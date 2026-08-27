@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>borahae.fm</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- LANDING PAGE - PIC 1 TO 5 -->
+<section id="landing">
+  <div class="container">
+    <nav><div class="logo"><div class="logo-b">b<span>✨</span></div> borahae<span class="purple">.fm</span></div></nav>
+    
+    <div class="tag-pill">✨ FOR EVERY COMEBACK, TOGETHER</div>
+    <h1>Keep the<br>light.<br><span class="purple">Stream with<br>heart.</span></h1>
+    <p class="desc">borahae.fm is your lovingly kept ARMY scrapbook — a place to discover missions, make every stream count, and watch the purple light grow.</p>
+    <button class="btn-main" onclick="openApp()">Open your scrapbook →</button>
+
+    <button class="btn-secondary">See how it works</button>
+    <div class="army-row">
+      <div class="avatars"><span>A</span><span>J</span><span>M</span><span>S</span></div>
+      <p><b>12,480 ARMY</b> keeping watch together</p>
+    </div>
+
+    <div class="mission-hero">
+      <p>MISSION 001 / BANGTANTV</p>
+      <h2>The<br>purple<br>hour</h2>
+      <button class="play-circle">▶</button>
+      <p>Watch together</p>
+      <div class="footer-row">
+        <span>YOUR STREAM JOURNAL</span>
+        <span class="pink">♡ borahae</span>
+      </div>
+    </div>
+    <div class="pink-tag">★ love notes, not numbers</div>
+
+    <div class="steps">
+      <div><span>01</span><h3>Find your mission</h3><p>Start with hand-picked BANGTANTV moments, or bring in a favorite YouTube video.</p></div>
+      <div><span>02</span><h3>Watch with intention</h3><p>The in-app player keeps your watch flow in one place, without losing the feeling.</p></div>
+      <div><span>03</span><h3>Leave your mark</h3><p>One completed stream, recorded. Your personal progress and our shared leaderboard grow together.</p></div>
+    </div>
+
+    <h2 class="comeback">A SOFT PLACE FOR LOUD LOVE<br>The comeback<br>energy, kept<br>close.</h2>
+    <div class="info-card purple-bg">
+      <div class="icon">◎</div><h4>Your daily rhythm</h4><p>A gentle daily goal makes showing up feel like a ritual, not a chore.</p>
+    </div>
+    <div class="info-card">
+      <div class="icon">👥</div><h4>Our purple light</h4><p>Celebrate milestones with ARMY around the world, one stream at a time.</p>
+    </div>
+
+    <footer>
+      <div class="logo"><div class="logo-b">b<span>✨</span></div></div>
+      <p>Made with purple light for ARMY, everywhere.</p>
+      <div class="social">📷 ▶</div>
+    </footer>
+  </div>
+</section>
+
+<!-- APP PAGE - PIC 6 -->
+<section id="app" class="hidden">
+  <header>
+    <div class="header-left"><button id="menu-btn">☰</button><div class="logo-b">b<span>✨</span></div></div>
+    <div class="header-right">ARMY demo ⌄</div>
+  </header>
+
+  <aside id="sidebar">
+    <div class="sidebar-logo"><div class="logo-b">b<span>✨</span></div> borahae<span class="purple">fm</span></div>
+    <p class="side-title">YOUR SCRAPBOOK</p>
+    <ul><li class="active">🏠 Home</li><li onclick="showMissions()">✨ Missions</li><li>📺 Videos</li><li>📖 My History</li></ul>
+    <div class="side-bottom"><p>⚙️ Settings</p><div class="profile"><div class="profile-a">A</div><div><b>ARMY demo</b><br><small>keeping the purple light on</small></div></div></div>
+  </aside>
+
+  <main>
+    <p class="page-sub">YOUR SCRAPBOOK - <span id="date"></span></p>
+    <div class="main-header"><h1>Welcome back, <span class="purple">ARMY</span>.</h1><button class="btn-purple" onclick="showMissions()">▶ Continue a mission</button></div>
+    <p class="main-desc">The purple light is on. What shall we watch today?</p>
+
+    <div class="goal-card">
+      <div class="goal-head"><span class="tag">DYNAMITE - TODAY'S GOAL</span><span>🔥</span></div>
+      <h2 id="today-count">0 <span>/ 10 streams</span></h2>
+      <div class="progress"><div id="progress"></div></div>
+      <p>10 more to keep today's promise.</p>
+    </div>
+
+    <div class="white-card">
+      <div class="card-head"><span>ALL-TIME STREAMS</span><span>♡</span></div>
+      <h2 class="purple" id="all-count">0</h2>
+      <p>Every count is a little love note.</p>
+      <p class="pink-dot">● 0 members in your light circle</p>
+    </div>
+
+    <div class="section-head"><p>PICK UP WHERE YOU LEFT OFF</p><a href="#">See all history</a></div>
+    <h2>Continue watching</h2>
+    <div id="continue-box"><div class="empty"><div class="heart">♡</div><h3>Your next memory is waiting</h3><p>Choose a mission and start the first page of your stream journal.</p><button class="btn-purple small" onclick="showMissions()">Browse missions</button></div></div>
+
+    <div class="white-card">
+      <div class="card-head"><h2>Leaderboard</h2><span>🏆</span></div>
+      <p class="center-gray">The light circle is waiting for its first streams.</p>
+    </div>
+
+    <div id="missions-grid" class="hidden"></div>
+  </main>
+</section>
+
+<div id="video-popup" class="popup hidden">
+  <div class="popup-box"><span onclick="closePopup()">✕ Close</span><iframe id="yt" src="" allowfullscreen></iframe><button class="btn-purple" onclick="markWatched()">Mark as Watched</button></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
