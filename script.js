@@ -1,25 +1,84 @@
-const songs=[{id:1,title:"BTS 'Dynamite' Official MV",yt:"https://www.youtube.com/embed/gdZLi9oWNZg",thumb:"https://i.ytimg.com/vi/gdZLi9oWNZg/hqdefault.jpg",views:"2.1B",dur:"3:44"},{id:2,title:"BTS 'Boy With Luv' Official MV",yt:"https://www.youtube.com/embed/XsX3ATcCjYA",thumb:"https://i.ytimg.com/vi/XsX3ATcCjYA/hqdefault.jpg",views:"1.6B",dur:"4:15"},{id:3,title:"BTS 'DNA' Official MV",yt:"https://www.youtube.com/embed/MBdVXkSdhwU",thumb:"https://i.ytimg.com/vi/MBdVXkSdhwU/hqdefault.jpg",views:"1.7B",dur:"3:50"},{id:4,title:"BTS 'Butter' Official MV",yt:"https://www.youtube.com/embed/WMweEpGlu_U",thumb:"https://i.ytimg.com/vi/WMweEpGlu_U/hqdefault.jpg",views:"1B",dur:"3:02"},{id:5,title:"BTS 'FAKE LOVE' Official MV",yt:"https://www.youtube.com/embed/7C2z4GqqS5E",thumb:"https://i.ytimg.com/vi/7C2z4GqqS5E/hqdefault.jpg",views:"1.4B",dur:"4:10"},{id:6,title:"BTS 'Spring Day' Official MV",yt:"https://www.youtube.com/embed/xEeFrLSkMm8",thumb:"https://i.ytimg.com/vi/xEeFrLSkMm8/hqdefault.jpg",views:"374M",dur:"4:20"}];
+const songs=[
+{id:1,title:"BTS (방탄소년단) 'Dynamite' Official MV",yt:"https://www.youtube.com/embed/gdZLi9oWNZg",thumb:"https://img.youtube.com/vi/gdZLi9oWNZg/maxresdefault.jpg",views:"1.9B views",channel:"HYBE LABELS",dur:"3:44"},
+{id:2,title:"BTS (방탄소년단) 'Butter' Official MV",yt:"https://www.youtube.com/embed/WMweEpGlu_U",thumb:"https://img.youtube.com/vi/WMweEpGlu_U/maxresdefault.jpg",views:"1.1B views",channel:"HYBE LABELS",dur:"2:45"},
+{id:3,title:"BTS (방탄소년단) 'IDOL' Official MV",yt:"https://www.youtube.com/embed/pBuZEGg_SF0",thumb:"https://img.youtube.com/vi/pBuZEGg_SF0/maxresdefault.jpg",views:"1.4B views",channel:"HYBE LABELS",dur:"3:53"},
+{id:4,title:"BTS 'ON' Official MV",yt:"https://www.youtube.com/embed/mPVDGOVjRQ0",thumb:"https://img.youtube.com/vi/mPVDGOVjRQ0/maxresdefault.jpg",views:"480M views",channel:"HYBE LABELS",dur:"4:55"},
+{id:5,title:"BTS 'Permission to Dance' Official MV",yt:"https://www.youtube.com/embed/CuklIb9d3fI",thumb:"https://img.youtube.com/vi/CuklIb9d3fI/maxresdefault.jpg",views:"690M views",channel:"HYBE LABELS",dur:"4:40"},
+{id:6,title:"BTS 'Boy With Luv (feat. Halsey)' Official MV",yt:"https://www.youtube.com/embed/XsX3ATcCjYA",thumb:"https://img.youtube.com/vi/XsX3ATcCjYA/maxresdefault.jpg",views:"1.8B views",channel:"HYBE LABELS",dur:"4:15"},
+{id:7,title:"BTS 'Run BTS' Official MV",yt:"https://www.youtube.com/embed/qGjAWJ2zWWI",thumb:"https://img.youtube.com/vi/qGjAWJ2zWWI/maxresdefault.jpg",views:"300M views",channel:"HYBE LABELS",dur:"3:31"},
+{id:8,title:"BTS 'Yet To Come' Official MV",yt:"https://www.youtube.com/embed/9mwRYhJ7aKo",thumb:"https://img.youtube.com/vi/9mwRYhJ7aKo/maxresdefault.jpg",views:"250M views",channel:"HYBE LABELS",dur:"4:20"}
+];
 
-let watched=JSON.parse(localStorage.getItem('watched'))||[];let streams=parseInt(localStorage.getItem('streams'))||0;let current=null;
+let watched=JSON.parse(localStorage.getItem('watched'))||[];
+let streams=parseInt(localStorage.getItem('streams'))||0;
+let current=null;
 
-function openApp(){document.getElementById('landing').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('date').innerText=new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}).toUpperCase();updateUI();}
-document.getElementById('menu-btn').onclick=()=>document.getElementById('sidebar').classList.toggle('open');
+function openApp(){
+  document.getElementById('landing').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('date').innerText=new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}).toUpperCase();
+  updateUI(); showHome();
+}
 
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+document.getElementById('menu-btn').onclick=toggleSidebar;
+
+function hideAllPages(){
+  document.getElementById('home-content').classList.add('hidden');
+  document.getElementById('missions-grid').classList.add('hidden');
+  document.getElementById('history-page').classList.add('hidden');
+  document.getElementById('music-page').classList.add('hidden');
+  document.getElementById('faq-page').classList.add('hidden');
+  document.querySelectorAll('aside li').forEach(li=>li.classList.remove('active'));
+}
+
+function showHome(){
+  hideAllPages();
+  document.getElementById('home-content').classList.remove('hidden');
+  document.getElementById('nav-home').classList.add('active');
+}
 function showMissions(){
-  document.getElementById('continue-box').classList.add('hidden');
-  const grid=document.getElementById('missions-grid');grid.classList.remove('hidden');
-  grid.innerHTML=songs.map(s=>`<div class="mission" onclick="openVid(${s.id})"><img src="${s.thumb}"><div class="mission-body"><div class="tag-small">NEW - ADDED WITHIN 3 DAYS <span style="float:right">${s.dur}</span></div><h4>${s.title}</h4><small>HYBE LABELS • ${s.views} views</small></div></div>`).join('');
+  hideAllPages();
+  const grid=document.getElementById('missions-grid');
+  grid.classList.remove('hidden');
+  document.getElementById('nav-missions').classList.add('active');
+  grid.innerHTML=songs.map(s=>`<div class="mission" onclick="openVid(${s.id})"><img src="${s.thumb}"><div class="mission-body"><div class="tag-small">HYBE LABELS • ${s.dur} <span style="float:right">${s.views}</span></div><h4 style="font-size:14px;margin:6px 0">${s.title}</h4><small>${s.channel}</small></div></div>`).join('');
+}
+function showMusicPage(){
+  hideAllPages();
+  document.getElementById('music-page').classList.remove('hidden');
+  document.getElementById('nav-music').classList.add('active');
+  document.getElementById('music-list').innerHTML=songs.map(s=>`<div class="music-card" onclick="openVid(${s.id})"><img src="${s.thumb}"><div class="music-body"><h4 style="font-size:13px;margin:0">${s.title}</h4><small style="color:#6b7280">${s.channel} • ${s.views}</small></div></div>`).join('');
+}
+function showHistoryPage(){
+  hideAllPages();
+  document.getElementById('history-page').classList.remove('hidden');
+  document.getElementById('nav-history').classList.add('active');
+  const box=document.getElementById('history-box');
+  if(watched.length===0) box.innerHTML=`<div class="empty"><div class="heart">♡</div><p>No history yet</p></div>`;
+  else box.innerHTML=watched.slice().reverse().map(w=>`<div class="music-card"><img src="${w.thumb}"><div class="music-body"><h4 style="font-size:13px">${w.title}</h4><small>Watched ${w.count} times</small></div></div>`).join('');
+}
+function showFaqPage(){
+  hideAllPages();
+  document.getElementById('faq-page').classList.remove('hidden');
+  document.getElementById('nav-faq').classList.add('active');
 }
 
 function openVid(id){current=songs.find(s=>s.id===id);document.getElementById('yt').src=current.yt;document.getElementById('video-popup').classList.remove('hidden');}
 function closePopup(){document.getElementById('video-popup').classList.add('hidden');document.getElementById('yt').src="";}
-function markWatched(){if(!watched.find(w=>w.id===current.id))watched.push({...current,count:1});else watched.find(w=>w.id===current.id).count++;streams++;localStorage.setItem('watched',JSON.stringify(watched));localStorage.setItem('streams',streams);updateUI();closePopup();}
-
+function markWatched(){
+  if(!watched.find(w=>w.id===current.id)) watched.push({...current,count:1});
+  else watched.find(w=>w.id===current.id).count++;
+  streams++;localStorage.setItem('watched',JSON.stringify(watched));localStorage.setItem('streams',streams);updateUI();closePopup();
+}
 function updateUI(){
   document.getElementById('today-count').innerHTML=`${streams} <span>/ 10 streams</span>`;
   document.getElementById('all-count').innerText=streams;
-  document.getElementById('progress').style.width=(streams*10)+'%';
+  document.getElementById('progress').style.width=Math.min(streams*10,100)+'%';
   if(watched.length>0){
-    document.getElementById('continue-box').innerHTML=watched.slice(-7).reverse().map(w=>`<div style="display:flex;gap:10px;background:#fff;padding:10px;border-radius:10px;margin-bottom:10px"><img src="${w.thumb}" style="width:100px;height:60px;border-radius:8px"><div><h4 style="font-size:14px;margin:0">${w.title}</h4><small>Watched ${w.count} times</small></div></div>`).join('');
+    document.getElementById('continue-box').innerHTML=watched.slice(-4).reverse().map(w=>`<div style="display:flex;gap:10px;background:#fff;padding:10px;border-radius:10px;margin-bottom:10px"><img src="${w.thumb}" style="width:100px;height:60px;border-radius:8px;object-fit:cover"><div><h4 style="font-size:13px;margin:0">${w.title}</h4><small>Watched ${w.count} times</small></div></div>`).join('');
   }
 }
