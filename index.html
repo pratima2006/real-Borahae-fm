@@ -1,127 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Borahae FM - Purple Scrapbook</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
-<style>
-  body{font-family:'Poppins',sans-serif;background:#fdfaff}
- .scrap-font{font-family:'Caveat',cursive}
- .sidebar{transform:translateX(-100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1)}
- .sidebar.open{transform:translateX(0)}
- .page{display:none}.page.active{display:block;animation:fadeIn 0.4s}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)}}
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>borahae.fm</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
-<body class="text-[#2d2a32]">
+<body>
 
-<!-- 3 DOTS BUTTON -->
-<button id="menuBtn" class="fixed top-4 left-4 z-50 bg-[#8B5CF6] w-11 h-11 rounded-full flex items-center justify-center text-white text-xl shadow-lg hover:bg-[#7C3AED] transition">⋮</button>
+<!-- LANDING PAGE -->
+<section id="landing">
+  <div class="container">
+    <nav><div class="logo"><div class="logo-b">b<span>✨</span></div> borahae<span class="purple">.fm</span></div></nav>
+    <div class="tag-pill">✨ FOR EVERY COMEBACK, TOGETHER</div>
+    <h1>Keep the<br>light.<br><span class="purple">Stream with<br>heart.</span></h1>
+    <p class="desc">borahae.fm is your lovingly kept ARMY scrapbook — a place to discover missions, make every stream count, and watch the purple light grow.</p>
+    <button class="btn-main" onclick="openApp()">Open your scrapbook →</button>
+    <button class="btn-secondary">See how it works</button>
+    <div class="army-row">
+      <div class="avatars"><span>A</span><span>J</span><span>M</span><span>S</span></div>
+      <p><b>12,480 ARMY</b> keeping watch together</p>
+    </div>
+    <div class="mission-hero">
+      <p>MISSION 001 / BANGTANTV</p>
+      <h2>The<br>purple<br>hour</h2>
+      <button class="play-circle">▶</button>
+      <p>Watch together</p>
+      <div class="footer-row"><span>YOUR STREAM JOURNAL</span><span class="pink">♡ borahae</span></div>
+    </div>
+    <div class="pink-tag">★ love notes, not numbers</div>
+    <div class="steps">
+      <div><span>01</span><h3>Find your mission</h3><p>Start with hand-picked BANGTANTV moments, or bring in a favorite YouTube video.</p></div>
+      <div><span>02</span><h3>Watch with intention</h3><p>The in-app player keeps your watch flow in one place.</p></div>
+      <div><span>03</span><h3>Leave your mark</h3><p>One completed stream, recorded. Your personal progress grows together.</p></div>
+    </div>
+    <h2 class="comeback">A SOFT PLACE FOR LOUD LOVE<br>The comeback<br>energy, kept<br>close.</h2>
+    <div class="info-card purple-bg"><div class="icon">◎</div><h4>Your daily rhythm</h4><p>A gentle daily goal makes showing up feel like a ritual, not a chore.</p></div>
+    <div class="info-card"><div class="icon">👥</div><h4>Our purple light</h4><p>Celebrate milestones with ARMY around the world.</p></div>
+    <footer><div class="logo"><div class="logo-b">b<span>✨</span></div></div><p>Made with purple light for ARMY, everywhere.</p><div class="social">📷 ▶</div></footer>
+  </div>
+</section>
 
-<!-- SIDEBAR -->
-<div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-[270px] bg-[#8B5CF6] z-40 p-6 shadow-2xl">
-  <h1 class="scrap-font text-3xl text-white mt-12 mb-8">borahae.fm 💜</h1>
-  <nav class="flex flex-col gap-2">
-    <button onclick="openPage('home')" class="nav-btn text-left px-4 py-3 rounded-xl bg-white text-[#8B5CF6] font-semibold">🏠 Home</button>
-    <button onclick="openPage('missions')" class="nav-btn text-left px-4 py-3 rounded-xl text-white/90 hover:bg-white/15">🎯 Missions</button>
-    <button onclick="openPage('history')" class="nav-btn text-left px-4 py-3 rounded-xl text-white/90 hover:bg-white/15">📜 History</button>
-    <button onclick="openPage('music')" class="nav-btn text-left px-4 py-3 rounded-xl text-white/90 hover:bg-white/15">🎵 Music</button>
-    <button onclick="openPage('faq')" class="nav-btn text-left px-4 py-3 rounded-xl text-white/90 hover:bg-white/15">💬 FAQ</button>
-  </nav>
-  <p class="absolute bottom-6 text-white/60 text-xs">Made for ARMY with 💜</p>
-</div>
-<div id="overlay" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleSidebar()"></div>
+<!-- APP PAGE -->
+<section id="app" class="hidden">
+  <header>
+    <div class="header-left"><button id="menu-btn">⋮</button><div class="logo-b">b<span>✨</span></div></div>
+    <div class="header-right">ARMY demo ⌄</div>
+  </header>
 
-<!-- MAIN -->
-<main class="min-h-screen pt-16 px-4 md:px-10 max-w-6xl mx-auto">
+  <aside id="sidebar">
+    <div class="sidebar-logo"><div class="logo-b">b<span>✨</span></div> borahae<span class="purple" style="color:#fff">.fm</span></div>
+    <p class="side-title">YOUR SCRAPBOOK</p>
+    <ul>
+      <li id="nav-home" class="active" onclick="showHome()">🏠 Home</li>
+      <li id="nav-missions" onclick="showMissions()">✨ Missions</li>
+      <li id="nav-music" onclick="showMusicPage()">🎵 Music</li>
+      <li id="nav-history" onclick="showHistoryPage()">📖 My History</li>
+      <li id="nav-faq" onclick="showFaqPage()">💬 FAQ</li>
+    </ul>
+    <div class="side-bottom"><p>⚙️ Settings</p><div class="profile"><div class="profile-a">A</div><div><b>ARMY demo</b><br><small>keeping the purple light on</small></div></div></div>
+  </aside>
+  <div id="overlay" onclick="toggleSidebar()"></div>
 
-  <!-- HOME = SCRAPBOOK PAGE -->
-  <section id="home" class="page active">
-    <div class="text-center py-12">
-      <h2 class="scrap-font text-5xl md:text-6xl text-[#8B5CF6]">open my scrapbook</h2>
-      <p class="mt-3 text-gray-500">Your purple diary of BTS memories</p>
-      <div class="grid md:grid-cols-3 gap-6 mt-10 text-left">
-        <div onclick="openPage('missions')" class="bg-white p-6 rounded-[20px] shadow-sm border hover:shadow-md cursor-pointer"><h3 class="font-bold">🎯 Today's Missions</h3><p class="text-sm text-gray-500 mt-2">Complete your tasks</p></div>
-        <div onclick="openPage('music')" class="bg-white p-6 rounded-[20px] shadow-sm border hover:shadow-md cursor-pointer"><h3 class="font-bold">🎵 Music Shelf</h3><p class="text-sm text-gray-500 mt-2">8 OG MVs waiting</p></div>
-        <div onclick="openPage('history')" class="bg-white p-6 rounded-[20px] shadow-sm border hover:shadow-md cursor-pointer"><h3 class="font-bold">📜 History</h3><p class="text-sm text-gray-500 mt-2">Your journey</p></div>
+  <main>
+    <p class="page-sub">YOUR SCRAPBOOK - <span id="date"></span></p>
+    
+    <!-- HOME CONTENT -->
+    <div id="home-content">
+      <div class="main-header"><h1>Welcome back, <span class="purple">ARMY</span>.</h1><button class="btn-purple" onclick="showMissions()">▶ Continue a mission</button></div>
+      <p class="main-desc">The purple light is on. What shall we watch today?</p>
+      <div class="goal-card">
+        <div class="goal-head"><span class="tag">DYNAMITE - TODAY'S GOAL</span><span>🔥</span></div>
+        <h2 id="today-count">0 <span>/ 10 streams</span></h2>
+        <div class="progress"><div id="progress"></div></div>
+        <p>10 more to keep today's promise.</p>
       </div>
+      <div class="white-card">
+        <div class="card-head"><span>ALL-TIME STREAMS</span><span>♡</span></div>
+        <h2 class="purple" id="all-count">0</h2>
+        <p>Every count is a little love note.</p>
+        <p class="pink-dot">● 0 members in your light circle</p>
+      </div>
+      <div class="section-head"><p>PICK UP WHERE YOU LEFT OFF</p><a href="#" onclick="showHistoryPage()">See all history</a></div>
+      <h2>Continue watching</h2>
+      <div id="continue-box"><div class="empty"><div class="heart">♡</div><h3>Your next memory is waiting</h3><p>Choose a mission and start the first page of your stream journal.</p><button class="btn-purple small" onclick="showMissions()">Browse missions</button></div></div>
+      <div class="white-card"><div class="card-head"><h2>Leaderboard</h2><span>🏆</span></div><p class="center-gray">The light circle is waiting for its first streams.</p></div>
     </div>
-  </section>
 
-  <!-- MISSIONS -->
-  <section id="missions" class="page">
-    <h2 class="text-3xl font-bold text-[#8B5CF6]">Missions</h2>
-    <div class="mt-6 grid gap-4">
-      <div class="bg-white p-5 rounded-2xl border flex justify-between items-center"><span>Stream 15 mins today</span><button class="bg-[#8B5CF6] text-white px-4 py-2 rounded-full text-sm">Start</button></div>
-      <div class="bg-white p-5 rounded-2xl border flex justify-between items-center"><span>Write 1 memory in scrapbook</span><button class="bg-[#8B5CF6] text-white px-4 py-2 rounded-full text-sm">Write</button></div>
-    </div>
-  </section>
+    <!-- OTHER PAGES -->
+    <div id="missions-grid" class="hidden"></div>
+    <div id="history-page" class="hidden"><h2>My History</h2><div id="history-box"></div></div>
+    <div id="music-page" class="hidden"><h2>BTS OG Music Videos</h2><p class="desc-small">Real MVs from HYBE LABELS official channel with real thumbnails</p><div id="music-list"></div></div>
+    <div id="faq-page" class="hidden"><h2>FAQ</h2><div class="faq-item"><h4>Why purple theme?</h4><p>Borahae = I Purple You. Made for ARMY.</p></div><div class="faq-item"><h4>Will data be saved?</h4><p>Yes, all watches are saved in your browser. Real login with Supabase next update.</p></div></div>
 
-  <!-- HISTORY -->
-  <section id="history" class="page">
-    <h2 class="text-3xl font-bold text-[#8B5CF6]">History</h2>
-    <p class="mt-6 bg-white p-6 rounded-2xl border text-gray-500">No history yet. Start completing missions!</p>
-  </section>
+  </main>
+</section>
 
-  <!-- MUSIC - REAL LIST -->
-  <section id="music" class="page">
-    <h2 class="text-3xl font-bold text-[#8B5CF6]">BTS OG Music Videos</h2>
-    <p class="text-gray-500 text-sm mt-1">From HYBE LABELS official channel</p>
-    <div id="musicList" class="mt-6 grid md:grid-cols-2 gap-5"></div>
-  </section>
+<div id="video-popup" class="popup hidden">
+  <div class="popup-box"><span class="close-btn" onclick="closePopup()">✕ Close</span><iframe id="yt" src="" allowfullscreen></iframe><button class="btn-purple" style="width:100%;margin-top:15px" onclick="markWatched()">Mark as Watched 💜</button></div>
+</div>
 
-  <!-- FAQ -->
-  <section id="faq" class="page">
-    <h2 class="text-3xl font-bold text-[#8B5CF6]">FAQ</h2>
-    <div class="mt-6 space-y-3">
-      <details class="bg-white p-4 rounded-2xl border"><summary class="font-semibold cursor-pointer">Why purple theme?</summary><p class="text-sm text-gray-500 mt-2">Purple is BTS & ARMY's colour - Borahae means I Purple You 💜</p></details>
-      <details class="bg-white p-4 rounded-2xl border"><summary class="font-semibold cursor-pointer">Will my data be saved?</summary><p class="text-sm text-gray-500 mt-2">This version is static. For real login/save, we will connect Supabase next.</p></details>
-    </div>
-  </section>
-
-</main>
-
-<script>
-const mvs = [
-  {id:'gdZLi9oWNZg', title:"BTS - 'Dynamite' Official MV", views:'1.9B views', channel:'HYBE LABELS'},
-  {id:'WMweEpGlu_U', title:"BTS - 'Butter' Official MV", views:'1.1B views', channel:'HYBE LABELS'},
-  {id:'pBuZEGg_SF0', title:"BTS - 'IDOL' Official MV", views:'1.4B views', channel:'HYBE LABELS'},
-  {id:'qGjAWJ2zWWI', title:"BTS - 'Run BTS' Official MV", views:'240M views', channel:'HYBE LABELS'},
-  {id:'mPVDGOVjRQ0', title:"BTS - 'ON' Official MV", views:'480M views', channel:'HYBE LABELS'},
-  {id:'AlIrGFyxFlQ', title:"BTS - 'Dynamite' (B-side) + Butter MVs", views:'100M+ views', channel:'BANGTANTV'},
-  {id:'CuklIb9d3fI', title:"BTS - 'Permission to Dance' Official MV", views:'690M views', channel:'HYBE LABELS'},
-  {id:'9mwRYhJ7aKo', title:"BTS - 'Yet To Come' Official MV", views:'250M views', channel:'HYBE LABELS'},
-];
-
-const list = document.getElementById('musicList');
-mvs.forEach(v=>{
-  list.innerHTML += `
-  <a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" class="bg-white rounded-[18px] border overflow-hidden hover:shadow-lg transition flex">
-    <img src="https://img.youtube.com/vi/${v.id}/maxresdefault.jpg" class="w-36 h-24 object-cover" />
-    <div class="p-3 flex-1">
-      <h4 class="font-semibold text-sm leading-tight line-clamp-2">${v.title}</h4>
-      <p class="text-xs text-gray-500 mt-1">${v.channel}</p>
-      <p class="text-xs text-gray-400">${v.views}</p>
-    </div>
-  </a>`
-});
-
-function toggleSidebar(){
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('hidden');
-}
-document.getElementById('menuBtn').onclick = toggleSidebar;
-
-function openPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b=>{b.className='nav-btn text-left px-4 py-3 rounded-xl text-white/90 hover:bg-white/15'});
-  event.currentTarget.className='nav-btn text-left px-4 py-3 rounded-xl bg-white text-[#8B5CF6] font-semibold';
-  if(window.innerWidth<768) toggleSidebar();
-  window.scrollTo(0,0);
-}
-</script>
+<script src="script.js"></script>
 </body>
 </html>
