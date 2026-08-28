@@ -65,3 +65,22 @@ main{padding:20px;max-width:900px;margin:auto}
 #faq-box.faq-item{background:#fff;padding:16px;border-radius:12px;margin:12px 0;border:1px solid #f3f4f6}
 #faq-box.faq-item h4{margin:0 0 6px;font-size:15px}
 #faq-box.faq-item p{margin:0;color:#6b7280;font-size:13px;line-height:1.5}
+*{box-sizing:border-box;font-family:Inter,sans-serif}
+body{margin:0;background:#f8f5ff}
+.topbar{display:flex;justify-content:space-between;padding:12px 16px;background:white}
+.logo span{background:#7c3aed;color:white;padding:2px 6px;border-radius:6px}
+.pill{margin:20px 16px;border:1px solid #c4b5fd;border-radius:20px;padding:4px 10px;font-size:10px;width:fit-content}
+.hero{padding:0 16px;font-size:32px;line-height:1.1}
+.hero span{color:#7c3aed}
+.sub{padding:0 16px;color:gray;font-size:13px}
+.primary{background:#7c3aed;color:white;border:none;width:92%;margin:10px 4%;padding:12px;border-radius:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
+.grid .card{background:white;border-radius:12px;overflow:hidden}
+.grid .card img{width:100%;aspect-ratio:16/9;object-fit:cover}
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;justify-content:center;align-items:center;z-index:100}
+.auth-modal{background:white;width:90%;max-width:380px;padding:24px;border-radius:16px;position:relative;box-sizing:border-box}
+.auth-modal input{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px;box-sizing:border-box}
+.google-btn{width:100%;padding:11px;background:white;border:1px solid #ddd;border-radius:10px}
+.close{position:absolute;right:14px;top:10px;cursor:pointer;font-size:20px}
+.or{text-align:center;color:gray;font-size:13px}
