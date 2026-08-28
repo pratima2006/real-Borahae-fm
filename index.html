@@ -1,96 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>borahae.fm</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-<section id="landing">
-  <div class="container">
-    <nav class="top-nav"><div class="logo"><div class="logo-b">b<span>✨</span></div> borahae<span class="purple">.fm</span></div><button class="login-top-btn" onclick="openLogin()">Login / Sign In</button></nav>
-    <div class="tag-pill">✨ FOR EVERY COMEBACK, TOGETHER</div>
-    <h1>Keep the<br>light.<br><span class="purple">Stream with<br>heart.</span></h1>
-    <p class="desc">borahae.fm is your lovingly kept ARMY scrapbook — a place to discover missions, make every stream count.</p>
-    <button class="btn-main" onclick="openApp()">Open your scrapbook →</button>
+<header class="topbar">
+  <div class="logo"><span>b</span> borahae .fm</div>
+  <button id="loginBtn" class="login-btn">Login / Sign In</button>
+</header>
+
+<!-- HOME VIEW -->
+<div id="homeView">
+  <div class="pill">✦ FOR EVERY COMEBACK, TOGETHER</div>
+  <h1 class="hero">Keep the<br>light.<br><span>Stream with<br>heart.</span></h1>
+  <p class="sub">borahae.fm is your lovingly kept ARMY scrapbook — a place to discover missions, make every stream count.</p>
+  <button class="primary" onclick="openScrapbook()">Open your scrapbook →</button>
+  <div style="height:200px"></div> <!-- fix for gayab wala part -->
+</div>
+
+<!-- SCRAPBOOK VIEW -->
+<div id="scrapbookView" style="display:none">
+  <p class="date">YOUR SCRAPBOOK - AUG 28, 2026</p>
+  <h2 class="section-title">THE ARCHIVE • SEVEN'S CINEMA</h2>
+  <p class="section-sub">A special vault of moments, curated with love by ARMY</p>
+  <button class="primary" onclick="openAddModal()">+ Add MV / Videos</button>
+  <div id="videoGrid" class="grid"></div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="authModal" class="modal-bg" style="display:none">
+  <div class="auth-modal">
+    <span class="close" onclick="closeAuth()">×</span>
+    <h2>Login with Supabase 💜</h2>
+    <button class="google-btn" onclick="loginWithGoogle()">Continue with Google</button>
+    <p class="or">or</p>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button class="primary" onclick="handleEmailAuth()">Login / Sign Up</button>
   </div>
-</section>
+</div>
 
-<section id="app" class="hidden">
-  <header><div class="header-left"><button id="menu-btn">⋮</button><div class="logo-b">b<span>✨</span></div></div><div class="header-right"><span id="user-name-display">ARMY</span><button id="auth-btn" class="login-small" onclick="openLogin()">Login</button></div></header>
-  <aside id="sidebar">
-    <div class="sidebar-logo"><div class="logo-b">b<span>✨</span></div> borahae<span style="color:#fff">.fm</span></div>
-    <p class="side-title">YOUR SCRAPBOOK</p>
-    <ul>
-      <li id="nav-home" class="active" onclick="showHome()">🏠 Home</li>
-      <li id="nav-missions" onclick="showMissions()">✨ Missions</li>
-      <li id="nav-music" onclick="showMusicPage()">🎵 Music</li>
-      <li id="nav-history" onclick="showHistoryPage()">📖 My History</li>
-      <li id="nav-faq" onclick="showFaqPage()">💬 FAQ</li>
-    </ul>
-    <div class="side-bottom"><div class="profile"><div class="profile-a" id="profile-letter">A</div><div><b id="profile-name">ARMY</b><br><small id="profile-email">guest</small></div></div></div>
-  </aside>
-  <div id="overlay" onclick="toggleSidebar()"></div>
-
-  <main>
-    <p class="page-sub">YOUR SCRAPBOOK - <span id="date"></span></p>
-    <div id="home-content">
-      <div class="main-header"><h1>Welcome back, <span class="purple" id="welcome-name">ARMY</span>.</h1><button class="btn-purple" onclick="showMissions()">▶ Continue a mission</button></div>
-      <div class="goal-card"><h2 id="today-count">0 <span>/ 10 streams</span></h2><div class="progress"><div id="progress"></div></div><p>10 more to keep today's promise.</p></div>
-      <div id="continue-box"></div>
-    </div>
-
-    <div id="missions-grid" class="hidden"></div>
-    <div id="history-page" class="hidden"><h2>My History</h2><div id="history-box"></div></div>
-
-    <div id="music-page" class="hidden">
-      <h2>BTS OG Music Videos</h2>
-      <p class="desc-small">Real MVs from HYBE LABELS</p>
-      <button class="btn-main" style="margin:15px 0" onclick="openAddMV()">+ Add MV / Videos</button>
-      <div id="music-list"></div>
-    </div>
-
-    <div id="faq-page" class="hidden"><h2>FAQ</h2><div id="faq-box"></div></div>
-
-    <!-- NEW WATCH PAGE - YT STYLE -->
-    <div id="watch-page" class="hidden">
-      <button class="btn-secondary" style="width:auto;margin-bottom:15px" onclick="showMusicPage()">← Back to Music</button>
-      <div class="watch-card">
-        <iframe id="watch-yt" src="" allowfullscreen></iframe>
-        <div class="watch-info">
-          <h2 id="watch-title"></h2>
-          <p id="watch-meta" style="color:#6b7280;font-size:14px"></p>
-          <button class="btn-purple" style="margin-top:15px" onclick="markWatchedFromWatch()">Mark as Watched 💜</button>
-        </div>
-      </div>
-    </div>
-
-  </main>
-</section>
-
-<!-- ADD MV POPUP -->
-<div id="add-mv-popup" class="popup hidden"><div class="popup-box" style="max-width:420px;text-align:center">
-  <span class="close-btn" onclick="closeAddMV()">✕</span>
-  <h3>Add YouTube MV</h3>
-  <p class="desc-small">Paste YouTube link in middle</p>
-  <input id="yt-link-input" type="text" placeholder="https://www.youtube.com/watch?v=..." style="width:100%;padding:12px;border-radius:10px;border:1px solid #ddd;margin-top:15px;text-align:center" oninput="checkYTLink()">
-  <div id="yt-preview" style="margin-top:15px"></div>
-  <div id="yt-status" style="margin-top:10px;font-weight:600"></div>
-  <button id="add-mv-btn" class="btn-main hidden" style="margin-top:15px" onclick="addNewMV()">Add to Music ✅</button>
-</div></div>
-
-<!-- LOGIN POPUP - SUPABASE -->
-<div id="login-popup" class="popup hidden"><div class="popup-box" style="max-width:380px;text-align:center">
-  <span class="close-btn" onclick="closeLogin()">✕</span>
-  <h2>Login with Supabase 💜</h2>
-  <button class="btn-main" style="background:#fff;color:#000;border:1px solid #ddd;margin-top:15px" onclick="loginWithGoogle()">Continue with Google</button>
-  <div style="margin:15px 0;color:#999">or</div>
-  <input id="email" type="email" placeholder="Email" style="width:100%;padding:12px;border-radius:10px;border:1px solid #ddd">
-  <input id="pass" type="password" placeholder="Password" style="width:100%;padding:12px;border-radius:10px;border:1px solid #ddd;margin-top:10px">
-  <button class="btn-purple" style="width:100%;margin-top:15px" onclick="loginWithEmail()">Login / Sign Up</button>
-</div></div>
+<!-- ADD MV MODAL -->
+<div id="addModal" class="modal-bg" style="display:none">
+  <div class="auth-modal">
+    <span class="close" onclick="closeAdd()">×</span>
+    <h3>Add YouTube MV</h3>
+    <p style="font-size:12px;color:gray">Paste YouTube link in middle</p>
+    <input type="text" id="ytLink" placeholder="https://youtu.be/..." oninput="previewYT(this.value)">
+    <div id="ytPreview" style="margin:10px 0; display:none"><img id="ytThumb" style="width:100%;border-radius:12px"></div>
+    <p id="ytStatus" style="font-size:13px"></p>
+    <button class="primary" onclick="addVideo()">Add to Music ✅</button>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>
