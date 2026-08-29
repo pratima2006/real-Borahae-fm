@@ -2,135 +2,153 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
-body{font-family:'Manrope',sans-serif;background:#fdf8ff;}
+body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 .font-display{font-family:'Playfair Display',serif;}
 .font-mono{font-family:'DM Mono',monospace;}
 .sidebar-bg{background:#28164f;}
+*{box-sizing:border-box;}
 </style></head><body>
 
-<header class="sticky top-0 z-30 bg-[#fdf8ff]/90 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
+<header class="sticky top-0 z-30 bg-[#fdf8ff] border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
   <button onclick="openSidebar()" class="w-9 h-9 flex items-center justify-center text-[24px]">☰</button>
-  <div class="w-[42px] h-[42px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[26px] font-bold shadow-[0_4px_14px_rgba(124,58,237,0.4)] relative">b<span class="absolute -top-1 -right-1 text-[14px]">✨</span></div>
+  <div class="w-[42px] h-[42px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[26px] font-bold relative">b<span class="absolute -top-1 -right-1 text-[12px]">✨</span></div>
 </header>
 
-<div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
-<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 flex flex-col p-5">
-  <div class="flex justify-between items-center"><div class="flex items-center gap-3"><div class="w-9 h-9 bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-bold">b</div><span class="text-white font-bold">borahae.fm</span></div><button onclick="closeSidebar()" class="text-white/70 text-[22px]">✕</button></div>
+<div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/50 hidden z-40"></div>
+<aside id="sidebar" class="fixed top-0 left-0 w-[75%] max-w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-transform duration-300 flex flex-col p-5">
+  <div class="flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-8 h-8 bg-[#7c3aed] rounded-xl flex items-center justify-center text-white font-bold">b</div><span class="text-white font-bold">borahae.fm</span></div><button onclick="closeSidebar()" class="text-white text-xl">✕</button></div>
   <nav class="mt-10 space-y-1">
     <a href="home.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">⌂ Home</a>
     <a href="missions.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">✦ Missions</a>
-    <a href="music.html" class="flex gap-3 px-4 py-3 rounded-full bg-white/10 text-white font-semibold">▶ Videos</a>
+    <a href="music.html" class="flex gap-3 px-4 py-3 rounded-full bg-white/10 text-white">▶ Videos</a>
     <a href="history.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">◫ My History</a>
     <a href="faq.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">? FAQ</a>
   </nav>
 </aside>
 
-<main class="max-w-[480px] mx-auto px-5 pt-6 pb-10">
-  <!-- TITLE SAME AS PIC -->
-  <p class="font-mono text-[13px] tracking-[3px] text-[#7c3aed] font-bold">YOUR VIDEO SHELF</p>
-  <h1 class="font-display text-[42px] leading-[0.95] font-bold mt-3">Bring a favorite in.</h1>
-  <p class="text-[#6b7280] text-[16px] leading-[1.5] mt-4">Search the videos already on your shelf, or paste a YouTube link. We'll check the metadata before it joins your scrapbook.</p>
+<main class="w-full max-w-[480px] mx-auto px-4 pt-5 pb-20 overflow-hidden">
+  <p class="font-mono text-[12px] tracking-[3px] text-[#7c3aed] font-bold">YOUR VIDEO SHELF</p>
+  <h1 class="font-display text-[38px] leading-[0.95] font-bold mt-2">Bring a favorite in.</h1>
+  <p class="text-[#6b7280] text-[14px] mt-3 leading-[1.5]">Search the videos already on your shelf, or paste a YouTube link. We'll check the metadata before it joins your scrapbook.</p>
 
-  <!-- BOX 1 - Search your added videos - PIC JAISA -->
-  <div class="mt-8 bg-white border border-[#ede9fe] rounded-[24px] p-5 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
-    <div class="flex items-center gap-2">
-      <span class="text-[#7c3aed]">⌕</span>
-      <h3 class="font-bold text-[16px] text-[#111]">Search your added videos</h3>
+  <!-- BOX 1 - ADD MVs FIRST (UPAR) - PIC SWAP -->
+  <div class="mt-6 bg-[#f3edff] rounded-[24px] p-4 w-full">
+    <div class="flex items-center gap-2"><span>🔗</span><h3 class="font-bold text-[15px]">Add MVs / videos for all</h3></div>
+    <input id="ytLink" oninput="checkLink()" placeholder="youtube.com/watch?v=..." class="w-full mt-4 bg-white border rounded-full px-4 py-3 text-[14px] outline-none">
+
+    <!-- PREVIEW + DOT -->
+    <div id="previewBox" class="hidden mt-4 bg-white rounded-[16px] p-3 border flex gap-3">
+      <img id="prevThumb" class="w-[90px] h-[54px] rounded-[10px] object-cover">
+      <div class="flex-1 min-w-0">
+        <p id="prevTitle" class="text-[13px] font-bold leading-[1.2] truncate"></p>
+        <p id="prevChannel" class="text-[11px] text-gray-500 mt-1"></p>
+        <div id="prevDot" class="text-[11px] font-bold mt-1"></div>
+      </div>
     </div>
-    <div class="flex gap-3 mt-4">
-      <input id="searchInput" oninput="doSearch()" placeholder='Try "Black Swan"' class="flex-1 bg-[#f9f5ff] border border-[#ede9fe] rounded-full px-5 py-3 text-[14px] outline-none focus:border-[#7c3aed]">
-      <button onclick="doSearch()" class="bg-[#7c3aed] text-white px-6 rounded-full font-bold text-[14px]">Search</button>
+
+    <button id="addBtn" onclick="addVideo()" disabled class="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold text-[14px] disabled:opacity-60">+ Add to videos</button>
+  </div>
+
+  <!-- BOX 2 - SEARCH SECOND (NEECHE) -->
+  <div class="mt-4 bg-white border rounded-[24px] p-4 w-full shadow-sm">
+    <div class="flex items-center gap-2"><span class="text-[#7c3aed]">⌕</span><h3 class="font-bold text-[15px]">Search your added videos</h3></div>
+    <div class="flex gap-2 mt-4 w-full">
+      <input id="searchInput" oninput="doSearch()" placeholder='Try "Black Swan"' class="flex-1 min-w-0 bg-[#f9f5ff] border rounded-full px-4 py-3 text-[13px] outline-none">
+      <button onclick="doSearch()" class="bg-[#7c3aed] text-white px-5 rounded-full font-bold text-[13px] flex-shrink-0">Search</button>
     </div>
   </div>
 
-  <!-- BOX 2 - Add MVs / videos for all - PIC JAISA, UPER LAYA -->
-  <div class="mt-5 bg-[#f3edff] border border-[#ede9fe] rounded-[24px] p-5">
-    <div class="flex items-center gap-2">
-      <span class="text-[#7c3aed]">🔗</span>
-      <h3 class="font-bold text-[16px] text-[#111]">Add MVs / videos for all</h3>
+  <!-- BOX 3 - SHELF - FIXED WIDTH -->
+  <div class="mt-5 border-[1.5px] border-dashed border-[#d8b4fe] rounded-[24px] p-3 w-full bg-white/50">
+    <div id="videoGrid" class="grid grid-cols-2 gap-3 w-full"></div>
+    <div id="emptyState" class="hidden text-center py-10">
+      <p class="text-[13px] text-gray-500">Search your shelf whenever a song gets stuck in your head.</p>
     </div>
-    <div class="mt-4 relative">
-      <input id="ytLink" oninput="checkLink()" placeholder="youtube.com/watch?v=..." class="w-full bg-white border border-[#ede9fe] rounded-full px-5 py-3 text-[14px] outline-none">
-      <!-- DOT + MESSAGE -->
-      <div id="linkStatus" class="hidden mt-2 text-[12px] font-semibold flex items-center gap-1.5"></div>
-    </div>
-    <button id="addBtn" onclick="addVideo()" disabled class="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold text-[15px] flex items-center justify-center gap-2 transition-all">+ Add to videos</button>
-  </div>
-
-  <!-- BOX 3 - Last wala box, same theme, yaha videos dikhenge -->
-  <div class="mt-6 border-[1.5px] border-dashed border-[#d8b4fe] rounded-[24px] p-5 min-h-[220px] bg-white/50">
-    <div id="emptyState" class="text-center py-10 hidden">
-      <div class="w-12 h-12 bg-white border rounded-xl flex items-center justify-center mx-auto text-[#7c3aed]">▶</div>
-      <p class="text-[#6b7280] text-[14px] mt-4">Search your shelf whenever a song<br>gets stuck in your head.</p>
-    </div>
-    <div id="videoGrid" class="grid grid-cols-2 gap-3"></div>
   </div>
 </main>
 
 <script>
-let videos = JSON.parse(localStorage.getItem('bts_videos') || '[{"title":"BTS Dynamite Official MV","id":"gdZLi9oWNZg"},{"title":"Butter Official MV","id":"WMweEpGlu_U"}]');
-videos = videos.filter(v=>v.id!=='pBuZEGgPm_k');
+let videos = JSON.parse(localStorage.getItem('bts_videos') || '[]');
+if(videos.length===0){
+  videos = [
+    {title:"BTS (방탄소년단) 'Dynamite' Official MV", id:"gdZLi9oWNZg", channel:"HYBE LABELS", addedAt: Date.now()-3*86400000},
+    {title:"BTS (방탄소년단) 'Butter' Official MV", id:"WMweEpGlu_U", channel:"HYBE LABELS", addedAt: Date.now()-3*86400000}
+  ];
+}
 localStorage.setItem('bts_videos', JSON.stringify(videos));
 
-let pendingId = null;
+let pending = null;
 
-function render(list = videos){
-  const grid = document.getElementById('videoGrid');
-  const empty = document.getElementById('emptyState');
-  grid.innerHTML='';
-  if(list.length===0){ empty.classList.remove('hidden'); return; } else { empty.classList.add('hidden'); }
-  list.forEach(v=>{
-    grid.innerHTML+=`<div class="bg-white rounded-[14px] overflow-hidden border shadow-sm"><img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg" class="w-full aspect-video object-cover"><p class="p-2 text-[12px] font-bold truncate">${v.title}</p></div>`;
-  });
-}
+async function checkLink(){
+  const link=document.getElementById('ytLink').value.trim();
+  const preview=document.getElementById('previewBox');
+  const addBtn=document.getElementById('addBtn');
+  const dot=document.getElementById('prevDot');
 
-function doSearch(){
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  if(!q){ render(); return; }
-  const filtered = videos.filter(v=> v.title.toLowerCase().includes(q) );
-  render(filtered);
-}
+  if(!link){ preview.classList.add('hidden'); addBtn.disabled=true; addBtn.className="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold disabled:opacity-60"; pending=null; return; }
 
-function checkLink(){
-  const link = document.getElementById('ytLink').value;
-  const status = document.getElementById('linkStatus');
-  const btn = document.getElementById('addBtn');
-  const id = link.match(/(?:v=|\.be\/)([a-zA-Z0-9_-]{11})/)?.[1] || (link.length===11? link : null);
+  const idMatch = link.match(/(?:v=|\.be\/|shorts\/)([a-zA-Z0-9_-]{11})/) || (link.length===11?[null,link]:null);
+  const id = idMatch? idMatch[1]:null;
+  if(!id){ preview.classList.add('hidden'); return; }
 
-  if(!link){ status.classList.add('hidden'); btn.disabled=true; btn.className="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold"; pendingId=null; return; }
-  if(!id){ status.classList.remove('hidden'); status.innerHTML=`<span class="w-2 h-2 bg-red-500 rounded-full"></span> <span class="text-red-500">Invalid link</span>`; btn.disabled=true; pendingId=null; return; }
+  // fetch real title via noembed
+  try{
+    const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${id}`);
+    const data = await res.json();
+    document.getElementById('prevThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+    document.getElementById('prevTitle').innerText=data.title || `YouTube Video ${id}`;
+    document.getElementById('prevChannel').innerText=data.author_name || "YouTube";
+    preview.classList.remove('hidden');
 
-  const exists = videos.some(v=>v.id===id);
-  status.classList.remove('hidden');
-  if(exists){
-    status.innerHTML=`<span class="w-2 h-2 bg-red-500 rounded-full"></span> <span class="text-red-500">Already on your shelf — this MV is already added</span>`;
-    btn.disabled=true;
-    btn.className="w-full mt-3 bg-gray-300 text-white py-3 rounded-full font-bold cursor-not-allowed";
-    pendingId=null;
-  } else {
-    status.innerHTML=`<span class="w-2 h-2 bg-green-500 rounded-full"></span> <span class="text-green-600">New video! Ready to add</span>`;
-    btn.disabled=false;
-    btn.className="w-full mt-3 bg-[#7c3aed] text-white py-3 rounded-full font-bold shadow";
-    pendingId=id;
+    const exists = videos.some(v=>v.id===id);
+    if(exists){
+      dot.innerHTML=`<span class="inline-block w-2 h-2 bg-red-500 rounded-full"></span> <span class="text-red-500">Already added</span>`;
+      addBtn.disabled=true;
+      addBtn.className="w-full mt-3 bg-gray-300 text-white py-3 rounded-full font-bold";
+      pending=null;
+    } else {
+      dot.innerHTML=`<span class="inline-block w-2 h-2 bg-green-500 rounded-full"></span> <span class="text-green-600">New video ready</span>`;
+      addBtn.disabled=false;
+      addBtn.className="w-full mt-3 bg-[#7c3aed] text-white py-3 rounded-full font-bold";
+      pending={id, title:data.title, channel:data.author_name};
+    }
+  }catch(e){
+    document.getElementById('prevThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+    document.getElementById('prevTitle').innerText=`Video ${id}`;
+    preview.classList.remove('hidden');
   }
 }
 
 function addVideo(){
-  if(!pendingId) return;
-  let title = prompt('Title for this MV?', 'New MV') || ('MV - '+pendingId);
-  videos.unshift({title, id: pendingId});
+  if(!pending) return;
+  videos.unshift({title:pending.title, id:pending.id, channel:pending.channel, addedAt: Date.now()});
   localStorage.setItem('bts_videos', JSON.stringify(videos));
   document.getElementById('ytLink').value='';
-  document.getElementById('linkStatus').classList.add('hidden');
+  document.getElementById('previewBox').classList.add('hidden');
   document.getElementById('addBtn').disabled=true;
   document.getElementById('addBtn').className="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold";
-  pendingId=null;
+  pending=null;
   render();
+}
+
+function render(list=videos){
+  const grid=document.getElementById('videoGrid');
+  grid.innerHTML='';
+  if(list.length===0){ document.getElementById('emptyState').classList.remove('hidden'); return;}
+  document.getElementById('emptyState').classList.add('hidden');
+  list.forEach(v=>{
+    const isNew = v.addedAt && (Date.now() - v.addedAt < 2*24*60*60*1000);
+    grid.innerHTML+=`<div class="bg-white rounded-[14px] overflow-hidden border shadow-sm relative"><img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg" class="w-full aspect-video object-cover"><div class="p-2"><p class="text-[11px] font-bold leading-[1.2] line-clamp-2">${v.title}</p><p class="text-[10px] text-gray-400 mt-1">${v.channel||''}</p></div>${isNew?'<span class="absolute top-2 left-2 bg-blue-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold">New</span>':''}</div>`;
+  });
+}
+
+function doSearch(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  if(!q){ render(); return; }
+  render(videos.filter(v=> v.title.toLowerCase().includes(q) || (v.channel||'').toLowerCase().includes(q) ));
 }
 
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
-
 render();
-</script>
-</body></html>
+</script></body></html>
