@@ -4,6 +4,7 @@
 <style>
 body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 .font-display{font-family:'Playfair Display',serif;}
+.font-mono{font-family:'DM Mono',monospace;}
 .sidebar-bg{background:#28164f;}
 *{box-sizing:border-box;}
 </style></head><body>
@@ -30,7 +31,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
   <h1 class="font-display text-[38px] leading-[0.95] font-bold mt-2">Bring a favorite in.</h1>
   <p class="text-[#6b7280] text-[14px] mt-3">Search the videos already on your shelf, or paste a YouTube link. We'll check the metadata before it joins your scrapbook.</p>
 
-  <!-- ADD BOX - UPAR -->
   <div class="mt-6 bg-[#f3edff] rounded-[24px] p-4 w-full">
     <div class="flex items-center gap-2"><span>🔗</span><h3 class="font-bold text-[15px]">Add MVs / videos for all</h3></div>
     <input id="ytLink" oninput="checkLink()" placeholder="youtube.com/watch?v=..." class="w-full mt-4 bg-white border rounded-full px-4 py-3 text-[14px] outline-none">
@@ -40,7 +40,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
     <button id="addBtn" onclick="addVideo()" disabled class="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold text-[14px] disabled:opacity-60">+ Add to videos</button>
   </div>
 
-  <!-- SEARCH BOX -->
   <div class="mt-4 bg-white border rounded-[24px] p-4 w-full shadow-sm">
     <div class="flex items-center gap-2"><span class="text-[#7c3aed]">⌕</span><h3 class="font-bold text-[15px]">Search your added videos</h3></div>
     <div class="flex gap-2 mt-4 w-full">
@@ -49,7 +48,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
     </div>
   </div>
 
-  <!-- GREEN CIRCLE WALI JAGAH PE DROPDOWN - NAYA -->
   <div class="mt-5 flex items-center justify-between">
     <div class="relative w-full">
       <select id="filterSelect" onchange="applyFilters()" class="w-full appearance-none bg-white border border-[#ede9fe] rounded-full px-5 py-3 pr-10 text-[14px] font-bold text-[#111] shadow-sm outline-none focus:border-[#7c3aed]">
@@ -62,7 +60,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
     </div>
   </div>
 
-  <!-- SHELF -->
   <div class="mt-4 border-[1.5px] border-dashed border-[#d8b4fe] rounded-[24px] p-3 w-full bg-white/50">
     <div id="videoGrid" class="grid grid-cols-2 gap-3 w-full"></div>
     <div id="emptyState" class="hidden text-center py-10"><p class="text-[13px] text-gray-500">No videos found 💜</p></div>
@@ -70,14 +67,22 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 </main>
 
 <script>
+// --- FIXED LOGIC: AB SIRF 2 TAK LIMIT NAHI ---
 let videos = JSON.parse(localStorage.getItem('bts_videos') || '[]');
+
+// Agar first time hai toh 2 default add karo
 if(videos.length===0){
   videos=[
     {title:"BTS (방탄소년단) 'Dynamite' Official MV", id:"gdZLi9oWNZg", channel:"HYBE LABELS", addedAt: Date.now()-3*86400000},
     {title:"BTS (방탄소년단) 'Butter' Official MV", id:"WMweEpGlu_U", channel:"HYBE LABELS", addedAt: Date.now()-3*86400000}
   ];
+} else {
+  // Purane videos ko rakho, bas ensure karo Dynamite & Butter hai
+  if(!videos.some(v=>v.id==="gdZLi9oWNZg")) videos.push({title:"BTS (방탄소년단) 'Dynamite' Official MV", id:"gdZLi9oWNZg", channel:"HYBE LABELS", addedAt: Date.now()-3*86400000});
+  if(!videos.some(v=>v.id==="WMweEpGlu_U")) videos.push({title:"BTS (방탄소년단) 'Butter' Official MV", id:"WMweEpGlu_U", channel:"HYBE LABELS", addedAt: Date.now()-3*86400000});
 }
 localStorage.setItem('bts_videos', JSON.stringify(videos));
+
 let pending=null;
 
 async function checkLink(){
