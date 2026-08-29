@@ -1,19 +1,7 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Music - borahae.fm</title><link rel="stylesheet" href="style.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head><body>
-<header class="topbar"><div class="logo"><b>b</b> borahae.fm</div></header>
-<nav class="bottom-nav"><a href="index.html">Home</a><a href="missions.html">Missions</a><a href="music.html" class="active">Music</a><a href="history.html">History</a></nav>
-<main style="padding:16px">
-<p class="date">YOUR SCRAPBOOK - 2026</p>
-<h2>THE ARCHIVE • SEVEN'S CINEMA</h2>
-<p class="sub">Special vault curated with love, not cringe 💜</p>
-<button class="primary" onclick="openAddModal()">+ Add MV / Vid</button>
-<div id="videoGrid" class="grid"></div>
-</main>
-<div id="addModal" class="modal-bg" style="display:none"><div class="auth-modal">
-<span class="close" onclick="closeAdd()">×</span>
-<h3>Add YouTube MV</h3>
-<input type="text" id="ytLink" placeholder="Paste YouTube link here" oninput="previewYT(this.value)">
-<div id="ytPreview" style="display:none;margin:10px 0"><img id="ytThumb" style="width:100%;border-radius:12px"></div>
-<p id="ytStatus"></p>
-<button class="primary" onclick="addVideo()">Add to Archive ✅</button>
-</div></div>
-<script src="app.js"></script></body></html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="owner-ai.css"></head><body>
+<header><div class="header-left"><button onclick="location.href='index.html'">←</button><div class="logo-b">b</div></div><div class="logo">Music</div></header>
+<main style="padding:16px"><h2>THE ARCHIVE • SEVEN'S CINEMA</h2><p class="desc-small">Special vault curated with love 💜</p><button class="btn-purple" onclick="openAddModal()">+ Add MV / Vid</button><div id="music-list" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px"></div></main>
+<div id="addModal" class="popup hidden"><div class="popup-box"><span class="close-btn" onclick="closeAdd()">✕</span><h3>Add MV</h3><input id="ytLink" placeholder="YouTube link" oninput="previewYT(this.value)"><div id="ytPreview" style="display:none"><img id="ytThumb" style="width:100%;border-radius:10px;margin-top:10px"></div><p id="ytStatus"></p><button class="btn-purple" style="width:100%" onclick="addVideo()">Add ✅</button></div></div>
+<div id="video-popup" class="popup hidden"><div class="popup-box"><span class="close-btn" onclick="closePopup()">✕ Close</span><iframe id="yt" style="width:100%;height:300px;border:none;border-radius:12px"></iframe><button class="btn-purple" style="width:100%;margin-top:10px" onclick="markWatched()">Mark as Watched 💜</button></div></div>
+<div id="owner-ai-btn" style="display:none" onclick="toggleAI()">💜 AI</div><div id="owner-ai-panel" class="hidden"><div class="ai-header">Owner AI <span onclick="toggleAI()">✕</span></div><div id="ai-chat"></div><div class="ai-input"><input id="ai-prompt" placeholder="Bol kya change karna hai?"><button onclick="askOwnerAI()">Send</button></div></div>
+<script src="script.js"></script><script src="owner-ai.js"></script></body></html>
