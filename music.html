@@ -1,10 +1,19 @@
-<!DOCTYPE html>
-<html><head><link rel="stylesheet" href="style.css"></head><body>
-<div class="topbar">borahae.fm</div>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Music - borahae.fm</title><link rel="stylesheet" href="style.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head><body>
+<header class="topbar"><div class="logo"><b>b</b> borahae.fm</div></header>
+<nav class="bottom-nav"><a href="index.html">Home</a><a href="missions.html">Missions</a><a href="music.html" class="active">Music</a><a href="history.html">History</a></nav>
+<main style="padding:16px">
+<p class="date">YOUR SCRAPBOOK - 2026</p>
 <h2>THE ARCHIVE • SEVEN'S CINEMA</h2>
-<p>A special vault curated with love 💜</p>
+<p class="sub">Special vault curated with love, not cringe 💜</p>
 <button class="primary" onclick="openAddModal()">+ Add MV / Vid</button>
 <div id="videoGrid" class="grid"></div>
-<!-- Add Modal same as before with thumbnail preview -->
-<script src="app.js"></script>
-</body></html>
+</main>
+<div id="addModal" class="modal-bg" style="display:none"><div class="auth-modal">
+<span class="close" onclick="closeAdd()">×</span>
+<h3>Add YouTube MV</h3>
+<input type="text" id="ytLink" placeholder="Paste YouTube link here" oninput="previewYT(this.value)">
+<div id="ytPreview" style="display:none;margin:10px 0"><img id="ytThumb" style="width:100%;border-radius:12px"></div>
+<p id="ytStatus"></p>
+<button class="primary" onclick="addVideo()">Add to Archive ✅</button>
+</div></div>
+<script src="app.js"></script></body></html>
