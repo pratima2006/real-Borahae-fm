@@ -1,22 +1,106 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>borahae.fm</title>
-<script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="owner-ai.css">
-</head><body class="paper-grid">
-<!-- LANDING - PIC JAISE -->
-<div id="landing" class="max-w-[600px] mx-auto p-5">
-  <nav class="flex justify-between items-center py-4"><div class="flex items-center gap-2 font-bold text-lg"><div class="bg-[hsl(var(--primary))] text-white px-3 py-1 rounded-xl">b✨</div> borahae.fm</div><button onclick="openLogin()" class="border border-[hsl(var(--primary))] text-[hsl(var(--primary))] px-4 py-1.5 rounded-full text-sm font-semibold">Login</button></nav>
-  <div class="top-pill mt-8">✨ FOR EVERY COMEBACK, TOGETHER</div>
-  <h1 class="font-display text-[3.2rem] leading-[0.95] mt-6 font-bold">Keep the<br><span class="text-[hsl(var(--primary))]">light.<br>Stream with<br>heart.</span></h1>
-  <p class="text-gray-500 mt-4 text-[14px]">borahae.fm is your lovingly kept ARMY scrapbook — a place to discover missions, make every stream count, and watch the purple light grow.</p>
-  <div class="flex gap-3 mt-6"><button class="btn-primary" onclick="openApp()">Open your scrapbook →</button><button class="btn-secondary">See how it works</button></div>
-  <div class="purple-card scrap-shadow mt-12 max-w-[340px] mx-auto">
-    <p class="font-mono text-[9px] tracking-widest opacity-70">MISSION 001 / BANGTANTV</p>
-    <h2 class="font-display text-3xl mt-4 leading-tight">The purple<br>hour.</h2>
-    <button class="bg-[#ec4899] w-8 h-8 rounded-full mt-8">▶</button>
-  </div>
-  <div class="grid grid-cols-3 gap-4 mt-16 border-t pt-8"><div><p class="font-mono text-[10px] text-purple-600">01</p><h3 class="font-display font-bold">Find your mission</h3></div><div><p class="font-mono text-[10px] text-purple-600">02</p><h3 class="font-display font-bold">Watch with intention</h3></div><div><p class="font-mono text-[10px] text-purple-600">03</p><h3 class="font-display font-bold">Leave your mark</h3></div></div>
-</div>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
-<!-- APP HOME -->
-<div id="app" class="hidden"><header class="flex justify-between p-4 bg-white sticky top-0 z-10"><button id="menu-btn" class="bg-[hsl(var(--primary))] text-white w-9 h-9 rounded-full">⋮</button><span id="user-name-display">ARMY</span></header><aside id="sidebar" class="fixed top-0 left-0 w-[270px] h-screen bg-[#2e1065] text-white p-5 -translate-x-full transition-transform z-50"><ul class="mt-16 space-y-2"><li class="bg-white/20 p-3 rounded-xl">🏠 Home</li><li onclick="location.href='missions.html'" class="p-3">✨ Missions</li><li onclick="location.href='music.html'" class="p-3">🎵 Music</li><li onclick="location.href='history.html'" class="p-3">📖 History</li></ul></aside><main class="p-5 max-w-[900px] mx-auto"><h1 class="font-display text-3xl">Welcome back, <span id="welcome-name" class="text-[hsl(var(--primary))]">ARMY</span>.</h1></main></div>
-<div id="owner-ai-btn" style="display:none" onclick="toggleAI()">💜 AI</div><div id="owner-ai-panel" class="hidden"><div class="ai-header">Owner AI <span onclick="toggleAI()">✕</span></div><div id="ai-chat"></div><div class="ai-input"><input id="ai-prompt" placeholder="Bol kya change?"><button onclick="askOwnerAI()">Send</button></div></div>
-<script src="script.js"></script><script src="owner-ai.js"></script></body></html>
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --background: 270 45% 98%;
+  --foreground: 264 31% 17%;
+  --border: 267 32% 89%;
+  --input: 267 32% 89%;
+  --ring: 272 72% 49%;
+  --card: 0 0% 100%;
+  --card-foreground: 264 31% 17%;
+  --primary: 272 72% 49%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 269 45% 94%;
+  --secondary-foreground: 273 55% 31%;
+  --muted: 270 32% 95%;
+  --muted-foreground: 264 12% 48%;
+  --accent: 326 75% 67%;
+  --accent-foreground: 264 31% 17%;
+  --destructive: 4 71% 53%;
+  --destructive-foreground: 0 0% 100%;
+  --app-font-sans: 'Manrope', sans-serif;
+  --app-font-serif: 'Playfair Display', serif;
+  --app-font-mono: 'DM Mono', monospace;
+  --radius: 1rem;
+  --sidebar: 269 60% 19%;
+  --sidebar-foreground: 270 40% 96%;
+}
+
+.dark {
+  --background: 264 34% 10%;
+  --foreground: 270 40% 96%;
+  --border: 265 23% 23%;
+  --input: 265 23% 23%;
+  --card: 264 29% 14%;
+  --card-foreground: 270 40% 96%;
+  --muted: 265 25% 19%;
+  --muted-foreground: 270 18% 71%;
+  --secondary: 265 24% 23%;
+  --secondary-foreground: 270 40% 96%;
+  --sidebar: 264 37% 8%;
+  --sidebar-foreground: 270 40% 96%;
+}
+
+@layer base {
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; }
+  body { @apply font-sans antialiased bg-background text-foreground; }
+  button, a, input, select { -webkit-tap-highlight-color: transparent; }
+  button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 3px solid hsl(var(--accent) / .55);
+    outline-offset: 3px;
+  }
+}
+
+@layer utilities {
+  .font-display { font-family: var(--app-font-serif); }
+  .font-mono { font-family: var(--app-font-mono); }
+  .scrap-shadow { box-shadow: 0 18px 50px hsl(270 43% 32% / .10), 0 3px 8px hsl(270 43% 32% / .06); }
+  .paper-grid {
+    background-image: linear-gradient(hsl(272 40% 74% / .12) 1px, transparent 1px), linear-gradient(90deg, hsl(272 40% 74% / .12) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .noise { position: relative; isolation: isolate; }
+  .noise::after { content: ''; position: fixed; inset: 0; pointer-events: none; opacity: .045; z-index: 50; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.34'/%3E%3C/svg%3E"); }
+  .animate-rise { animation: rise .65s cubic-bezier(.2,.75,.25,1) both; }
+  .animate-fade { animation: fade .45s ease both; }
+  .skeleton { animation: pulse 1.7s ease-in-out infinite; background: hsl(var(--muted)); }
+}
+
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+
+.cl-rootBox { font-family: var(--app-font-sans); }
+.cl-cardBox { border: 1px solid hsl(var(--border)); box-shadow: 0 22px 70px hsl(270 43% 32% / .16); }
