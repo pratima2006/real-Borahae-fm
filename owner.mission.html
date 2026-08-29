@@ -7,7 +7,7 @@
 <style>
 body{font-family:system-ui;background:#fdf2ff;padding:16px;margin:0}
 .top{font-size:22px;font-weight:bold}
-.card{background:#fff;padding:14px;border-radius:16px;margin-top:12px;box-shadow:0 2px 10px #0001}
+.card{background:#fff;padding:14px;border-radius:16px;margin-top:12px;box-shadow:0 2px 10px #0001;display:flex;justify-content:space-between;align-items:center}
 input{width:100%;padding:13px;margin:6px 0;border-radius:25px;border:1px solid #ddd;box-sizing:border-box;font-size:15px}
 .addBtn{width:100%;padding:14px;border-radius:25px;border:none;background:#7c3aed;color:#fff;font-weight:bold;font-size:16px;margin-top:8px}
 .row{display:flex;gap:8px;align-items:center;margin-top:8px}
@@ -33,7 +33,7 @@ input{width:100%;padding:13px;margin:6px 0;border-radius:25px;border:1px solid #
 if(prompt("Enter Owner PIN:")!=="bora123"){document.body.innerHTML="<h1>Access Denied</h1>";throw "no"}
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",
+  apiKey: "AIzaSyAdEoRnBLg4N7TEDE1WRU6FBjcrS6r7XNw",
   authDomain: "borahae-fm-f7075.firebaseapp.com",
   databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com",
   projectId: "borahae-fm-f7075",
@@ -41,23 +41,37 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+// NAYA FIXED FUNCTION - HAR LINK SE SAHI ID NIKALEGA
+function getYouTubeID(urlOrId){
+  if(!urlOrId) return "";
+  urlOrId = urlOrId.trim();
+  if(urlOrId.length===11 &&!urlOrId.includes("/") &&!urlOrId.includes("?") &&!urlOrId.includes("=")) return urlOrId;
+  let reg = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+  let m = urlOrId.match(reg);
+  if(m && m[2].length===11) return m[2];
+  // fallback - last 11 chars if nothing else
+  return urlOrId.slice(-11);
+}
+
 function addMission(){
   const t=title.value.trim(), l=link.value.trim(), s=parseInt(reqStreams.value)||12;
   if(!t||!l) return alert("Title + Link daal");
-  let vid = l.includes("v=")? l.split("v=")[1].split("&")[0] : l.slice(-11);
-  db.ref("missions/"+Date.now()).set({title:t, videoId:vid, requiredStreams:s, createdAt:Date.now()});
+  let vid = getYouTubeID(l);
+  if(!vid || vid.length!==11) return alert("Link sahi nahi hai! Sahi YouTube link daal");
+  db.ref("missions/"+Date.now()).set({title:t, videoId:vid, id:vid, requiredStreams:s, createdAt:Date.now()});
   title.value=""; link.value=""; reqStreams.value="";
-  alert("Added with "+s+" streams ✅");
+  alert("Added "+t+" with "+s+" streams ✅ ID: "+vid);
 }
 
 db.ref("missions").on("value", snap=>{
   list.innerHTML="";
   const data=snap.val(); if(!data) return;
   Object.entries(data).reverse().forEach(([key,v])=>{
+    const cleanId = getYouTubeID(v.videoId || v.id || "");
     const d=document.createElement("div"); d.className="card";
     d.innerHTML=`
       <div style="flex:1">
-        <b>${v.title}</b><br><small>${v.videoId}</small><br>
+        <b>${v.title}</b><br><small>${cleanId}</small><br>
         <div class="row">
           <input id="inp_${key}" type="number" value="${v.requiredStreams||12}" style="width:80px;padding:8px;border-radius:12px">
           <span style="font-size:13px">streams</span>
