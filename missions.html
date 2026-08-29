@@ -13,13 +13,13 @@
 <aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full bg-[#28164f] z-50 -translate-x-full transition-all duration-300 flex flex-col p-5">
   <div class="flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-9 h-9 bg-[#7c3aed] rounded-xl flex items-center justify-center text-white font-bold">b</div><span class="text-white font-bold">borahae.fm</span></div><button onclick="closeSidebar()" class="text-white text-xl">✕</button></div>
   <nav class="mt-10 space-y-1">
-    <a href="home.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60 hover:text-white hover:bg-white/5">⌂ Home</a>
-    <a href="missions.html" class="flex gap-3 px-4 py-3 rounded-full bg-white/10 text-white font-bold">✦ Missions</a>
-    <a href="music.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60 hover:text-white hover:bg-white/5">▶ Videos</a>
-    <a href="history.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60 hover:text-white hover:bg-white/5">◫ My History</a>
-    <a href="faq.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60 hover:text-white hover:bg-white/5">? FAQ</a>
+    <a href="home.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">⌂ Home</a>
+    <a href="missions.html" class="flex gap-3 px-4 py-3 rounded-full bg-white/10 text-white">✦ Missions</a>
+    <a href="music.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">▶ Videos</a>
+    <a href="history.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">◫ My History</a>
+    <a href="faq.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">? FAQ</a>
   </nav>
-  <div class="mt-auto pt-6 border-t border-white/10"><a href="settings.html" class="flex gap-3 px-4 py-3 text-white/60">⚙ Settings</a><p class="text-[11px] text-white/30 text-center mt-6">Borahae.fm 💜<br>Made for ARMY</p></div>
+  <div class="mt-auto pt-6 border-t border-white/10"><a href="settings.html" class="flex gap-3 px-4 py-3 text-white/60">⚙ Settings</a></div>
 </aside>
 
 <main class="max-w-[600px] mx-auto px-5 pt-8 pb-20">
@@ -27,7 +27,8 @@
   <h1 class="font-display text-[36px] font-bold mt-2">A little mission for today.</h1>
   <div id="missionList" class="mt-8 space-y-4"><p class="text-center text-gray-400 text-[13px] mt-10">Loading missions... 💜</p></div>
 </main>
-<div id="video-popup" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-[60]"><div class="bg-white rounded-[20px] p-3 w-full max-w-[600px]"><div class="aspect-video bg-black rounded-[14px] overflow-hidden"><iframe id="ytPlayer" class="w-full h-full" frameborder="0" allowfullscreen></iframe></div><button onclick="markWatched()" class="w-full bg-[#7c3aed] text-white py-3 rounded-xl mt-3 font-bold">Mark Watched 💜</button><p onclick="closeVideo()" class="text-center text-sm mt-3 cursor-pointer">✕ Close</p></div></div>
+
+<div id="video-popup" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-[60]"><div class="bg-white rounded-[20px] p-3 w-full max-w-[600px]"><div class="aspect-video bg-black rounded-[14px] overflow-hidden"><iframe id="ytPlayer" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div><button onclick="markWatched()" class="w-full bg-[#7c3aed] text-white py-3 rounded-xl mt-3 font-bold">Mark Watched 💜</button><p onclick="closeVideo()" class="text-center text-sm mt-3 cursor-pointer">✕ Close</p></div></div>
 
 <script>
 const firebaseConfig = {
@@ -42,10 +43,21 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-let videos=[]; // ab firebase se ayega
+let videos=[];
 let todayKey=new Date().toISOString().split('T')[0];
 if(localStorage.getItem('last_reset_date')!==todayKey){localStorage.setItem('stream_counts',JSON.stringify({}));localStorage.setItem('last_reset_date',todayKey);}
 let counts=JSON.parse(localStorage.getItem('stream_counts')||'{}'); let currentId='';
+
+// YEH NAYA FUNCTION HAI - JO BHI LINK DALOGI SAHI ID NIKAL DEGA
+function getYouTubeID(urlOrId){
+  if(!urlOrId) return "";
+  urlOrId = urlOrId.trim();
+  if(urlOrId.length===11 &&!urlOrId.includes("/") &&!urlOrId.includes("?")) return urlOrId;
+  let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+  let match = urlOrId.match(regExp);
+  if(match && match[2].length===11) return match[2];
+  return urlOrId; // fallback
+}
 
 function render(){
  const list=document.getElementById('missionList');
@@ -57,16 +69,16 @@ function render(){
   <div class="flex-1"><h3 class="font-bold text-[15px]">${v.title}</h3><p class="text-[13px] text-gray-500">Stream ${v.title} ${goal} times today</p><div class="flex justify-between mt-2"><span class="text-[13px] text-gray-500">${c} / ${goal} streams</span><span class="text-[13px] text-[#7c3aed] font-bold">${p}%</span></div><div class="w-full h-[6px] bg-gray-100 rounded-full mt-1.5"><div class="h-full bg-[#7c3aed] rounded-full transition-all" style="width:${p}%"></div></div></div></div>`;});
 }
 
-// FIREBASE SE MISSIONS LOAD - OWNER CONTROL
 db.ref('missions').on('value', (snap)=>{
   let data=snap.val();
   if(!data){
     videos=[{"title":"Dynamite","id":"gdZLi9oWNZg","goal":12},{"title":"Butter","id":"WMweEpGlu_U","goal":12}];
   } else {
     videos = Object.values(data).reverse().map(m=>{
+      let rawId = m.id || m.videoId || "";
       return {
         title: m.title || "Untitled",
-        id: m.id || m.videoId || "",
+        id: getYouTubeID(rawId),
         goal: m.requiredStreams || m.goal || 12
       };
     }).filter(v=>v.id);
@@ -76,7 +88,7 @@ db.ref('missions').on('value', (snap)=>{
 
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
-function openVideo(id){currentId=id;document.getElementById('ytPlayer').src=`https://www.youtube.com/embed/${id}?autoplay=1`;document.getElementById('video-popup').classList.remove('hidden');document.getElementById('video-popup').classList.add('flex');}
+function openVideo(id){currentId=id;document.getElementById('ytPlayer').src=`https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`;document.getElementById('video-popup').classList.remove('hidden');document.getElementById('video-popup').classList.add('flex');}
 function closeVideo(){document.getElementById('ytPlayer').src='';document.getElementById('video-popup').classList.add('hidden');}
 function markWatched(){
   let currentGoal = (videos.find(v=>v.id===currentId)?.goal) || 12;
