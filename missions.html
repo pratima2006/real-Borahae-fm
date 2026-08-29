@@ -11,28 +11,25 @@
 </header>
 
 <!-- SIDEBAR - SECRET OWNER REMOVED -->
-<div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-40 hidden"></div>
-<div id="sidebar" class="fixed top-0 right-0 w-[280px] h-full bg-white z-50 translate-x-full transition-transform duration-300 shadow-2xl p-6">
-  <div class="flex justify-between items-center mb-8">
-    <span class="font-bold text-lg">Menu</span>
-    <button onclick="toggleSidebar()" class="text-2xl">×</button>
+<div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
+<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-3"><div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px]">b</div><span class="text-white font-bold text-[18px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div>
+    <button onclick="closeSidebar()" class="text-white/70 text-[24px]">✕</button>
   </div>
+  <p class="font-mono text-[10px] tracking-[2.5px] text-white/40 mt-8 mb-3">YOUR SCRAPBOOK</p>
   <nav class="space-y-1">
-    <a href="index.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#f5f0ff] font-semibold">🏠 Home</a>
-    <a href="missions.html" class="flex items-center gap-3 p-3 rounded-xl bg-[#f5f0ff] text-[#7c3aed] font-bold">🎯 Missions</a>
-    <a href="videos.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#f5f0ff] font-semibold">📺 Videos</a>
-    <a href="history.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#f5f0ff] font-semibold">🕘 My History</a>
-    <a href="faq.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#f5f0ff] font-semibold">💬 FAQ</a>
-    <a href="settings.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#f5f0ff] font-semibold">⚙️ Settings</a>
+    <a href="home.html" class="flex items-center gap-3 px-4 py-3 rounded-full bg-white/10 text-white font-semibold">⌂ Home <span class="ml-auto w-2 h-2 bg-[#f472b6] rounded-full"></span></a>
+    <a href="missions.html" class="flex items-center gap-3 px-4 py-3 rounded-full text-white/60 hover:bg-white/5">✦ Missions</a>
+    <a href="music.html" class="flex items-center gap-3 px-4 py-3 rounded-full text-white/60 hover:bg-white/5">▶ Videos</a>
+    <a href="history.html" class="flex items-center gap-3 px-4 py-3 rounded-full text-white/60 hover:bg-white/5">◫ My History</a>
+    <a href="faq.html" class="flex items-center gap-3 px-4 py-3 rounded-full text-white/60 hover:bg-white/5">? FAQ</a>
   </nav>
-  <p class="text-[11px] text-gray-400 mt-10 text-center">Borahae.fm 💜<br>Made for ARMY</p>
-</div>
-
-<main class="max-w-[480px] mx-auto p-5 pb-24">
-<p class="text-[11px] tracking-[2px] text-[#7c3aed] font-bold">STARTER MISSIONS / BANGTANTV</p>
-<h1 class="text-[34px] font-bold leading-[1.1] mt-2" style="font-family:'Playfair Display'">A little mission for today.</h1>
-<div id="list" class="mt-8 space-y-4"><p class="text-center text-gray-400 text-[13px] mt-10">Loading missions... 💜</p></div>
-</main>
+  <div class="mt-auto">
+    <div class="border-t border-white/10 pt-6"><a href="settings.html" class="flex items-center gap-3 px-4 py-3 text-white/60">⚙ Settings</a></div>
+    <div class="mt-4 bg-white/10 rounded-[16px] p-3 flex items-center gap-3"><div class="w-10 h-10 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f]">A</div><div><p class="text-white text-[13px] font-bold">ARMY demo</p><p class="text-white/50 text-[11px]">keeping the purple light on</p></div></div>
+  </div>
+</aside>
 
 <script>
 function toggleSidebar(){
