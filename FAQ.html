@@ -1,0 +1,38 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FAQ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<style>body{font-family:'Manrope',sans-serif;background:#fdf8ff;}</style></head><body>
+<header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur border-b px-4 py-3 flex gap-3"><button onclick="openSidebar()" class="w-9 h-9 bg-white border rounded-[10px]">☰</button><div class="w-9 h-9 bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-bold">b</div></header>
+<div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 z-40 hidden"></div>
+<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full bg-[#28164f] z-50 -translate-x-full transition-all duration-300 flex flex-col p-5">
+  <div class="flex justify-between"><div class="flex gap-2 items-center"><div class="w-9 h-9 bg-[#7c3aed] rounded-xl flex items-center justify-center text-white font-bold">b</div><span class="text-white font-bold">borahae.fm</span></div><button onclick="closeSidebar()" class="text-white">✕</button></div>
+  <nav class="mt-10 space-y-1">
+    <a href="home.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">⌂ Home</a>
+    <a href="missions.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">✦ Missions</a>
+    <a href="music.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">▶ Videos</a>
+    <a href="history.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">◫ My History</a>
+    <a href="faq.html" class="flex gap-3 px-4 py-3 rounded-full bg-white/10 text-white">? FAQ</a>
+  </nav>
+</aside>
+
+<main class="max-w-[600px] mx-auto px-5 pt-8 pb-20">
+  <h1 class="font-display text-[36px] font-bold">FAQ</h1>
+  <p class="text-gray-500 text-[14px] mt-2">Everything you want to know, with purple love.</p>
+
+  <div class="mt-8 space-y-3" id="faqList">
+    <!-- Q1 -->
+    <div class="bg-white border border-[#ede9fe] rounded-[16px] overflow-hidden"><button onclick="toggleFaq(this)" class="w-full text-left px-5 py-4 flex justify-between items-center"><span class="font-bold text-[15px] text-[#111]">What is borahae.fm?</span><span class="text-[#7c3aed]">+</span></button><div class="hidden px-5 pb-4 text-[13px] text-[#6b7280] leading-[1.6]">borahae.fm is your ARMY scrapbook — a cozy place to stream with heart, not just numbers. <br><br><span class="text-[#111] font-semibold">•</span> Track your daily streams<br><span class="text-[#111] font-semibold">•</span> Complete missions<br><span class="text-[#111] font-semibold">•</span> Watch the purple light grow with ARMYs</div></div>
+    <!-- Q2 -->
+    <div class="bg-white border rounded-[16px] overflow-hidden"><button onclick="toggleFaq(this)" class="w-full text-left px-5 py-4 flex justify-between"><span class="font-bold text-[15px] text-[#111]">How does it work?</span><span class="text-[#7c3aed]">+</span></button><div class="hidden px-5 pb-4 text-[13px] text-[#6b7280] leading-[1.6]"><span class="text-[#111] font-semibold">•</span> Pick a mission (Dynamite, Butter etc)<br><span class="text-[#111] font-semibold">•</span> Watch full MV in our player<br><span class="text-[#111] font-semibold">•</span> Click Mark Watched — it counts as 1 stream<br><span class="text-[#111] font-semibold">•</span> Daily goal is 12 streams</div></div>
+    <!-- Q3 -->
+    <div class="bg-white border rounded-[16px] overflow-hidden"><button onclick="toggleFaq(this)" class="w-full text-left px-5 py-4 flex justify-between"><span class="font-bold text-[15px] text-[#111]">When does daily count reset?</span><span class="text-[#7c3aed]">+</span></button><div class="hidden px-5 pb-4 text-[13px] text-[#6b7280]">Every day at 12:00 AM IST (midnight). Fresh missions, fresh light.</div></div>
+    <!-- Q4 -->
+    <div class="bg-white border rounded-[16px] overflow-hidden"><button onclick="toggleFaq(this)" class="w-full text-left px-5 py-4 flex justify-between"><span class="font-bold text-[15px] text-[#111]">Does this count on YouTube?</span><span class="text-[#7c3aed]">+</span></button><div class="hidden px-5 pb-4 text-[13px] text-[#6b7280]">Yes, if you watch full video logged in. We also keep your personal journal here for motivation.</div></div>
+  </div>
+</main>
+
+<script>
+function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
+function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
+function toggleFaq(btn){let content=btn.nextElementSibling; let icon=btn.querySelector('span:last-child'); if(content.classList.contains('hidden')){content.classList.remove('hidden'); icon.textContent='−';}else{content.classList.add('hidden'); icon.textContent='+';}}
+</script></body></html>
