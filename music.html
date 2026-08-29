@@ -2,6 +2,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
 body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
@@ -69,10 +70,10 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
   </div>
 </main>
 
-<!-- VIDEO PLAYER POPUP - YEH MISSING THA -->
+<!-- VIDEO PLAYER POPUP - SIRF YAHAN CHANGE KIYA HAI YT HISTORY KE LIYE -->
 <div id="video-popup" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-[60]">
   <div class="bg-white rounded-[20px] p-3 w-full max-w-[600px]">
-    <div class="aspect-video bg-black rounded-[14px] overflow-hidden"><iframe id="ytPlayer" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
+    <div class="aspect-video bg-black rounded-[14px] overflow-hidden"><div id="ytPlayer" class="w-full h-full"></div></div>
     <p id="nowPlaying" class="text-[13px] font-bold mt-3 px-1 truncate"></p>
     <p onclick="closeVideo()" class="text-center text-sm mt-3 cursor-pointer bg-gray-100 py-2 rounded-full">✕ Close</p>
   </div>
@@ -106,6 +107,7 @@ if(videos.length===0){
   localStorage.setItem('bts_videos', JSON.stringify(videos));
 }
 let pending=null;
+let player=null; let currentId=""; let currentTitle=""; // YT HISTORY KE LIYE ADD KIYA
 
 // Firebase se bhi load karo taaki sabko dikhe
 db.ref('videos').on('value', snap=>{
@@ -197,13 +199,47 @@ function render(list){
   });
 }
 
+// --- YEH WALA PART HI YT HISTORY KE LIYE HAI (PEHLE WALA ORIGINAL) ---
 function openVideo(id,title){
-  document.getElementById('ytPlayer').src=`https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`;
+  currentId=id; currentTitle=title;
   document.getElementById('nowPlaying').innerText=title||"";
   document.getElementById('video-popup').classList.remove('hidden');
   document.getElementById('video-popup').classList.add('flex');
+
+  // YT API player jo history me count hota hai
+  if(player && player.loadVideoById){
+    player.loadVideoById(id);
+  } else {
+    player = new YT.Player('ytPlayer', {
+      height:'100%', width:'100%', videoId:id,
+      playerVars:{autoplay:1, rel:0, modestbranding:1, enablejsapi:1, origin: window.location.origin},
+      events:{'onStateChange': onPlayerStateChange}
+    });
+  }
 }
-function closeVideo(){document.getElementById('ytPlayer').src='';document.getElementById('video-popup').classList.add('hidden');document.getElementById('video-popup').classList.remove('flex');}
+function onPlayerStateChange(e){
+  if(e.data==1){ // playing
+    setTimeout(saveStream, 3000);
+  }
+}
+function saveStream(){
+  if(!currentId) return;
+  let todayKey=new Date().toISOString().split('T')[0];
+  if(localStorage.getItem('last_reset_date')!==todayKey){localStorage.setItem('stream_counts',JSON.stringify({}));localStorage.setItem('last_reset_date',todayKey);}
+  let counts=JSON.parse(localStorage.getItem('stream_counts')||'{}');
+  counts[currentId]=(counts[currentId]||0)+1;
+  localStorage.setItem('stream_counts',JSON.stringify(counts));
+  let history=JSON.parse(localStorage.getItem('borahae_history')||'[]');
+  history.unshift({id:currentId,title:currentTitle,watchedAt:Date.now(),date:todayKey});
+  localStorage.setItem('borahae_history',JSON.stringify(history.slice(0,100)));
+  let total=Object.values(counts).reduce((a,b)=>a+b,0);
+  localStorage.setItem('today_total_streams',total);
+}
+function closeVideo(){
+  if(player && player.stopVideo) player.stopVideo();
+  document.getElementById('video-popup').classList.add('hidden');
+  document.getElementById('video-popup').classList.remove('flex');
+}
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
 applyFilters();
