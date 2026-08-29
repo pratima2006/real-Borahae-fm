@@ -5,38 +5,42 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>body{font-family:'Manrope',sans-serif;background:#fdf8ff}</style>
 </head><body>
-<header class="sticky top-0 z-30 bg-[#fdf8ff] border-b px-4 py-3 flex items-center justify-between">
+<!-- HEADER WITH MENU BUTTON - HOME JAISE -->
+<header class="sticky top-0 z-20 bg-[#fdf8ff] border-b px-4 py-3 flex items-center justify-between">
   <div class="flex items-center gap-3"><div class="w-9 h-9 bg-[#7c3aed] rounded-xl flex items-center justify-center text-white font-bold">b</div><span class="font-bold">borahae.fm</span></div>
-  <button onclick="toggleSidebar()" class="w-9 h-9 rounded-full bg-white border flex items-center justify-center">☰</button>
+  <button onclick="toggleMenu()" class="w-9 h-9 bg-white border rounded-full flex items-center justify-center text-[18px]">☰</button>
 </header>
 
-<!-- SIDEBAR - SECRET OWNER REMOVED -->
-<div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
-<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
-  <div class="flex items-center justify-between">
-    <div class="flex items-center gap-3"><div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px]">b</div><span class="text-white font-bold text-[18px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div>
-    <button onclick="closeSidebar()" class="text-white/70 text-[24px]">✕</button>
+<!-- SIDEBAR - EXACT SAME AS YOUR SCREENSHOT -->
+<div id="overlay" onclick="toggleMenu()" class="fixed inset-0 bg-black/30 z-30 hidden"></div>
+<div id="sideMenu" class="fixed top-0 right-0 w-[78%] max-w-[320px] h-full bg-white z-40 shadow-2xl translate-x-full transition-transform duration-300 flex flex-col">
+  <div class="p-6 flex-1">
+    <div class="flex justify-between items-center mb-8"><h2 class="text-[22px] font-bold">Menu</h2><button onclick="toggleMenu()" class="text-[22px]">×</button></div>
+    <nav class="space-y-1">
+      <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50"><span>🏠</span><span class="font-medium">Home</span></a>
+      <a href="missions.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#f5f0ff] text-[#7c3aed]"><span>🎯</span><span class="font-bold">Missions</span></a>
+      <a href="videos.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50"><span>📺</span><span class="font-medium">Videos</span></a>
+      <a href="history.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50"><span>🕒</span><span class="font-medium">My History</span></a>
+      <a href="faq.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50"><span>💬</span><span class="font-medium">FAQ</span></a>
+      <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50"><span>⚙️</span><span class="font-medium">Settings</span></a>
+    </nav>
   </div>
-  <p class="font-mono text-[10px] tracking-[2.5px] text-white/40 mt-8 mb-3">YOUR SCRAPBOOK</p>
-  <nav class="space-y-1">
-    <a href="home.html" class="flex items-center gap-3 px-4 py-3 rounded-full bg-white/10 text-white font-semibold">⌂ Home <span class="ml-auto w-2 h-2 bg-[#f472b6] rounded-full"></span></a>
-    <a href="missions.html" class="flex items-center gap-3 px-4 py-3 rounded-full text-white/60 hover:bg-white/5">✦ Missions</a>
-    <a href="music.html" class="flex items-center gap-3 px-4 py-3 rounded-full text-white/60 hover:bg-white/5">▶ Videos</a>
-    <a href="history.html" class="flex items-center gap-3 px-4 py-3 rounded-full text-white/60 hover:bg-white/5">◫ My History</a>
-    <a href="faq.html" class="flex items-center gap-3 px-4 py-3 rounded-full text-white/60 hover:bg-white/5">? FAQ</a>
-  </nav>
-  <div class="mt-auto">
-    <div class="border-t border-white/10 pt-6"><a href="settings.html" class="flex items-center gap-3 px-4 py-3 text-white/60">⚙ Settings</a></div>
-    <div class="mt-4 bg-white/10 rounded-[16px] p-3 flex items-center gap-3"><div class="w-10 h-10 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f]">A</div><div><p class="text-white text-[13px] font-bold">ARMY demo</p><p class="text-white/50 text-[11px]">keeping the purple light on</p></div></div>
-  </div>
-</aside>
+  <div class="p-6 text-center"><p class="text-[13px] text-gray-400">Borahae.fm 💜</p><p class="text-[13px] text-gray-400">Made for ARMY</p></div>
+</div>
+
+<main class="max-w-[480px] mx-auto p-5 pb-24">
+<p class="text-[11px] tracking-[2px] text-[#7c3aed] font-bold">STARTER MISSIONS / BANGTANTV</p>
+<h1 class="text-[34px] font-bold leading-[1.1] mt-2" style="font-family:'Playfair Display'">A little mission for today.</h1>
+<div id="list" class="mt-8 space-y-4"><p class="text-center text-gray-400 text-[13px] mt-10">Loading missions... 💜</p></div>
+</main>
 
 <script>
-function toggleSidebar(){
-  const sb=document.getElementById('sidebar'), ov=document.getElementById('sidebarOverlay');
-  if(sb.classList.contains('translate-x-full')){sb.classList.remove('translate-x-full');ov.classList.remove('hidden');}
-  else{sb.classList.add('translate-x-full');ov.classList.add('hidden');}
+function toggleMenu(){
+  const m=document.getElementById('sideMenu'), o=document.getElementById('overlay');
+  if(m.classList.contains('translate-x-full')){m.classList.remove('translate-x-full');o.classList.remove('hidden');}
+  else{m.classList.add('translate-x-full');o.classList.add('hidden');}
 }
+
 const firebaseConfig = {
   apiKey: "AIzaSyAdEoRnBLg4N7TEDE1WRU6FBjcrS6r7XNw",
   authDomain: "borahae-fm-f7075.firebaseapp.com",
@@ -48,14 +52,19 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-db.ref('missions').on('value', snap=>{
-  let data=snap.val();
-  if(!data){document.getElementById('list').innerHTML=`<p class="text-center text-gray-400 text-[13px] mt-10">No missions yet 💜</p>`;return;}
+
+db.ref('missions').on('value', (snap)=>{
+  let data = snap.val();
+  if(!data){
+    document.getElementById('list').innerHTML = `<p class="text-center text-gray-400 text-[13px] mt-10">No missions yet, owner will add soon 💜</p>`;
+    return;
+  }
   let html='';
   Object.values(data).reverse().forEach(m=>{
-    const videoId=m.id||m.videoId||""; const title=m.title||"Untitled";
-    const goal=m.goal||m.requiredStreams||12;
-    const desc=m.desc||`Stream ${title} ${goal} times today`;
+    const videoId = m.id || m.videoId || "";
+    const title = m.title || "Untitled";
+    const goal = m.requiredStreams || m.goal || 12;
+    const desc = m.desc || `Stream ${title} ${goal} times today`;
     if(!videoId) return;
     html+=`<div class="bg-white border rounded-[20px] p-4 flex gap-4 items-center shadow-sm">
     <img src="https://img.youtube.com/vi/${videoId}/mqdefault.jpg" class="w-[70px] h-[70px] rounded-[16px] object-cover">
