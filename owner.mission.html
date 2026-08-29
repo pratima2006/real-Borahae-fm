@@ -3,92 +3,80 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Owner Panel - Borahae FM</title>
+<title>Owner Panel</title>
 <style>
 body{font-family:system-ui;background:#fdf2ff;padding:16px;margin:0}
-.card{background:#fff;padding:14px;border-radius:14px;margin-top:12px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px #0001}
-.tag{padding:3px 10px;border-radius:20px;font-size:12px;color:#fff;margin-top:5px;display:inline-block}
-.high{background:#ff3b30}.med{background:#ff9500}.low{background:#8e8e93}
-input,select{width:100%;padding:13px;margin:7px 0;border-radius:25px;border:1px solid #ddd;box-sizing:border-box;font-size:15px}
-button{width:100%;padding:14px;border-radius:25px;border:none;background:#7c3aed;color:#fff;font-weight:bold;font-size:16px;margin-top:5px}
-small{color:#888}
+.top{font-size:22px;font-weight:bold}
+.card{background:#fff;padding:14px;border-radius:16px;margin-top:12px;box-shadow:0 2px 10px #0001}
+input{width:100%;padding:13px;margin:6px 0;border-radius:25px;border:1px solid #ddd;box-sizing:border-box;font-size:15px}
+.addBtn{width:100%;padding:14px;border-radius:25px;border:none;background:#7c3aed;color:#fff;font-weight:bold;font-size:16px;margin-top:8px}
+.row{display:flex;gap:8px;align-items:center;margin-top:8px}
+.saveBtn{background:#000;color:#fff;border:none;padding:8px 12px;border-radius:20px;font-size:13px}
+.delBtn{color:red;font-size:26px;cursor:pointer;padding:0 8px}
 </style>
 </head>
 <body>
-<h2>👑 Owner Panel</h2>
-<p style="color:#666;margin-top:-10px">Yaha se mission add karegi to sabko dikhega</p>
+<div class="top">👑 Owner Panel</div>
+<p style="color:#666;margin-top:4px;font-size:13px">Yaha se stream target set karegi to sabko dikhega</p>
 
 <input id="title" placeholder="Title ex: Black Swan">
 <input id="link" placeholder="youtube.com/watch?v=...">
-<select id="priority">
-  <option value="high">🔥 HIGH Priority - Zyada Important</option>
-  <option value="medium" selected>⭐ MEDIUM Priority</option>
-  <option value="low">💜 LOW Priority - Kam Important</option>
-</select>
-<button onclick="addMission()">+ Add Mission for ALL</button>
+<input id="reqStreams" type="number" placeholder="Kitne streams karne hai? ex: 20">
+
+<button class="addBtn" onclick="addMission()">+ Add Mission for ALL</button>
 
 <div id="list"></div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
-// PIN CHECK
-if(prompt("Enter Owner PIN:")!== "bora123"){
-  document.body.innerHTML="<h1 style='text-align:center;margin-top:100px'>Access Denied 💜</h1>";
-  throw new Error("Wrong PIN");
-}
+if(prompt("Enter Owner PIN:")!=="bora123"){document.body.innerHTML="<h1>Access Denied</h1>";throw "no"}
 
-// FIREBASE CONFIG - TERA WALA, FULL READY
 const firebaseConfig = {
   apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",
   authDomain: "borahae-fm-f7075.firebaseapp.com",
   databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com",
   projectId: "borahae-fm-f7075",
-  storageBucket: "borahae-fm-f7075.firebasestorage.app",
-  messagingSenderId: ""319118277965"
- https://console.firebase.google.com/u/0/project/borahae-fm-f7075/settings/general/web:MTMxNzUwMTUtMGE4ZS00ZmEzLWE1NDQtMDk5MDczOWQzZDdm#:~:text=messagingSenderId%3A%20%22-,319118277965,-%22%2C%0A%C2%A0%20appId",
-  appId: "1:319118277965:web:eece2a5bf15708aab3cb04"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 function addMission(){
-  const t = document.getElementById('title').value.trim();
-  const l = document.getElementById('link').value.trim();
-  const p = document.getElementById('priority').value;
-  if(!t ||!l) return alert("Title aur Link dono daal!");
-  let videoId = "";
-  if(l.includes("v=")) videoId = l.split("v=")[1].split("&")[0];
-  else videoId = l.slice(-11);
-
-  db.ref("missions/"+Date.now()).set({
-    title: t,
-    videoId: videoId,
-    priority: p,
-    totalStreams: 0,
-    createdAt: Date.now()
-  });
-  document.getElementById('title').value="";
-  document.getElementById('link').value="";
-  alert("Added! ✅");
+  const t=title.value.trim(), l=link.value.trim(), s=parseInt(reqStreams.value)||12;
+  if(!t||!l) return alert("Title + Link daal");
+  let vid = l.includes("v=")? l.split("v=")[1].split("&")[0] : l.slice(-11);
+  db.ref("missions/"+Date.now()).set({title:t, videoId:vid, requiredStreams:s, createdAt:Date.now()});
+  title.value=""; link.value=""; reqStreams.value="";
+  alert("Added with "+s+" streams ✅");
 }
 
 db.ref("missions").on("value", snap=>{
-  const list = document.getElementById('list');
   list.innerHTML="";
-  const data = snap.val();
-  if(!data) return;
-  Object.entries(data).sort((a,b)=>b[0]-a[0]).forEach(([key, v])=>{
-    const div = document.createElement("div");
-    div.className="card";
-    div.innerHTML = `<div><b>${v.title}</b><br><small>${v.videoId}</small><br><small>🔁 Total Streams: ${v.totalStreams||0}</small><br><span class="tag ${v.priority=='high'?'high':v.priority=='medium'?'med':'low'}">${v.priority.toUpperCase()}</span></div><span onclick="deleteMission('${key}')" style="color:red;font-size:28px;cursor:pointer;padding:0 10px">×</span>`;
-    list.appendChild(div);
+  const data=snap.val(); if(!data) return;
+  Object.entries(data).reverse().forEach(([key,v])=>{
+    const d=document.createElement("div"); d.className="card";
+    d.innerHTML=`
+      <div style="flex:1">
+        <b>${v.title}</b><br><small>${v.videoId}</small><br>
+        <div class="row">
+          <input id="inp_${key}" type="number" value="${v.requiredStreams||12}" style="width:80px;padding:8px;border-radius:12px">
+          <span style="font-size:13px">streams</span>
+          <button class="saveBtn" onclick="updateStreams('${key}')">Update</button>
+        </div>
+      </div>
+      <div class="delBtn" onclick="del('${key}')">×</div>
+    `;
+    list.appendChild(d);
   });
 });
 
-function deleteMission(key){
-  if(confirm("Delete this mission?")) db.ref("missions/"+key).remove();
+function updateStreams(key){
+  const newVal = parseInt(document.getElementById("inp_"+key).value);
+  if(!newVal) return alert("Number daal");
+  db.ref("missions/"+key+"/requiredStreams").set(newVal);
+  alert("Updated to "+newVal+" streams ✅");
 }
+function del(k){ if(confirm("Delete?")) db.ref("missions/"+k).remove(); }
 </script>
 </body>
 </html>
