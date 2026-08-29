@@ -1,5 +1,5 @@
 const OWNER_EMAIL = "pratimatribhuvan2006@gmail.com"; // tera github username check
-const GEMINI_KEY = "YOUR_FREE_GEMINI_KEY"; // yaha apni free key paste kar
+const GEMINI_KEY = "AQ.Ab8RN6KOKCh7yzVxcrQESHkiHDWUoQ_xS_CLNsVViSckC6ZJCA"; // yaha apni free key paste kar
 
 function checkOwner(){ const e=localStorage.getItem('user_email')||""; if(e.toLowerCase().includes(OWNER_EMAIL) || e.toLowerCase().includes("pratima")){ document.getElementById('owner-ai-btn').style.display='flex'; }}
 function toggleAI(){ document.getElementById('owner-ai-panel').classList.toggle('hidden'); }
