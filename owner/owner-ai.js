@@ -1,4 +1,4 @@
-const OWNER_EMAIL = "pratima2006"; // tera github username check
+const OWNER_EMAIL = "pratimatribhuvan2006@gmail.com"; // tera github username check
 const GEMINI_KEY = "YOUR_FREE_GEMINI_KEY"; // yaha apni free key paste kar
 
 function checkOwner(){ const e=localStorage.getItem('user_email')||""; if(e.toLowerCase().includes(OWNER_EMAIL) || e.toLowerCase().includes("pratima")){ document.getElementById('owner-ai-btn').style.display='flex'; }}
