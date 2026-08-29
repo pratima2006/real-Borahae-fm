@@ -1,5 +1,20 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="style.css"></head><body>
-<header class="topbar"><div class="logo"><b>b</b> borahae.fm</div></header>
-<nav class="bottom-nav"><a href="index.html">Home</a><a href="missions.html" class="active">Missions</a><a href="music.html">Music</a><a href="history.html">History</a></nav>
-<main style="padding:16px"><h2>Missions</h2><div class="card">Daily Streaming - 1hr</div></main>
-<script src="app.js"></script></body></html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Missions - borahae.fm</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>body{font-family:'Manrope',sans-serif; background:#fdf8ff;}.font-display{font-family:'Playfair Display',serif;}</style>
+</head><body>
+<nav class="flex items-center justify-between px-6 py-4 bg-white border-b sticky top-0 z-10">
+  <div class="flex items-center gap-2 font-bold"><div class="w-8 h-8 bg-[#7c3aed] rounded-xl flex items-center justify-center text-white">b</div> borahae.fm</div>
+  <div class="flex gap-4 text-[13px]"><a href="index.html" class="text-gray-400">Home</a><a href="missions.html" class="font-bold text-[#7c3aed]">Missions</a><a href="music.html" class="text-gray-400">Music</a><a href="history.html" class="text-gray-400">History</a></div>
+</nav>
+<main class="max-w-[900px] mx-auto p-6">
+  <h1 class="font-display text-[32px] font-bold">Missions</h1>
+  <p class="text-gray-500 mt-2">Your daily streaming missions 💜</p>
+  <div class="mt-8 bg-white border rounded-[20px] p-6 shadow-sm">
+    <h3 class="font-bold">Daily Streaming - 1hr</h3>
+    <p class="text-sm text-gray-500 mt-1">Complete 1 hour of streaming today</p>
+    <div class="mt-4 w-full bg-gray-100 rounded-full h-2"><div class="bg-[#7c3aed] h-2 rounded-full w-[30%]"></div></div>
+    <button onclick="location.href='music.html'" class="mt-4 bg-[#7c3aed] text-white px-5 py-2 rounded-full text-sm font-bold">Start Streaming →</button>
+  </div>
+</main>
+</body></html>
