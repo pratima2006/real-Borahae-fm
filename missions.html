@@ -1,78 +1,64 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Missions</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-<style>
- body{font-family:'Manrope',sans-serif; background:#fdf8ff;}.font-display{font-family:'Playfair Display',serif;}.font-mono{font-family:'DM Mono',monospace;}
-.paper-grid{background-image:linear-gradient(#e9d5ff1f 1px, transparent 1px),linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px); background-size:22px 22px;}
-.sidebar-bg{background:#28164f;}.glow-badge{box-shadow:0 0 12px rgba(124,58,237,0.4);}
-</style></head><body class="paper-grid">
+<style>body{font-family:'Manrope',sans-serif;background:#fdf8ff;}.font-display{font-family:'Playfair Display',serif;}.font-mono{font-family:'DM Mono',monospace;}.sidebar-bg{background:#28164f;}</style></head><body>
 
-<!-- HEADER SAME -->
 <header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
   <button onclick="openSidebar()" class="w-9 h-9 bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center">☰</button>
   <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
 </header>
 
-<!-- SIDEBAR SAME -->
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/30 hidden z-40"></div>
 <aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-transform duration-300 flex flex-col p-5">
-  <div class="flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px]">b</div><span class="text-white font-bold text-[18px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div><button onclick="closeSidebar()" class="text-white/70 text-[22px]">✕</button></div>
-  <p class="font-mono text-[10px] tracking-[2.5px] text-white/40 mt-8 mb-3">YOUR SCRAPBOOK</p>
-  <nav class="space-y-1">
-    <a href="home.html" class="flex items-center gap-3 px-4 py-3 rounded-full text-white/60">⌂ Home</a>
-    <a href="missions.html" class="flex items-center gap-3 px-4 py-3 rounded-full bg-white/10 text-white font-semibold">✦ Missions <span class="ml-auto w-2 h-2 bg-[#f472b6] rounded-full"></span></a>
-    <a href="music.html" class="flex items-center gap-3 px-4 py-3 rounded-full text-white/60">▶ Videos</a>
-    <a href="history.html" class="flex items-center gap-3 px-4 py-3 rounded-full text-white/60">◫ My History</a>
-  </nav>
-  <div class="mt-auto border-t border-white/10 pt-6"><a href="settings.html" class="flex items-center gap-3 px-4 py-3 text-white/60">⚙ Settings</a></div>
+  <div class="flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px]">b</div><span class="text-white font-bold">borahae.fm</span></div><button onclick="closeSidebar()" class="text-white/70 text-[22px]">✕</button></div>
+  <nav class="mt-8 space-y-1"><a href="home.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">⌂ Home</a><a href="missions.html" class="flex gap-3 px-4 py-3 rounded-full bg-white/10 text-white font-semibold">✦ Missions</a><a href="music.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">▶ Videos</a><a href="history.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">◫ My History</a></nav>
 </aside>
 
-<!-- MISSIONS CONTENT -->
 <main class="max-w-[600px] mx-auto px-5 pt-8 pb-20">
   <p class="font-mono text-[11px] tracking-[2.5px] text-[#7c3aed]">STARTER MISSIONS / BANGTANTV</p>
-  <h1 class="font-display text-[38px] leading-[0.9] font-bold mt-3">A little mission for<br>today.</h1>
-  <p class="text-[#6b7280] text-[14px] mt-3 leading-[1.5]">Begin with the moments ARMY has kept close. Watch in the player, then let your completed stream find its place in your journal.</p>
-
-  <!-- HORIZONTAL CARDS LIST -->
+  <h1 class="font-display text-[38px] leading-[0.9] font-bold mt-3">A little mission for today.</h1>
   <div id="missionList" class="mt-8 space-y-4"></div>
 </main>
 
-<!-- VIDEO POPUP SAME AS MUSIC -->
 <div id="video-popup" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-[60]"><div class="bg-white rounded-[20px] p-3 w-full max-w-[600px]"><div class="aspect-video bg-black rounded-[14px] overflow-hidden"><iframe id="ytPlayer" class="w-full h-full" frameborder="0" allowfullscreen></iframe></div><button onclick="markWatched()" class="w-full bg-[#7c3aed] text-white py-3 rounded-xl mt-3 font-bold">Mark Watched 💜</button><p onclick="closeVideo()" class="text-center text-sm mt-3 cursor-pointer">✕ Close</p></div></div>
 
 <script>
-let videos = JSON.parse(localStorage.getItem('bts_videos') || '[{"title":"BTS (방탄소년단) \'Dynamite\' Official MV","id":"gdZLi9oWNZg","channel":"HYBE LABELS","views":"2.1B views"},{"title":"BTS (방탄소년단) \'Butter\' Official MV","id":"WMweEpGlu_U","channel":"HYBE LABELS","views":"1.1B views"},{"title":"BTS (방탄소년단) \'IDOL\' Official MV","id":"pBuZEGgPm_k","channel":"HYBE LABELS","views":"1.2B views"},{"title":"BTS \'Dynamite\' @ AGT","id":"BflFnmr_UqA","channel":"BANGTANTV","views":"45M views"}]');
+let videos = JSON.parse(localStorage.getItem('bts_videos') || '[{"title":"Dynamite","id":"gdZLi9oWNZg"},{"title":"Butter","id":"WMweEpGlu_U"},{"title":"IDOL","id":"pBuZEGgPm_k"},{"title":"Merry Go Round","id":"wD8d3PRLT4c"},{"title":"One More Night","id":"-5q5mZbe3V8"},{"title":"No. 29","id":"r6WbbU_lLCA"},{"title":"FYA","id":"_mAybB2lVRI"}]');
 let todayKey = new Date().toISOString().split('T')[0];
-let lastDate = localStorage.getItem('last_reset_date');
-if(lastDate!== todayKey){ localStorage.setItem('stream_counts', JSON.stringify({})); localStorage.setItem('last_reset_date', todayKey); }
-let counts = JSON.parse(localStorage.getItem('stream_counts') || '{}');
-let currentId = '';
+if(localStorage.getItem('last_reset_date')!==todayKey){ localStorage.setItem('stream_counts', JSON.stringify({})); localStorage.setItem('last_reset_date', todayKey); }
+let counts = JSON.parse(localStorage.getItem('stream_counts')||'{}');
+let currentId='';
 
 function render(){
-  const list=document.getElementById('missionList');
-  list.innerHTML='';
+  const list=document.getElementById('missionList'); list.innerHTML='';
   videos.forEach(v=>{
-    let c = counts[v.id] || 0;
-    let badge = c>0? `${c}/12 stream` : `X12`;
+    let c = counts[v.id]||0;
+    let goal = 12; // X12 wala
+    let percent = Math.round((c/goal)*100);
+    // THUMBNAIL FIX: hqdefault + onerror fallback
+    let thumb = `https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
     list.innerHTML+=`
-    <div onclick="openVideo('${v.id}')" class="bg-white border border-[#f3e8ff] rounded-[20px] p-3 flex gap-3 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(124,58,237,0.08)] transition">
-      <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" class="w-[110px] h-[80px] rounded-[14px] object-cover flex-shrink-0">
+    <div onclick="openVideo('${v.id}')" class="bg-white border border-[#ede9fe] rounded-[18px] p-4 flex gap-4 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+      <img src="${thumb}" onerror="this.src='https://img.youtube.com/vi/${v.id}/mqdefault.jpg'" class="w-[56px] h-[56px] rounded-full object-cover flex-shrink-0 border border-[#f5f3ff]">
       <div class="flex-1 min-w-0">
-        <div class="flex justify-between items-start gap-2">
-          <h3 class="font-semibold text-[13px] leading-[1.3] line-clamp-2">${v.title}</h3>
-          <span class="bg-[#f5f3ff] text-[#7c3aed] border border-[#ede9fe] text-[11px] font-bold px-2.5 py-1 rounded-full glow-badge flex-shrink-0">${badge}</span>
+        <h3 class="font-bold text-[15px] leading-tight truncate">${v.title}</h3>
+        <p class="text-[13px] text-[#6b7280] mt-0.5">Stream ${v.title} ${goal} times today</p>
+        <div class="flex justify-between items-center mt-2">
+          <span class="text-[13px] text-[#6b7280] font-medium">${c} / ${goal} streams</span>
+          <span class="text-[13px] text-[#7c3aed] font-bold">${percent}%</span>
         </div>
-        <p class="text-[11px] text-[#6b7280] mt-1.5">${v.views} · ${v.channel}</p>
-        <p class="font-mono text-[9px] tracking-[1.5px] text-[#a78bfa] mt-2">STARTER MISSION</p>
+        <div class="w-full h-[6px] bg-[#f3f4f6] rounded-full mt-1.5 overflow-hidden">
+          <div class="h-full bg-[#7c3aed] rounded-full transition-all" style="width:${percent}%"></div>
+        </div>
       </div>
     </div>`;
   });
 }
-function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebarOverlay').classList.remove('hidden');}
-function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebarOverlay').classList.add('hidden');}
+function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
+function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
 function openVideo(id){currentId=id; document.getElementById('ytPlayer').src=`https://www.youtube.com/embed/${id}?autoplay=1`; document.getElementById('video-popup').classList.remove('hidden'); document.getElementById('video-popup').classList.add('flex');}
 function closeVideo(){document.getElementById('ytPlayer').src=''; document.getElementById('video-popup').classList.add('hidden'); document.getElementById('video-popup').classList.remove('flex');}
-function markWatched(){ counts[currentId]=(counts[currentId]||0)+1; if(counts[currentId]>12) counts[currentId]=12; localStorage.setItem('stream_counts', JSON.stringify(counts)); closeVideo(); render(); alert(`Counted! ${counts[currentId]}/12 today 💜`); }
+function markWatched(){counts[currentId]=(counts[currentId]||0)+1; if(counts[currentId]>12) counts[currentId]=12; localStorage.setItem('stream_counts', JSON.stringify(counts)); closeVideo(); render();}
 render();
 </script>
 </body></html>
