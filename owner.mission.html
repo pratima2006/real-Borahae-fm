@@ -1,65 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Owner Panel</title>
+<title>Owner Panel - Borahae FM</title>
 <style>
-body{font-family:system-ui;background:#fdf2ff;padding:15px}
-.card{background:#fff;padding:12px;border-radius:12px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px #0001}
-.tag{padding:2px 8px;border-radius:20px;font-size:12px;color:#fff}
-.high{background:#ff3b30}.med{background:#ff9500}.low{background:#34c759}
-input,select{width:100%;padding:12px;margin:6px 0;border-radius:25px;border:1px solid #ddd;box-sizing:border-box}
-button{width:100%;padding:13px;border-radius:25px;border:none;background:#7c3aed;color:#fff;font-weight:bold;font-size:16px}
+body{font-family:system-ui;background:#fdf2ff;padding:16px;margin:0}
+.card{background:#fff;padding:14px;border-radius:14px;margin-top:12px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px #0001}
+.tag{padding:3px 10px;border-radius:20px;font-size:12px;color:#fff;margin-top:5px;display:inline-block}
+.high{background:#ff3b30}.med{background:#ff9500}.low{background:#8e8e93}
+input,select{width:100%;padding:13px;margin:7px 0;border-radius:25px;border:1px solid #ddd;box-sizing:border-box;font-size:15px}
+button{width:100%;padding:14px;border-radius:25px;border:none;background:#7c3aed;color:#fff;font-weight:bold;font-size:16px;margin-top:5px}
+small{color:#888}
 </style>
 </head>
 <body>
 <h2>👑 Owner Panel</h2>
-<p style="color:#666">Priority set kar aur streams track kar</p>
+<p style="color:#666;margin-top:-10px">Yaha se mission add karegi to sabko dikhega</p>
 
 <input id="title" placeholder="Title ex: Black Swan">
 <input id="link" placeholder="youtube.com/watch?v=...">
 <select id="priority">
-  <option value="high">🔥 HIGH Priority - Zyada Stream Karwana hai</option>
-  <option value="medium">⭐ MEDIUM Priority</option>
-  <option value="low">💜 LOW Priority</option>
+  <option value="high">🔥 HIGH Priority - Zyada Important</option>
+  <option value="medium" selected>⭐ MEDIUM Priority</option>
+  <option value="low">💜 LOW Priority - Kam Important</option>
 </select>
-<button onclick="add()">+ Add Mission for ALL</button>
+<button onclick="addMission()">+ Add Mission for ALL</button>
 
 <div id="list"></div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
-// ==== APNA PIN YAHAN CHANGE KAR LE ====
-const MY_PIN = "bora123";
-if(prompt("Enter Owner PIN:")!== MY_PIN){ document.body.innerHTML="<h1>Access Denied</h1>"; throw "no"; }
+// PIN CHECK
+if(prompt("Enter Owner PIN:")!== "bora123"){
+  document.body.innerHTML="<h1 style='text-align:center;margin-top:100px'>Access Denied 💜</h1>";
+  throw new Error("Wrong PIN");
+}
 
+// FIREBASE CONFIG - TERA WALA, FULL READY
 const firebaseConfig = {
-  apiKey: "AIzaSyA4y6u-HU-tOQq1Rc2F1o0Zs0QqZzZqZzQ",
+  apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",
   authDomain: "borahae-fm-f7075.firebaseapp.com",
   databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com",
   projectId: "borahae-fm-f7075",
+  storageBucket: "borahae-fm-f7075.firebasestorage.app",
+  messagingSenderId: ""319118277965"
+ https://console.firebase.google.com/u/0/project/borahae-fm-f7075/settings/general/web:MTMxNzUwMTUtMGE4ZS00ZmEzLWE1NDQtMDk5MDczOWQzZDdm#:~:text=messagingSenderId%3A%20%22-,319118277965,-%22%2C%0A%C2%A0%20appId",
+  appId: "1:319118277965:web:eece2a5bf15708aab3cb04"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-function add(){
-  const t=title.value.trim(); const l=link.value.trim(); const p=priority.value;
-  if(!t||!l) return alert("Title + Link daal");
-  const id = l.split("v=")[1]?.split("&")[0] || l.slice(-11);
-  db.ref("missions/"+Date.now()).set({title:t, videoId:id, priority:p, totalStreams:0, createdAt:Date.now()});
-  title.value=""; link.value="";
+function addMission(){
+  const t = document.getElementById('title').value.trim();
+  const l = document.getElementById('link').value.trim();
+  const p = document.getElementById('priority').value;
+  if(!t ||!l) return alert("Title aur Link dono daal!");
+  let videoId = "";
+  if(l.includes("v=")) videoId = l.split("v=")[1].split("&")[0];
+  else videoId = l.slice(-11);
+
+  db.ref("missions/"+Date.now()).set({
+    title: t,
+    videoId: videoId,
+    priority: p,
+    totalStreams: 0,
+    createdAt: Date.now()
+  });
+  document.getElementById('title').value="";
+  document.getElementById('link').value="";
+  alert("Added! ✅");
 }
+
 db.ref("missions").on("value", snap=>{
+  const list = document.getElementById('list');
   list.innerHTML="";
-  const data=snap.val(); if(!data) return;
-  Object.entries(data).sort((a,b)=>b[0]-a[0]).forEach(([k,v])=>{
-    const d=document.createElement("div"); d.className="card";
-    d.innerHTML=`<div><b>${v.title}</b><br><small>${v.videoId}</small><br><small>🔁 Streams: ${v.totalStreams||0}</small><br><span class="tag ${v.priority=='high'?'high':v.priority=='medium'?'med':'low'}">${v.priority}</span></div><span onclick="del('${k}')" style="color:red;font-size:24px;cursor:pointer">×</span>`;
-    list.appendChild(d);
+  const data = snap.val();
+  if(!data) return;
+  Object.entries(data).sort((a,b)=>b[0]-a[0]).forEach(([key, v])=>{
+    const div = document.createElement("div");
+    div.className="card";
+    div.innerHTML = `<div><b>${v.title}</b><br><small>${v.videoId}</small><br><small>🔁 Total Streams: ${v.totalStreams||0}</small><br><span class="tag ${v.priority=='high'?'high':v.priority=='medium'?'med':'low'}">${v.priority.toUpperCase()}</span></div><span onclick="deleteMission('${key}')" style="color:red;font-size:28px;cursor:pointer;padding:0 10px">×</span>`;
+    list.appendChild(div);
   });
 });
-function del(k){ if(confirm("Delete?")) db.ref("missions/"+k).remove(); }
+
+function deleteMission(key){
+  if(confirm("Delete this mission?")) db.ref("missions/"+key).remove();
+}
 </script>
 </body>
 </html>
