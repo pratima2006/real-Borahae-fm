@@ -1,3 +1,10 @@
+function getYouTubeID(urlOrId){
+  if(!urlOrId) return "";
+  urlOrId = urlOrId.trim();
+  if(urlOrId.length===11 &&!urlOrId.includes("/")) return urlOrId;
+  let m = urlOrId.match(/^.*(youtu.be\/|v\/|embed\/|watch\?v=|shorts\/)([^#\&\?]*).*/);
+  return (m && m[2].length===11)? m[2] : urlOrId;
+}
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Videos - borahae.fm</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
