@@ -27,17 +27,21 @@ const db = firebase.database();
 db.ref('missions').on('value', (snap)=>{
   let data = snap.val();
   if(!data){
-    data = {
-      m1: {title:"Dynamite",desc:"Stream Dynamite 12 times today",id:"gdZLi9oWNZg",goal:12},
-      m2: {title:"Butter",desc:"Stream Butter 12 times today",id:"WMweEpGlu_U",goal:12}
-    };
-    db.ref('missions').set(data);
+    document.getElementById('list').innerHTML = `<p class="text-center text-gray-400 text-[13px] mt-10">No missions yet, owner add karegi 💜</p>`;
+    return;
   }
   let html='';
-  Object.values(data).forEach(m=>{
+  Object.values(data).reverse().forEach(m=>{
+    const videoId = m.id || m.videoId || "";
+    const title = m.title || "Untitled";
+    const goal = m.goal || m.requiredStreams || 10;
+    const desc = m.desc || `Stream ${title} ${goal} times today`;
+
+    if(!videoId) return;
+
     html+=`<div class="bg-white border rounded-[20px] p-4 flex gap-4 items-center shadow-sm">
-    <img src="https://img.youtube.com/vi/${m.id}/mqdefault.jpg" class="w-[70px] h-[70px] rounded-[16px] object-cover">
-    <div class="flex-1"><p class="font-bold text-[14px]">${m.title}</p><p class="text-[12px] text-gray-500">${m.desc}</p><div class="w-full h-1 bg-gray-100 rounded-full mt-2"><div class="h-1 bg-[#7c3aed] rounded-full" style="width:0%"></div></div><p class="text-[11px] text-gray-400 mt-1">0 / ${m.goal} streams</p></div><div class="text-[#7c3aed] font-bold text-[13px]">0%</div></div>`;
+    <img src="https://img.youtube.com/vi/${videoId}/mqdefault.jpg" class="w-[70px] h-[70px] rounded-[16px] object-cover">
+    <div class="flex-1"><p class="font-bold text-[14px]">${title}</p><p class="text-[12px] text-gray-500">${desc}</p><div class="w-full h-1 bg-gray-100 rounded-full mt-2"><div class="h-1 bg-[#7c3aed] rounded-full" style="width:0%"></div></div><p class="text-[11px] text-gray-400 mt-1">0 / ${goal} streams</p></div><div class="text-[#7c3aed] font-bold text-[13px]">0%</div></div>`;
   });
   document.getElementById('list').innerHTML=html;
 });
