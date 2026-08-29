@@ -3,41 +3,32 @@ const SUPABASE_URL = "https://kiwbitgnulmxjjqicvob.supabase.co/rest/v1/";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtpd2JpdGdudWxteGpqcWljdm9iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4OTg0MzEsImV4cCI6MjEwMzQ3NDQzMX0.dU-objJn2-8TdzzKuweKKQyhu906HNnPXA_IbFnmKj8";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Check
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-const defaultVideos = [
-  {title:"BTS 'Dynamite' Official MV", channel:"HYBE LABELS • 1.9B views", id:"Rs2q5IdJdEA"},
-  {title:"BTS 'Butter' Official MV", channel:"HYBE LABELS • 1.1B views", id:"WMweEpGlu_U"},
-  {title:"BTS 'IDOL' Official MV", channel:"HYBE LABELS • 1.4B views", id:"pBuZEGYXA6E"},
-  {title:"BTS 'ON' Official MV", channel:"HYBE LABELS • 450M views", id:"mPVDGOVjRQ0"},
+const songs=[
+{id:1,title:"BTS (방탄소년단) 'Dynamite' Official MV",yt:"https://www.youtube.com/embed/gdZLi9oWNZg",thumb:"https://img.youtube.com/vi/gdZLi9oWNZg/maxresdefault.jpg",views:"1.9B",channel:"HYBE LABELS",dur:"3:44"},
+{id:2,title:"BTS (방탄소년단) 'Butter' Official MV",yt:"https://www.youtube.com/embed/WMweEpGlu_U",thumb:"https://img.youtube.com/vi/WMweEpGlu_U/maxresdefault.jpg",views:"1.1B",channel:"HYBE LABELS",dur:"2:45"},
+{id:3,title:"BTS (방탄소년단) 'IDOL' Official MV",yt:"https://www.youtube.com/embed/pBuZEGg_SF0",thumb:"https://img.youtube.com/vi/pBuZEGg_SF0/maxresdefault.jpg",views:"1.4B",channel:"HYBE LABELS",dur:"3:53"},
+{id:4,title:"BTS 'ON' Official MV",yt:"https://www.youtube.com/embed/mPVDGOVjRQ0",thumb:"https://img.youtube.com/vi/mPVDGOVjRQ0/maxresdefault.jpg",views:"480M",channel:"HYBE LABELS",dur:"4:55"},
+{id:5,title:"BTS 'Permission to Dance' Official MV",yt:"https://www.youtube.com/embed/CuklIb9d3fI",thumb:"https://img.youtube.com/vi/CuklIb9d3fI/maxresdefault.jpg",views:"690M",channel:"HYBE LABELS",dur:"4:40"},
+{id:6,title:"BTS 'Boy With Luv (feat. Halsey)' Official MV",yt:"https://www.youtube.com/embed/XsX3ATcCjYA",thumb:"https://img.youtube.com/vi/XsX3ATcCjYA/maxresdefault.jpg",views:"1.8B",channel:"HYBE LABELS",dur:"4:15"},
+{id:7,title:"BTS 'Run BTS' Official MV",yt:"https://www.youtube.com/embed/qGjAWJ2zWWI",thumb:"https://img.youtube.com/vi/qGjAWJ2zWWI/maxresdefault.jpg",views:"300M",channel:"HYBE LABELS",dur:"3:31"},
+{id:8,title:"BTS 'Yet To Come' Official MV",yt:"https://www.youtube.com/embed/9mwRYhJ7aKo",thumb:"https://img.youtube.com/vi/9mwRYhJ7aKo/maxresdefault.jpg",views:"250M",channel:"HYBE LABELS",dur:"4:20"}
 ];
+let watched=JSON.parse(localStorage.getItem('watched'))||[];let streams=parseInt(localStorage.getItem('streams'))||0;let current=null;
 
-let customVideos = JSON.parse(localStorage.getItem('customMVs') || "[]");
-
-function openScrapbook(){document.getElementById('homeView').style.display='none';document.getElementById('scrapbookView').style.display='block';renderVideos()}
-function renderVideos(){
-  const grid=document.getElementById('videoGrid');grid.innerHTML="";
-  [...defaultVideos, ...customVideos].forEach(v=>{
-    grid.innerHTML+=`<div class="card"><img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg"><div style="padding:8px"><p style="font-size:11px;font-weight:600;margin:0">${v.title}</p><p style="font-size:9px;color:gray">${v.channel}</p></div></div>`
-  })
-}
-function openAddModal(){document.getElementById('addModal').style.display='flex'}
-function closeAdd(){document.getElementById('addModal').style.display='none'}
-function closeAuth(){document.getElementById('authModal').style.display='none'}
-document.getElementById('loginBtn').onclick=()=>document.getElementById('authModal').style.display='flex';
-
-async function loginWithGoogle(){
-  const {error} = await supabaseClient.auth.signInWithOAuth({provider:'google', options:{redirectTo: window.location.origin}});
-  if(error) alert(error.message);
-}
-async function handleEmailAuth(){
-  const email=document.getElementById('email').value, password=document.getElementById('password').value;
-  const {error} = await supabaseClient.auth.signUp({email,password});
-  if(error){ const {error:err2}=await supabaseClient.auth.signInWithPassword({email,password}); if(err2) alert(err2.message); else alert("Logged in!"); closeAuth(); }
-  else {alert("Check email or logged in!"); closeAuth();}
-}
-function getYTId(url){const reg=/(?:youtube\.com.*v=|youtu\.be\/)([^&\s]+)/;const m=url.match(reg);return m?m[1]:null}
-function previewYT(url){const id=getYTId(url);if(id){document.getElementById('ytThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;document.getElementById('ytPreview').style.display='block';document.getElementById('ytStatus').innerText="✅ New video - ready to add";document.getElementById('ytStatus').dataset.id=id}else{document.getElementById('ytPreview').style.display='none';document.getElementById('ytStatus').innerText="";}}
-function addVideo(){const id=document.getElementById('ytStatus').dataset.id;if(!id) return alert("Paste valid link first");customVideos.push({title:`Custom MV - ${id}`, channel:"Custom Added • New", id});localStorage.setItem('customMVs', JSON.stringify(customVideos));closeAdd();renderVideos();}
-renderVideos();
+function openApp(){document.getElementById('landing').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('date').innerText=new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}).toUpperCase();updateUI();showHome();loadUser();}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('show');}
+document.getElementById('menu-btn').onclick=toggleSidebar;
+function hideAllPages(){document.getElementById('home-content').classList.add('hidden');document.getElementById('missions-grid').classList.add('hidden');document.getElementById('history-page').classList.add('hidden');document.getElementById('music-page').classList.add('hidden');document.getElementById('faq-page').classList.add('hidden');document.querySelectorAll('aside li').forEach(li=>li.classList.remove('active'));}
+function showHome(){hideAllPages();document.getElementById('home-content').classList.remove('hidden');document.getElementById('nav-home').classList.add('active');}
+function showMissions(){hideAllPages();const grid=document.getElementById('missions-grid');grid.classList.remove('hidden');document.getElementById('nav-missions').classList.add('active');grid.innerHTML=songs.map(s=>`<div class="mission" onclick="openVid(${s.id})"><img src="${s.thumb}"><div class="mission-body"><div class="tag-small">HYBE LABELS • ${s.dur} <span style="float:right">${s.views}</span></div><h4 style="font-size:14px;margin:6px 0">${s.title}</h4><small>${s.channel}</small></div></div>`).join('');}
+function showMusicPage(){hideAllPages();document.getElementById('music-page').classList.remove('hidden');document.getElementById('nav-music').classList.add('active');document.getElementById('music-list').innerHTML=songs.map(s=>`<div class="music-card" onclick="openVid(${s.id})"><img src="${s.thumb}"><div class="music-body"><h4 style="font-size:13px;margin:0">${s.title}</h4><small style="color:#6b7280">${s.channel} • ${s.views}</small></div></div>`).join('');}
+function showHistoryPage(){hideAllPages();document.getElementById('history-page').classList.remove('hidden');document.getElementById('nav-history').classList.add('active');const box=document.getElementById('history-box');if(watched.length===0) box.innerHTML=`<div class="empty"><div class="heart">♡</div><p>No history yet</p></div>`;else box.innerHTML=watched.slice().reverse().map(w=>`<div class="music-card"><img src="${w.thumb}"><div class="music-body"><h4 style="font-size:13px">${w.title}</h4><small>Watched ${w.count} times</small></div></div>`).join('');}
+function showFaqPage(){hideAllPages();document.getElementById('faq-page').classList.remove('hidden');document.getElementById('nav-faq').classList.add('active');}
+function openVid(id){current=songs.find(s=>s.id===id);document.getElementById('yt').src=current.yt;document.getElementById('video-popup').classList.remove('hidden');}
+function closePopup(){document.getElementById('video-popup').classList.add('hidden');document.getElementById('yt').src="";}
+function markWatched(){if(!watched.find(w=>w.id===current.id)) watched.push({...current,count:1});else watched.find(w=>w.id===current.id).count++;streams++;localStorage.setItem('watched',JSON.stringify(watched));localStorage.setItem('streams',streams);updateUI();closePopup();}
+function updateUI(){document.getElementById('today-count').innerHTML=`${streams} <span>/ 10 streams</span>`;document.getElementById('all-count').innerText=streams;document.getElementById('progress').style.width=Math.min(streams*10,100)+'%';if(watched.length>0){document.getElementById('continue-box').innerHTML=watched.slice(-4).reverse().map(w=>`<div style="display:flex;gap:10px;background:#fff;padding:10px;border-radius:10px;margin-bottom:10px"><img src="${w.thumb}" style="width:100px;height:60px;border-radius:8px;object-fit:cover"><div><h4 style="font-size:13px;margin:0">${w.title}</h4><small>Watched ${w.count} times</small></div></div>`).join('');}}
+function openLogin(){document.getElementById('login-popup').classList.remove('hidden');}
+function closeLogin(){document.getElementById('login-popup').classList.add('hidden');}
+function doLogin(){const email=document.getElementById('email').value;if(!email){alert('Enter email');return;}localStorage.setItem('user_email',email);loadUser();closeLogin();alert('Logged in as '+email);}
+function loadUser(){const e=localStorage.getItem('user_email');if(e){document.getElementById('user-name-display').innerText=e.split('@')[0];document.getElementById('welcome-name').innerText=e.split('@')[0];document.getElementById('profile-name').innerText=e.split('@')[0];document.getElementById('profile-letter').innerText=e[0].toUpperCase();document.getElementById('auth-btn').innerText='Logout';document.getElementById('auth-btn').onclick=()=>{localStorage.removeItem('user_email');location.reload();}}}
