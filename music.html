@@ -1,7 +1,31 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="owner-ai.css"></head><body class="paper-grid">
-<header class="flex justify-between p-4 bg-white"><button onclick="location.href='index.html'">← Home</button><b>Music</b></header>
-<main class="p-5"><button class="btn-primary" onclick="openAddModal()">+ Add MV / Vid</button><div id="music-list" class="grid grid-cols-2 gap-3 mt-4"></div></main>
-<div id="addModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center flex z-50"><div class="bg-white p-5 rounded-2xl w-[90%] max-w-[350px]"><input id="ytLink" class="w-full border p-3 rounded-xl" placeholder="YouTube link" oninput="previewYT(this.value)"><img id="ytThumb" class="hidden w-full rounded-xl mt-2"><p id="ytStatus" class="text-sm mt-2"></p><button class="btn-primary w-full mt-3" onclick="addVideo()">Add</button></div></div>
-<div id="video-popup" class="fixed inset-0 bg-black/80 hidden items-center justify-center flex z-50"><div class="bg-white p-4 rounded-2xl w-[90%] max-w-[600px]"><iframe id="yt" class="w-full h-[300px] rounded-xl"></iframe><button class="btn-primary w-full mt-3" onclick="markWatched()">Mark Watched 💜</button><p class="text-center mt-2 cursor-pointer" onclick="closePopup()">✕ Close</p></div></div>
-<div id="owner-ai-btn" style="display:none" onclick="toggleAI()">💜 AI</div><div id="owner-ai-panel" class="hidden"><div class="ai-header">Owner AI <span onclick="toggleAI()">✕</span></div><div id="ai-chat"></div><div class="ai-input"><input id="ai-prompt"><button onclick="askOwnerAI()">Send</button></div></div>
-<script src="script.js"></script><script src="owner-ai.js"></script></body></html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Music - borahae.fm</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<style>body{font-family:'Manrope',sans-serif; background:#fdf8ff;}.paper-grid{background-image:linear-gradient(#e9d5ff1f 1px, transparent 1px),linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px); background-size:22px 22px;}</style>
+</head><body class="paper-grid">
+<nav class="flex items-center justify-between px-6 py-4 bg-white border-b sticky top-0 z-10">
+  <a href="index.html" class="text-sm">← Home</a><b>Music</b><span class="w-5"></span>
+</nav>
+<main class="max-w-[900px] mx-auto p-6">
+  <button onclick="openAdd()" class="bg-[#7c3aed] text-white px-6 py-3 rounded-[14px] font-bold text-sm">+ Add MV / Vid</button>
+  <div id="music-list" class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6"></div>
+</main>
+
+<!-- Add Modal -->
+<div id="addModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-5 z-50 flex"><div class="bg-white rounded-[20px] p-5 w-full max-w-[380px]"><h3 class="font-bold">Add YouTube MV</h3><input id="ytLink" placeholder="Paste YouTube link here" class="w-full border border-gray-200 rounded-xl p-3 mt-3 text-sm"><p id="ytStatus" class="text-xs mt-2 text-gray-500"></p><button onclick="addVideo()" class="w-full bg-[#7c3aed] text-white py-3 rounded-xl mt-3 font-bold">Add</button><p onclick="closeAdd()" class="text-center text-sm mt-3 cursor-pointer">Cancel</p></div></div>
+
+<!-- VIDEO POPUP - Ye fix hai -->
+<div id="video-popup" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-[60] flex"><div class="bg-white rounded-[20px] p-3 w-full max-w-[600px]"><div class="aspect-video bg-black rounded-[14px] overflow-hidden"><iframe id="ytPlayer" class="w-full h-full" frameborder="0" allowfullscreen></iframe></div><button onclick="markWatched()" class="w-full bg-[#7c3aed] text-white py-3 rounded-xl mt-3 font-bold">Mark Watched 💜</button><p onclick="closeVideo()" class="text-center text-sm mt-3 cursor-pointer">✕ Close</p></div></div>
+
+<script>
+let videos = JSON.parse(localStorage.getItem('bts_videos') || '[{"title":"BTS Dynamite Official MV","id":"gdZLi9oWNZg"},{"title":"Butter Official MV","id":"WMweEpGlu_U"},{"title":"IDOL Official MV","id":"pBuZEGgPm_k"}]');
+function render(){ const list=document.getElementById('music-list'); list.innerHTML=''; videos.forEach(v=>{ list.innerHTML+=`<div onclick="openVideo('${v.id}')" class="bg-white rounded-[14px] overflow-hidden border shadow-sm cursor-pointer"><img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" class="w-full aspect-video object-cover"><p class="p-2 text-[13px] font-semibold">${v.title}</p></div>`; }); }
+function openAdd(){document.getElementById('addModal').classList.remove('hidden');}
+function closeAdd(){document.getElementById('addModal').classList.add('hidden');}
+function openVideo(id){document.getElementById('ytPlayer').src=`https://www.youtube.com/embed/${id}?autoplay=1`; document.getElementById('video-popup').classList.remove('hidden'); document.getElementById('video-popup').classList.add('flex'); localStorage.setItem('currentVideo',id);}
+function closeVideo(){document.getElementById('ytPlayer').src=''; document.getElementById('video-popup').classList.add('hidden');}
+function markWatched(){alert('Marked as watched 💜 +1 stream!'); closeVideo();}
+function addVideo(){const link=document.getElementById('ytLink').value; const id=link.match(/(?:v=|\.be\/)([a-zA-Z0-9_-]{11})/)?.[1]; if(!id){document.getElementById('ytStatus').innerText='Invalid link'; return;} videos.unshift({title:'New MV - '+id, id}); localStorage.setItem('bts_videos',JSON.stringify(videos)); closeAdd(); render();}
+render();
+</script>
+</body></html>
