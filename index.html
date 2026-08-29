@@ -1,62 +1,117 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>borahae.fm</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>borahae.fm</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
-:root { --background: 270 45% 98%; --foreground: 264 31% 17%; --border: 267 32% 89%; --primary: 272 72% 49%; --accent: 326 75% 67%; }
-body{font-family:'Manrope',sans-serif; background:hsl(var(--background)); margin:0; overflow-x:hidden;}
-.font-display{font-family:'Playfair Display',serif;}
-.paper-grid{background-image: linear-gradient(hsl(272 40% 74% /.12) 1px, transparent 1px), linear-gradient(90deg, hsl(272 40% 74% /.12) 1px, transparent 1px); background-size:24px 24px;}
-.scrap-shadow{box-shadow: 0 18px 50px hsl(270 43% 32% /.10), 0 3px 8px hsl(270 43% 32% /.06);}
-</style></head>
-<body class="paper-grid">
+  html{scroll-behavior:smooth;}
+  body{font-family:'Manrope',sans-serif; background:#fdf8ff; color:#1e1033; margin:0; -webkit-font-smoothing:antialiased;}
+ .font-display{font-family:'Playfair Display',serif;}
+ .font-mono{font-family:'DM Mono',monospace;}
+ .hero-bg{
+    background: radial-gradient(120% 80% at 90% 0%, #f5d0fe 0%, #fce7ff 20%, #fdf8ff 60%);
+  }
+ .paper-grid{
+    background-image: linear-gradient(#e9d5ff1f 1px, transparent 1px), linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px);
+    background-size:22px 22px;
+  }
+</style>
+</head>
+<body class="hero-bg">
 
-<div class="max-w-[1200px] mx-auto">
-  <!-- TOP BAR -->
-  <nav class="flex justify-between items-center p-5 md:px-10"><div class="flex items-center gap-2 font-bold"><div class="bg-[#7c3aed] text-white w-8 h-8 rounded-xl flex items-center justify-center">b</div> borahae.fm</div></nav>
+<!-- HEADER -->
+<nav class="flex items-center justify-between px-6 py-5 max-w-[1100px] mx-auto">
+  <div class="flex items-center gap-2.5">
+    <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[22px] font-bold shadow-[0_8px_20px_rgba(124,58,237,0.3)]">b</div>
+    <span class="font-bold text-[16px] tracking-tight">borahae<span class="text-[#7c3aed]">.fm</span></span>
+  </div>
+</nav>
 
-  <!-- HERO SECTION - Phone me half dikhega jaise pic 2 -->
-  <section class="px-5 md:px-10 md:flex md:justify-between md:items-start">
-    <div class="md:w-[50%]">
-      <div class="inline-flex items-center gap-1 border border-[#e9d5ff] rounded-full px-3 py-1 text-[9px] tracking-widest font-mono text-[#7c3aed]">✦ FOR EVERY COMEBACK, TOGETHER</div>
-      <h1 class="font-display text-[2.8rem] md:text-[4.2rem] leading-[0.95] mt-5 font-bold">Keep the<br><span class="text-[#7c3aed]">light.<br>Stream with<br>heart.</span></h1>
-      <p class="text-[14px] text-gray-500 mt-4 max-w-[400px]">borahae.fm is your lovingly kept ARMY scrapbook — a place to discover missions, make every stream count, and watch the purple light grow.</p>
-      <div class="flex gap-3 mt-6">
-        <button onclick="openApp()" class="bg-[#7c3aed] text-white px-5 py-3 rounded-xl text-sm font-bold">Open your scrapbook →</button>
-        <button onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})" class="bg-white border border-gray-200 px-5 py-3 rounded-xl text-sm font-semibold">See how it works</button>
-      </div>
-      <div class="flex items-center gap-2 mt-5"><div class="flex -space-x-2"><div class="w-6 h-6 rounded-full bg-purple-100 border-2 border-white flex items-center justify-center text-[8px]">A</div><div class="w-6 h-6 rounded-full bg-purple-200 border-2 border-white flex items-center justify-center text-[8px]">J</div></div><p class="text-[11px] text-gray-500"><b>12,480 ARMY</b> keeping watch together</p></div>
+<!-- HERO -->
+<section class="max-w-[1100px] mx-auto px-6 pt-6 pb-10 md:flex md:justify-between md:pt-16">
+  <div class="md:w-[48%]">
+    <div class="inline-flex items-center gap-2 border border-[#e9d5ff] bg-white/60 backdrop-blur rounded-full px-3.5 py-1.5">
+      <span class="text-[11px]">✦</span><span class="font-mono text-[10px] tracking-[1.8px] text-[#7c3aed]">FOR EVERY COMEBACK, TOGETHER</span>
     </div>
+    <h1 class="font-display text-[48px] md:text-[64px] leading-[0.9] mt-6 font-bold tracking-[-1.5px]">
+      Keep the<br>light.<br><span class="text-[#7c3aed]">Stream with<br>heart.</span>
+    </h1>
+    <p class="text-[#6b7280] text-[16px] leading-[1.6] mt-5 max-w-[360px]">
+      borahae.fm is your lovingly kept ARMY scrapbook — a place to discover missions, make every stream count, and watch the purple light grow.
+    </p>
+    <div class="mt-8 flex flex-col gap-3 w-fit">
+      <button onclick="location.href='missions.html'" class="bg-[#7c3aed] hover:bg-[#6d28d9] text-white px-6 py-[14px] rounded-full font-semibold text-[14px] flex items-center gap-2 shadow-[0_10px_30px_rgba(124,58,237,0.3)] transition">Open your scrapbook <span>→</span></button>
+      <button onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})" class="bg-white border border-[#e5e7eb] px-6 py-[14px] rounded-full font-semibold text-[14px] text-[#111] hover:bg-gray-50 transition">See how it works</button>
+    </div>
+  </div>
 
-    <!-- PURPLE CARD - Tilted -->
-    <div class="relative mt-10 md:mt-0 md:w-[45%] flex justify-center">
-      <div class="bg-white p-2 rounded-[2rem] scrap-shadow rotate-[-2deg] w-[320px] md:w-[380px]">
-        <div class="bg-gradient-to-br from-[#2e1065] to-[#7c3aed] rounded-[1.5rem] p-7 text-white h-[380px] flex flex-col justify-between relative overflow-hidden">
-          <p class="font-mono text-[8px] tracking-[2px] opacity-60">MISSION 001 / BANGTANTV</p>
-          <div><h2 class="font-display text-[2.2rem] leading-tight">The purple<br>hour.</h2><p class="text-[11px] opacity-70 mt-2">A little place to leave your mark on the streams that mean something.</p></div>
-          <div class="flex items-center gap-2"><div class="w-7 h-7 bg-[#ec4899] rounded-full flex items-center justify-center text-[10px]">▶</div><span class="text-[11px] font-semibold">Watch together</span></div>
+  <!-- PURPLE CARD - pic 2 exact -->
+  <div class="relative mt-12 md:mt-4 md:w-[52%] flex justify-center md:justify-end">
+    <div class="relative w-[300px] md:w-[380px] rotate-[-1.5deg]">
+      <div class="bg-white p-[10px] rounded-[28px] shadow-[0_20px_60px_rgba(100,30,150,0.15)]">
+        <div class="paper-grid bg-gradient-to-br from-[#2a1555] via-[#3b1f7a] to-[#5b3cc4] rounded-[22px] p-6 md:p-7 h-[420px] flex flex-col justify-between relative overflow-hidden">
+          <div class="flex justify-between"><span class="font-mono text-[9px] tracking-[2.5px] text-white/50">MISSION 001 / BANGTANTV</span></div>
+          <div class="absolute right-[-10px] top-[40px] w-[180px] h-[180px] border border-white/10 rounded-full"></div>
+          <div class="absolute right-[20px] top-[70px] w-[120px] h-[120px] border border-white/10 rounded-full"></div>
+          <div class="absolute right-[60px] top-[30px] w-[120px] h-[120px] bg-[#a78bfa]/30 blur-[30px] rounded-full"></div>
+          <div>
+            <h2 class="font-display text-[36px] leading-[0.95] text-white">The purple<br>hour.</h2>
+            <p class="text-[11px] text-white/60 mt-3 leading-[1.4] max-w-[180px]">A little place to leave your mark on the streams that mean something.</p>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-[32px] h-[32px] bg-[#f472b6] rounded-full flex items-center justify-center"><span class="text-[12px]">▶</span></div>
+            <span class="text-white text-[12px] font-semibold">Watch together</span>
+          </div>
+          <div class="bg-[#1a0d33] -mx-6 -mb-6 px-6 py-3 flex justify-between items-center mt-4 rounded-b-[22px]">
+            <span class="font-mono text-[8px] tracking-[2px] text-white/40">YOUR STREAM JOURNAL</span>
+            <span class="text-[11px] text-[#f472b6] font-bold">♥ borahae</span>
+          </div>
         </div>
       </div>
-      <div class="absolute -bottom-3 -left-2 md:left-0 bg-[#f472b6] text-[10px] font-bold px-3 py-1.5 rounded-full rotate-[-6deg] text-black">★ love notes, not numbers</div>
+      <div class="absolute -bottom-2 -left-4 bg-[#f472b6] text-black font-bold text-[11px] px-4 py-2 rounded-full rotate-[-8deg] shadow-md">★ &nbsp; love notes, not numbers</div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- GREEN TICK WALA SECTION - Yehi scroll hoga -->
-  <section id="how-it-works" class="mt-20 border-t border-gray-200 bg-white">
-    <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200">
-      <div class="p-8"><p class="font-mono text-[10px] text-[#7c3aed]">01</p><h3 class="font-display font-bold text-xl mt-2">Find your mission</h3><p class="text-[12px] text-gray-500 mt-2">Start with hand-picked BANGTANTV moments, or bring in a favorite YouTube video.</p></div>
-      <div class="p-8"><p class="font-mono text-[10px] text-[#7c3aed]">02</p><h3 class="font-display font-bold text-xl mt-2">Watch with intention</h3><p class="text-[12px] text-gray-500 mt-2">The in-app player keeps your watch flow in one place, without losing the feeling.</p></div>
-      <div class="p-8"><p class="font-mono text-[10px] text-[#7c3aed]">03</p><h3 class="font-display font-bold text-xl mt-2">Leave your mark</h3><p class="text-[12px] text-gray-500 mt-2">One completed stream, recorded. Your personal progress and our shared leaderboard grow together.</p></div>
+<!-- 01 02 03 - GREEN TICK WALA -->
+<section id="how-it-works" class="bg-white border-y border-[#eee6f8] mt-6">
+  <div class="max-w-[1100px] mx-auto divide-y md:divide-y-0 md:grid md:grid-cols-3 md:divide-x divide-[#eee6f8]">
+    <div class="p-8 md:p-10 py-12"><p class="font-mono text-[13px] text-[#7c3aed]">01</p><h3 class="font-display text-[24px] font-bold mt-4 leading-tight">Find your mission</h3><p class="text-[14px] text-[#6b7280] mt-3 leading-[1.5]">Start with hand-picked BANGTANTV moments, or bring in a favorite YouTube video.</p></div>
+    <div class="p-8 md:p-10 py-12"><p class="font-mono text-[13px] text-[#7c3aed]">02</p><h3 class="font-display text-[24px] font-bold mt-4 leading-tight">Watch with intention</h3><p class="text-[14px] text-[#6b7280] mt-3 leading-[1.5]">The in-app player keeps your watch flow in one place, without losing the feeling.</p></div>
+    <div class="p-8 md:p-10 py-12"><p class="font-mono text-[13px] text-[#7c3aed]">03</p><h3 class="font-display text-[24px] font-bold mt-4 leading-tight">Leave your mark</h3><p class="text-[14px] text-[#6b7280] mt-3 leading-[1.5]">One completed stream, recorded. Your personal progress and our shared leaderboard grow together.</p></div>
+  </div>
+</section>
+
+<!-- COMEBACK ENERGY -->
+<section class="max-w-[1100px] mx-auto px-6 py-16 md:py-24 md:flex md:justify-between">
+  <div class="md:w-[40%]">
+    <p class="font-mono text-[11px] tracking-[3px] text-[#7c3aed]">A SOFT PLACE FOR LOUD LOVE</p>
+    <h2 class="font-display text-[40px] md:text-[52px] leading-[0.9] font-bold mt-4">The comeback energy, kept close.</h2>
+  </div>
+  <div class="md:w-[50%] mt-10 md:mt-0 grid gap-5">
+    <div class="bg-[#f3f0ff] rounded-[24px] p-7 md:p-8 border border-[#ede9fe]">
+      <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center text-[#7c3aed] mb-8">◎</div>
+      <h4 class="font-bold text-[18px]">Your daily rhythm</h4>
+      <p class="text-[14px] text-[#6b7280] mt-2 leading-[1.6]">A gentle daily goal makes showing up feel like a ritual, not a chore.</p>
     </div>
-  </section>
+    <div class="bg-white rounded-[24px] p-7 md:p-8 border border-[#eee6f8] shadow-[0_10px_40px_rgba(0,0,0,0.04)]">
+      <div class="w-9 h-9 bg-[#f5f3ff] rounded-full flex items-center justify-center mb-8">◍◍</div>
+      <h4 class="font-bold text-[18px]">Our purple light</h4>
+      <p class="text-[14px] text-[#6b7280] mt-2 leading-[1.6]">Celebrate milestones with ARMY around the world, one stream at a time.</p>
+    </div>
+  </div>
+</section>
 
-  <!-- BOTTOM -->
-  <section class="p-8 md:flex justify-between items-center">
-    <h2 class="font-display text-3xl md:text-4xl font-bold">The comeback<br>energy, kept close.</h2>
-    <div class="flex gap-3 mt-6 md:mt-0"><div class="bg-[#f5f3ff] p-4 rounded-2xl w-[200px]"><h4 class="font-bold text-sm">Your daily rhythm</h4></div><div class="bg-white border p-4 rounded-2xl w-[200px]"><h4 class="font-bold text-sm">Our purple light</h4></div></div>
-  </section>
-</div>
+<!-- FOOTER -->
+<footer class="border-t border-[#eee6f8] bg-white/50 py-10 px-6">
+  <div class="max-w-[1100px] mx-auto flex justify-between items-end">
+    <div><div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[22px] font-bold">b</div><p class="text-[13px] text-[#6b7280] mt-4">Made with purple light for ARMY, everywhere.</p></div>
+    <div class="flex gap-4 text-[#6b7280]"><span>◍</span><span>▶</span></div>
+  </div>
+</footer>
 
-<script>
-function openApp(){ localStorage.setItem('appOpened','true'); window.location.href='home.html'; }
-</script>
-</body></html>
+</body>
+</html>
