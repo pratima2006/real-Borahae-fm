@@ -192,7 +192,7 @@ function handleScrapbook(){
 
 async function signInWithGoogle(){
   const provider = new firebase.auth.GoogleAuthProvider();
-  provider.addScope('https://www.googleapis.com/auth/youtube');
+  // YT scope removed - v0 jaisa normal login, YT history browser cookies se save hogi
   try{
     if(/Android|iPhone|iPad/i.test(navigator.userAgent)){
       await auth.signInWithRedirect(provider);
@@ -210,7 +210,6 @@ function saveUser(user, isEmail){
   db.ref('users/'+user.uid).set({name:obj.name,email:obj.email,joinedAt:Date.now()});
   closeAuth();
   checkLogin();
-  // YT history ke liye - user ab logged hai, home.html me player se history save hogi
 }
 
 async function signUpWithEmail(){
