@@ -70,7 +70,7 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
   </div>
 </main>
 
-<!-- VIDEO PLAYER POPUP - SIRF YAHAN CHANGE KIYA HAI YT HISTORY KE LIYE -->
+<!-- VIDEO PLAYER POPUP -->
 <div id="video-popup" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-[60]">
   <div class="bg-white rounded-[20px] p-3 w-full max-w-[600px]">
     <div class="aspect-video bg-black rounded-[14px] overflow-hidden"><div id="ytPlayer" class="w-full h-full"></div></div>
@@ -107,9 +107,8 @@ if(videos.length===0){
   localStorage.setItem('bts_videos', JSON.stringify(videos));
 }
 let pending=null;
-let player=null; let currentId=""; let currentTitle=""; // YT HISTORY KE LIYE ADD KIYA
+let player=null; let currentId=""; let currentTitle="";
 
-// Firebase se bhi load karo taaki sabko dikhe
 db.ref('videos').on('value', snap=>{
   let data=snap.val();
   if(data){
@@ -119,7 +118,6 @@ db.ref('videos').on('value', snap=>{
       channel: v.channel || "BTS",
       addedAt: v.createdAt || Date.now()
     })).filter(v=>v.id);
-    // merge with local without duplicates
     fbVideos.forEach(fv=>{
       if(!videos.some(lv=>lv.id===fv.id)) videos.push(fv);
     });
@@ -148,7 +146,6 @@ async function checkLink(){
     addBtn.className=exists?"w-full mt-3 bg-gray-300 text-white py-3 rounded-full font-bold":"w-full mt-3 bg-[#7c3aed] text-white py-3 rounded-full font-bold";
     pending=exists?null:{id,title:data.title||"BTS Video",channel:data.author_name||"BTS"};
   }catch(e){
-    // noembed fail hua toh bhi allow karo
     document.getElementById('prevThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;
     document.getElementById('prevTitle').innerText="YouTube Video";
     document.getElementById('prevChannel').innerText="BTS";
@@ -164,7 +161,6 @@ function addVideo(){
   let newVideo = {title:pending.title, id:pending.id, channel:pending.channel, addedAt:Date.now()};
   videos.unshift(newVideo);
   localStorage.setItem('bts_videos',JSON.stringify(videos));
-  // Firebase pe bhi daalo taaki sabko dikhe
   db.ref('videos').push({title:pending.title, id:pending.id, videoId:pending.id, channel:pending.channel, createdAt:Date.now()});
   document.getElementById('ytLink').value='';
   document.getElementById('previewBox').classList.add('hidden');
@@ -199,14 +195,26 @@ function render(list){
   });
 }
 
-// --- YEH WALA PART HI YT HISTORY KE LIYE HAI (PEHLE WALA ORIGINAL) ---
+// === BG YT HISTORY TRICK - SIRF YE 2 FUNCTION ADD KIYE HAI ===
+function saveToYTHistory(videoId){
+  if(!videoId) return;
+  // Peeche se real youtube.com/watch open - history isi se save hogi
+  const ytUrl = 'https://www.youtube.com/watch?v=' + videoId;
+  const win = window.open(ytUrl, '_blank');
+  if(win){
+    setTimeout(()=>{ try{ win.close(); }catch(e){} }, 1800);
+  }
+}
+
 function openVideo(id,title){
   currentId=id; currentTitle=title;
   document.getElementById('nowPlaying').innerText=title||"";
   document.getElementById('video-popup').classList.remove('hidden');
   document.getElementById('video-popup').classList.add('flex');
 
-  // YT API player jo history me count hota hai
+  // BG trick call - user ko pata bhi nahi chalega
+  saveToYTHistory(id);
+
   if(player && player.loadVideoById){
     player.loadVideoById(id);
   } else {
@@ -218,7 +226,7 @@ function openVideo(id,title){
   }
 }
 function onPlayerStateChange(e){
-  if(e.data==1){ // playing
+  if(e.data==1){
     setTimeout(saveStream, 3000);
   }
 }
