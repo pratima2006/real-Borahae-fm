@@ -1,5 +1,174 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="style.css"></head><body>
-<header class="topbar"><div class="logo"><b>b</b> borahae.fm</div></header>
-<nav class="bottom-nav"><a href="index.html">Home</a><a href="missions.html">Missions</a><a href="music.html">Music</a><a href="history.html" class="active">History</a></nav>
-<main style="padding:16px"><h2>History</h2><p class="sub">Your stream logs will show here.</p></main>
-<script src="app.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>History - Borahae FM</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Mono:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body{font-family:'Inter',sans-serif;background:#faf6ff}
+ .serif{font-family:'DM Serif Display',serif}
+ .mono{font-family:'Space Mono',monospace}
+</style>
+</head>
+<body class="min-h-screen pb-10">
+
+<!-- Header same as your app -->
+<header class="sticky top-0 z-20 bg-[#faf6ff]/80 backdrop-blur-md border-b border-purple-100 px-4 py-3 flex items-center gap-3">
+  <button class="text-xl">☰</button>
+  <div class="w-10 h-10 rounded-2xl bg-[#8b2cf0] flex items-center justify-center text-white text-2xl serif shadow-[0_0_15px_rgba(139,44,240,0.5)] relative">
+    b <span class="absolute -top-1 -right-1 text-[10px]">✨</span>
+  </div>
+</header>
+
+<div class="px-5 pt-6 max-w-[480px] mx-auto">
+  <p class="mono text-[11px] tracking-[0.25em] text-[#8b2cf0] font-bold">STREAM JOURNAL</p>
+  <h1 class="serif text-[42px] leading-[0.95] mt-2 text-[#1a1033]">The pages you've left<br>behind.</h1>
+  <p class="text-[15px] text-[#6b5b8a] mt-3 leading-snug">Every completed stream stays here as a small record of showing up. Filter by member, revisit a memory, or clear a page.</p>
+
+  <!-- Filter -->
+  <div class="mt-6">
+    <select id="memberFilter" class="w-full bg-white border border-gray-200 rounded-full px-5 py-3 text-sm font-semibold flex justify-between">
+      <option value="all">All members</option>
+      <option value="OT7">OT7</option>
+      <option value="RM">RM</option>
+      <option value="Jin">Jin</option>
+      <option value="SUGA">SUGA</option>
+      <option value="j-hope">j-hope</option>
+      <option value="Jimin">Jimin</option>
+      <option value="V">V</option>
+      <option value="Jungkook">Jungkook</option>
+    </select>
+  </div>
+
+  <!-- Streams List -->
+  <div id="streamList" class="mt-5 space-y-3"></div>
+
+  <!-- Empty State - Pic 1 & 2 wala -->
+  <div id="emptyState" class="mt-5 bg-white/60 border border-dashed border-[#d6c6f5] rounded-[20px] p-8 text-center" style="background-image: linear-gradient(#f0e8ff 1px, transparent 1px); background-size: 100% 28px;">
+    <div class="w-14 h-14 mx-auto rounded-2xl bg-[#ede6fb] flex items-center justify-center text-[#8b2cf0] text-xl">♡</div>
+    <h2 class="serif text-[26px] mt-4 leading-tight text-[#1a1033]">No streams recorded<br>yet</h2>
+    <p class="text-[13px] text-[#8a7ca3] mt-2">Your journal begins when a video reaches the end in the player.</p>
+    <button onclick="location.href='missions.html'" class="mt-5 bg-[#8b2cf0] text-white mono text-[13px] font-bold px-6 py-2.5 rounded-full">Find a mission</button>
+  </div>
+
+  <!-- Leaderboard - Pic 2 & 3 wala -->
+  <div class="mt-6 bg-white rounded-[24px] p-6 shadow-sm border border-purple-50">
+    <div class="flex justify-between items-start">
+      <div>
+        <p class="mono text-[11px] tracking-[0.2em] text-[#8b2cf0]">LIGHT CIRCLE</p>
+        <h2 class="serif text-[34px] mt-1 text-[#1a1033]">Leaderboard</h2>
+      </div>
+      <div class="text-xl">🏆</div>
+    </div>
+    <div id="leaderboardEmpty" class="mt-8 text-center pb-6">
+      <p class="text-[14px] text-[#8a7ca3]">The light circle is waiting for its first<br>streams.</p>
+    </div>
+    <div id="leaderboardList" class="mt-4 space-y-3 hidden"></div>
+  </div>
+</div>
+
+<script>
+// === STORAGE ===
+let streams = JSON.parse(localStorage.getItem('borahae_history') || '[]');
+
+function render(){
+  const list = document.getElementById('streamList');
+  const empty = document.getElementById('emptyState');
+  const lbEmpty = document.getElementById('leaderboardEmpty');
+  const lbList = document.getElementById('leaderboardList');
+  const filter = document.getElementById('memberFilter').value;
+
+  let filtered = streams.filter(s=> filter==='all' || s.member===filter);
+
+  if(filtered.length===0 && streams.length===0){
+    empty.classList.remove('hidden');
+    list.innerHTML='';
+  } else {
+    empty.classList.add('hidden');
+    list.innerHTML = filtered.map(s=>`
+      <div class="bg-white rounded-[18px] p-3 flex gap-3 border border-purple-50 shadow-sm">
+        <div class="relative w-[120px] h-[68px] rounded-[14px] overflow-hidden shrink-0 bg-black">
+          <img src="https://img.youtube.com/vi/${s.videoId}/mqdefault.jpg" class="w-full h-full object-cover">
+          <span class="absolute bottom-1 left-1 bg-black/70 text-white text-[10px] px-1.5 py-0.5 rounded-full">${s.count}×</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-[14px] font-semibold leading-tight line-clamp-2 text-[#1a1033]">${s.title}</p>
+          <p class="text-[12px] text-[#8a7ca3] mt-1">${s.member} · ${s.date}</p>
+          <p class="mono text-[11px] text-[#8b2cf0] mt-1 tracking-widest">◷ STREAM ${s.count}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Leaderboard
+  if(streams.length===0){
+    lbEmpty.classList.remove('hidden');
+    lbList.classList.add('hidden');
+  } else {
+    lbEmpty.classList.add('hidden');
+    lbList.classList.remove('hidden');
+    // count by member
+    let counts = {};
+    streams.forEach(s=> counts[s.member] = (counts[s.member]||0)+ s.count);
+    let sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+    lbList.innerHTML = sorted.map(([member,c],i)=>`
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${i===0?'bg-[#ff6fb0] text-white': 'bg-[#ede6fb] text-[#8b2cf0]'}">${i+1}</span>
+          <span class="font-semibold text-sm">${member}</span>
+        </div>
+        <span class="text-sm text-[#8a7ca3]">${c}</span>
+      </div>
+    `).join('');
+  }
+}
+
+// === 1 MIN RULE - NO SKIP/FAST FORWARD ===
+// Isko music.html me call karna
+window.saveStreamIfValid = function(videoId, title, member){
+  // check last watch time logic is in music.html player
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US',{month:'short', day:'2-digit', year:'numeric'});
+  let existing = streams.find(s=> s.videoId===videoId);
+  if(existing){
+    existing.count++;
+    existing.date = dateStr;
+  } else {
+    streams.push({videoId, title: title||'BTS Video', member: member||'OT7', date: dateStr, count:1});
+  }
+  localStorage.setItem('borahae_history', JSON.stringify(streams));
+  render();
+  // also update missions
+  let missions = JSON.parse(localStorage.getItem('borahae_missions')||'{}');
+  missions[videoId] = (missions[videoId]||0)+1;
+  localStorage.setItem('borahae_missions', JSON.stringify(missions));
+}
+
+document.getElementById('memberFilter').addEventListener('change', render);
+render();
+</script>
+
+<!-- PLAYER WATCH LOGIC - ye music.html me bhi same daalna -->
+<script>
+// Example for music.html - yaha reference ke liye diya hai
+// music.html ke player me ye logic add karna:
+// let watchSeconds=0, lastTime=0, hasSeeked=false;
+// player.addEventListener('onStateChange', e=>{
+// if(e.data===1){ // playing
+// let interval = setInterval(()=>{
+// let curr = player.getCurrentTime();
+// if(Math.abs(curr-lastTime) > 2.5) hasSeeked=true; // fast forward / skip detect
+// if(!hasSeeked) watchSeconds+=1;
+// lastTime=curr;
+// if(watchSeconds>=60 &&!hasSeeked){
+// window.saveStreamIfValid(currentId, currentTitle, currentMember);
+// clearInterval(interval);
+// }
+// },1000);
+// }
+// });
+</script>
+</body>
+</html>
