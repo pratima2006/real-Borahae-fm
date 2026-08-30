@@ -14,31 +14,29 @@
   body{font-family:'Manrope',sans-serif; background:#fdf8ff; color:#1e1033; margin:0; -webkit-font-smoothing:antialiased;}
 .font-display{font-family:'Playfair Display',serif;}
 .font-mono{font-family:'DM Mono',monospace;}
-.hero-bg{
-    background: radial-gradient(120% 80% at 90% 0%, #f5d0fe 0%, #fce7ff 20%, #fdf8ff 60%);
-  }
-.paper-grid{
-    background-image: linear-gradient(#e9d5ff1f 1px, transparent 1px), linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px);
-    background-size:22px 22px;
-  }
-  /* MOBILE ME PIC 1 JAISA CLEAN BOX - FIX */
- .auth-scroll::-webkit-scrollbar{width:0}
-  @media(max-width:640px){
-    #authCard{max-height:86vh; overflow-y:auto; -webkit-overflow-scrolling:touch;}
-  }
+.hero-bg{background: radial-gradient(120% 80% at 90% 0%, #f5d0fe 0%, #fce7ff 20%, #fdf8ff 60%);}
+.paper-grid{background-image: linear-gradient(#e9d5ff1f 1px, transparent 1px), linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px);background-size:22px 22px;}
+.auth-scroll::-webkit-scrollbar{width:0}
+@media(max-width:640px){ #authCard{max-height:84vh; overflow-y:auto;} }
 </style>
 </head>
 <body class="hero-bg">
 
-<!-- HEADER - SIGN IN + JOIN THE LIGHT ADDED, BAKI SAME -->
-<nav class="flex items-center justify-between px-6 py-5 max-w-[1100px] mx-auto">
+<!-- HEADER - MOBILE PE SMALL FIXED -->
+<nav class="flex items-center justify-between px-4 md:px-6 py-4 md:py-5 max-w-[1100px] mx-auto">
   <div class="flex items-center gap-2.5">
-    <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[22px] font-bold shadow-[0_8px_20px_rgba(124,58,237,0.3)]">b</div>
-    <span class="font-bold text-[16px] tracking-tight">borahae<span class="text-[#7c3aed]">.fm</span></span>
+    <div class="w-[34px] h-[34px] md:w-[38px] md:h-[38px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px] font-bold">b</div>
+    <span class="font-bold text-[14px] md:text-[16px] tracking-tight">borahae<span class="text-[#7c3aed]">.fm</span></span>
   </div>
-  <div class="flex items-center gap-3">
-    <button onclick="openAuth()" class="font-mono text-[13px] font-bold text-[#6b7280] hover:text-[#1e1033]">Sign in</button>
-    <button onclick="openAuth()" class="bg-[#7c3aed] text-white px-5 py-2.5 rounded-full text-[13px] font-bold shadow-[0_4px_20px_rgba(124,58,237,0.3)]">Join the light</button>
+  <!-- BEFORE LOGIN -->
+  <div id="beforeLogin" class="flex items-center gap-2 md:gap-3">
+    <button onclick="openAuth()" class="font-mono text-[11px] md:text-[13px] font-bold text-[#6b7280] px-2">Sign in</button>
+    <button onclick="openAuth()" class="bg-[#7c3aed] text-white px-3 py-1.5 md:px-5 md:py-2.5 rounded-full text-[11px] md:text-[13px] font-bold leading-tight text-center">Join the<br class="md:hidden"> light</button>
+  </div>
+  <!-- AFTER LOGIN - GMAIL + PENCIL -->
+  <div id="afterLogin" class="hidden items-center gap-2 md:gap-3">
+    <span id="userEmailShow" class="font-mono text-[10px] md:text-[12px] font-bold text-[#1e1033] max-w-[110px] md:max-w-[200px] truncate"></span>
+    <button onclick="openProfile()" class="w-[32px] h-[32px] md:w-[38px] md:h-[38px] bg-[#1e1033] rounded-full flex items-center justify-center text-white text-[14px]">✎</button>
   </div>
 </nav>
 
@@ -55,12 +53,11 @@
       borahae.fm is your lovingly kept ARMY scrapbook — a place to discover missions, make every stream count, and watch the purple light grow.
     </p>
     <div class="mt-8 flex flex-col gap-3 w-fit">
-      <button onclick="openAuth()" class="bg-[#7c3aed] hover:bg-[#6d28d9] text-white px-6 py-[14px] rounded-full font-semibold text-[14px] flex items-center gap-2 shadow-[0_10px_30px_rgba(124,58,237,0.3)] transition">Open your scrapbook <span>→</span></button>
+      <button onclick="handleScrapbook()" class="bg-[#7c3aed] hover:bg-[#6d28d9] text-white px-6 py-[14px] rounded-full font-semibold text-[14px] flex items-center gap-2 shadow-[0_10px_30px_rgba(124,58,237,0.3)] transition">Open your scrapbook <span>→</span></button>
       <button onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})" class="bg-white border border-[#e5e7eb] px-6 py-[14px] rounded-full font-semibold text-[14px] text-[#111] hover:bg-gray-50 transition">See how it works</button>
     </div>
   </div>
 
-  <!-- PURPLE CARD - SAME AS YOURS -->
   <div class="relative mt-12 md:mt-4 md:w-[52%] flex justify-center md:justify-end">
     <div class="relative w-[300px] md:w-[380px] rotate-[-1.5deg]">
       <div class="bg-white p-[10px] rounded-[28px] shadow-[0_20px_60px_rgba(100,30,150,0.15)]">
@@ -88,7 +85,6 @@
   </div>
 </section>
 
-<!-- 01 02 03 - SAME AS YOURS -->
 <section id="how-it-works" class="bg-white border-y border-[#eee6f8] mt-6">
   <div class="max-w-[1100px] mx-auto divide-y md:divide-y-0 md:grid md:grid-cols-3 md:divide-x divide-[#eee6f8]">
     <div class="p-8 md:p-10 py-12"><p class="font-mono text-[13px] text-[#7c3aed]">01</p><h3 class="font-display text-[24px] font-bold mt-4 leading-tight">Find your mission</h3><p class="text-[14px] text-[#6b7280] mt-3 leading-[1.5]">Start with hand-picked BANGTANTV moments, or bring in a favorite YouTube video.</p></div>
@@ -97,7 +93,6 @@
   </div>
 </section>
 
-<!-- COMEBACK ENERGY - SAME AS YOURS, NOT DELETED -->
 <section class="max-w-[1100px] mx-auto px-6 py-16 md:py-24 md:flex md:justify-between">
   <div class="md:w-[40%]">
     <p class="font-mono text-[11px] tracking-[3px] text-[#7c3aed]">A SOFT PLACE FOR LOUD LOVE</p>
@@ -117,7 +112,6 @@
   </div>
 </section>
 
-<!-- FOOTER - SAME AS YOURS -->
 <footer class="border-t border-[#eee6f8] bg-white/50 py-10 px-6">
   <div class="max-w-[1100px] mx-auto flex justify-between items-end">
     <div><div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[22px] font-bold">b</div><p class="text-[13px] text-[#6b7280] mt-4">Made with purple light for ARMY, everywhere.</p></div>
@@ -125,36 +119,40 @@
   </div>
 </footer>
 
-<!-- LOGIN BOX - FIXED, CLEAN LIKE PIC 1 -->
+<!-- AUTH MODAL - SMALL & CLEAN -->
 <div id="authModal" class="fixed inset-0 bg-[#1e1033]/50 backdrop-blur-[10px] hidden items-center justify-center p-4 z-[100]">
-  <div id="authCard" class="auth-scroll bg-white w-full max-w-[380px] rounded-[28px] p-[8px] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
-    <div class="bg-[#fdf8ff] border border-[#f3e8ff] rounded-[22px] p-6 relative overflow-hidden">
-      <div class="inline-flex items-center gap-1.5 border border-[#e9d5ff] bg-white rounded-full px-2.5 py-1">
-        <span class="text-[10px]">✨</span><p class="font-mono text-[8px] tracking-[1.5px] text-[#7c3aed] font-bold">JOIN THE LIGHT, ARMY</p>
-      </div>
-      <h2 class="font-display text-[28px] leading-[0.95] font-bold mt-4">Welcome back,<br><span class="text-[#7c3aed]">my love.</span></h2>
-      <p class="text-[#6b7280] text-[13px] leading-[1.5] mt-3">Your little scrapbook missed you. Sign in to keep your streams, missions & purple memories safe — all in one place, just like you left it.</p>
+  <div id="authCard" class="auth-scroll bg-white w-full max-w-[360px] rounded-[28px] p-[8px] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
+    <div class="bg-[#fdf8ff] border border-[#f3e8ff] rounded-[22px] p-5 md:p-6">
+      <div class="inline-flex items-center gap-1.5 border border-[#e9d5ff] bg-white rounded-full px-2.5 py-1"><span class="text-[10px]">✨</span><p class="font-mono text-[8px] tracking-[1.5px] text-[#7c3aed] font-bold">JOIN THE LIGHT, ARMY</p></div>
+      <h2 class="font-display text-[26px] leading-[0.95] font-bold mt-4">Welcome back,<br><span class="text-[#7c3aed]">my love.</span></h2>
+      <p class="text-[#6b7280] text-[12px] leading-[1.5] mt-3">Your little scrapbook missed you. Sign in to keep your streams safe.</p>
+      <button id="googleBtn" onclick="signInWithGoogle()" class="w-full mt-4 bg-[#1e1033] text-white rounded-full py-3 flex items-center justify-center gap-2 text-[12px] font-bold"><img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 bg-white rounded-full p-0.5"> Continue with Google</button>
+      <div class="flex items-center gap-3 my-3"><div class="flex-1 h-[1px] bg-[#ede9fe]"></div><p class="font-mono text-[8px] text-[#9ca3af]">OR FAST LOGIN</p><div class="flex-1 h-[1px] bg-[#ede9fe]"></div></div>
+      <input id="emailInput" type="email" placeholder="your gmail id" class="w-full bg-white border border-[#ede9fe] rounded-full px-4 py-2.5 text-[12px] outline-none">
+      <input id="passInput" type="password" placeholder="password (min 6 chars)" class="w-full mt-2 bg-white border border-[#ede9fe] rounded-full px-4 py-2.5 text-[12px] outline-none">
+      <button onclick="signUpWithEmail()" class="w-full mt-3 bg-[#7c3aed] text-white rounded-full py-2.5 text-[12px] font-bold">Create account in 2 sec ✨</button>
+      <button onclick="signInWithEmail()" class="w-full mt-2 bg-white border border-[#ede9fe] rounded-full py-2.5 text-[12px] font-bold">Already have account? Log in</button>
+      <p class="text-[9px] text-[#9ca3af] text-center mt-3 font-mono">*ss of your profile for future login 💌</p>
+      <button onclick="closeAuth()" class="w-full mt-2 text-[11px] font-bold text-[#6b7280]">maybe later →</button>
+    </div>
+  </div>
+</div>
 
-      <button id="googleBtn" onclick="signInWithGoogle()" class="w-full mt-5 bg-[#1e1033] text-white rounded-full py-3.5 flex items-center justify-center gap-3 text-[13px] font-bold">
-        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 bg-white rounded-full p-0.5"> Continue with Google
-      </button>
-
-      <div class="flex items-center gap-3 my-4"><div class="flex-1 h-[1px] bg-[#ede9fe]"></div><p class="font-mono text-[9px] text-[#9ca3af]">OR FAST LOGIN</p><div class="flex-1 h-[1px] bg-[#ede9fe]"></div></div>
-
-      <input id="emailInput" type="email" placeholder="your gmail id" class="w-full bg-white border border-[#ede9fe] rounded-full px-4 py-3 text-[13px] outline-none focus:border-[#7c3aed]">
-      <input id="passInput" type="password" placeholder="password (min 6 chars)" class="w-full mt-2 bg-white border border-[#ede9fe] rounded-full px-4 py-3 text-[13px] outline-none focus:border-[#7c3aed]">
-
-      <button onclick="signUpWithEmail()" class="w-full mt-3 bg-[#7c3aed] text-white rounded-full py-3 text-[13px] font-bold">Create account in 2 sec ✨</button>
-      <button onclick="signInWithEmail()" class="w-full mt-2 bg-white border border-[#ede9fe] rounded-full py-3 text-[13px] font-bold">Already have account? Log in</button>
-
-      <p class="text-[10px] text-[#9ca3af] text-center mt-3 font-mono leading-[1.4]">*we prefer you to take a ss of your profile for future login, just in case you forget your army name 💌</p>
-      <button onclick="closeAuth()" class="w-full mt-3 text-[12px] font-bold text-[#6b7280]">maybe later, i'll just look around →</button>
+<!-- PROFILE SETTINGS MODAL - PENCIL ICON -->
+<div id="profileModal" class="fixed inset-0 bg-[#1e1033]/50 backdrop-blur-[10px] hidden items-center justify-center p-4 z-[101]">
+  <div class="bg-white w-full max-w-[340px] rounded-[24px] p-2">
+    <div class="bg-[#fdf8ff] border rounded-[18px] p-6 text-center">
+      <div class="w-16 h-16 bg-[#f3f0ff] rounded-full mx-auto flex items-center justify-center text-[24px]">💜</div>
+      <h3 class="font-bold mt-3" id="profileEmail"></h3>
+      <p class="text-[12px] text-[#6b7280] mt-1">Your streams are saved to YT history when you watch from our app ✨</p>
+      <button onclick="location.href='home.html'" class="w-full mt-4 bg-[#7c3aed] text-white rounded-full py-2.5 text-[13px] font-bold">Go to Scrapbook</button>
+      <button onclick="logOut()" class="w-full mt-2 bg-white border rounded-full py-2.5 text-[13px] font-bold">Log out</button>
+      <button onclick="closeProfile()" class="w-full mt-2 text-[12px] text-[#6b7280]">close →</button>
     </div>
   </div>
 </div>
 
 <script>
-// YAHAN APNI REAL KEYS DALO - dummy nahi chalega!
 const firebaseConfig = {
   apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",
   authDomain: "borahae-fm-f7075.firebaseapp.com",
@@ -170,37 +168,61 @@ const db = firebase.database();
 
 function openAuth(){document.getElementById('authModal').classList.remove('hidden');document.getElementById('authModal').classList.add('flex');}
 function closeAuth(){document.getElementById('authModal').classList.add('hidden');document.getElementById('authModal').classList.remove('flex');}
+function openProfile(){document.getElementById('profileModal').classList.remove('hidden');document.getElementById('profileModal').classList.add('flex');}
+function closeProfile(){document.getElementById('profileModal').classList.add('hidden');document.getElementById('profileModal').classList.remove('flex');}
+
+function checkLogin(){
+  const saved = localStorage.getItem('borahae_user');
+  if(saved){
+    const u = JSON.parse(saved);
+    document.getElementById('beforeLogin').classList.add('hidden');
+    document.getElementById('beforeLogin').classList.remove('flex');
+    document.getElementById('afterLogin').classList.remove('hidden');
+    document.getElementById('afterLogin').classList.add('flex');
+    document.getElementById('userEmailShow').innerText = u.email;
+    document.getElementById('profileEmail').innerText = u.email;
+  }
+}
+checkLogin();
+
+function handleScrapbook(){
+  if(localStorage.getItem('borahae_user')){ location.href='home.html'; }
+  else{ openAuth(); }
+}
 
 async function signInWithGoogle(){
   const provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope('https://www.googleapis.com/auth/youtube');
   try{
     if(/Android|iPhone|iPad/i.test(navigator.userAgent)){
       await auth.signInWithRedirect(provider);
     } else {
       const result = await auth.signInWithPopup(provider);
-      saveAndGo(result.user);
+      saveUser(result.user, false);
     }
   }catch(e){ alert(e.message); }
 }
-auth.getRedirectResult().then((result)=>{
-  if(result && result.user){ saveAndGo(result.user); }
-}).catch(e=>{ if(e && e.code!=='auth/no-auth-event') alert(e.message); });
+auth.getRedirectResult().then(r=>{ if(r&&r.user) saveUser(r.user,false); }).catch(()=>{});
 
-function saveAndGo(user){
-  localStorage.setItem('borahae_user',JSON.stringify({name:user.displayName||user.email.split('@')[0],email:user.email,photo:user.photoURL||'',uid:user.uid}));
-  db.ref('users/'+user.uid).set({name:user.displayName||user.email.split('@')[0],email:user.email,joinedAt:Date.now()});
-  window.location.href="home.html";
+function saveUser(user, isEmail){
+  const obj = {name:user.displayName||user.email.split('@')[0], email:user.email, photo:user.photoURL||'', uid:user.uid};
+  localStorage.setItem('borahae_user', JSON.stringify(obj));
+  db.ref('users/'+user.uid).set({name:obj.name,email:obj.email,joinedAt:Date.now()});
+  closeAuth();
+  checkLogin();
+  // YT history ke liye - user ab logged hai, home.html me player se history save hogi
 }
+
 async function signUpWithEmail(){
   const email=document.getElementById('emailInput').value.trim();
   const pass=document.getElementById('passInput').value;
-  if(!email||!pass) return alert("Gmail and password daal de ARMY 💜");
+  if(!email||!pass) return alert("Gmail and password daal de 💜");
   if(pass.length<6) return alert("Password 6 chars ka hona chahiye");
   try{
     const res=await auth.createUserWithEmailAndPassword(email,pass);
     localStorage.setItem('borahae_user',JSON.stringify({name:email.split('@')[0],email:email,uid:res.user.uid}));
     localStorage.setItem('borahae_pass',pass);
-    window.location.href="home.html";
+    closeAuth(); checkLogin();
   }catch(e){ alert(e.message); }
 }
 async function signInWithEmail(){
@@ -211,8 +233,12 @@ async function signInWithEmail(){
     const res=await auth.signInWithEmailAndPassword(email,pass);
     localStorage.setItem('borahae_user',JSON.stringify({name:email.split('@')[0],email:email,uid:res.user.uid}));
     localStorage.setItem('borahae_pass',pass);
-    window.location.href="home.html";
+    closeAuth(); checkLogin();
   }catch(e){ alert(e.message); }
+}
+function logOut(){
+  auth.signOut(); localStorage.removeItem('borahae_user'); localStorage.removeItem('borahae_pass');
+  location.reload();
 }
 </script>
 </body>
