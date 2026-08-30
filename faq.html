@@ -5,7 +5,7 @@
 body{font-family:'Manrope',sans-serif;background:#fdf8ff;}
 .font-display{font-family:'Playfair Display',serif;}
 .font-mono{font-family:'DM Mono',monospace;}
-.sidebar-bg{background:#28164f;}
+.sidebar-bg{background:#23144a;}
 </style></head><body>
 <header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
   <button onclick="openSidebar()" class="w-9 h-9 flex items-center justify-center text-[24px]">☰</button>
@@ -13,16 +13,50 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;}
 </header>
 
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 z-40 hidden"></div>
-<aside id="sidebar" class="fixed top-0 left-0 w-[75%] max-w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-transform duration-300 flex flex-col p-5">
-  <div class="flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-8 h-8 bg-[#7c3aed] rounded-xl flex items-center justify-center text-white font-bold">b</div><span class="text-white font-bold">borahae.fm</span></div><button onclick="closeSidebar()" class="text-white text-xl">✕</button></div>
-  <nav class="mt-10 space-y-1">
-    <a href="home.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">⌂ Home</a>
-    <a href="missions.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">✦ Missions</a>
-    <a href="music.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">▶ Videos</a>
-    <a href="history.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">◫ My History</a>
-    <a href="faq.html" class="flex gap-3 px-4 py-3 rounded-full bg-white/10 text-white">? FAQ</a>
+
+<!-- HOME PAGE WALA EXACT SIDEBAR -->
+<aside id="sidebar" class="fixed top-0 left-0 w-[82%] max-w-[300px] h-full sidebar-bg z-50 -translate-x-full transition-transform duration-300 flex flex-col p-5 rounded-r-[28px]">
+  <div class="flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[22px] font-bold">b</div>
+      <span class="text-white font-bold text-[18px]">borahae<span class="text-[#a78bfa]">.fm</span></span>
+    </div>
+    <button onclick="closeSidebar()" class="text-white/60 text-[28px] leading-none">×</button>
+  </div>
+
+  <p class="font-mono text-[11px] tracking-[3.5px] text-white/30 mt-8">YOUR SCRAPBOOK</p>
+
+  <nav class="mt-4 space-y-1.5">
+    <a href="home.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
+      <span class="flex items-center gap-3">⌂ Home</span>
+    </a>
+    <a href="missions.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
+      <span class="flex items-center gap-3">✦ Missions</span>
+    </a>
+    <a href="music.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
+      <span class="flex items-center gap-3">▶ Videos</span>
+    </a>
+    <a href="history.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
+      <span class="flex items-center gap-3">◫ My History</span>
+    </a>
+    <a href="faq.html" class="flex items-center justify-between px-4 py-3.5 rounded-full bg-[#3c2a63] text-white font-semibold">
+      <span class="flex items-center gap-3">? FAQ</span>
+      <span class="w-2.5 h-2.5 bg-[#ff7eb6] rounded-full"></span>
+    </a>
   </nav>
-  <div class="mt-auto pt-6 border-t border-white/10"><a href="settings.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">⚙ Settings</a></div>
+
+  <div class="mt-auto">
+    <div class="border-t border-white/10 pt-6">
+      <a href="settings.html" class="flex gap-3 px-4 py-3 rounded-full text-white/40 hover:text-white/70">⚙ Settings</a>
+    </div>
+    <div class="mt-4 bg-[#3a275e]/80 rounded-[20px] p-3.5 flex items-center gap-3">
+      <div class="w-10 h-10 bg-[#f0a8c0] rounded-full flex items-center justify-center font-bold text-[#4a1e32] text-[16px]">A</div>
+      <div>
+        <p class="text-white text-[14px] font-bold leading-none">ARMY demo</p>
+        <p class="text-white/50 text-[11px] mt-1">keeping the purple light on</p>
+      </div>
+    </div>
+  </div>
 </aside>
 
 <main class="w-full max-w-[480px] mx-auto px-4 pt-6 pb-28 min-h-screen">
@@ -30,7 +64,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;}
   <h1 class="font-display text-[42px] leading-[0.95] font-bold mt-1 text-[#1a1033]">FAQ, with care.</h1>
 
   <div class="mt-6 bg-white border border-[#e9e0f5] rounded-[28px] p-2 shadow-sm">
-    <!-- Q1 -->
     <div class="border-b border-[#eee6f8] last:border-0">
       <button onclick="toggleFaq(this)" class="w-full text-left px-5 py-5 flex justify-between items-center gap-3">
         <span class="font-bold text-[16px] text-[#1a1033] leading-[1.3]">What counts as a stream?</span>
@@ -38,7 +71,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;}
       </button>
       <div class="hidden px-5 pb-5 text-[14px] text-[#6b7280] leading-[1.5]">A stream is recorded when you finish a video in our in-app player. You can also mark a completed watch from the player controls.</div>
     </div>
-    <!-- Q2 -->
     <div class="border-b border-[#eee6f8] last:border-0">
       <button onclick="toggleFaq(this)" class="w-full text-left px-5 py-5 flex justify-between items-center gap-3">
         <span class="font-bold text-[16px] text-[#1a1033] leading-[1.3]">Can I add any YouTube video?</span>
@@ -46,7 +78,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;}
       </button>
       <div class="hidden px-5 pb-5 text-[14px] text-[#6b7280] leading-[1.5]">Yes. Paste a public YouTube watch link and we'll validate its metadata before adding it to your shelf.</div>
     </div>
-    <!-- Q3 -->
     <div class="border-b border-[#eee6f8] last:border-0">
       <button onclick="toggleFaq(this)" class="w-full text-left px-5 py-5 flex justify-between items-center gap-3">
         <span class="font-bold text-[16px] text-[#1a1033] leading-[1.3]">Why do missions come from BANGTANTV?</span>
@@ -54,7 +85,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;}
       </button>
       <div class="hidden px-5 pb-5 text-[14px] text-[#6b7280] leading-[1.5]">Missions are a welcoming starting point: official moments with the kind of rewatch energy ARMY already knows.</div>
     </div>
-    <!-- Q4 -->
     <div class="border-b border-[#eee6f8] last:border-0">
       <button onclick="toggleFaq(this)" class="w-full text-left px-5 py-5 flex justify-between items-center gap-3">
         <span class="font-bold text-[16px] text-[#1a1033] leading-[1.3]">How does the leaderboard work?</span>
@@ -62,7 +92,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;}
       </button>
       <div class="hidden px-5 pb-5 text-[14px] text-[#6b7280] leading-[1.5]">It reflects recorded streams across members in the light circle. It is a celebration, never a competition.</div>
     </div>
-    <!-- Q5 -->
     <div class="border-b border-[#eee6f8] last:border-0">
       <button onclick="toggleFaq(this)" class="w-full text-left px-5 py-5 flex justify-between items-center gap-3">
         <span class="font-bold text-[16px] text-[#1a1033] leading-[1.3]">Can I filter my history?</span>
@@ -70,7 +99,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;}
       </button>
       <div class="hidden px-5 pb-5 text-[14px] text-[#6b7280] leading-[1.5]">Use the member filter on Stream history to focus your journal on OT7 or an individual member.</div>
     </div>
-    <!-- Q6 -->
     <div class="border-b border-[#eee6f8] last:border-0">
       <button onclick="toggleFaq(this)" class="w-full text-left px-5 py-5 flex justify-between items-center gap-3">
         <span class="font-bold text-[16px] text-[#1a1033] leading-[1.3]">How do I change my profile?</span>
