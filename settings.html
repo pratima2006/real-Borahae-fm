@@ -1,4 +1,182 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="style.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head><body>
-<header class="topbar"><div class="logo"><b>b</b> borahae.fm</div></header>
-<main style="padding:16px"><h2>Settings</h2><button class="primary" id="loginBtn">Login with Google</button></main>
-<script src="app.js"></script></body></html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Settings - borahae.fm</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
+.font-display{font-family:'Playfair Display',serif;}
+.font-mono{font-family:'DM Mono',monospace;}
+.sidebar-bg{background:#28164f;}
+*{box-sizing:border-box;}
+</style></head><body>
+
+<header class="sticky top-0 z-30 bg-[#fdf8ff] border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
+  <button onclick="openSidebar()" class="w-9 h-9 flex items-center justify-center text-[24px]">☰</button>
+  <div class="w-[42px] h-[42px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[26px] font-bold relative">b<span class="absolute -top-1 -right-1 text-[12px]">✨</span></div>
+</header>
+
+<div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/50 hidden z-40"></div>
+<aside id="sidebar" class="fixed top-0 left-0 w-[75%] max-w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-transform duration-300 flex flex-col p-5">
+  <div class="flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-8 h-8 bg-[#7c3aed] rounded-xl flex items-center justify-center text-white font-bold">b</div><span class="text-white font-bold">borahae.fm</span></div><button onclick="closeSidebar()" class="text-white text-xl">✕</button></div>
+  <nav class="mt-10 space-y-1">
+    <a href="home.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">⌂ Home</a>
+    <a href="missions.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">✦ Missions</a>
+    <a href="music.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">▶ Videos</a>
+    <a href="history.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">◫ My History</a>
+    <a href="faq.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">? FAQ</a>
+  </nav>
+  <div class="mt-auto pt-6 border-t border-white/10"><a href="settings.html" class="flex gap-3 px-4 py-3 rounded-full bg-white/10 text-white">⚙ Settings</a></div>
+</aside>
+
+<main class="w-full max-w-[480px] mx-auto px-4 pt-5 pb-28 overflow-y-auto min-h-screen">
+
+  <p class="font-mono text-[12px] tracking-[3px] text-[#7c3aed] font-bold">YOUR DETAILS</p>
+  <h1 class="font-display text-[42px] leading-[0.95] font-bold mt-2">Keep your page<br>yours.</h1>
+  <p class="text-[#6b7280] text-[14px] mt-3 leading-[1.4]">A few quiet settings for the person behind the streams. Your profile is only as public as the light circle needs it to be.</p>
+
+  <!-- PROFILE CARD - SAME AS PIC -->
+  <div class="mt-6 bg-white rounded-[28px] p-6 border border-[#f3e8ff] shadow-sm w-full">
+    <div class="flex items-center gap-4">
+      <div class="w-[64px] h-[64px] bg-[#f3edff] rounded-[18px] flex items-center justify-center text-[#7c3aed] font-bold text-[24px]">A</div>
+      <div>
+        <p class="font-bold text-[18px]">ARMY</p>
+        <p class="text-[13px] text-gray-500">Joined Aug 30, 2026</p>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <label class="text-[13px] font-bold">Display name</label>
+      <input id="displayName" value="ARMY" class="w-full mt-2 bg-white border border-[#e9d5ff] rounded-full px-4 py-3 text-[14px] font-bold outline-none focus:border-[#7c3aed]">
+    </div>
+    <div class="mt-4">
+      <label class="text-[13px] font-bold">Avatar URL <span class="font-normal text-gray-500">(optional)</span></label>
+      <input id="avatarUrl" placeholder="https://..." class="w-full mt-2 bg-[#f9f5ff] border border-[#f3e8ff] rounded-full px-4 py-3 text-[14px] outline-none">
+    </div>
+    <div class="mt-4">
+      <label class="text-[13px] font-bold">Email address</label>
+      <input id="emailAddr" disabled class="w-full mt-2 bg-[#f3f4f6] border border-[#e5e7eb] rounded-full px-4 py-3 text-[14px] text-gray-500">
+    </div>
+    <button onclick="saveProfile()" class="w-full mt-6 bg-[#7c3aed] text-white py-3 rounded-full font-bold text-[14px]">Save profile</button>
+  </div>
+
+  <!-- YOUTUBE CONNECT BOX - NEW EXTENDED -->
+  <div class="mt-5 bg-[#fffbeb] border-[1.5px] border-[#fcd34d] rounded-[24px] p-5 w-full">
+    <div class="flex gap-2 items-start">
+      <span>⚠️</span>
+      <div class="flex-1">
+        <h3 class="font-bold text-[15px] text-[#92400e]">Connect YouTube to save your hard work</h3>
+        <p class="text-[11px] text-[#a16207] mt-1 leading-[1.3]">Connect once, then your YT streams will auto count in borahae-fm history & missions.</p>
+      </div>
+    </div>
+
+    <div id="ytNotConnected" class="">
+      <button onclick="connectYT()" class="mt-4 w-full bg-[#fde047] hover:bg-[#facc15] border border-[#fcd34d] text-[#713f12] py-2.5 rounded-full text-[13px] font-bold">▶ Connect YouTube</button>
+      <p class="text-[11px] text-[#b45309] mt-2 text-center">Connect before you start streaming!</p>
+    </div>
+
+    <div id="ytConnected" class="hidden mt-4 bg-white rounded-[16px] p-4 border border-[#fde68a]">
+      <p class="text-[12px] font-bold text-[#15803d]">✅ YouTube Connected</p>
+      <p id="ytEmailShow" class="text-[13px] font-bold mt-1"></p>
+      <p class="text-[11px] text-[#ef4444] mt-2">*Select the same acc you're streaming with in YouTube</p>
+      <div class="mt-3 grid grid-cols-2 gap-2">
+        <button onclick="syncYT()" class="bg-black text-white py-2.5 rounded-full text-[12px] font-bold">Sync last 7</button>
+        <button onclick="disconnectYT()" class="bg-white border py-2.5 rounded-full text-[12px] font-bold">Disconnect</button>
+      </div>
+      <p id="ytSyncStatus" class="text-[11px] text-gray-500 mt-2"></p>
+    </div>
+  </div>
+
+  <!-- EXTRA SETTINGS - SCROLL KE LIYE -->
+  <div class="mt-5 bg-white rounded-[24px] p-5 border w-full">
+    <h3 class="font-bold text-[15px]">Streaming Prefs</h3>
+    <p class="text-[12px] text-gray-500 mt-1">More options coming soon...</p>
+    <div class="mt-3 h-[120px] bg-[#f9f5ff] rounded-xl flex items-center justify-center text-[12px] text-gray-400">space for future settings 💜</div>
+  </div>
+
+</main>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAdEoRnBLg4N7TEDE1WRU6FBjcrS6r7XNw",
+  authDomain: "borahae-fm-f7075.firebaseapp.com",
+  databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com",
+  projectId: "borahae-fm-f7075",
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+auth.onAuthStateChanged(user=>{
+  if(user){
+    document.getElementById('emailAddr').value=user.email;
+    document.getElementById('displayName').value=user.displayName||'ARMY';
+    if(localStorage.getItem('yt_access_token')) showConnected();
+  }
+});
+
+function saveProfile(){
+  let name=document.getElementById('displayName').value;
+  localStorage.setItem('army_name', name);
+  alert('Saved! 💜');
+}
+
+function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
+function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
+
+function showConnected(){
+  document.getElementById('ytNotConnected').classList.add('hidden');
+  document.getElementById('ytConnected').classList.remove('hidden');
+  document.getElementById('ytEmailShow').innerText=localStorage.getItem('yt_email')||'';
+  // music page warning hide
+}
+
+async function connectYT(){
+  try{
+    let provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/youtube.readonly');
+    const result = await auth.signInWithPopup(provider);
+    const token = result.credential.accessToken;
+    localStorage.setItem('yt_access_token', token);
+    localStorage.setItem('yt_email', result.user.email);
+    showConnected();
+    document.getElementById('ytSyncStatus').innerText='Connected! Syncing last 7...';
+    syncYT();
+  }catch(e){ alert('Fail: '+e.message); }
+}
+
+async function syncYT(){
+  let token=localStorage.getItem('yt_access_token'); if(!token) return;
+  document.getElementById('ytSyncStatus').innerText='Syncing...';
+  try{
+    let ch=await fetch('https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true',{headers:{Authorization:'Bearer '+token}});
+    let chd=await ch.json();
+    let hid=chd.items?.[0]?.contentDetails?.relatedPlaylists?.watchHistory||'WL';
+    let pl=await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${hid}&maxResults=7`,{headers:{Authorization:'Bearer '+token}});
+    let pd=await pl.json();
+    let streams=JSON.parse(localStorage.getItem('borahae_history')||'[]');
+    let missions=JSON.parse(localStorage.getItem('borahae_missions')||'{}');
+    pd.items?.forEach(it=>{
+      let vid=it.snippet?.resourceId?.videoId;
+      let title=it.snippet?.title||'';
+      if(!vid) return;
+      if(!streams.some(s=>s.videoId===vid)){
+        streams.unshift({videoId:vid, title:title, member:'OT7', date:new Date().toLocaleDateString(), count:1, watchedAt:Date.now()});
+      }
+      missions[vid]=(missions[vid]||0)+1;
+    });
+    localStorage.setItem('borahae_history', JSON.stringify(streams.slice(0,100)));
+    localStorage.setItem('borahae_missions', JSON.stringify(missions));
+    document.getElementById('ytSyncStatus').innerText='✅ Last 7 synced to history + missions!';
+  }catch(e){ document.getElementById('ytSyncStatus').innerText='Sync error, try again'; }
+}
+
+function disconnectYT(){
+  localStorage.removeItem('yt_access_token');
+  localStorage.removeItem('yt_email');
+  document.getElementById('ytConnected').classList.add('hidden');
+  document.getElementById('ytNotConnected').classList.remove('hidden');
+}
+if(localStorage.getItem('yt_access_token')) showConnected();
+</script>
+</body></html>
