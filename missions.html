@@ -2,25 +2,66 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-<style>body{font-family:'Manrope',sans-serif;background:#fdf8ff;}</style></head><body>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+body{font-family:'Manrope',sans-serif;background:#fdf8ff;}
+.font-display{font-family:'Playfair Display',serif;}
+.font-mono{font-family:'DM Mono',monospace;}
+.sidebar-bg{background:#23144a;}
+</style></head><body>
 <header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
   <button onclick="openSidebar()" class="w-9 h-9 bg-white border rounded-[10px]">☰</button>
   <div class="w-9 h-9 bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-bold">b</div>
   <span class="font-bold">borahae.fm</span>
 </header>
+
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 z-40 hidden"></div>
-<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full bg-[#28164f] z-50 -translate-x-full transition-all duration-300 flex flex-col p-5">
-  <div class="flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-9 h-9 bg-[#7c3aed] rounded-xl flex items-center justify-center text-white font-bold">b</div><span class="text-white font-bold">borahae.fm</span></div><button onclick="closeSidebar()" class="text-white text-xl">✕</button></div>
-  <nav class="mt-10 space-y-1">
-    <a href="home.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">⌂ Home</a>
-    <a href="missions.html" class="flex gap-3 px-4 py-3 rounded-full bg-white/10 text-white">✦ Missions</a>
-    <a href="music.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">▶ Videos</a>
-    <a href="history.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">◫ My History</a>
-    <a href="faq.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">? FAQ</a>
+
+<!-- HOME PAGE WALA EXACT SIDEBAR - START -->
+<aside id="sidebar" class="fixed top-0 left-0 w-[82%] max-w-[300px] h-full sidebar-bg z-50 -translate-x-full transition-transform duration-300 flex flex-col p-5 rounded-r-[28px]">
+  <div class="flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[22px] font-bold">b</div>
+      <span class="text-white font-bold text-[18px]">borahae<span class="text-[#a78bfa]">.fm</span></span>
+    </div>
+    <button onclick="closeSidebar()" class="text-white/60 text-[28px] leading-none">×</button>
+  </div>
+
+  <p class="font-mono text-[11px] tracking-[3.5px] text-white/30 mt-8">YOUR SCRAPBOOK</p>
+
+  <nav class="mt-4 space-y-1.5">
+    <a href="home.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
+      <span class="flex items-center gap-3">⌂ Home</span>
+    </a>
+    <a href="missions.html" class="flex items-center justify-between px-4 py-3.5 rounded-full bg-[#3c2a63] text-white font-semibold">
+      <span class="flex items-center gap-3">✦ Missions</span>
+      <span class="w-2.5 h-2.5 bg-[#ff7eb6] rounded-full"></span>
+    </a>
+    <a href="music.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
+      <span class="flex items-center gap-3">▶ Videos</span>
+    </a>
+    <a href="history.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
+      <span class="flex items-center gap-3">◫ My History</span>
+    </a>
+    <a href="faq.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
+      <span class="flex items-center gap-3">? FAQ</span>
+    </a>
   </nav>
-  <div class="mt-auto pt-6 border-t border-white/10"><a href="settings.html" class="flex gap-3 px-4 py-3 text-white/60">⚙ Settings</a></div>
+
+  <div class="mt-auto">
+    <div class="border-t border-white/10 pt-6">
+      <a href="settings.html" class="flex gap-3 px-4 py-3 rounded-full text-white/40 hover:text-white/70">⚙ Settings</a>
+    </div>
+    <div class="mt-4 bg-[#3a275e]/80 rounded-[20px] p-3.5 flex items-center gap-3">
+      <div class="w-10 h-10 bg-[#f0a8c0] rounded-full flex items-center justify-center font-bold text-[#4a1e32] text-[16px]">A</div>
+      <div>
+        <p class="text-white text-[14px] font-bold leading-none">ARMY demo</p>
+        <p class="text-white/50 text-[11px] mt-1">keeping the purple light on</p>
+      </div>
+    </div>
+  </div>
 </aside>
+<!-- HOME PAGE WALA EXACT SIDEBAR - END -->
 
 <main class="max-w-[600px] mx-auto px-5 pt-8 pb-20">
   <p class="font-mono text-[11px] tracking-[2.5px] text-[#7c3aed]">STARTER MISSIONS / BANGTANTV</p>
@@ -48,7 +89,6 @@ let todayKey=new Date().toISOString().split('T')[0];
 if(localStorage.getItem('last_reset_date')!==todayKey){localStorage.setItem('stream_counts',JSON.stringify({}));localStorage.setItem('last_reset_date',todayKey);}
 let counts=JSON.parse(localStorage.getItem('stream_counts')||'{}'); let currentId='';
 
-// YEH NAYA FUNCTION HAI - JO BHI LINK DALOGI SAHI ID NIKAL DEGA
 function getYouTubeID(urlOrId){
   if(!urlOrId) return "";
   urlOrId = urlOrId.trim();
@@ -56,7 +96,7 @@ function getYouTubeID(urlOrId){
   let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
   let match = urlOrId.match(regExp);
   if(match && match[2].length===11) return match[2];
-  return urlOrId; // fallback
+  return urlOrId;
 }
 
 function render(){
