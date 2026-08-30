@@ -1,7 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Videos - borahae.fm</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script src="https://www.youtube.com/iframe_api"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -16,7 +15,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 <header class="sticky top-0 z-30 bg-[#fdf8ff] border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
   <button onclick="openSidebar()" class="w-9 h-9 flex items-center justify-center text-[24px]">☰</button>
   <div class="w-[42px] h-[42px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[26px] font-bold relative">b<span class="absolute -top-1 -right-1 text-[12px]">✨</span></div>
-  <button id="ytConnectBtn" onclick="connectYT()" class="ml-auto bg-white border border-[#ede9fe] px-4 py-2 rounded-full text-[12px] font-bold text-[#7c3aed]">💜 Connect YouTube</button>
 </header>
 
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/50 hidden z-40"></div>
@@ -29,15 +27,24 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
     <a href="history.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">◫ My History</a>
     <a href="faq.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">? FAQ</a>
   </nav>
-  <div class="mt-auto pt-6 border-t border-white/10"><div id="ytStatus" class="text-[11px] text-white/50 px-4 mb-2"></div><a href="settings.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">⚙ Settings</a></div>
+  <div class="mt-auto pt-6 border-t border-white/10"><a href="settings.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">⚙ Settings</a></div>
 </aside>
 
 <main class="w-full max-w-[480px] mx-auto px-4 pt-5 pb-20 overflow-hidden">
-  <p class="font-mono text-[12px] tracking-[3px] text-[#7c3aed] font-bold">YOUR VIDEO SHELF</p>
-  <h1 class="font-display text-[38px] leading-[0.95] font-bold mt-2">Bring a favorite in.</h1>
-  <p class="text-[#6b7280] text-[14px] mt-3">Connect YouTube once, then stream anywhere - app or YouTube. We'll count 60s watches without skipping.</p>
 
-  <div id="ytConnectedBox" class="hidden mt-4 bg-[#ede6ff] border border-[#d6c6f5] rounded-[16px] p-3 text-[12px]"><span class="font-bold">✅ YouTube Connected:</span> <span id="ytEmail"></span><br><span class="text-[11px] text-[#6b5b8a]">YT App history will auto sync to missions + history page</span></div>
+  <!-- YELLOW WARNING BOX - NEW -->
+  <div id="ytWarningBox" class="bg-[#fffbeb] border-[1.5px] border-[#fcd34d] rounded-[18px] p-4 w-full">
+    <div class="flex gap-2 items-start">
+      <span class="text-[18px]">⚠️</span>
+      <p class="text-[13px] font-bold leading-[1.3] text-[#92400e]">Connect your YouTube account with borahae-fm to mark your hard work in YouTube History & Missions!</p>
+    </div>
+    <p class="text-[11px] text-[#a16207] mt-2 ml-7">If you stream without connecting, your views won't be saved 💜</p>
+    <button onclick="location.href='settings.html'" class="mt-3 ml-7 bg-[#fde047] hover:bg-[#facc15] border border-[#fcd34d] text-[#713f12] px-5 py-2 rounded-full text-[12px] font-bold shadow-sm">▶ Connect YouTube</button>
+  </div>
+
+  <p class="font-mono text-[12px] tracking-[3px] text-[#7c3aed] font-bold mt-6">YOUR VIDEO SHELF</p>
+  <h1 class="font-display text-[38px] leading-[0.95] font-bold mt-2">Bring a favorite in.</h1>
+  <p class="text-[#6b7280] text-[14px] mt-3">Search the videos already on your shelf, or paste a YouTube link. We'll check the metadata before it joins your scrapbook.</p>
 
   <div class="mt-6 bg-[#f3edff] rounded-[24px] p-4 w-full">
     <div class="flex items-center gap-2"><span>🔗</span><h3 class="font-bold text-[15px]">Add MVs / videos for all</h3></div>
@@ -93,85 +100,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// === YOUTUBE CONNECT LOGIC ===
-function updateYTUI(){
-  let token = localStorage.getItem('yt_access_token');
-  let email = localStorage.getItem('yt_email')||'';
-  if(token){
-    document.getElementById('ytConnectBtn').innerText='✅ Connected';
-    document.getElementById('ytConnectedBox').classList.remove('hidden');
-    document.getElementById('ytEmail').innerText=email;
-    document.getElementById('ytStatus').innerText='YT: '+email;
-  }
-}
-updateYTUI();
-
-async function connectYT(){
-  try{
-    let provider = new firebase.auth.GoogleAuthProvider();
-    provider.addScope('https://www.googleapis.com/auth/youtube.readonly');
-    const result = await firebase.auth().signInWithPopup(provider);
-    const credential = result.credential;
-    const token = credential.accessToken;
-    const email = result.user.email;
-    localStorage.setItem('yt_access_token', token);
-    localStorage.setItem('yt_email', email);
-    localStorage.setItem('yt_token_time', Date.now());
-    updateYTUI();
-    alert('Connected! '+email+'\nAb YT App pe jo dekhegi wo auto count hoga 💜');
-    syncYTHistory();
-  }catch(e){
-    alert('Connect fail: '+e.message+'\nFirebase console me Google Auth enable karna padega');
-  }
+// Hide warning if already connected
+if(localStorage.getItem('yt_access_token')){
+  document.getElementById('ytWarningBox').classList.add('hidden');
 }
 
-async function syncYTHistory(){
-  let token = localStorage.getItem('yt_access_token');
-  if(!token) return;
-  try{
-    // get watchHistory playlist id
-    let chRes = await fetch('https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true',{headers:{Authorization:'Bearer '+token}});
-    let chData = await chRes.json();
-    let historyId = chData.items?.[0]?.contentDetails?.relatedPlaylists?.watchHistory;
-    if(!historyId){
-      // agar watchHistory nahi milta, liked videos ya recent se try karo
-      historyId = 'HL';
-    }
-    let plRes = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${historyId}&maxResults=20`,{headers:{Authorization:'Bearer '+token}});
-    let plData = await plRes.json();
-    if(plData.items){
-      plData.items.forEach(item=>{
-        let vid = item.snippet?.resourceId?.videoId;
-        let title = item.snippet?.title||'BTS Video';
-        if(vid && title.toLowerCase().includes('bts') || title.toLowerCase().includes('bangtan') || title.toLowerCase().includes('방탄')){
-          // auto add if BTS
-          saveStreamFromYT(vid, title);
-        }
-      });
-    }
-  }catch(e){ console.log('YT sync error',e); }
-}
-
-function saveStreamFromYT(videoId, title){
-  let streams=JSON.parse(localStorage.getItem('borahae_history')||'[]');
-  let dateStr = new Date().toLocaleDateString('en-US',{month:'short', day:'2-digit', year:'numeric'});
-  let existing = streams.find(s=> (s.videoId||s.id)===videoId);
-  if(existing){
-    if(Date.now() - (existing.watchedAt||0) < 5*60*1000) return; // 5 min me dobara count nahi
-    existing.count=(existing.count||1)+1; existing.date=dateStr; existing.watchedAt=Date.now();
-  } else {
-    streams.unshift({videoId:videoId, id:videoId, title:title, member:'OT7', date:dateStr, watchedAt:Date.now(), count:1});
-  }
-  localStorage.setItem('borahae_history', JSON.stringify(streams.slice(0,100)));
-  let missions=JSON.parse(localStorage.getItem('borahae_missions')||'{}');
-  missions[videoId]=(missions[videoId]||0)+1;
-  localStorage.setItem('borahae_missions', JSON.stringify(missions));
-}
-
-// Auto sync har 2 min me agar connected hai
-setInterval(()=>{ if(localStorage.getItem('yt_access_token')) syncYTHistory(); }, 120000);
-
-// === ORIGINAL VIDEO LOGIC ===
 function getYouTubeID(urlOrId){
   if(!urlOrId) return "";
   urlOrId = urlOrId.trim();
@@ -257,7 +190,7 @@ function render(list){
   document.getElementById('emptyState').classList.add('hidden');
   list.forEach(v=>{
     const isNew=v.addedAt && Date.now()-v.addedAt < 2*86400000;
-    grid.innerHTML+=`<div onclick="openVideo('${v.id}','${v.title.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')" class="bg-white rounded-[14px] overflow-hidden border shadow-sm relative cursor-pointer hover:shadow-md transition">
+    grid.innerHTML+=`<div onclick="openVideo('${v.id}','${v.title.replace(/'/g,"\\'")}')" class="bg-white rounded-[14px] overflow-hidden border shadow-sm relative cursor-pointer hover:shadow-md transition">
     <img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg" class="w-full aspect-video object-cover">
     <div class="p-2"><p class="text-[11px] font-bold leading-[1.2] line-clamp-2">${v.title}</p><p class="text-[10px] text-gray-400 mt-1">${v.channel||''}</p></div>
     ${isNew?'<span class="absolute top-2 left-2 bg-blue-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold">New</span>':''}</div>`;
@@ -266,11 +199,7 @@ function render(list){
 let watchInterval=null, watchSeconds=0, lastTime=0, hasSeeked=false, hasCounted=false;
 function saveToYTHistory(videoId){
   if(!videoId) return;
-  try{
-    const ytUrl = 'https://www.youtube.com/watch?v=' + videoId;
-    const win = window.open(ytUrl, '_blank');
-    if(win){ setTimeout(()=>{ try{ win.close(); }catch(e){} }, 1500); }
-  }catch(e){}
+  try{ const ytUrl = 'https://www.youtube.com/watch?v=' + videoId; const win = window.open(ytUrl, '_blank'); if(win){ setTimeout(()=>{ try{ win.close(); }catch(e){} }, 1500); } }catch(e){}
 }
 function openVideo(id,title){
   currentId=id; currentTitle=title;
@@ -282,9 +211,7 @@ function openVideo(id,title){
   clearInterval(watchInterval);
   saveToYTHistory(id);
   if(player && player.loadVideoById){ player.loadVideoById(id); }
-  else {
-    player = new YT.Player('ytPlayer', {height:'100%', width:'100%', videoId:id, playerVars:{autoplay:1, rel:0, modestbranding:1, enablejsapi:1, origin: window.location.origin}, events:{'onStateChange': onPlayerStateChange}});
-  }
+  else { player = new YT.Player('ytPlayer', {height:'100%', width:'100%', videoId:id, playerVars:{autoplay:1, rel:0, modestbranding:1, enablejsapi:1, origin: window.location.origin}, events:{'onStateChange': onPlayerStateChange}}); }
 }
 function onPlayerStateChange(e){
   if(e.data==1){
@@ -303,14 +230,14 @@ function onPlayerStateChange(e){
 function saveStream(){
   if(!currentId) return;
   let todayKey=new Date().toISOString().split('T')[0];
-  if(localStorage.getItem('last_reset_date')!==todayKey){ localStorage.setItem('stream_counts',JSON.stringify({})); localStorage.setItem('last_reset_date',todayKey); }
+  if(localStorage.getItem('last_reset_date')!==todayKey){localStorage.setItem('stream_counts',JSON.stringify({}));localStorage.setItem('last_reset_date',todayKey);}
   let counts=JSON.parse(localStorage.getItem('stream_counts')||'{}'); counts[currentId]=(counts[currentId]||0)+1; localStorage.setItem('stream_counts',JSON.stringify(counts));
-  let streams=JSON.parse(localStorage.getItem('borahae_history')||'[]');
+  let history=JSON.parse(localStorage.getItem('borahae_history')||'[]');
   let dateStr = new Date().toLocaleDateString('en-US',{month:'short', day:'2-digit', year:'numeric'});
-  let existing = streams.find(s=> (s.videoId||s.id)===currentId);
+  let existing = history.find(s=> (s.videoId||s.id)===currentId);
   if(existing){ existing.count=(existing.count||1)+1; existing.date=dateStr; existing.watchedAt=Date.now(); }
-  else { streams.unshift({videoId: currentId, id: currentId, title: currentTitle, member:'OT7', date:dateStr, watchedAt:Date.now(), count:1}); }
-  localStorage.setItem('borahae_history', JSON.stringify(streams.slice(0,100)));
+  else { history.unshift({videoId:currentId, id:currentId, title:currentTitle, member:'OT7', date:dateStr, watchedAt:Date.now(), count:1}); }
+  localStorage.setItem('borahae_history', JSON.stringify(history.slice(0,100)));
   let missions=JSON.parse(localStorage.getItem('borahae_missions')||'{}'); missions[currentId]=(missions[currentId]||0)+1; localStorage.setItem('borahae_missions', JSON.stringify(missions));
   let total=Object.values(counts).reduce((a,b)=>a+b,0); localStorage.setItem('today_total_streams',total);
 }
