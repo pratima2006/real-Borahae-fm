@@ -5,22 +5,71 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>History - Borahae FM</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Mono:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Mono:wght@400;700&family=Inter:wght@400;500&family=Manrope:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
   body{font-family:'Inter',sans-serif;background:#faf6ff}
- .serif{font-family:'DM Serif Display',serif}
- .mono{font-family:'Space Mono',monospace}
+.serif{font-family:'DM Serif Display',serif}
+.mono{font-family:'Space Mono',monospace}
+.font-display{font-family:'Playfair Display',serif;}
+.sidebar-bg{background:#23144a;}
 </style>
 </head>
 <body class="min-h-screen pb-10">
 
-<!-- Header same as your app -->
+<!-- HEADER - FIXED -->
 <header class="sticky top-0 z-20 bg-[#faf6ff]/80 backdrop-blur-md border-b border-purple-100 px-4 py-3 flex items-center gap-3">
-  <button class="text-xl">☰</button>
+  <button onclick="openSidebar()" class="text-xl w-9 h-9 flex items-center justify-center bg-white border rounded-[10px]">☰</button>
   <div class="w-10 h-10 rounded-2xl bg-[#8b2cf0] flex items-center justify-center text-white text-2xl serif shadow-[0_0_15px_rgba(139,44,240,0.5)] relative">
     b <span class="absolute -top-1 -right-1 text-[10px]">✨</span>
   </div>
 </header>
+
+<div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 z-40 hidden"></div>
+
+<!-- HOME PAGE WALA EXACT SIDEBAR -->
+<aside id="sidebar" class="fixed top-0 left-0 w-[82%] max-w-[300px] h-full sidebar-bg z-50 -translate-x-full transition-transform duration-300 flex flex-col p-5 rounded-r-[28px]">
+  <div class="flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[22px] font-bold">b</div>
+      <span class="text-white font-bold text-[18px]">borahae<span class="text-[#a78bfa]">.fm</span></span>
+    </div>
+    <button onclick="closeSidebar()" class="text-white/60 text-[28px] leading-none">×</button>
+  </div>
+
+  <p class="font-mono text-[11px] tracking-[3.5px] text-white/30 mt-8" style="font-family:'Space Mono',monospace">YOUR SCRAPBOOK</p>
+
+  <nav class="mt-4 space-y-1.5">
+    <a href="home.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
+      <span class="flex items-center gap-3">⌂ Home</span>
+    </a>
+    <a href="missions.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
+      <span class="flex items-center gap-3">✦ Missions</span>
+    </a>
+    <a href="music.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
+      <span class="flex items-center gap-3">▶ Videos</span>
+    </a>
+    <a href="history.html" class="flex items-center justify-between px-4 py-3.5 rounded-full bg-[#3c2a63] text-white font-semibold">
+      <span class="flex items-center gap-3">◫ My History</span>
+      <span class="w-2.5 h-2.5 bg-[#ff7eb6] rounded-full"></span>
+    </a>
+    <a href="faq.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
+      <span class="flex items-center gap-3">? FAQ</span>
+    </a>
+  </nav>
+
+  <div class="mt-auto">
+    <div class="border-t border-white/10 pt-6">
+      <a href="settings.html" class="flex gap-3 px-4 py-3 rounded-full text-white/40 hover:text-white/70">⚙ Settings</a>
+    </div>
+    <div class="mt-4 bg-[#3a275e]/80 rounded-[20px] p-3.5 flex items-center gap-3">
+      <div class="w-10 h-10 bg-[#f0a8c0] rounded-full flex items-center justify-center font-bold text-[#4a1e32] text-[16px]">A</div>
+      <div>
+        <p class="text-white text-[14px] font-bold leading-none">ARMY demo</p>
+        <p class="text-white/50 text-[11px] mt-1">keeping the purple light on</p>
+      </div>
+    </div>
+  </div>
+</aside>
 
 <div class="px-5 pt-6 max-w-[480px] mx-auto">
   <p class="mono text-[11px] tracking-[0.25em] text-[#8b2cf0] font-bold">STREAM JOURNAL</p>
@@ -70,6 +119,9 @@
 </div>
 
 <script>
+function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
+function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
+
 // === STORAGE ===
 let streams = JSON.parse(localStorage.getItem('borahae_history') || '[]');
 
@@ -125,10 +177,7 @@ function render(){
   }
 }
 
-// === 1 MIN RULE - NO SKIP/FAST FORWARD ===
-// Isko music.html me call karna
 window.saveStreamIfValid = function(videoId, title, member){
-  // check last watch time logic is in music.html player
   const now = new Date();
   const dateStr = now.toLocaleDateString('en-US',{month:'short', day:'2-digit', year:'numeric'});
   let existing = streams.find(s=> s.videoId===videoId);
@@ -140,7 +189,6 @@ window.saveStreamIfValid = function(videoId, title, member){
   }
   localStorage.setItem('borahae_history', JSON.stringify(streams));
   render();
-  // also update missions
   let missions = JSON.parse(localStorage.getItem('borahae_missions')||'{}');
   missions[videoId] = (missions[videoId]||0)+1;
   localStorage.setItem('borahae_missions', JSON.stringify(missions));
@@ -148,27 +196,6 @@ window.saveStreamIfValid = function(videoId, title, member){
 
 document.getElementById('memberFilter').addEventListener('change', render);
 render();
-</script>
-
-<!-- PLAYER WATCH LOGIC - ye music.html me bhi same daalna -->
-<script>
-// Example for music.html - yaha reference ke liye diya hai
-// music.html ke player me ye logic add karna:
-// let watchSeconds=0, lastTime=0, hasSeeked=false;
-// player.addEventListener('onStateChange', e=>{
-// if(e.data===1){ // playing
-// let interval = setInterval(()=>{
-// let curr = player.getCurrentTime();
-// if(Math.abs(curr-lastTime) > 2.5) hasSeeked=true; // fast forward / skip detect
-// if(!hasSeeked) watchSeconds+=1;
-// lastTime=curr;
-// if(watchSeconds>=60 &&!hasSeeked){
-// window.saveStreamIfValid(currentId, currentTitle, currentMember);
-// clearInterval(interval);
-// }
-// },1000);
-// }
-// });
 </script>
 </body>
 </html>
