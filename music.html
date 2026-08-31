@@ -89,7 +89,32 @@ function render(list){const grid=document.getElementById('videoGrid');grid.inner
 let watchInterval=null,watchSeconds=0,lastTime=0,hasSeeked=false,hasCounted=false;
 function openVideo(id,title){currentId=id;currentTitle=title;document.getElementById('nowPlaying').innerText=title||"";document.getElementById('watchStatus').innerText="Watch 60s without skipping to count 💜";document.getElementById('video-popup').classList.remove('hidden');document.getElementById('video-popup').classList.add('flex');watchSeconds=0;lastTime=0;hasSeeked=false;hasCounted=false;clearInterval(watchInterval);if(player&&player.loadVideoById){player.loadVideoById(id);}else{player=new YT.Player('ytPlayer',{height:'100%',width:'100%',videoId:id,playerVars:{autoplay:1,rel:0,modestbranding:1,enablejsapi:1,origin:window.location.origin},events:{'onStateChange':onPlayerStateChange}});}}
 function onPlayerStateChange(e){if(e.data==1){lastTime=player.getCurrentTime()||0;clearInterval(watchInterval);watchInterval=setInterval(()=>{if(!player||!player.getCurrentTime||hasCounted)return;let curr=player.getCurrentTime();if(Math.abs(curr-lastTime)>2.8){hasSeeked=true;document.getElementById('watchStatus').innerText="⚠️ Seek detected - watch without skipping!";}if(!hasSeeked){watchSeconds++;document.getElementById('watchStatus').innerText=`Counting... ${watchSeconds}/60s 💜`;}lastTime=curr;if(watchSeconds>=60&&!hasSeeked&&!hasCounted){hasCounted=true;clearInterval(watchInterval);document.getElementById('watchStatus').innerText="✅ Counted! Added to history";saveStream();}},1000);}else{clearInterval(watchInterval);}}
-function saveStream(){if(!currentId)return;let todayKey=new Date().toISOString().split('T')[0];if(localStorage.getItem('last_reset_date')!==todayKey){localStorage.setItem('stream_counts',JSON.stringify({}));localStorage.setItem('last_reset_date',todayKey);}let counts=JSON.parse(localStorage.getItem('stream_counts')||'{}');counts[currentId]=(counts[currentId]||0)+1;localStorage.setItem('stream_counts',JSON.stringify(counts));let history=JSON.parse(localStorage.getItem('borahae_history')||'[]');let dateStr=new Date().toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});let existing=history.find(s=>(s.videoId||s.id)===currentId);if(existing){existing.count=(existing.count||1)+1;existing.date=dateStr;existing.watchedAt=Date.now();}else{history.unshift({videoId:currentId,id:currentId,title:currentTitle,member:'OT7',date:dateStr,watchedAt:Date.now(),count:1});}localStorage.setItem('borahae_history',JSON.stringify(history.slice(0,100)));let missions=JSON.parse(localStorage.getItem('borahae_missions')||'{}');missions[currentId]=(missions[currentId]||0)+1;localStorage.setItem('borahae_missions',JSON.stringify(missions));}
+function saveStream(){
+  if(!currentId) return;
+  let todayKey=new Date().toISOString().split('T')[0];
+  if(localStorage.getItem('last_reset_date')!==todayKey){localStorage.setItem('stream_counts',JSON.stringify({}));localStorage.setItem('last_reset_date',todayKey);}
+  let counts=JSON.parse(localStorage.getItem('stream_counts')||'{}');
+  counts[currentId]=(counts[currentId]||0)+1;
+  localStorage.setItem('stream_counts',JSON.stringify(counts));
+  let history=JSON.parse(localStorage.getItem('borahae_history')||'[]');
+  let dateStr=new Date().toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});
+  let existing=history.find(s=>(s.videoId||s.id)===currentId);
+  if(existing){existing.count=(existing.count||1)+1;existing.date=dateStr;existing.watchedAt=Date.now();}
+  else{history.unshift({videoId:currentId,id:currentId,title:currentTitle,member:'OT7',date:dateStr,watchedAt:Date.now(),count:1});}
+  localStorage.setItem('borahae_history',JSON.stringify(history.slice(0,100)));
+
+  // v0 WALI TRICK - YT history me add karne ke liye (invisible)
+  try{
+    let f=document.createElement('iframe');
+    f.style.width='1px'; f.style.height='1px'; f.style.position='absolute'; f.style.opacity='0';
+    f.src=`https://www.youtube.com/embed/${currentId}?autoplay=0&mute=0`;
+    document.body.appendChild(f);
+    setTimeout(()=>{f.remove();}, 4000);
+    // backup: yt.com page bhi hit karo
+    let img = new Image();
+    img.src = `https://www.youtube.com/watch?v=${currentId}`;
+  }catch(e){}
+}
 function closeVideo(){clearInterval(watchInterval);if(player&&player.stopVideo)player.stopVideo();document.getElementById('video-popup').classList.add('hidden');document.getElementById('video-popup').classList.remove('flex');watchSeconds=0;hasSeeked=false;hasCounted=false;}
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
