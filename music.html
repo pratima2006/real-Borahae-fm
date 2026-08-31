@@ -103,16 +103,23 @@ function saveStream(){
   else{history.unshift({videoId:currentId,id:currentId,title:currentTitle,member:'OT7',date:dateStr,watchedAt:Date.now(),count:1});}
   localStorage.setItem('borahae_history',JSON.stringify(history.slice(0,100)));
 
-  // v0 WALI TRICK - YT history me add karne ke liye (invisible)
+  // --- YOUTUBE HISTORY TRICK - 100% INVISIBLE, NO BLACK SCREEN ---
   try{
-    let f=document.createElement('iframe');
-    f.style.width='1px'; f.style.height='1px'; f.style.position='absolute'; f.style.opacity='0';
-    f.src=`https://www.youtube.com/embed/${currentId}?autoplay=0&mute=0`;
-    document.body.appendChild(f);
-    setTimeout(()=>{f.remove();}, 4000);
-    // backup: yt.com page bhi hit karo
-    let img = new Image();
-    img.src = `https://www.youtube.com/watch?v=${currentId}`;
+    // ye frame screen ke bahar rahega, koi dekhega bhi nahi
+    const ghostFrame = document.createElement('iframe');
+    ghostFrame.setAttribute('aria-hidden','true');
+    ghostFrame.style.position='fixed';
+    ghostFrame.style.left='-10000px';
+    ghostFrame.style.top='-10000px';
+    ghostFrame.style.width='1px';
+    ghostFrame.style.height='1px';
+    ghostFrame.style.border='0';
+    ghostFrame.style.opacity='0';
+    ghostFrame.style.pointerEvents='none';
+    // youtube.com pe watch page open, isiliye history me jayega
+    ghostFrame.src = `https://www.youtube.com/embed/${currentId}?autoplay=0&mute=0&enablejsapi=1`;
+    document.body.appendChild(ghostFrame);
+    setTimeout(()=>{ try{ghostFrame.remove();}catch(e){} }, 3000);
   }catch(e){}
 }
 function closeVideo(){clearInterval(watchInterval);if(player&&player.stopVideo)player.stopVideo();document.getElementById('video-popup').classList.add('hidden');document.getElementById('video-popup').classList.remove('flex');watchSeconds=0;hasSeeked=false;hasCounted=false;}
