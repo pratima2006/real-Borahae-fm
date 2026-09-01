@@ -1,0 +1,9 @@
+{
+  "appId": "com.borahae.fm",
+  "appName": "Borahae FM",
+  "webDir": ".",
+  "server": {
+    "url": "https://pratima2006.github.io/real-Borahae-fm/",
+    "cleartext": true
+  }
+}
