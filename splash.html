@@ -1,0 +1,105 @@
+"use client"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+
+const voices = [
+  { file: "jk-euphoria.mp3", member: "Jungkook", song: "Euphoria" },
+  { file: "v-friends.mp3", member: "Taehyung", song: "FRI(END)S" },
+  { file: "jimin-likecrazy.mp3", member: "Jimin", song: "Like Crazy" },
+  { file: "jin-astronaut.mp3", member: "Jin", song: "The Astronaut" },
+  { file: "rm-wildflower.mp3", member: "RM", song: "Wild Flower" },
+  { file: "suga-people.mp3", member: "Suga", song: "People Pt.2" },
+  { file: "jhope-street.mp3", member: "J-Hope", song: "On The Street" },
+];
+
+export default function BorahaeSplash() {
+  const router = useRouter();
+  const [stage, setStage] = useState("falling");
+  const [todayVoice, setTodayVoice] = useState(null);
+
+  useEffect(() => {
+    const todayIndex = new Date().getDate() % voices.length;
+    setTodayVoice(voices[todayIndex]);
+
+    const audio = new Audio(`/voices/${voices[todayIndex].file}`);
+    audio.volume = 0.35;
+    audio.play().catch(()=>{});
+
+    const t1 = setTimeout(() => setStage("purple"), 2000);
+    const t2 = setTimeout(() => setStage("assemble"), 2800);
+
+    // YAHAN CHANGE KIYA HAI - ab index.html / login pe jayega
+    const t3 = setTimeout(() => {
+      audio.pause();
+      // Agar tu Next.js use kar rahi hai:
+      router.push("/login"); // ya "/index" jahan tera login hai
+
+      // Agar tu normal HTML use kar rahi hai toh ye wala use kar:
+      // window.location.href = "/index.html";
+    }, 4200);
+
+    return () => {
+      clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
+      audio.pause();
+    };
+  }, [router]);
+
+  const letters = ["B", "O", "R", "A", "H", "A", "E"];
+
+  return (
+    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden">
+      <div className="absolute inset-0" style={{
+          backgroundImage: `url('/bg-borahae-dreamy.jpg')`,
+          backgroundSize: 'cover', backgroundPosition: 'center',
+        }}
+      />
+      <div className="absolute inset-0 bg-[#2a145a]/30" />
+
+      <div className={`relative z-10 flex gap-2 md:gap-4 transition-all duration-1000 ${
+        stage === "assemble"? "scale-[0.8] translate-y-4" : "scale-100"
+      }`}>
+        {letters.map((letter, i) => (
+          <div
+            key={i}
+            className={`
+              relative w-[38px] h-[85px] md:w-[55px] md:h-[125px]
+              flex items-center justify-center font-black text-[52px] md:text-[78px]
+              border-[3px] rounded-[2px] transition-all duration-700
+              ${stage === "falling"
+              ? "bg-white text-white border-white shadow-[0_0_20px_rgba(255,255,255,0.6)] animate-fall"
+                : "bg-[#7c3aed] text-white border-[#7c3aed] shadow-[0_0_30px_rgba(124,58,237,0.8)]"
+              }
+            `}
+            style={{
+              animationDelay: `${i * 120}ms`,
+              clipPath: "polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)",
+            }}
+          >
+            <span>{letter}</span>
+          </div>
+        ))}
+      </div>
+
+      {stage === "assemble" && (
+        <div className="relative z-10 mt-8 animate-fadeIn">
+          <img src="/logo-borahae-final.png" alt="BORAHAE" className="w-[300px] md:w-[420px]" />
+        </div>
+      )}
+
+      {todayVoice && stage!== "falling" && (
+        <div className="relative z-10 mt-6 text-center">
+          <p className="text-white/80 text-xs tracking-[0.3em]">TODAY'S VOICE</p>
+          <p className="text-white font-bold text-sm mt-1">{todayVoice.member} • {todayVoice.song} 💜</p>
+        </div>
+      )}
+
+      <style jsx>{`
+        @keyframes fall {
+          0% { transform: translateY(-150vh); opacity: 0; }
+          100% { transform: translateY(0); opacity: 1; }
+        }
+       .animate-fall { animation: fall 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; }
+      `}</style>
+    </div>
+  );
+}
