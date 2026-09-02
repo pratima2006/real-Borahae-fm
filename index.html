@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>borahae.fm</title>
+
+<!-- YE 3 LINE ADD KI HAI - PWA KE LIYE -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#7c3aed">
+<link rel="icon" type="image/png" href="logo-borahae-final.png">
+
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
@@ -21,6 +27,7 @@
 </style>
 </head>
 <body class="hero-bg">
+<!-- baaki ka pura code tera wala hi hai, neeche same rehne de -->
 
 <!-- HEADER -->
 <nav class="flex items-center justify-between px-4 md:px-6 py-4 md:py-5 max-w-[1100px] mx-auto">
@@ -38,7 +45,6 @@
   </div>
 </nav>
 
-<!-- HERO - SAME AS YOURS -->
 <section class="max-w-[1100px] mx-auto px-6 pt-6 pb-10 md:flex md:justify-between md:pt-16">
   <div class="md:w-[48%]">
     <div class="inline-flex items-center gap-2 border border-[#e9d5ff] bg-white/60 backdrop-blur rounded-full px-3.5 py-1.5">
@@ -116,31 +122,25 @@
   </div>
 </footer>
 
-<!-- AUTH MODAL - ONLY GOOGLE NOW -->
 <div id="authModal" class="fixed inset-0 bg-[#1e1033]/50 backdrop-blur-[10px] hidden items-center justify-center p-4 z-[100]">
   <div id="authCard" class="auth-scroll bg-white w-full max-w-[360px] rounded-[28px] p-[8px] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
     <div class="bg-[#fdf8ff] border border-[#f3e8ff] rounded-[22px] p-6 text-center">
       <div class="inline-flex items-center gap-1.5 border border-[#e9d5ff] bg-white rounded-full px-2.5 py-1"><span class="text-[10px]">✨</span><p class="font-mono text-[8px] tracking-[1.5px] text-[#7c3aed] font-bold">JOIN THE LIGHT, ARMY</p></div>
       <h2 class="font-display text-[26px] leading-[0.95] font-bold mt-4">Welcome back,<br><span class="text-[#7c3aed]">my love.</span></h2>
       <p class="text-[#6b7280] text-[12px] leading-[1.5] mt-3">Your little scrapbook missed you. Sign in to keep your streams safe.</p>
-
       <button id="googleBtn" onclick="signInWithGoogle()" class="w-full mt-6 bg-[#1e1033] text-white rounded-full py-3.5 flex items-center justify-center gap-2 text-[13px] font-bold">
         <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 bg-white rounded-full p-0.5"> Continue with Google
       </button>
-
-      <!-- Returning user ke liye hi dikhega -->
       <div id="returningUserBlock" class="hidden mt-4">
         <div class="flex items-center gap-3 my-3"><div class="flex-1 h-[1px] bg-[#ede9fe]"></div><p class="font-mono text-[8px] text-[#9ca3af]">WELCOME BACK</p><div class="flex-1 h-[1px] bg-[#ede9fe]"></div></div>
         <button onclick="signInWithGoogle()" class="w-full bg-white border border-[#ede9fe] rounded-full py-2.5 text-[12px] font-bold">Already have an account? Log in</button>
       </div>
-
       <p class="text-[9px] text-[#9ca3af] text-center mt-4 font-mono">secure login with Google 💜</p>
       <button onclick="closeAuth()" class="w-full mt-3 text-[11px] font-bold text-[#6b7280]">maybe later →</button>
     </div>
   </div>
 </div>
 
-<!-- PROFILE MODAL -->
 <div id="profileModal" class="fixed inset-0 bg-[#1e1033]/50 backdrop-blur-[10px] hidden items-center justify-center p-4 z-[101]">
   <div class="bg-white w-full max-w-[340px] rounded-[24px] p-2">
     <div class="bg-[#fdf8ff] border rounded-[18px] p-6 text-center">
@@ -167,11 +167,9 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
-
 function openAuth(){
   document.getElementById('authModal').classList.remove('hidden');
   document.getElementById('authModal').classList.add('flex');
-  // Agar pehle kabhi login kiya hai toh returning block dikhao
   if(localStorage.getItem('borahae_hasAccount') === 'true'){
     document.getElementById('returningUserBlock').classList.remove('hidden');
   } else {
@@ -181,7 +179,6 @@ function openAuth(){
 function closeAuth(){document.getElementById('authModal').classList.add('hidden');document.getElementById('authModal').classList.remove('flex');}
 function openProfile(){document.getElementById('profileModal').classList.remove('hidden');document.getElementById('profileModal').classList.add('flex');}
 function closeProfile(){document.getElementById('profileModal').classList.add('hidden');document.getElementById('profileModal').classList.remove('flex');}
-
 function updateHeader(user){
   if(user){
     document.getElementById('beforeLogin').classList.add('hidden');
@@ -197,8 +194,6 @@ function updateHeader(user){
     document.getElementById('afterLogin').classList.remove('flex');
   }
 }
-
-// FIXED: Auth state listener - yehi header fix karega
 auth.onAuthStateChanged((user) => {
   if(user){
     saveUser(user);
@@ -211,19 +206,15 @@ auth.onAuthStateChanged((user) => {
     }
   }
 });
-
 function handleScrapbook(){
   if(localStorage.getItem('borahae_user')){ location.href='home.html'; }
   else{ openAuth(); }
 }
-
 async function signInWithGoogle(){
   const provider = new firebase.auth.GoogleAuthProvider();
   try{
     const result = await auth.signInWithPopup(provider);
-    // saveUser onAuthStateChanged se call hoga
   }catch(e){
-    // Agar popup block hua toh redirect try karo
     if(e.code === 'auth/popup-blocked'){
       await auth.signInWithRedirect(provider);
     } else {
@@ -231,9 +222,7 @@ async function signInWithGoogle(){
     }
   }
 }
-
 auth.getRedirectResult().then(r=>{ if(r&&r.user) saveUser(r.user); }).catch(()=>{});
-
 function saveUser(user){
   const obj = {name:user.displayName||user.email.split('@')[0], email:user.email, photo:user.photoURL||'', uid:user.uid};
   localStorage.setItem('borahae_user', JSON.stringify(obj));
@@ -242,11 +231,9 @@ function saveUser(user){
   closeAuth();
   updateHeader(obj);
 }
-
 function logOut(){
   auth.signOut();
   localStorage.removeItem('borahae_user');
-  // hasAccount ko delete nahi karenge - taki logout ke baad "Already have account" dikhe
   location.reload();
 }
 </script>
