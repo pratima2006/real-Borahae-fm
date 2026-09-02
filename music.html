@@ -40,9 +40,14 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
     <div class="flex items-center gap-2"><span>🔗</span><h3 class="font-bold text-[15px]">Add MVs / videos for all</h3></div>
     <input id="ytLink" oninput="checkLink()" placeholder="youtube.com/watch?v=..." class="w-full mt-4 bg-white border rounded-full px-4 py-3 text-[14px] outline-none">
     <div id="previewBox" class="hidden mt-4 bg-white rounded-[16px] p-3 border flex gap-3">
-      <img id="prevThumb" class="w-[90px] h-[54px] rounded-[10px] object-cover"><div class="flex-1 min-w-0"><p id="prevTitle" class="text-[13px] font-bold truncate"></p><p id="prevChannel" class="text-[11px] text-gray-500 mt-1"></p><div id="prevDot" class="text-[11px] font-bold mt-1"></div></div>
+      <img id="prevThumb" class="w-[130px] h-[78px] rounded-[12px] object-cover flex-shrink-0">
+      <div class="flex-1 min-w-0">
+        <p id="prevTitle" class="text-[13px] font-bold truncate"></p>
+        <p id="prevChannel" class="text-[11px] text-gray-500 mt-1"></p>
+        <div id="prevDot" class="text-[11px] font-bold mt-1"></div>
+      </div>
     </div>
-    <button id="addBtn" onclick="addVideo()" disabled class="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold text-[14px] disabled:opacity-60">+ Add to videos</button>
+    <button id="addBtn" onclick="addVideo()" disabled class="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold text-[14px] disabled:opacity-60 transition-colors">+ Add to videos</button>
   </div>
   <div class="mt-4 bg-white border rounded-[24px] p-4 w-full shadow-sm">
     <div class="flex items-center gap-2"><span class="text-[#7c3aed]">⌕</span><h3 class="font-bold text-[15px]">Search your added videos</h3></div>
@@ -51,10 +56,11 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
       <button onclick="applyFilters()" class="bg-[#7c3aed] text-white px-5 rounded-full font-bold text-[13px] flex-shrink-0">Search</button>
     </div>
   </div>
-  <div class="mt-5 flex items-center justify-between">
-    <div class="relative w-full">
+  <div class="mt-5 flex items-center gap-3">
+    <button id="newToggleBtn" onclick="toggleNew()" class="bg-white border border-[#ede9fe] text-black px-6 py-3 rounded-full text-[14px] font-bold shadow-sm transition-all">New</button>
+    <div class="relative flex-1">
       <select id="filterSelect" onchange="applyFilters()" class="w-full appearance-none bg-white border border-[#ede9fe] rounded-full px-5 py-3 pr-10 text-[14px] font-bold shadow-sm outline-none">
-        <option value="all">All</option><option value="new">New</option><option value="hybe">HYBE LABELS</option><option value="bangtantv">BANGTANTV</option><option value="solo">Solo Members</option>
+        <option value="all">All</option><option value="bangtantv">BANGTANTV</option><option value="hybe">HYBE LABELS</option>
       </select>
       <span class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#7c3aed]">▼</span>
     </div>
@@ -81,11 +87,96 @@ function getYouTubeID(u){if(!u)return"";u=u.trim();if(u.length===11&&!u.includes
 let videos=JSON.parse(localStorage.getItem('bts_videos')||'[]');
 if(videos.length===0){videos=[{title:"BTS 'Dynamite' Official MV",id:"gdZLi9oWNZg",channel:"HYBE LABELS",addedAt:Date.now()},{title:"BTS 'Butter' Official MV",id:"WMweEpGlu_U",channel:"HYBE LABELS",addedAt:Date.now()}];localStorage.setItem('bts_videos',JSON.stringify(videos));}
 let pending=null;let player=null;let currentId="";let currentTitle="";
+let isNewFilterActive=false;
+const ALLOWED_KEYWORDS = ["hybe labels","bangtantv","bts","bangtan"];
+function normalizeChannelName(authorName){
+  const name = (authorName||"").toLowerCase();
+  if(name.includes("bangtan")) return "BANGTANTV";
+  if(name.includes("hybe")) return "HYBE LABELS";
+  return authorName || "BTS";
+}
 db.ref('videos').on('value',snap=>{let d=snap.val();if(d){let fb=Object.values(d).map(v=>({title:v.title,id:getYouTubeID(v.id||v.videoId||""),channel:v.channel||"BTS",addedAt:v.createdAt||Date.now()})).filter(v=>v.id);fb.forEach(fv=>{if(!videos.some(lv=>lv.id===fv.id))videos.push(fv);});localStorage.setItem('bts_videos',JSON.stringify(videos));applyFilters();}});
-async function checkLink(){const link=document.getElementById('ytLink').value.trim();const preview=document.getElementById('previewBox');const addBtn=document.getElementById('addBtn');if(!link){preview.classList.add('hidden');addBtn.disabled=true;pending=null;return;}const id=getYouTubeID(link);if(!id||id.length!==11){preview.classList.add('hidden');addBtn.disabled=true;return;}try{const res=await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${id}`);const data=await res.json();document.getElementById('prevThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;document.getElementById('prevTitle').innerText=data.title||"BTS Video";document.getElementById('prevChannel').innerText=data.author_name||"YouTube";preview.classList.remove('hidden');const exists=videos.some(v=>v.id===id);document.getElementById('prevDot').innerHTML=exists?`<span class="text-red-500">Already added</span>`:`<span class="text-green-600">New video ready</span>`;addBtn.disabled=exists;pending=exists?null:{id,title:data.title||"BTS Video",channel:data.author_name||"BTS"};}catch(e){document.getElementById('prevThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;document.getElementById('prevTitle').innerText="YouTube Video";document.getElementById('prevChannel').innerText="BTS";preview.classList.remove('hidden');const exists=videos.some(v=>v.id===id);addBtn.disabled=exists;pending=exists?null:{id,title:"BTS Video",channel:"BTS"};}}
-function addVideo(){if(!pending)return;let nv={title:pending.title,id:pending.id,channel:pending.channel,addedAt:Date.now()};videos.unshift(nv);localStorage.setItem('bts_videos',JSON.stringify(videos));db.ref('videos').push({title:pending.title,id:pending.id,videoId:pending.id,channel:pending.channel,createdAt:Date.now()});document.getElementById('ytLink').value='';document.getElementById('previewBox').classList.add('hidden');document.getElementById('addBtn').disabled=true;pending=null;applyFilters();}
-function applyFilters(){const q=document.getElementById('searchInput').value.toLowerCase();const f=document.getElementById('filterSelect').value;let filtered=[...videos];if(f==='new'){filtered=filtered.filter(v=>v.addedAt&&Date.now()-v.addedAt<2*86400000);}if(f==='hybe'){filtered=filtered.filter(v=>(v.channel||'').toLowerCase().includes('hybe'));}if(f==='bangtantv'){filtered=filtered.filter(v=>(v.channel||'').toLowerCase().includes('bangtan'));}if(f==='solo'){filtered=filtered.filter(v=>['jimin','jungkook','taehyung','jin','rm','namjoon','jhope','hoseok','suga','yoongi'].some(n=>(v.channel+v.title).toLowerCase().includes(n)));}if(q){filtered=filtered.filter(v=>v.title.toLowerCase().includes(q)||(v.channel||'').toLowerCase().includes(q));}render(filtered);}
-function render(list){const grid=document.getElementById('videoGrid');grid.innerHTML='';if(list.length===0){document.getElementById('emptyState').classList.remove('hidden');return;}document.getElementById('emptyState').classList.add('hidden');list.forEach(v=>{const isNew=v.addedAt&&Date.now()-v.addedAt<2*86400000;grid.innerHTML+=`<div onclick="openVideo('${v.id}','${v.title.replace(/'/g,"\\'")}')" class="bg-white rounded-[14px] overflow-hidden border shadow-sm relative cursor-pointer"><img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg" class="w-full aspect-video object-cover"><div class="p-2"><p class="text-[11px] font-bold leading-[1.2] line-clamp-2">${v.title}</p><p class="text-[10px] text-gray-400 mt-1">${v.channel||''}</p></div>${isNew?'<span class="absolute top-2 left-2 bg-blue-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold">New</span>':''}</div>`;});}
+async function checkLink(){
+  const link=document.getElementById('ytLink').value.trim();
+  const preview=document.getElementById('previewBox');
+  const addBtn=document.getElementById('addBtn');
+  if(!link){preview.classList.add('hidden');addBtn.disabled=true;addBtn.className="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold text-[14px] disabled:opacity-60 transition-colors";pending=null;return;}
+  const id=getYouTubeID(link);
+  if(!id||id.length!==11){preview.classList.add('hidden');addBtn.disabled=true;addBtn.className="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold text-[14px] disabled:opacity-60 transition-colors";return;}
+  try{
+    const res=await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${id}`);
+    const data=await res.json();
+    const rawChannel = data.author_name||"";
+    const fixedChannel = normalizeChannelName(rawChannel);
+    const isAllowed = ALLOWED_KEYWORDS.some(k=> (rawChannel+data.title).toLowerCase().includes(k)) || fixedChannel==="HYBE LABELS" || fixedChannel==="BANGTANTV";
+    document.getElementById('prevThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+    document.getElementById('prevTitle').innerText=data.title||"BTS Video";
+    document.getElementById('prevChannel').innerText=fixedChannel;
+    preview.classList.remove('hidden');
+    const exists=videos.some(v=>v.id===id);
+    if(!isAllowed){
+      document.getElementById('prevDot').innerHTML=`<span class="text-red-500">❌ Only HYBE / BANGTANTV allowed</span>`;
+      addBtn.disabled=true;
+      addBtn.className="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold text-[14px] disabled:opacity-60 transition-colors";
+      pending=null;
+      return;
+    }
+    document.getElementById('prevDot').innerHTML=exists?`<span class="text-red-500">Already added</span>`:`<span class="text-green-600">✅ New video ready</span>`;
+    addBtn.disabled=exists;
+    if(!exists){
+      addBtn.className="w-full mt-3 bg-[#7c3aed] text-white py-3 rounded-full font-bold text-[14px] shadow-md transition-colors";
+    } else {
+      addBtn.className="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold text-[14px] disabled:opacity-60 transition-colors";
+    }
+    pending=exists?null:{id,title:data.title||"BTS Video",channel:fixedChannel};
+  }catch(e){
+    document.getElementById('prevThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+    document.getElementById('prevTitle').innerText="YouTube Video";
+    document.getElementById('prevChannel').innerText="Checking...";
+    preview.classList.remove('hidden');
+    const exists=videos.some(v=>v.id===id);
+    addBtn.disabled=exists;
+    if(!exists){addBtn.className="w-full mt-3 bg-[#7c3aed] text-white py-3 rounded-full font-bold text-[14px] shadow-md transition-colors";}
+    pending=exists?null:{id,title:"BTS Video",channel:"HYBE LABELS"};
+  }
+}
+function addVideo(){if(!pending)return;let nv={title:pending.title,id:pending.id,channel:pending.channel,addedAt:Date.now()};videos.unshift(nv);localStorage.setItem('bts_videos',JSON.stringify(videos));db.ref('videos').push({title:pending.title,id:pending.id,videoId:pending.id,channel:pending.channel,createdAt:Date.now()});document.getElementById('ytLink').value='';document.getElementById('previewBox').classList.add('hidden');document.getElementById('addBtn').disabled=true;document.getElementById('addBtn').className="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold text-[14px] disabled:opacity-60 transition-colors";pending=null;applyFilters();}
+function toggleNew(){
+  isNewFilterActive =!isNewFilterActive;
+  const btn = document.getElementById('newToggleBtn');
+  if(isNewFilterActive){
+    btn.className="bg-[#e9e5e5] border border-[#d1c7c7] text-black px-6 py-3 rounded-full text-[14px] font-bold shadow-sm transition-all";
+  } else {
+    btn.className="bg-white border border-[#ede9fe] text-black px-6 py-3 rounded-full text-[14px] font-bold shadow-sm transition-all";
+  }
+  applyFilters();
+}
+function applyFilters(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const f=document.getElementById('filterSelect').value;
+  let filtered=[...videos];
+  if(isNewFilterActive){
+    filtered=filtered.filter(v=>v.addedAt&&Date.now()-v.addedAt < 2*86400000);
+  }
+  if(f==='hybe'){filtered=filtered.filter(v=>(v.channel||'').toLowerCase().includes('hybe'));}
+  if(f==='bangtantv'){filtered=filtered.filter(v=>(v.channel||'').toLowerCase().includes('bangtan'));}
+  if(q){filtered=filtered.filter(v=>v.title.toLowerCase().includes(q)||(v.channel||'').toLowerCase().includes(q));}
+  render(filtered);
+}
+function render(list){
+  const grid=document.getElementById('videoGrid');
+  grid.innerHTML='';
+  if(list.length===0){document.getElementById('emptyState').classList.remove('hidden');return;}
+  document.getElementById('emptyState').classList.add('hidden');
+  list.forEach(v=>{
+    const isNew=v.addedAt&&Date.now()-v.addedAt < 2*86400000;
+    grid.innerHTML+=`<div onclick="openVideo('${v.id}','${v.title.replace(/'/g,"\\'")}')" class="bg-white rounded-[16px] overflow-hidden border shadow-sm relative cursor-pointer">
+      <img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg" class="w-full aspect-[16/10] object-cover">
+      <div class="p-2.5"><p class="text-[12px] font-bold leading-[1.3] line-clamp-2">${v.title}</p><p class="text-[10px] text-gray-400 mt-1 font-bold">${v.channel||''}</p></div>
+      ${isNew?'<span class="absolute top-2 left-2 bg-blue-500 text-white text-[9px] px-2.5 py-1 rounded-full font-bold">New</span>':''}
+    </div>`;
+  });
+}
 let watchInterval=null,watchSeconds=0,lastTime=0,hasSeeked=false,hasCounted=false;
 function openVideo(id,title){currentId=id;currentTitle=title;document.getElementById('nowPlaying').innerText=title||"";document.getElementById('watchStatus').innerText="Watch 60s without skipping to count 💜";document.getElementById('video-popup').classList.remove('hidden');document.getElementById('video-popup').classList.add('flex');watchSeconds=0;lastTime=0;hasSeeked=false;hasCounted=false;clearInterval(watchInterval);if(player&&player.loadVideoById){player.loadVideoById(id);}else{player=new YT.Player('ytPlayer',{height:'100%',width:'100%',videoId:id,playerVars:{autoplay:1,rel:0,modestbranding:1,enablejsapi:1,origin:window.location.origin},events:{'onStateChange':onPlayerStateChange}});}}
 function onPlayerStateChange(e){if(e.data==1){lastTime=player.getCurrentTime()||0;clearInterval(watchInterval);watchInterval=setInterval(()=>{if(!player||!player.getCurrentTime||hasCounted)return;let curr=player.getCurrentTime();if(Math.abs(curr-lastTime)>2.8){hasSeeked=true;document.getElementById('watchStatus').innerText="⚠️ Seek detected - watch without skipping!";}if(!hasSeeked){watchSeconds++;document.getElementById('watchStatus').innerText=`Counting... ${watchSeconds}/60s 💜`;}lastTime=curr;if(watchSeconds>=60&&!hasSeeked&&!hasCounted){hasCounted=true;clearInterval(watchInterval);document.getElementById('watchStatus').innerText="✅ Counted! Added to history";saveStream();}},1000);}else{clearInterval(watchInterval);}}
@@ -102,10 +193,7 @@ function saveStream(){
   if(existing){existing.count=(existing.count||1)+1;existing.date=dateStr;existing.watchedAt=Date.now();}
   else{history.unshift({videoId:currentId,id:currentId,title:currentTitle,member:'OT7',date:dateStr,watchedAt:Date.now(),count:1});}
   localStorage.setItem('borahae_history',JSON.stringify(history.slice(0,100)));
-
-  // --- YOUTUBE HISTORY TRICK - 100% INVISIBLE, NO BLACK SCREEN ---
   try{
-    // ye frame screen ke bahar rahega, koi dekhega bhi nahi
     const ghostFrame = document.createElement('iframe');
     ghostFrame.setAttribute('aria-hidden','true');
     ghostFrame.style.position='fixed';
@@ -116,7 +204,6 @@ function saveStream(){
     ghostFrame.style.border='0';
     ghostFrame.style.opacity='0';
     ghostFrame.style.pointerEvents='none';
-    // youtube.com pe watch page open, isiliye history me jayega
     ghostFrame.src = `https://www.youtube.com/embed/${currentId}?autoplay=0&mute=0&enablejsapi=1`;
     document.body.appendChild(ghostFrame);
     setTimeout(()=>{ try{ghostFrame.remove();}catch(e){} }, 3000);
