@@ -1,24 +1,12 @@
 {
-  "name": "Borahae FM",
-  "short_name": "BorahaeFM",
+  "name": "borahae.fm",
+  "short_name": "borahae.fm",
+  "description": "Keep the light. Stream with heart",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#2a145a",
-  "theme_color": "#7c3aed",
+  "background_color": "#2A145A",
+  "theme_color": "#7C3AED",
   "icons": [
-    {
-      "src": "logo-borahae-final.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  "lang": "en",
-  "categories": [
-    "music",
-    "photo &amp; video",
-    "video"
-  ],
-  "description": "Keep the light. Stream with heart - ARMY Scrapbook",
-  "scope": "/",
-  "orientation": "portrait"
+    { "src": "logo-borahae-final.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
 }
