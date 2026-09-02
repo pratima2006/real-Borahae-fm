@@ -4,12 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>borahae.fm</title>
-
-<!-- PWA KE LIYE YE 3 LINES ADDED -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#7c3aed">
-<link rel="icon" href="logo-borahae-final.png">
-
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
@@ -177,6 +171,7 @@ const db = firebase.database();
 function openAuth(){
   document.getElementById('authModal').classList.remove('hidden');
   document.getElementById('authModal').classList.add('flex');
+  // Agar pehle kabhi login kiya hai toh returning block dikhao
   if(localStorage.getItem('borahae_hasAccount') === 'true'){
     document.getElementById('returningUserBlock').classList.remove('hidden');
   } else {
@@ -203,6 +198,7 @@ function updateHeader(user){
   }
 }
 
+// FIXED: Auth state listener - yehi header fix karega
 auth.onAuthStateChanged((user) => {
   if(user){
     saveUser(user);
@@ -225,7 +221,9 @@ async function signInWithGoogle(){
   const provider = new firebase.auth.GoogleAuthProvider();
   try{
     const result = await auth.signInWithPopup(provider);
+    // saveUser onAuthStateChanged se call hoga
   }catch(e){
+    // Agar popup block hua toh redirect try karo
     if(e.code === 'auth/popup-blocked'){
       await auth.signInWithRedirect(provider);
     } else {
@@ -248,6 +246,7 @@ function saveUser(user){
 function logOut(){
   auth.signOut();
   localStorage.removeItem('borahae_user');
+  // hasAccount ko delete nahi karenge - taki logout ke baad "Already have account" dikhe
   location.reload();
 }
 </script>
