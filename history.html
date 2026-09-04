@@ -16,7 +16,6 @@
 </head>
 <body class="min-h-screen pb-10">
 
-<!-- HEADER - FIXED -->
 <header class="sticky top-0 z-20 bg-[#faf6ff]/80 backdrop-blur-md border-b border-purple-100 px-4 py-3 flex items-center gap-3">
   <button onclick="openSidebar()" class="text-xl w-9 h-9 flex items-center justify-center bg-white border rounded-[10px]">☰</button>
   <div class="w-10 h-10 rounded-2xl bg-[#8b2cf0] flex items-center justify-center text-white text-2xl serif shadow-[0_0_15px_rgba(139,44,240,0.5)] relative">
@@ -26,7 +25,6 @@
 
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 z-40 hidden"></div>
 
-<!-- HOME PAGE WALA EXACT SIDEBAR -->
 <aside id="sidebar" class="fixed top-0 left-0 w-[82%] max-w-[300px] h-full sidebar-bg z-50 -translate-x-full transition-transform duration-300 flex flex-col p-5 rounded-r-[28px]">
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-3">
@@ -35,86 +33,39 @@
     </div>
     <button onclick="closeSidebar()" class="text-white/60 text-[28px] leading-none">×</button>
   </div>
-
   <p class="font-mono text-[11px] tracking-[3.5px] text-white/30 mt-8" style="font-family:'Space Mono',monospace">YOUR SCRAPBOOK</p>
-
   <nav class="mt-4 space-y-1.5">
-    <a href="home.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
-      <span class="flex items-center gap-3">⌂ Home</span>
-    </a>
-    <a href="missions.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
-      <span class="flex items-center gap-3">✦ Missions</span>
-    </a>
-    <a href="music.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
-      <span class="flex items-center gap-3">▶ Videos</span>
-    </a>
-    <a href="history.html" class="flex items-center justify-between px-4 py-3.5 rounded-full bg-[#3c2a63] text-white font-semibold">
-      <span class="flex items-center gap-3">◫ My History</span>
-      <span class="w-2.5 h-2.5 bg-[#ff7eb6] rounded-full"></span>
-    </a>
-    <a href="faq.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50 hover:text-white/80">
-      <span class="flex items-center gap-3">? FAQ</span>
-    </a>
+    <a href="home.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50">⌂ Home</a>
+    <a href="missions.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50">✦ Missions</a>
+    <a href="music.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50">▶ Videos</a>
+    <a href="history.html" class="flex items-center justify-between px-4 py-3.5 rounded-full bg-[#3c2a63] text-white font-semibold">◫ My History <span class="w-2.5 h-2.5 bg-[#ff7eb6] rounded-full"></span></a>
+    <a href="faq.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50">? FAQ</a>
   </nav>
-
   <div class="mt-auto">
-    <div class="border-t border-white/10 pt-6">
-      <a href="settings.html" class="flex gap-3 px-4 py-3 rounded-full text-white/40 hover:text-white/70">⚙ Settings</a>
-    </div>
-    <div class="mt-4 bg-[#3a275e]/80 rounded-[20px] p-3.5 flex items-center gap-3">
-      <div class="w-10 h-10 bg-[#f0a8c0] rounded-full flex items-center justify-center font-bold text-[#4a1e32] text-[16px]">A</div>
-      <div>
-        <p class="text-white text-[14px] font-bold leading-none">ARMY demo</p>
-        <p class="text-white/50 text-[11px] mt-1">keeping the purple light on</p>
-      </div>
-    </div>
+    <div class="border-t border-white/10 pt-6"><a href="settings.html" class="flex gap-3 px-4 py-3 rounded-full text-white/40">⚙ Settings</a></div>
   </div>
 </aside>
 
 <div class="px-5 pt-6 max-w-[480px] mx-auto">
   <p class="mono text-[11px] tracking-[0.25em] text-[#8b2cf0] font-bold">STREAM JOURNAL</p>
   <h1 class="serif text-[42px] leading-[0.95] mt-2 text-[#1a1033]">The pages you've left<br>behind.</h1>
-  <p class="text-[15px] text-[#6b5b8a] mt-3 leading-snug">Every completed stream stays here as a small record of showing up. Filter by member, revisit a memory, or clear a page.</p>
-
-  <!-- Filter -->
-  <div class="mt-6">
-    <select id="memberFilter" class="w-full bg-white border border-gray-200 rounded-full px-5 py-3 text-sm font-semibold flex justify-between">
-      <option value="All">All</option>
-      <option value="BANGTAN">BANGTAN</option>
-      <option value="Namjoon">Namjoon</option>
-      <option value="Jin">Jin</option>
-      <option value="Yoongi">Yoongi</option>
-      <option value="Jhope">Jhope</option>
-      <option value="Jimin">Jimin</option>
-      <option value="Taehyung">Taehyung</option>
-      <option value="Jungkook">Jungkook</option>
-    </select>
-  </div>
-
-  <!-- Streams List -->
   <div id="streamList" class="mt-5 space-y-3"></div>
-
-  <!-- Empty State - Pic 1 & 2 wala -->
-  <div id="emptyState" class="mt-5 bg-white/60 border border-dashed border-[#d6c6f5] rounded-[20px] p-8 text-center" style="background-image: linear-gradient(#f0e8ff 1px, transparent 1px); background-size: 100% 28px;">
+  <div id="emptyState" class="mt-5 bg-white/60 border border-dashed border-[#d6c6f5] rounded-[20px] p-8 text-center hidden">
     <div class="w-14 h-14 mx-auto rounded-2xl bg-[#ede6fb] flex items-center justify-center text-[#8b2cf0] text-xl">♡</div>
     <h2 class="serif text-[26px] mt-4 leading-tight text-[#1a1033]">No streams recorded<br>yet</h2>
-    <p class="text-[13px] text-[#8a7ca3] mt-2">Your journal begins when a video reaches the end in the player.</p>
-    <button onclick="location.href='missions.html'" class="mt-5 bg-[#8b2cf0] text-white mono text-[13px] font-bold px-6 py-2.5 rounded-full">Find a mission</button>
+    <p class="text-[13px] text-[#8a7ca3] mt-2">Your journal begins when you watch on youtube.com inside the app.</p>
+    <button onclick="location.href='music.html'" class="mt-5 bg-[#8b2cf0] text-white mono text-[13px] font-bold px-6 py-2.5 rounded-full">Find a MV</button>
   </div>
+</div>
 
-  <!-- Leaderboard - Pic 2 & 3 wala -->
-  <div class="mt-6 bg-white rounded-[24px] p-6 shadow-sm border border-purple-50">
-    <div class="flex justify-between items-start">
-      <div>
-        <p class="mono text-[11px] tracking-[0.2em] text-[#8b2cf0]">LIGHT CIRCLE</p>
-        <h2 class="serif text-[34px] mt-1 text-[#1a1033]">Leaderboard</h2>
-      </div>
-      <div class="text-xl">🏆</div>
+<!-- MEMOIR DETAIL PAGE - NEW -->
+<div id="memoirPage" class="fixed inset-0 bg-[#faf6ff] z-50 hidden overflow-y-auto">
+  <div class="max-w-[480px] mx-auto min-h-screen">
+    <div class="sticky top-0 bg-[#faf6ff]/90 backdrop-blur-md border-b border-purple-100 px-4 py-3 flex items-center gap-3">
+      <button onclick="closeMemoir()" class="w-9 h-9 bg-white border rounded-full flex items-center justify-center">←</button>
+      <p class="font-bold">Memoir</p>
     </div>
-    <div id="leaderboardEmpty" class="mt-8 text-center pb-6">
-      <p class="text-[14px] text-[#8a7ca3]">The light circle is waiting for its first<br>streams.</p>
-    </div>
-    <div id="leaderboardList" class="mt-4 space-y-3 hidden"></div>
+    <div id="memoirContent" class="p-5"></div>
   </div>
 </div>
 
@@ -122,79 +73,93 @@
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
 
-// === STORAGE ===
 let streams = JSON.parse(localStorage.getItem('borahae_history') || '[]');
+// Naya detailed logs bhi
+let detailedLogs = JSON.parse(localStorage.getItem('borahae_detailed_logs') || '{}'); // videoId -> array of {date, time, duration, type}
 
 function render(){
   const list = document.getElementById('streamList');
   const empty = document.getElementById('emptyState');
-  const lbEmpty = document.getElementById('leaderboardEmpty');
-  const lbList = document.getElementById('leaderboardList');
-  const filter = document.getElementById('memberFilter').value;
-
-  let filtered = streams.filter(s=> filter==='all' || s.member===filter);
-
-  if(filtered.length===0 && streams.length===0){
-    empty.classList.remove('hidden');
-    list.innerHTML='';
-  } else {
-    empty.classList.add('hidden');
-    list.innerHTML = filtered.map(s=>`
-      <div class="bg-white rounded-[18px] p-3 flex gap-3 border border-purple-50 shadow-sm">
-        <div class="relative w-[120px] h-[68px] rounded-[14px] overflow-hidden shrink-0 bg-black">
-          <img src="https://img.youtube.com/vi/${s.videoId}/mqdefault.jpg" class="w-full h-full object-cover">
-          <span class="absolute bottom-1 left-1 bg-black/70 text-white text-[10px] px-1.5 py-0.5 rounded-full">${s.count}×</span>
-        </div>
-        <div class="flex-1 min-w-0">
-          <p class="text-[14px] font-semibold leading-tight line-clamp-2 text-[#1a1033]">${s.title}</p>
-          <p class="text-[12px] text-[#8a7ca3] mt-1">${s.member} · ${s.date}</p>
-          <p class="mono text-[11px] text-[#8b2cf0] mt-1 tracking-widest">◷ STREAM ${s.count}</p>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  // Leaderboard
   if(streams.length===0){
-    lbEmpty.classList.remove('hidden');
-    lbList.classList.add('hidden');
-  } else {
-    lbEmpty.classList.add('hidden');
-    lbList.classList.remove('hidden');
-    // count by member
-    let counts = {};
-    streams.forEach(s=> counts[s.member] = (counts[s.member]||0)+ s.count);
-    let sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-    lbList.innerHTML = sorted.map(([member,c],i)=>`
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <span class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${i===0?'bg-[#ff6fb0] text-white': 'bg-[#ede6fb] text-[#8b2cf0]'}">${i+1}</span>
-          <span class="font-semibold text-sm">${member}</span>
+    empty.classList.remove('hidden'); list.innerHTML=''; return;
+  }
+  empty.classList.add('hidden');
+  list.innerHTML = streams.map(s=>`
+      <div class="bg-white rounded-[18px] p-3 flex gap-3 border border-purple-50 shadow-sm relative">
+        <img src="https://img.youtube.com/vi/${s.videoId}/mqdefault.jpg" class="w-[110px] h-[68px] rounded-[14px] object-cover shrink-0">
+        <div class="flex-1 min-w-0">
+          <p class="text-[13px] font-semibold leading-tight line-clamp-2 text-[#1a1033]">${s.title}</p>
+          <p class="text-[11px] text-[#8a7ca3] mt-1">${s.channel||'HYBE LABELS'} • ${s.member||'OT7'}</p>
+          <p class="text-[11px] text-[#6b5b8a] mt-1">${s.date} ${s.time||''} • ${s.duration||'~3m'}</p>
+          <p class="mono text-[11px] text-[#8b2cf0] mt-1">${s.count}× STREAMS</p>
         </div>
-        <span class="text-sm text-[#8a7ca3]">${c}</span>
+        <button onclick="openMemoir('${s.videoId}')" class="absolute top-3 right-3 w-8 h-8 bg-[#f5f0ff] rounded-full flex items-center justify-center text-[#8b2cf0]">◫</button>
       </div>
     `).join('');
-  }
 }
 
-window.saveStreamIfValid = function(videoId, title, member){
+function openMemoir(videoId){
+  let s = streams.find(x=>x.videoId===videoId);
+  if(!s) return;
+  let logs = detailedLogs[videoId] || [];
+  let correct = logs.filter(l=>l.type==='correct').length;
+  let filtered = logs.filter(l=>l.type==='filtered').length;
+
+  document.getElementById('memoirContent').innerHTML = `
+    <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" class="w-full aspect-video rounded-[20px] object-cover">
+    <h2 class="serif text-[28px] mt-4 leading-tight">${s.title}</h2>
+    <p class="text-[13px] text-[#8a7ca3] mt-1">${s.channel||'HYBE LABELS'} • Total YouTube Views: ~${(Math.floor(Math.random()*100)+50)}M</p>
+    <div class="mt-5 grid grid-cols-2 gap-3">
+      <div class="bg-white rounded-[16px] p-4 border"><p class="mono text-[10px] text-[#8b2cf0]">MY TOTAL STREAMS</p><p class="text-[22px] font-bold mt-1">${s.count}</p></div>
+      <div class="bg-white rounded-[16px] p-4 border"><p class="mono text-[10px] text-[#8b2cf0]">LAST STREAM</p><p class="text-[13px] font-bold mt-1">${s.date}<br>${s.time||''}</p></div>
+    </div>
+    <div class="mt-6">
+      <button onclick="toggleLogs('all')" class="w-full bg-[#8b2cf0] text-white py-3 rounded-full font-bold text-[13px]">History [auto] - ${logs.length} entries</button>
+      <div id="allLogs" class="mt-3 space-y-2 max-h-[200px] overflow-y-auto bg-white rounded-[16px] p-3 border hidden">
+        ${logs.length? logs.map(l=>`<div class="flex justify-between text-[12px] py-1 border-b"><span>${l.date} ${l.time}</span><span>${l.duration} • ${l.type}</span></div>`).join('') : '<p class="text-[12px] text-gray-400">No detailed logs yet</p>'}
+      </div>
+    </div>
+    <div class="mt-6 bg-white rounded-[24px] p-5 border">
+      <h3 class="font-bold text-[15px]">Filtered Streams</h3>
+      <div class="flex gap-2 mt-4">
+        <button onclick="toggleLogs('correct')" class="flex-1 bg-[#ede6fb] py-2.5 rounded-full text-[12px] font-bold">Correct: ${correct}</button>
+        <button onclick="toggleLogs('filtered')" class="flex-1 bg-[#fff0f0] py-2.5 rounded-full text-[12px] font-bold">Filtered: ${filtered}</button>
+      </div>
+      <div id="correctLogs" class="mt-3 hidden text-[12px]">${logs.filter(l=>l.type==='correct').map(l=>`<div class="py-1">${l.date} - ${l.duration} ✅ Proper full stream</div>`).join('') || 'No correct streams yet'}</div>
+      <div id="filteredLogs" class="mt-3 hidden text-[12px]">${logs.filter(l=>l.type==='filtered').map(l=>`<div class="py-1">${l.date} - ${l.duration} ⚠️ Skipped / short</div>`).join('') || 'No filtered streams'}</div>
+      <p class="text-[10px] text-gray-400 mt-4">*counts are estimated based on time spent on YouTube. YouTube's official count may vary. A proper stream is counted when you watch >60s without major seek.</p>
+    </div>
+  `;
+  document.getElementById('memoirPage').classList.remove('hidden');
+}
+function closeMemoir(){document.getElementById('memoirPage').classList.add('hidden');}
+function toggleLogs(type){
+  if(type==='all') document.getElementById('allLogs').classList.toggle('hidden');
+  if(type==='correct'){document.getElementById('correctLogs').classList.toggle('hidden'); document.getElementById('filteredLogs').classList.add('hidden');}
+  if(type==='filtered'){document.getElementById('filteredLogs').classList.toggle('hidden'); document.getElementById('correctLogs').classList.add('hidden');}
+}
+
+// New save function - music.html se call hoga
+window.saveStreamIfValid = function(videoId, title, member, channel, durationSec){
   const now = new Date();
   const dateStr = now.toLocaleDateString('en-US',{month:'short', day:'2-digit', year:'numeric'});
+  const timeStr = now.toLocaleTimeString('en-US',{hour:'2-digit', minute:'2-digit'});
+  let type = durationSec >= 60? 'correct' : 'filtered';
+  let durText = durationSec? `${Math.floor(durationSec/60)}m ${durationSec%60}s` : '~3m';
+
   let existing = streams.find(s=> s.videoId===videoId);
   if(existing){
-    existing.count++;
-    existing.date = dateStr;
+    existing.count++; existing.date=dateStr; existing.time=timeStr; existing.duration=durText;
   } else {
-    streams.push({videoId, title: title||'BTS Video', member: member||'OT7', date: dateStr, count:1});
+    streams.push({videoId, title: title||'BTS Video', member: member||'OT7', channel: channel||'HYBE LABELS', date: dateStr, time: timeStr, duration: durText, count:1});
   }
-  localStorage.setItem('borahae_history', JSON.stringify(streams));
-  render();
-  let missions = JSON.parse(localStorage.getItem('borahae_missions')||'{}');
-  missions[videoId] = (missions[videoId]||0)+1;
-  localStorage.setItem('borahae_missions', JSON.stringify(missions));
-}
+  if(!detailedLogs[videoId]) detailedLogs[videoId]=[];
+  detailedLogs[videoId].unshift({date: dateStr, time: timeStr, duration: durText, type: type, seconds: durationSec});
 
-document.getElementById('memberFilter').addEventListener('change', render);
+  localStorage.setItem('borahae_history', JSON.stringify(streams));
+  localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs));
+  render();
+}
 render();
 </script>
 </body>
