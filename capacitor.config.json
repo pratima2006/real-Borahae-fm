@@ -3,7 +3,7 @@
   "appName": "Borahae FM",
   "webDir": ".",
   "server": {
-    "url": "https://pratima2006.github.io/real-Borahae-fm/",
+    "url": "https://borahae-fm-app.vercel.app/",
     "cleartext": true
   }
 }
