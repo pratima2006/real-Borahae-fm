@@ -75,7 +75,7 @@
 </div>
 </div>
 <script>
-const firebaseConfig={apiKey:"AIzaSyAdEoRnBLg4N7TEDE1WRU6FBjcrS6r7XNw",authDomain:"borahae-fm-f7075.firebaseapp.com",databaseURL:"https://borahae-fm-f7075-default-rtdb.firebaseio.com",projectId:"borahae-fm-f7075"};
+const firebaseConfig={apiKey:"AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",authDomain:"borahae-fm-f7075.firebaseapp.com",databaseURL:"https://borahae-fm-f7075-default-rtdb.firebaseio.com",projectId:"borahae-fm-f7075"};
 firebase.initializeApp(firebaseConfig);const db=firebase.database();
 if(localStorage.getItem('yt_access_token')){document.getElementById('ytWarningBox').classList.add('hidden');}
 function getYouTubeID(u){if(!u)return"";u=u.trim();if(u.length===11&&!u.includes("/")&&!u.includes("?"))return u;let r=/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;let m=u.match(r);return(m&&m[2].length===11)?m[2]:"";}
