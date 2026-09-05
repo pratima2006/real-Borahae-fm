@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>borahae.fm</title>
 
-<!-- YE 3 LINE ADD KI HAI - PWA KE LIYE -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#7c3aed">
 <link rel="icon" type="image/png" href="logo-borahae-final.png">
@@ -28,7 +27,6 @@
 </head>
 <body class="hero-bg">
 
-<!-- HEADER -->
 <nav class="flex items-center justify-between px-4 md:px-6 py-4 md:py-5 max-w-[1100px] mx-auto">
   <div class="flex items-center gap-2.5">
     <div class="w-[34px] h-[34px] md:w-[38px] md:h-[38px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px] font-bold">b</div>
@@ -210,34 +208,46 @@ auth.onAuthStateChanged((user) => {
 });
 
 function handleScrapbook(){
-  if(localStorage.getItem('borahae_user')){ location.href='home.html'; }
-  else{ openAuth(); }
-}
-
-// FIXED - App ke andar Google login ke liye
-async function signInWithGoogle(){
-  const provider = new firebase.auth.GoogleAuthProvider();
-  // WebView me popup block hota hai, isliye redirect use karenge
-  // Ye ChromeCustomTab me khulega jo tune Niotron me lagaya hai
-  try {
-    await auth.signInWithRedirect(provider);
-  } catch(e) {
-    alert(e.message);
+  const u = localStorage.getItem('borahae_user');
+  if(u){
+    location.href='home.html';
+  } else {
+    sessionStorage.setItem('want_scrapbook','true');
+    openAuth();
   }
 }
 
-auth.getRedirectResult().then(r=>{
-  if(r && r.user) saveUser(r.user);
-}).catch(()=>{});
+// FIXED FOR WEB + APK
+async function signInWithGoogle(){
+  const provider = new firebase.auth.GoogleAuthProvider();
+  const btn = document.getElementById('googleBtn');
+  btn.innerText = "Opening...";
+  try {
+    const result = await auth.signInWithPopup(provider);
+    // onAuthStateChanged will call saveUser automatically
+    btn.innerText = "Continue with Google";
+  } catch(e) {
+    btn.innerText = "Continue with Google";
+    alert("Login failed: " + e.message);
+    console.error(e);
+  }
+}
 
 function saveUser(user){
+  if(!user) return;
   const obj = {name:user.displayName||user.email.split('@')[0], email:user.email, photo:user.photoURL||'', uid:user.uid};
   localStorage.setItem('borahae_user', JSON.stringify(obj));
   localStorage.setItem('borahae_hasAccount', 'true');
-  db.ref('users/'+user.uid).set({name:obj.name,email:obj.email,joinedAt:Date.now()});
+  db.ref('users/'+user.uid).update({name:obj.name,email:obj.email,joinedAt:Date.now()});
   closeAuth();
   updateHeader(obj);
+
+  if(sessionStorage.getItem('want_scrapbook') === 'true'){
+    sessionStorage.removeItem('want_scrapbook');
+    location.href='home.html';
+  }
 }
+
 function logOut(){
   auth.signOut();
   localStorage.removeItem('borahae_user');
