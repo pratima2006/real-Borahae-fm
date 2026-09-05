@@ -20,7 +20,7 @@
 .hero-bg{background: radial-gradient(120% 80% at 90% 0%, #f5d0fe 0%, #fce7ff 20%, #fdf8ff 60%);}
 .paper-grid{background-image: linear-gradient(#e9d5ff1f 1px, transparent 1px), linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px);background-size:22px 22px;}
 .auth-scroll::-webkit-scrollbar{width:0}
-@media(max-width:640px){ #authCard{max-height:84vh; overflow-y:auto;} }
+@media(max-width:640px){ #authCard{max-height:88vh; overflow-y:auto;} }
 </style>
 </head>
 <body class="hero-bg">
@@ -29,12 +29,10 @@
     <div class="w-[34px] h-[34px] md:w-[38px] md:h-[38px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px] font-bold">b</div>
     <span class="font-bold text-[14px] md:text-[16px] tracking-tight">borahae<span class="text-[#7c3aed]">.fm</span></span>
   </div>
-  <!-- BEFORE LOGIN -->
   <div id="beforeLogin" class="flex items-center gap-2 md:gap-3">
-    <button onclick="openAuth()" class="font-mono text-[11px] md:text-[13px] font-bold text-[#6b7280] px-2">Sign in</button>
-    <button onclick="openAuth()" class="bg-[#7c3aed] text-white px-3 py-1.5 md:px-5 md:py-2.5 rounded-full text-[11px] md:text-[13px] font-bold leading-tight text-center">Join the<br class="md:hidden"> light</button>
+    <button onclick="openAuth('login')" class="font-mono text-[11px] md:text-[13px] font-bold text-[#6b7280] px-2">Sign in</button>
+    <button onclick="openAuth('signup')" class="bg-[#7c3aed] text-white px-3 py-1.5 md:px-5 md:py-2.5 rounded-full text-[11px] md:text-[13px] font-bold leading-tight text-center">Join the<br class="md:hidden"> light</button>
   </div>
-  <!-- AFTER LOGIN - Yahi tujhe chahiye tha -->
   <div id="afterLogin" class="hidden items-center gap-2 md:gap-3">
     <span id="userEmailShow" class="font-mono text-[10px] md:text-[12px] font-bold text-[#1e1033] max-w-[110px] md:max-w-[200px] truncate"></span>
     <button onclick="openProfile()" id="pfpCircle" class="w-[32px] h-[32px] md:w-[38px] md:h-[38px] bg-[#1e1033] rounded-full flex items-center justify-center text-white text-[12px] font-bold overflow-hidden border-2 border-[#e9d5ff]">
@@ -61,8 +59,6 @@
       <div class="bg-white p-[10px] rounded-[28px] shadow-[0_20px_60px_rgba(100,30,150,0.15)]">
         <div class="paper-grid bg-gradient-to-br from-[#2a1555] via-[#3b1f7a] to-[#5b3cc4] rounded-[22px] p-6 md:p-7 h-[420px] flex flex-col justify-between relative overflow-hidden">
           <div class="flex justify-between"><span class="font-mono text-[9px] tracking-[2.5px] text-white/50">MISSION 001 / BANGTANTV</span></div>
-          <div class="absolute right-[-10px] top-[40px] w-[180px] h-[180px] border border-white/10 rounded-full"></div>
-          <div class="absolute right-[20px] top-[70px] w-[120px] h-[120px] border border-white/10 rounded-full"></div>
           <div><h2 class="font-display text-[36px] leading-[0.95] text-white">The purple<br>hour.</h2><p class="text-[11px] text-white/60 mt-3 leading-[1.4] max-w-[180px]">A little place to leave your mark on the streams that mean something.</p></div>
           <div class="flex items-center gap-2.5"><div class="w-[32px] h-[32px] bg-[#f472b6] rounded-full flex items-center justify-center"><span class="text-[12px]">▶</span></div><span class="text-white text-[12px] font-semibold">Watch together</span></div>
           <div class="bg-[#1a0d33] -mx-6 -mb-6 px-6 py-3 flex justify-between items-center mt-4 rounded-b-[22px]"><span class="font-mono text-[8px] tracking-[2px] text-white/40">YOUR STREAM JOURNAL</span><span class="text-[11px] text-[#f472b6] font-bold">♥ borahae</span></div>
@@ -81,15 +77,48 @@
   </div>
 </section>
 
-<div id="authModal" class="fixed inset-0 bg-[#1e1033]/50 backdrop-blur-[10px] hidden items-center justify-center p-4 z-[100]">
-  <div id="authCard" class="auth-scroll bg-white w-full max-w-[360px] rounded-[28px] p-[8px] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
-    <div class="bg-[#fdf8ff] border border-[#f3e8ff] rounded-[22px] p-6 text-center">
-      <div class="inline-flex items-center gap-1.5 border border-[#e9d5ff] bg-white rounded-full px-2.5 py-1"><span class="text-[10px]">✨</span><p class="font-mono text-[8px] tracking-[1.5px] text-[#7c3aed] font-bold">JOIN THE LIGHT, ARMY</p></div>
-      <h2 class="font-display text-[26px] leading-[0.95] font-bold mt-4">Welcome back,<br><span class="text-[#7c3aed]">my love.</span></h2>
-      <p class="text-[#6b7280] text-[12px] leading-[1.5] mt-3">Your little scrapbook missed you. Sign in to keep your streams safe.</p>
-      <button id="googleBtn" onclick="signInWithGoogle()" class="w-full mt-6 bg-[#1e1033] text-white rounded-full py-3.5 flex items-center justify-center gap-2 text-[13px] font-bold"><img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 bg-white rounded-full p-0.5"> Continue with Google</button>
-      <p class="text-[9px] text-[#9ca3af] text-center mt-4 font-mono">secure login with Google 💜</p>
-      <button onclick="closeAuth()" class="w-full mt-3 text-[11px] font-bold text-[#6b7280]">maybe later →</button>
+<!-- FINAL AUTH MODAL - Niotron Style but Purple -->
+<div id="authModal" class="fixed inset-0 bg-[#1e1033]/60 backdrop-blur-[10px] hidden items-center justify-center p-4 z-[100]">
+  <div id="authCard" class="bg-white w-full max-w-[390px] rounded-[20px] overflow-hidden shadow-[0_20px_80px_rgba(0,0,0,0.3)]">
+    <!-- Tabs -->
+    <div class="flex">
+      <button id="tabLogin" onclick="switchTab('login')" class="flex-1 py-3.5 font-bold text-[14px] bg-[#7c3aed] text-white">Log In</button>
+      <button id="tabSignup" onclick="switchTab('signup')" class="flex-1 py-3.5 font-bold text-[14px] bg-[#f3f0ff] text-[#6b7280]">Sign Up</button>
+    </div>
+    <div class="p-6">
+      <!-- LOGIN -->
+      <div id="loginForm">
+        <h2 class="font-bold text-[22px] text-center">Welcome Back</h2>
+        <p class="text-[12px] text-[#6b7280] text-center mt-1">Sign in to continue to borahae.fm</p>
+        <label class="text-[13px] font-semibold mt-5 block">Email</label>
+        <div class="relative mt-1.5"><input id="loginEmail" type="email" placeholder="your@email.com" class="w-full border border-[#e5e7eb] rounded-[12px] py-3 px-4 text-[13px] outline-none focus:border-[#7c3aed]"></div>
+        <label class="text-[13px] font-semibold mt-4 flex justify-between"><span>Password</span><span onclick="forgotPass()" class="text-[#7c3aed] text-[11px] font-bold cursor-pointer">Forgot password?</span></label>
+        <div class="relative mt-1.5"><input id="loginPass" type="password" placeholder="••••••••" class="w-full border border-[#e5e7eb] rounded-[12px] py-3 px-4 text-[13px] outline-none focus:border-[#7c3aed]"></div>
+        <button onclick="doEmailLogin()" class="w-full mt-5 bg-[#7c3aed] text-white rounded-[12px] py-3 font-bold text-[14px]">Log In</button>
+        <div class="flex items-center gap-3 my-5"><div class="flex-1 h-[1px] bg-[#e5e7eb]"></div><span class="text-[11px] text-[#9ca3af] font-bold tracking-widest">OR</span><div class="flex-1 h-[1px] bg-[#e5e7eb]"></div></div>
+        <button id="savedAccountBtn" onclick="signInWithGoogle()" class="hidden w-full border border-[#e5e7eb] rounded-[12px] py-2.5 px-3 flex items-center gap-2 text-left mb-3">
+          <div class="w-7 h-7 bg-[#1e1033] rounded-full text-white flex items-center justify-center text-[12px] font-bold" id="savedInitial">P</div>
+          <div class="flex-1"><p class="text-[12px] font-bold leading-tight" id="savedName">Sign in as Pratima</p><p class="text-[10px] text-[#6b7280] truncate" id="savedEmail"></p></div>
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5">
+        </button>
+        <button onclick="signInWithGoogle()" id="googleBtn" class="w-full bg-[#1e1033] text-white rounded-full py-3.5 flex items-center justify-center gap-2 text-[13px] font-bold"><img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 bg-white rounded-full p-0.5"> Continue with Google</button>
+      </div>
+      <!-- SIGNUP -->
+      <div id="signupForm" class="hidden">
+        <h2 class="font-bold text-[22px] text-center">Create Account</h2>
+        <p class="text-[12px] text-[#6b7280] text-center mt-1">Join borahae.fm today</p>
+        <label class="text-[13px] font-semibold mt-5 block">Email</label>
+        <div class="relative mt-1.5"><input id="signupEmail" type="email" placeholder="your@email.com" class="w-full border border-[#e5e7eb] rounded-[12px] py-3 px-4 text-[13px] outline-none focus:border-[#7c3aed]"></div>
+        <label class="text-[13px] font-semibold mt-4 block">Password</label>
+        <div class="relative mt-1.5"><input id="signupPass" type="password" placeholder="••••••••" class="w-full border border-[#e5e7eb] rounded-[12px] py-3 px-4 text-[13px] outline-none focus:border-[#7c3aed]"></div>
+        <label class="text-[13px] font-semibold mt-4 block">Confirm Password</label>
+        <div class="relative mt-1.5"><input id="signupConfirm" type="password" placeholder="••••••••" class="w-full border border-[#e5e7eb] rounded-[12px] py-3 px-4 text-[13px] outline-none focus:border-[#7c3aed]"></div>
+        <label class="flex gap-2 mt-4 text-[12px] items-start"><input type="checkbox" id="terms" class="mt-1"><span>I agree to the <span class="text-[#7c3aed] font-bold">Terms of Service</span> and Privacy Policy</span></label>
+        <button onclick="doEmailSignup()" class="w-full mt-5 bg-[#7c3aed] text-white rounded-[12px] py-3 font-bold text-[14px]">Sign Up</button>
+        <div class="flex items-center gap-3 my-4"><div class="flex-1 h-[1px] bg-[#e5e7eb]"></div><span class="text-[11px] text-[#9ca3af] font-bold">OR</span><div class="flex-1 h-[1px] bg-[#e5e7eb]"></div></div>
+        <button onclick="signInWithGoogle()" class="w-full bg-[#1e1033] text-white rounded-full py-3.5 flex items-center justify-center gap-2 text-[13px] font-bold"><img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 bg-white rounded-full p-0.5"> Continue with Google</button>
+      </div>
+      <button onclick="closeAuth()" class="w-full mt-4 text-[11px] font-bold text-[#6b7280]">maybe later →</button>
     </div>
   </div>
 </div>
@@ -100,7 +129,6 @@
       <img id="profilePhotoBig" src="" class="w-16 h-16 rounded-full mx-auto hidden object-cover">
       <div id="profileInitialBig" class="w-16 h-16 bg-[#f3f0ff] rounded-full mx-auto flex items-center justify-center text-[24px]">💜</div>
       <h3 class="font-bold mt-3" id="profileEmail"></h3>
-      <p class="text-[12px] text-[#6b7280] mt-1">Your streams are saved to YT history when you watch from our app ✨</p>
       <button onclick="location.href='home.html'" class="w-full mt-4 bg-[#7c3aed] text-white rounded-full py-2.5 text-[13px] font-bold">Go to Scrapbook</button>
       <button onclick="logOut()" class="w-full mt-2 bg-white border rounded-full py-2.5 text-[13px] font-bold">Log out</button>
       <button onclick="closeProfile()" class="w-full mt-2 text-[12px] text-[#6b7280]">close →</button>
@@ -122,13 +150,43 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-function openAuth(){
+function openAuth(tab){
   document.getElementById('authModal').classList.remove('hidden');
   document.getElementById('authModal').classList.add('flex');
+  switchTab(tab || 'login');
+  checkSavedAccount();
 }
 function closeAuth(){document.getElementById('authModal').classList.add('hidden');document.getElementById('authModal').classList.remove('flex');}
 function openProfile(){document.getElementById('profileModal').classList.remove('hidden');document.getElementById('profileModal').classList.add('flex');}
 function closeProfile(){document.getElementById('profileModal').classList.add('hidden');document.getElementById('profileModal').classList.remove('flex');}
+
+function switchTab(t){
+  const loginForm=document.getElementById('loginForm');
+  const signupForm=document.getElementById('signupForm');
+  const tabL=document.getElementById('tabLogin');
+  const tabS=document.getElementById('tabSignup');
+  if(t==='login'){
+    loginForm.classList.remove('hidden'); signupForm.classList.add('hidden');
+    tabL.className='flex-1 py-3.5 font-bold text-[14px] bg-[#7c3aed] text-white';
+    tabS.className='flex-1 py-3.5 font-bold text-[14px] bg-[#f3f0ff] text-[#6b7280]';
+  } else {
+    signupForm.classList.remove('hidden'); loginForm.classList.add('hidden');
+    tabS.className='flex-1 py-3.5 font-bold text-[14px] bg-[#7c3aed] text-white';
+    tabL.className='flex-1 py-3.5 font-bold text-[14px] bg-[#f3f0ff] text-[#6b7280]';
+  }
+}
+
+function checkSavedAccount(){
+  const s=localStorage.getItem('borahae_user');
+  if(s){
+    const u=JSON.parse(s);
+    document.getElementById('savedAccountBtn').classList.remove('hidden');
+    document.getElementById('savedAccountBtn').classList.add('flex');
+    document.getElementById('savedEmail').innerText=u.email;
+    document.getElementById('savedName').innerText='Sign in as '+(u.name||u.email.split('@')[0]);
+    document.getElementById('savedInitial').innerText=u.email.charAt(0).toUpperCase();
+  }
+}
 
 function updateHeader(user){
   if(user){
@@ -138,29 +196,18 @@ function updateHeader(user){
     document.getElementById('afterLogin').classList.add('flex');
     document.getElementById('userEmailShow').innerText = user.email;
     document.getElementById('profileEmail').innerText = user.email;
-
-    // PFP Circle logic
-    const photoEl = document.getElementById('userPhotoShow');
-    const initialEl = document.getElementById('userInitial');
-    const bigPhotoEl = document.getElementById('profilePhotoBig');
-    const bigInitialEl = document.getElementById('profileInitialBig');
-
-    if(user.photo && user.photo!== ''){
-      photoEl.src = user.photo;
-      bigPhotoEl.src = user.photo;
-      photoEl.classList.remove('hidden');
-      bigPhotoEl.classList.remove('hidden');
-      initialEl.classList.add('hidden');
-      bigInitialEl.classList.add('hidden');
-      bigInitialEl.classList.remove('flex');
+    const photoEl=document.getElementById('userPhotoShow');
+    const initialEl=document.getElementById('userInitial');
+    const bigPhotoEl=document.getElementById('profilePhotoBig');
+    const bigInitialEl=document.getElementById('profileInitialBig');
+    if(user.photo && user.photo!==''){
+      photoEl.src=user.photo; bigPhotoEl.src=user.photo;
+      photoEl.classList.remove('hidden'); bigPhotoEl.classList.remove('hidden');
+      initialEl.classList.add('hidden'); bigInitialEl.classList.add('hidden');
     } else {
-      photoEl.classList.add('hidden');
-      bigPhotoEl.classList.add('hidden');
-      initialEl.classList.remove('hidden');
-      bigInitialEl.classList.remove('hidden');
-      bigInitialEl.classList.add('flex');
-      initialEl.innerText = user.email.charAt(0).toUpperCase();
-      bigInitialEl.innerText = user.email.charAt(0).toUpperCase();
+      photoEl.classList.add('hidden'); bigPhotoEl.classList.add('hidden');
+      initialEl.classList.remove('hidden'); bigInitialEl.classList.remove('hidden'); bigInitialEl.classList.add('flex');
+      initialEl.innerText=user.email.charAt(0).toUpperCase(); bigInitialEl.innerText=user.email.charAt(0).toUpperCase();
     }
   } else {
     document.getElementById('beforeLogin').classList.remove('hidden');
@@ -181,28 +228,42 @@ auth.onAuthStateChanged((user) => {
 function handleScrapbook(){
   const u = localStorage.getItem('borahae_user');
   if(u){ location.href='home.html'; }
-  else { sessionStorage.setItem('want_scrapbook','true'); openAuth(); }
+  else { sessionStorage.setItem('want_scrapbook','true'); openAuth('login'); }
 }
 
-// APK + WEBSITE DONO KE LIYE FINAL FIX
 async function signInWithGoogle(){
   const btn = document.getElementById('googleBtn');
-  btn.innerText = "Opening...";
+  if(btn) btn.innerText="Opening...";
   try{
     if(window.AppInventor && window.AppInventor.setWebViewString){
       window.AppInventor.setWebViewString("NEED_GOOGLE_LOGIN_" + Date.now());
       return;
     }
   }catch(err){ console.log(err); }
-
   const provider = new firebase.auth.GoogleAuthProvider();
-  try {
-    const result = await auth.signInWithPopup(provider);
-    btn.innerText = "Continue with Google";
-  } catch(e) {
-    btn.innerText = "Continue with Google";
-    alert("Login failed: " + e.message);
-  }
+  try { await auth.signInWithPopup(provider); }
+  catch(e){ if(btn) btn.innerText="Continue with Google"; alert("Login failed: "+e.message); }
+}
+
+function doEmailLogin(){
+  const e=document.getElementById('loginEmail').value.trim();
+  const p=document.getElementById('loginPass').value;
+  if(!e||!p) return alert('Email password bhar de');
+  auth.signInWithEmailAndPassword(e,p).then(r=>saveUser(r.user)).catch(err=>alert(err.message));
+}
+function doEmailSignup(){
+  const e=document.getElementById('signupEmail').value.trim();
+  const p=document.getElementById('signupPass').value;
+  const c=document.getElementById('signupConfirm').value;
+  if(!e||!p) return alert('Email password bhar de');
+  if(p!==c) return alert('Password match nahi ho raha');
+  if(!document.getElementById('terms').checked) return alert('Terms agree kar');
+  auth.createUserWithEmailAndPassword(e,p).then(r=>saveUser(r.user)).catch(err=>alert(err.message));
+}
+function forgotPass(){
+  const e=document.getElementById('loginEmail').value.trim();
+  if(!e) return alert('Pehle email daal');
+  auth.sendPasswordResetEmail(e).then(()=>alert('Reset link bhej diya 💜')).catch(err=>alert(err.message));
 }
 
 function saveUser(user){
@@ -211,19 +272,10 @@ function saveUser(user){
   localStorage.setItem('borahae_user', JSON.stringify(obj));
   localStorage.setItem('borahae_hasAccount', 'true');
   db.ref('users/'+obj.uid).update({name:obj.name,email:obj.email,joinedAt:Date.now()});
-  closeAuth();
-  updateHeader(obj);
-  if(sessionStorage.getItem('want_scrapbook') === 'true'){
-    sessionStorage.removeItem('want_scrapbook');
-    location.href='home.html';
-  }
+  closeAuth(); updateHeader(obj);
+  if(sessionStorage.getItem('want_scrapbook')==='true'){ sessionStorage.removeItem('want_scrapbook'); location.href='home.html'; }
 }
-
-function logOut(){
-  auth.signOut();
-  localStorage.removeItem('borahae_user');
-  location.reload();
-}
+function logOut(){ auth.signOut(); localStorage.removeItem('borahae_user'); location.reload(); }
 </script>
 </body>
 </html>
