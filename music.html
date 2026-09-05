@@ -117,26 +117,23 @@ function toggleDropdown(){document.getElementById('filterDropdown').classList.to
 function selectFilter(v,l){currentFilter=v;document.getElementById('filterLabel').innerText=l;document.getElementById('filterDropdown').classList.add('hidden');applyFilters();}
 document.addEventListener('click',function(e){const b=document.getElementById('filterBtn');const d=document.getElementById('filterDropdown');if(!b.contains(e.target)&&!d.contains(e.target)){d.classList.add('hidden');}});
 
-// ===== FINAL FIX - YOUTUBE APP KE ANDAR CHROME JAISA KHULEGA =====
+// ===== FIXED FOR APK - ASLI YOUTUBE.COM APP KE ANDAR CHROME TAB ME KHULEGA =====
 function openYouTubeInsideApp(id,title){
   currentId=id; currentTitle=title;
-  // First time notice - tu chahti thi wala message
   if(localStorage.getItem('borahae_yt_notice')!== 'done'){
     let msg = "💜 Make sure you're logged in on YouTube.com\n\nTaki tumhara stream YouTube History me save ho aur count ho!\n\nFirst time youtube.com tumse login mangega, uske baad hamesha yaad rahega.\n\nContinue to YouTube?";
     if(!confirm(msg)){ return; }
     localStorage.setItem('borahae_yt_notice','done');
   }
-  // Tracking ke liye start time save karo
   localStorage.setItem('borahae_last_stream_start', Date.now().toString());
   localStorage.setItem('borahae_last_video_id', id);
   localStorage.setItem('borahae_last_video_title', title);
-  // Chrome jaise app ke andar hi youtube.com kholo - bahar nahi jayega!
-  window.location.href = `https://www.youtube.com/watch?v=${id}`;
+  // YE LINE FIX HAI - APK ke liye asli youtube.com Chrome Tab me
+  window.open(`https://www.youtube.com/watch?v=${id}`, '_blank');
 }
 
 function applyFilters(){const q=document.getElementById('searchInput').value.toLowerCase();let f=[...videos];if(isNewFilterActive){f=f.filter(v=>v.addedAt&&Date.now()-v.addedAt<2*86400000);}if(currentFilter==='hybe'){f=f.filter(v=>(v.channel||'').toUpperCase().includes('HYBE'));}if(currentFilter==='bangtantv'){f=f.filter(v=>(v.channel||'').toUpperCase().includes('BANGTAN'));}if(q){f=f.filter(v=>v.title.toLowerCase().includes(q)||(v.channel||'').toLowerCase().includes(q));}render(f);}
 function render(list){const g=document.getElementById('videoGrid');g.innerHTML='';if(list.length===0){document.getElementById('emptyState').classList.remove('hidden');return;}document.getElementById('emptyState').classList.add('hidden');list.forEach(v=>{
-  // Yaha change kiya: pehle openVideo tha, ab openYouTubeInsideApp hai
   g.innerHTML+=`<div onclick="openYouTubeInsideApp('${v.id}','${v.title.replace(/'/g,"\\'")}')" class="bg-white rounded-[16px] overflow-hidden border shadow-sm relative cursor-pointer"><img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg" class="w-full aspect-[16/10] object-cover"><div class="p-2.5"><p class="text-[12px] font-bold leading-[1.3] line-clamp-2">${v.title}</p><p class="text-[10px] text-gray-400 mt-1 font-bold">${v.channel||''}</p></div>${v.addedAt&&Date.now()-v.addedAt<2*86400000?'<span class="absolute top-2 left-2 bg-blue-500 text-white text-[9px] px-2.5 py-1 rounded-full font-bold">New</span>':''}</div>`;
 });}
 let watchInterval=null,watchSeconds=0,lastTime=0,hasSeeked=false,hasCounted=false;
@@ -146,14 +143,12 @@ function saveStream(){if(!currentId)return;let k=new Date().toISOString().split(
 function closeVideo(){clearInterval(watchInterval);if(player&&player.stopVideo)player.stopVideo();document.getElementById('video-popup').classList.add('hidden');document.getElementById('video-popup').classList.remove('flex');watchSeconds=0;hasSeeked=false;hasCounted=false;}
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
-// Auto-count when user returns from youtube.com (tracking)
 window.addEventListener('pageshow', function(){
   let start = localStorage.getItem('borahae_last_stream_start');
   let vid = localStorage.getItem('borahae_last_video_id');
   let vtitle = localStorage.getItem('borahae_last_video_title');
   if(start && vid){
     let diff = Date.now() - parseInt(start);
-    // Agar 30 sec se zyada youtube pe raha toh count kar do
     if(diff > 30000){
       currentId = vid; currentTitle = vtitle;
       saveStream();
