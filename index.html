@@ -77,16 +77,13 @@
   </div>
 </section>
 
-<!-- FINAL AUTH MODAL - Niotron Style but Purple -->
 <div id="authModal" class="fixed inset-0 bg-[#1e1033]/60 backdrop-blur-[10px] hidden items-center justify-center p-4 z-[100]">
   <div id="authCard" class="bg-white w-full max-w-[390px] rounded-[20px] overflow-hidden shadow-[0_20px_80px_rgba(0,0,0,0.3)]">
-    <!-- Tabs -->
     <div class="flex">
       <button id="tabLogin" onclick="switchTab('login')" class="flex-1 py-3.5 font-bold text-[14px] bg-[#7c3aed] text-white">Log In</button>
       <button id="tabSignup" onclick="switchTab('signup')" class="flex-1 py-3.5 font-bold text-[14px] bg-[#f3f0ff] text-[#6b7280]">Sign Up</button>
     </div>
     <div class="p-6">
-      <!-- LOGIN -->
       <div id="loginForm">
         <h2 class="font-bold text-[22px] text-center">Welcome Back</h2>
         <p class="text-[12px] text-[#6b7280] text-center mt-1">Sign in to continue to borahae.fm</p>
@@ -103,7 +100,6 @@
         </button>
         <button onclick="signInWithGoogle()" id="googleBtn" class="w-full bg-[#1e1033] text-white rounded-full py-3.5 flex items-center justify-center gap-2 text-[13px] font-bold"><img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 bg-white rounded-full p-0.5"> Continue with Google</button>
       </div>
-      <!-- SIGNUP -->
       <div id="signupForm" class="hidden">
         <h2 class="font-bold text-[22px] text-center">Create Account</h2>
         <p class="text-[12px] text-[#6b7280] text-center mt-1">Join borahae.fm today</p>
@@ -245,10 +241,16 @@ async function signInWithGoogle(){
   catch(e){ if(btn) btn.innerText="Continue with Google"; alert("Login failed: "+e.message); }
 }
 
+// --- FIXED FOR APK ---
 function doEmailLogin(){
   const e=document.getElementById('loginEmail').value.trim();
   const p=document.getElementById('loginPass').value;
   if(!e||!p) return alert('Email password bhar de');
+  // APK me hai toh Niotron ko bhej
+  if(window.AppInventor && window.AppInventor.setWebViewString){
+    window.AppInventor.setWebViewString("EMAIL_LOGIN|"+e+"|"+p);
+    return;
+  }
   auth.signInWithEmailAndPassword(e,p).then(r=>saveUser(r.user)).catch(err=>alert(err.message));
 }
 function doEmailSignup(){
@@ -258,6 +260,11 @@ function doEmailSignup(){
   if(!e||!p) return alert('Email password bhar de');
   if(p!==c) return alert('Password match nahi ho raha');
   if(!document.getElementById('terms').checked) return alert('Terms agree kar');
+  // APK me hai toh Niotron ko bhej
+  if(window.AppInventor && window.AppInventor.setWebViewString){
+    window.AppInventor.setWebViewString("EMAIL_SIGNUP|"+e+"|"+p);
+    return;
+  }
   auth.createUserWithEmailAndPassword(e,p).then(r=>saveUser(r.user)).catch(err=>alert(err.message));
 }
 function forgotPass(){
