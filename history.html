@@ -12,6 +12,8 @@
 .mono{font-family:'Space Mono',monospace}
 .font-display{font-family:'Playfair Display',serif;}
 .sidebar-bg{background:#23144a;}
+.blur-lock{filter:blur(8px);pointer-events:none;user-select:none;opacity:0.55}
+.lock-overlay{background:linear-gradient(to bottom, transparent 10%, #faf6ff 65%)}
 </style>
 </head>
 <body class="min-h-screen pb-10">
@@ -58,12 +60,13 @@
   </div>
 </div>
 
-<!-- MEMOIR DETAIL PAGE - NEW -->
+<!-- MEMOIR DETAIL PAGE -->
 <div id="memoirPage" class="fixed inset-0 bg-[#faf6ff] z-50 hidden overflow-y-auto">
   <div class="max-w-[480px] mx-auto min-h-screen">
     <div class="sticky top-0 bg-[#faf6ff]/90 backdrop-blur-md border-b border-purple-100 px-4 py-3 flex items-center gap-3">
       <button onclick="closeMemoir()" class="w-9 h-9 bg-white border rounded-full flex items-center justify-center">←</button>
       <p class="font-bold">Memoir</p>
+      <span id="ownerBadge" class="hidden ml-auto text-[10px] bg-[#10b981] text-white px-2 py-0.5 rounded-full font-bold">OWNER • FREE</span>
     </div>
     <div id="memoirContent" class="p-5"></div>
   </div>
@@ -74,8 +77,29 @@ function openSidebar(){document.getElementById('sidebar').classList.remove('-tra
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
 
 let streams = JSON.parse(localStorage.getItem('borahae_history') || '[]');
-// Naya detailed logs bhi
-let detailedLogs = JSON.parse(localStorage.getItem('borahae_detailed_logs') || '{}'); // videoId -> array of {date, time, duration, type}
+let detailedLogs = JSON.parse(localStorage.getItem('borahae_detailed_logs') || '{}');
+
+// === OWNER CHECK - SIRF YEH 4 LINE NAYI HAI ===
+const OWNER_EMAILS = ['pratimatribhuvan2006@gmail.com','tribhuvanpratima38@gmail.com'].map(e=>e.toLowerCase());
+function getCurrentUser(){ try{ return JSON.parse(localStorage.getItem('borahaeUser')||'{}'); }catch(e){ return {}; } }
+function isOwnerUser(){ const u=getCurrentUser(); return u.email && OWNER_EMAILS.includes(u.email.toLowerCase()); }
+
+function isFreeDayActive(){
+  const now=new Date();
+  const first=new Date(now.getFullYear(), now.getMonth(), 1);
+  let s=new Date(first); while(s.getDay()!==0) s.setDate(s.getDate()+1);
+  const start=new Date(s); start.setHours(12,0,0,0);
+  const end=new Date(start); end.setDate(end.getDate()+1);
+  return (now>=start && now<=end)? end : null;
+}
+const FREE_UNTIL = new Date('2027-05-01T00:00:00');
+function hasPremiumAccess(){
+  if(isOwnerUser()) return true;
+  if(localStorage.getItem('isPremium')==='true') return true;
+  if(new Date() < FREE_UNTIL) return true;
+  if(isFreeDayActive()) return true;
+  return false;
+}
 
 function render(){
   const list = document.getElementById('streamList');
@@ -104,33 +128,57 @@ function openMemoir(videoId){
   let logs = detailedLogs[videoId] || [];
   let correct = logs.filter(l=>l.type==='correct').length;
   let filtered = logs.filter(l=>l.type==='filtered').length;
+  let premium = hasPremiumAccess();
+  let owner = isOwnerUser();
+  let freeDayEnd = isFreeDayActive();
+
+  document.getElementById('ownerBadge').classList.toggle('hidden',!owner);
 
   document.getElementById('memoirContent').innerHTML = `
     <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" class="w-full aspect-video rounded-[20px] object-cover">
     <h2 class="serif text-[28px] mt-4 leading-tight">${s.title}</h2>
     <p class="text-[13px] text-[#8a7ca3] mt-1">${s.channel||'HYBE LABELS'} • Total YouTube Views: ~${(Math.floor(Math.random()*100)+50)}M</p>
+
     <div class="mt-5 grid grid-cols-2 gap-3">
       <div class="bg-white rounded-[16px] p-4 border"><p class="mono text-[10px] text-[#8b2cf0]">MY TOTAL STREAMS</p><p class="text-[22px] font-bold mt-1">${s.count}</p></div>
       <div class="bg-white rounded-[16px] p-4 border"><p class="mono text-[10px] text-[#8b2cf0]">LAST STREAM</p><p class="text-[13px] font-bold mt-1">${s.date}<br>${s.time||''}</p></div>
     </div>
-    <div class="mt-6">
-      <button onclick="toggleLogs('all')" class="w-full bg-[#8b2cf0] text-white py-3 rounded-full font-bold text-[13px]">History [auto] - ${logs.length} entries</button>
-      <div id="allLogs" class="mt-3 space-y-2 max-h-[200px] overflow-y-auto bg-white rounded-[16px] p-3 border hidden">
-        ${logs.length? logs.map(l=>`<div class="flex justify-between text-[12px] py-1 border-b"><span>${l.date} ${l.time}</span><span>${l.duration} • ${l.type}</span></div>`).join('') : '<p class="text-[12px] text-gray-400">No detailed logs yet</p>'}
+
+    <div class="mt-6 relative">
+      <div id="premiumPart" class="${!premium?'blur-lock':''}">
+        <div class="mt-2">
+          <button onclick="toggleLogs('all')" class="w-full bg-[#8b2cf0] text-white py-3 rounded-full font-bold text-[13px]">History [auto] - ${logs.length} entries</button>
+          <div id="allLogs" class="mt-3 space-y-2 max-h-[200px] overflow-y-auto bg-white rounded-[16px] p-3 border hidden">
+            ${logs.length? logs.map(l=>`<div class="flex justify-between text-[12px] py-1 border-b"><span>${l.date} ${l.time}</span><span>${l.duration} • ${l.type}</span></div>`).join('') : '<p class="text-[12px] text-gray-400">No detailed logs yet</p>'}
+          </div>
+        </div>
+        <div class="mt-4 bg-white rounded-[24px] p-5 border">
+          <h3 class="font-bold text-[15px]">Filtered Streams</h3>
+          <div class="flex gap-2 mt-4">
+            <button onclick="toggleLogs('correct')" class="flex-1 bg-[#ede6fb] py-2.5 rounded-full text-[12px] font-bold">Correct: ${correct}</button>
+            <button onclick="toggleLogs('filtered')" class="flex-1 bg-[#fff0f0] py-2.5 rounded-full text-[12px] font-bold">Filtered: ${filtered}</button>
+          </div>
+          <div id="correctLogs" class="mt-3 hidden text-[12px]">${logs.filter(l=>l.type==='correct').map(l=>`<div class="py-1">${l.date} - ${l.duration} ✅ Proper full stream</div>`).join('') || 'No correct streams yet'}</div>
+          <div id="filteredLogs" class="mt-3 hidden text-[12px]">${logs.filter(l=>l.type==='filtered').map(l=>`<div class="py-1">${l.date} - ${l.duration} ⚠️ Skipped / short</div>`).join('') || 'No filtered streams'}</div>
+          <p class="text-[10px] text-gray-400 mt-4">*counts are estimated based on time spent on YouTube. YouTube's official count may vary. A proper stream is counted when you watch >60s without major seek.</p>
+        </div>
       </div>
-    </div>
-    <div class="mt-6 bg-white rounded-[24px] p-5 border">
-      <h3 class="font-bold text-[15px]">Filtered Streams</h3>
-      <div class="flex gap-2 mt-4">
-        <button onclick="toggleLogs('correct')" class="flex-1 bg-[#ede6fb] py-2.5 rounded-full text-[12px] font-bold">Correct: ${correct}</button>
-        <button onclick="toggleLogs('filtered')" class="flex-1 bg-[#fff0f0] py-2.5 rounded-full text-[12px] font-bold">Filtered: ${filtered}</button>
-      </div>
-      <div id="correctLogs" class="mt-3 hidden text-[12px]">${logs.filter(l=>l.type==='correct').map(l=>`<div class="py-1">${l.date} - ${l.duration} ✅ Proper full stream</div>`).join('') || 'No correct streams yet'}</div>
-      <div id="filteredLogs" class="mt-3 hidden text-[12px]">${logs.filter(l=>l.type==='filtered').map(l=>`<div class="py-1">${l.date} - ${l.duration} ⚠️ Skipped / short</div>`).join('') || 'No filtered streams'}</div>
-      <p class="text-[10px] text-gray-400 mt-4">*counts are estimated based on time spent on YouTube. YouTube's official count may vary. A proper stream is counted when you watch >60s without major seek.</p>
+
+      ${!premium? `
+      <div class="absolute inset-0 lock-overlay flex flex-col justify-end pb-2">
+        <div class="bg-white border border-[#e9d5ff] shadow-[0_10px_40px_rgba(0,0,0,0.12)] rounded-[24px] p-5 text-center">
+          <div class="w-10 h-10 bg-[#f3e8ff] rounded-full flex items-center justify-center mx-auto">🔒</div>
+          <h3 class="font-bold text-[16px] mt-2">Unlock Full Memoir</h3>
+          <p class="text-[12px] text-[#6b7280] mt-1">Correct & filtered history is premium</p>
+          <p class="font-mono text-[11px] mt-2 text-[#8b2cf0] font-bold">$2.99 / month • ₹249</p>
+          <button onclick="buyPremium()" class="w-full mt-3 bg-[#8b2cf0] text-white py-3 rounded-full font-bold text-[13px]">Unlock Now 💜</button>
+          <p class="text-[10px] text-[#9ca3af] mt-2">Free for all until May 1, 2027</p>
+        </div>
+      </div>` : freeDayEnd? `<div class="mt-3 bg-[#fef3c7] text-[#92400e] px-3 py-2 rounded-full text-[11px] font-bold text-center">Free Day active! Ends in <span id="memTimer"></span></div>` : '' }
     </div>
   `;
   document.getElementById('memoirPage').classList.remove('hidden');
+  if(premium && freeDayEnd){ startMemTimer(freeDayEnd); }
 }
 function closeMemoir(){document.getElementById('memoirPage').classList.add('hidden');}
 function toggleLogs(type){
@@ -138,24 +186,20 @@ function toggleLogs(type){
   if(type==='correct'){document.getElementById('correctLogs').classList.toggle('hidden'); document.getElementById('filteredLogs').classList.add('hidden');}
   if(type==='filtered'){document.getElementById('filteredLogs').classList.toggle('hidden'); document.getElementById('correctLogs').classList.add('hidden');}
 }
+function startMemTimer(end){ setInterval(()=>{ const d=end-new Date(); if(d<=0) location.reload(); const h=String(Math.floor(d/3600000)).padStart(2,'0'); const m=String(Math.floor(d%3600000/60000)).padStart(2,'0'); const s=String(Math.floor(d%60000/1000)).padStart(2,'0'); const el=document.getElementById('memTimer'); if(el) el.innerText=`${h}:${m}:${s}`; },1000); }
+function buyPremium(){ if(confirm('Test unlock? Real me Play Billing lagega')){ localStorage.setItem('isPremium','true'); location.reload(); } }
 
-// New save function - music.html se call hoga
 window.saveStreamIfValid = function(videoId, title, member, channel, durationSec){
   const now = new Date();
   const dateStr = now.toLocaleDateString('en-US',{month:'short', day:'2-digit', year:'numeric'});
   const timeStr = now.toLocaleTimeString('en-US',{hour:'2-digit', minute:'2-digit'});
   let type = durationSec >= 60? 'correct' : 'filtered';
   let durText = durationSec? `${Math.floor(durationSec/60)}m ${durationSec%60}s` : '~3m';
-
   let existing = streams.find(s=> s.videoId===videoId);
-  if(existing){
-    existing.count++; existing.date=dateStr; existing.time=timeStr; existing.duration=durText;
-  } else {
-    streams.push({videoId, title: title||'BTS Video', member: member||'OT7', channel: channel||'HYBE LABELS', date: dateStr, time: timeStr, duration: durText, count:1});
-  }
+  if(existing){ existing.count++; existing.date=dateStr; existing.time=timeStr; existing.duration=durText; }
+  else { streams.push({videoId, title: title||'BTS Video', member: member||'OT7', channel: channel||'HYBE LABELS', date: dateStr, time: timeStr, duration: durText, count:1}); }
   if(!detailedLogs[videoId]) detailedLogs[videoId]=[];
   detailedLogs[videoId].unshift({date: dateStr, time: timeStr, duration: durText, type: type, seconds: durationSec});
-
   localStorage.setItem('borahae_history', JSON.stringify(streams));
   localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs));
   render();
