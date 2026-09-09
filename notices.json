@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "type": "voting",
+    "badge": "VOTING NOW",
+    "title": "MAMA 2026 - Vote for BTS",
+    "desc": "1 vote per hour. Let's bring the crown home!",
+    "link": "https://mnet.world",
+    "date": "Sep 10, 2026"
+  },
+  {
+    "id": 2,
+    "type": "announcement",
+    "badge": "NOTICE",
+    "title": "Jungkook Birthday Ad in Seoul",
+    "desc": "Project details inside, let's make it special.",
+    "link": "",
+    "date": "Sep 9, 2026"
+  }
+]
