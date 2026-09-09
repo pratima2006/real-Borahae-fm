@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - borahae.fm</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700&display=swap" rel="stylesheet">
+<style>body{font-family:'Manrope',sans-serif; background:#fdf8ff;}</style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+<div class="bg-white w-full max-w-[380px] rounded-[24px] p-8 shadow-xl text-center">
+  <div id="beforeLogin">
+    <h1 class="text-[24px] font-bold">Login to borahae.fm 💜</h1>
+    <p class="text-[13px] text-gray-500 mt-2">Chrome me login karo, fir app me code dalo</p>
+    <button onclick="loginGoogle()" class="w-full mt-6 bg-[#1e1033] text-white rounded-full py-3.5 font-bold flex items-center justify-center gap-2"> <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 bg-white rounded-full p-0.5"> Continue with Google</button>
+  </div>
+
+  <div id="afterLogin" class="hidden">
+    <h1 class="text-[22px] font-bold">You're all set! ✨</h1>
+    <p class="text-[12px] text-gray-500 mt-2">Ye code ko app me daalo:</p>
+    <div id="codeBox" class="mt-4 bg-[#f3f0ff] border-2 border-dashed border-[#7c3aed] rounded-[16px] py-4 text-[32px] font-bold tracking-[6px] text-[#7c3aed]">----</div>
+    <p class="text-[11px] text-gray-400 mt-3">Code 10 minute tak valid hai</p>
+    <button onclick="window.close()" class="w-full mt-5 bg-[#7c3aed] text-white rounded-full py-3 font-bold">App me wapas jao</button>
+  </div>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",
+  authDomain: "borahae-fm-f7075.firebaseapp.com",
+  databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com",
+  projectId: "borahae-fm-f7075",
+  storageBucket: "borahae-fm-f7075.firebasestorage.app",
+  messagingSenderId: "319118277965",
+  appId: "1:319118277965:web:eece2a5bf15708aab3cb04"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+async function loginGoogle(){
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try{
+    const result = await auth.signInWithPopup(provider);
+    const user = result.user;
+    const code = Math.floor(1000 + Math.random()*9000).toString();
+    await db.ref('loginCodes/'+code).set({
+      email: user.email,
+      name: user.displayName || user.email.split('@')[0],
+      photo: user.photoURL || '',
+      uid: user.uid,
+      createdAt: Date.now()
+    });
+    document.getElementById('beforeLogin').classList.add('hidden');
+    document.getElementById('afterLogin').classList.remove('hidden');
+    document.getElementById('codeBox').innerText = code;
+  }catch(e){ alert("Login failed: "+e.message); }
+}
+</script>
+</body>
+</html>
