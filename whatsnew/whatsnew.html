@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's New - borahae.fm</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  body{font-family:'Manrope',sans-serif; background:#fdf8ff; color:#1a1033;}
+ .font-display{font-family:'Playfair Display',serif;}.font-mono{font-family:'DM Mono',monospace;}
+ .paper-grid{background-image:linear-gradient(#e9d5ff1f 1px, transparent 1px),linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px); background-size:22px 22px;}
+ .sidebar-bg{background:#28164f;}
+</style>
+</head>
+<body class="paper-grid">
+<header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
+  <button onclick="openSidebar()" class="w-9 h-9 bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center text-[20px]">☰</button>
+  <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
+  <span class="font-bold text-[15px]">What's New</span>
+</header>
+
+<div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
+<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div>
+    <button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button>
+  </div>
+  <p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
+  <nav class="space-y-[2px]">
+    <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
+    <a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice</a>
+    <a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✦ Missions</a>
+    <a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">▶ Videos</a>
+    <a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◫ My History</a>
+    <a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">? FAQ</a>
+  </nav>
+  <div class="mt-auto">
+    <div class="border-t border-white/10 pt-4 space-y-[2px]">
+      <a href="whatsnew.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">✧ What's New</a>
+      <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a>
+    </div>
+    <div class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3"><div class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px]">A</div><div><p class="text-white text-[12px] font-bold">ARMY demo</p><p class="text-white/50 text-[10px]">keeping the purple light on</p></div></div>
+  </div>
+</aside>
+
+<main class="max-w-[600px] mx-auto px-5 pt-6 pb-20">
+  <h1 class="font-display text-[32px] font-bold">What's New</h1>
+  <p class="text-[#6b7280] text-[13px] mt-1">New features added to Borahae FM</p>
+  <div id="whatsnewList" class="mt-6 relative border-l border-[#e9d5ff] ml-3 pl-6 space-y-6"></div>
+</main>
+
+<script>
+fetch('whatsnew.json').then(r=>r.json()).then(data=>{
+  document.getElementById('whatsnewList').innerHTML = data.map(n=>`
+    <div class="relative">
+      <div class="absolute -left-[31px] top-1 w-3 h-3 bg-[#7c3aed] rounded-full border-2 border-white"></div>
+      <div class="bg-white border border-[#f3e8ff] rounded-[18px] p-4">
+        <div class="flex gap-2 items-center"><span class="text-[10px] bg-[#28164f] text-white px-2 py-0.5 rounded-full font-bold">${n.version}</span><span class="text-[11px] text-[#9ca3af]">${n.date}</span></div>
+        <h3 class="font-bold text-[15px] mt-2">${n.title}</h3>
+        <p class="text-[13px] text-[#6b7280] mt-1">${n.desc}</p>
+      </div>
+    </div>`).join('');
+});
+function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebarOverlay').classList.remove('hidden');}
+function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebarOverlay').classList.add('hidden');}
+</script>
+</body>
+</html>
