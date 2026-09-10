@@ -1,20 +1,4 @@
 [
-  {
-    "id": 1,
-    "type": "voting",
-    "badge": "VOTING NOW",
-    "title": "MAMA 2026 - Vote for BTS",
-    "desc": "1 vote per hour. Let's bring the crown home!",
-    "link": "https://mnet.world",
-    "date": "Sep 10, 2026"
-  },
-  {
-    "id": 2,
-    "type": "announcement",
-    "badge": "NOTICE",
-    "title": "Jungkook Birthday Ad in Seoul",
-    "desc": "Project details inside, let's make it special.",
-    "link": "",
-    "date": "Sep 9, 2026"
-  }
+  {"badge":"NEW","date":"Aug 30 2026","title":"Welcome to Borahae FM","desc":"Streaming missions started!","link":""},
+  {"badge":"VOTING","date":"Aug 31 2026","title":"Vote for VMAs","desc":"Jungkook nominated","link":"https://vote.com"}
 ]
