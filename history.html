@@ -5,46 +5,56 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>History - Borahae FM</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Mono:wght@400;700&family=Inter:wght@400;500&family=Manrope:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Mono:wght@400;700&family=Inter:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
-  body{font-family:'Inter',sans-serif;background:#faf6ff}
+  body{font-family:'Inter',sans-serif;background:#faf6ff;transition:0.3s}
 .serif{font-family:'DM Serif Display',serif}
 .mono{font-family:'Space Mono',monospace}
 .font-display{font-family:'Playfair Display',serif;}
-.sidebar-bg{background:#23144a;}
+.sidebar-bg{background:#28164f;}
 .blur-lock{filter:blur(8px);pointer-events:none;user-select:none;opacity:0.55}
 .lock-overlay{background:linear-gradient(to bottom, transparent 10%, #faf6ff 65%)}
+.paper-grid{background-image:linear-gradient(#e9d5ff1f 1px, transparent 1px),linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px); background-size:22px 22px;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #f3e8ff;display:none;justify-content:space-around;padding:8px 0 18px 0;z-index:30;max-width:480px;margin:0 auto;}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;opacity:0.5}
+.nav-item.active{opacity:1}
+body.dark{background:#0f0a1e!important;color:white!important}
+body.dark header{background:#0f0a1e!important;border-color:#1f1340!important}
 </style>
 </head>
-<body class="min-h-screen pb-10">
+<body class="min-h-screen pb-28 paper-grid">
 
 <header class="sticky top-0 z-20 bg-[#faf6ff]/80 backdrop-blur-md border-b border-purple-100 px-4 py-3 flex items-center gap-3">
-  <button onclick="openSidebar()" class="text-xl w-9 h-9 flex items-center justify-center bg-white border rounded-[10px]">☰</button>
-  <div class="w-10 h-10 rounded-2xl bg-[#8b2cf0] flex items-center justify-center text-white text-2xl serif shadow-[0_0_15px_rgba(139,44,240,0.5)] relative">
-    b <span class="absolute -top-1 -right-1 text-[10px]">✨</span>
-  </div>
+  <button onclick="openSidebar()" class="text-xl w-9 h-9 flex items-center justify-center bg-white border border-[#ede9fe] rounded-[10px]">☰</button>
+  <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
+  <span class="font-bold text-[15px]">History</span>
 </header>
 
-<div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 z-40 hidden"></div>
-
-<aside id="sidebar" class="fixed top-0 left-0 w-[82%] max-w-[300px] h-full sidebar-bg z-50 -translate-x-full transition-transform duration-300 flex flex-col p-5 rounded-r-[28px]">
-  <div class="flex justify-between items-center">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[22px] font-bold">b</div>
-      <span class="text-white font-bold text-[18px]">borahae<span class="text-[#a78bfa]">.fm</span></span>
-    </div>
-    <button onclick="closeSidebar()" class="text-white/60 text-[28px] leading-none">×</button>
+<!-- EXACT HOME WALA SIDEBAR - SIRF YEH CHANGE KIYA -->
+<div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
+<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div>
+    <button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button>
   </div>
-  <p class="font-mono text-[11px] tracking-[3.5px] text-white/30 mt-8" style="font-family:'Space Mono',monospace">YOUR SCRAPBOOK</p>
-  <nav class="mt-4 space-y-1.5">
-    <a href="home.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50">⌂ Home</a>
-    <a href="missions.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50">✦ Missions</a>
-    <a href="music.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50">▶ Videos</a>
-    <a href="history.html" class="flex items-center justify-between px-4 py-3.5 rounded-full bg-[#3c2a63] text-white font-semibold">◫ My History <span class="w-2.5 h-2.5 bg-[#ff7eb6] rounded-full"></span></a>
-    <a href="faq.html" class="flex items-center justify-between px-4 py-3.5 rounded-full text-white/50">? FAQ</a>
+  <p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2" style="font-family:'Space Mono',monospace">YOUR SCRAPBOOK</p>
+  <nav class="space-y-[2px]">
+    <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
+    <a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice <span class="ml-auto bg-[#f472b6] text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span></a>
+    <a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✦ Missions</a>
+    <a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">▶ Videos</a>
+    <a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">◫ My History <span class="ml-auto w-2 h-2 bg-[#f472b6] rounded-full"></span></a>
+    <a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">? FAQ</a>
   </nav>
   <div class="mt-auto">
-    <div class="border-t border-white/10 pt-6"><a href="settings.html" class="flex gap-3 px-4 py-3 rounded-full text-white/40">⚙ Settings</a></div>
+    <div class="border-t border-white/10 pt-4 space-y-[2px]">
+      <a href="whatsnew.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✧ What's New</a>
+      <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a>
+    </div>
+    <div id="sidebarUserBox" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3">
+      <div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div>
+      <div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY demo</p><p id="sidebarEmail" class="text-white/50 text-[10px] truncate">keeping the purple light on</p></div>
+    </div>
   </div>
 </aside>
 
@@ -71,6 +81,15 @@
   </div>
 </div>
 
+<!-- BOTTOM NAV -->
+<div id="bottomNav" class="bottom-nav">
+  <a href="home.html" class="nav-item"><span style="font-size:22px">⌂</span><span style="font-size:10px;font-weight:700">Home</span></a>
+  <a href="missions.html" class="nav-item"><span style="font-size:22px">✦</span><span style="font-size:10px;font-weight:700">Missions</span></a>
+  <a href="music.html" class="nav-item"><span style="font-size:22px">▶</span><span style="font-size:10px;font-weight:700">Videos</span></a>
+  <a href="history.html" class="nav-item active"><span style="font-size:26px;color:#7c3aed">◫</span><span style="font-size:10px;font-weight:700">History</span></a>
+  <a href="settings.html" class="nav-item"><span style="font-size:22px">⚙</span><span style="font-size:10px;font-weight:700">Settings</span></a>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -85,7 +104,7 @@ const db = firebase.firestore();
 </script>
 
 <script>
-function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
+function openSidebar(){ if(localStorage.getItem('borahae_navMode')==='navigation') return; document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
 
 let streams = JSON.parse(localStorage.getItem('borahae_history') || '[]');
@@ -222,7 +241,18 @@ async function loadFromCloud(){
   }catch(e){ console.log('cloud load fail', e); }
 }
 firebase.auth().onAuthStateChanged(user=>{
-  if(user) loadFromCloud();
+  if(user){
+    document.getElementById('sidebarName').innerText=user.displayName||localStorage.getItem('army_name')||'ARMY demo';
+    document.getElementById('sidebarEmail').innerText=user.email;
+    if(user.photoURL){ document.getElementById('sidebarAvatarImg').src=user.photoURL; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }
+    loadFromCloud();
+  } else {
+    try{ const u=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); if(u.name){ document.getElementById('sidebarName').innerText=u.name; document.getElementById('sidebarAvatarLetter').innerText=u.name.charAt(0).toUpperCase(); if(u.photo){ document.getElementById('sidebarAvatarImg').src=u.photo; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); } document.getElementById('sidebarEmail').innerText=u.email||'keeping the purple light on'; } }catch(e){}
+  }
+  let mode=localStorage.getItem('borahae_navMode')||'sidebar';
+  if(mode==='navigation'){ document.getElementById('sidebar').style.display='none'; document.getElementById('bottomNav').style.display='flex'; }
+  else { document.getElementById('bottomNav').style.display='none'; document.getElementById('sidebar').style.display='flex'; }
+  if(localStorage.getItem('borahae_dark')==='true') document.body.classList.add('dark');
 });
 
 window.saveStreamIfValid = function(videoId, title, member, channel, durationSec){
