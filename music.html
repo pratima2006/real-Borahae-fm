@@ -18,21 +18,18 @@ body.dark{background:#12101a!important;color:#f5f3ff!important}
 body.dark header{background:#12101a!important;border-color:#2a2540!important}
 body.dark.bg-white{background:#1e1b2e!important;border-color:#2a2540!important;color:#f5f3ff!important}
 body.dark.bg-[#f9f5ff]{background:#2a2540!important}
-body.dark.bg-[#f3edff]{background:#1e1b2e!important}
+body.dark.bg-[#f3edff]{background:#1e1b2e!important;border-color:#2a2540!important}
 body.dark input{background:#1e1b2e!important;color:white!important;border-color:#2a2540!important}
 body.dark #bottomNav{background:#1e1b2e!important}
+body.dark.bg-white\/50{background:#1e1b2e80!important}
 </style></head><body class="paper-grid pb-24">
 <header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
 <button onclick="openSidebar()" class="w-9 h-9 bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center text-[20px]">☰</button>
 <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
 </header>
-
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
 <aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
-  <div class="flex items-center justify-between">
-    <div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div>
-    <button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button>
-  </div>
+  <div class="flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div><button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button></div>
   <p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
   <nav class="space-y-[2px]">
     <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
@@ -42,50 +39,42 @@ body.dark #bottomNav{background:#1e1b2e!important}
     <a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◫ My History</a>
     <a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">? FAQ</a>
   </nav>
-  <div class="mt-auto">
-    <div class="border-t border-white/10 pt-4 space-y-[2px]">
-      <a href="whatsnew.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✧ What's New</a>
-      <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a>
-    </div>
-    <div id="sidebarUserBox" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3">
-      <div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div>
-      <div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY demo</p><p id="sidebarEmail" class="text-white/50 text-[10px] truncate">keeping the purple light on</p></div>
-    </div>
+  <div class="mt-auto"><div class="border-t border-white/10 pt-4 space-y-[2px]"><a href="whatsnew.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✧ What's New</a><a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a></div>
+    <div id="sidebarUserBox" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3"><div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div><div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY demo</p><p id="sidebarEmail" class="text-white/50 text-[10px] truncate">keeping the purple light on</p></div></div>
   </div>
 </aside>
 
 <main class="w-full max-w-[480px] mx-auto px-4 pt-5">
+<div id="newBanner" class="hidden bg-[#e0f2fe] border border-[#7dd3fc] rounded-[18px] p-3 w-full flex justify-between items-center mb-4">
+<p class="text-[12px] font-bold text-[#0c4a6e]"><span id="newCount">0</span> new videos added by ARMYs ✨</p><button onclick="toggleNew();document.getElementById('newBanner').classList.add('hidden')" class="bg-[#0c4a6e] text-white px-3 py-1 rounded-full text-[11px] font-bold">View New</button>
+</div>
 <div id="ytWarningBox" class="bg-[#fffbeb] border-[1.5px] border-[#fcd34d] rounded-[18px] p-4 w-full">
-<div class="flex gap-2 items-start"><span class="text-[18px]">⚠️</span><p class="text-[13px] font-bold leading-[1.3] text-[#92400e]">Watch here, auto saves to History & Missions with thumbnail!</p></div>
-<p class="text-[11px] text-[#a16207] mt-2 ml-7">Full watch = Correct • Short = Filtered • 2 min loop blocked 💜</p>
+<div class="flex gap-2 items-start"><span class="text-[18px]">💜</span><p class="text-[13px] font-bold leading-[1.3] text-[#92400e]">Your personal shelf - pin top 3 for easy access!</p></div>
+<p class="text-[11px] text-[#a16207] mt-2 ml-7">Shelf = personal favs • New = community adds • Missions daily 2 limit</p>
 </div>
 <p class="font-mono text-[12px] tracking-[3px] text-[#7c3aed] font-bold mt-6">YOUR VIDEO SHELF</p>
 <h1 class="font-display text-[38px] leading-[0.95] font-bold mt-2">Bring a favorite in.</h1>
-<p class="text-[#6b7280] text-[14px] mt-3">Search shelf, or paste YouTube link. Auto detects duration.</p>
 <div class="mt-6 bg-[#f3edff] rounded-[24px] p-4 w-full border">
-<div class="flex items-center gap-2"><span>🔗</span><h3 class="font-bold text-[15px]">Add MVs / videos for all</h3></div>
+<div class="flex items-center gap-2"><span>🔗</span><h3 class="font-bold text-[15px]">Add MVs for shelf</h3><span class="ml-auto text-[10px] bg-white px-2 py-1 rounded-full">Personal + Community</span></div>
 <input id="ytLink" oninput="checkLink()" placeholder="youtube.com/watch?v=... or shorts/..." class="w-full mt-4 bg-white border rounded-full px-4 py-3 text-[14px] outline-none">
 <div id="previewBox" class="hidden mt-4 bg-white rounded-[16px] p-3 border flex gap-3">
-<img id="prevThumb" class="w-[130px] h-[78px] rounded-[12px] object-cover flex-shrink-0 bg-gray-100">
-<div class="flex-1 min-w-0">
-<p id="prevTitle" class="text-[13px] font-bold truncate"></p>
-<p id="prevChannel" class="text-[11px] text-gray-500 mt-1"></p>
-<div id="prevDot" class="text-[11px] font-bold mt-1"></div>
+<img id="prevThumb" class="w-[130px] h-[78px] rounded-[12px] object-cover bg-gray-100">
+<div class="flex-1 min-w-0"><p id="prevTitle" class="text-[13px] font-bold truncate"></p><p id="prevChannel" class="text-[11px] text-gray-500 mt-1"></p><div id="prevDot" class="text-[11px] font-bold mt-1"></div></div>
 </div>
-</div>
-<button id="addBtn" onclick="addVideo()" disabled class="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold text-[14px] disabled:opacity-60 transition-colors">+ Add to videos</button>
+<button id="addBtn" onclick="addVideo()" disabled class="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold text-[14px] disabled:opacity-60">+ Add to shelf</button>
 </div>
 <div class="mt-4 bg-white border rounded-[24px] p-4 w-full shadow-sm">
-<div class="flex items-center gap-2"><span class="text-[#7c3aed]">⌕</span><h3 class="font-bold text-[15px]">Search your added videos</h3></div>
+<div class="flex items-center gap-2"><span class="text-[#7c3aed]">⌕</span><h3 class="font-bold text-[15px]">Search your shelf</h3></div>
 <div class="flex gap-2 mt-4 w-full">
 <input id="searchInput" oninput="applyFilters()" placeholder='Try "Black Swan"' class="flex-1 min-w-0 bg-[#f9f5ff] border rounded-full px-4 py-3 text-[13px] outline-none">
-<button onclick="applyFilters()" class="bg-[#7c3aed] text-white px-5 rounded-full font-bold text-[13px] flex-shrink-0">Search</button>
+<button onclick="applyFilters()" class="bg-[#7c3aed] text-white px-5 rounded-full font-bold text-[13px]">Search</button>
 </div>
 </div>
-<div class="mt-5 flex items-center gap-3 relative">
-<button id="newToggleBtn" onclick="toggleNew()" class="bg-white border border-[#ede9fe] text-black px-6 py-3 rounded-full text-[14px] font-bold shadow-sm">New</button>
+<div class="mt-5 flex items-center gap-2">
+<button id="newToggleBtn" onclick="toggleNew()" class="bg-white border border-[#ede9fe] px-4 py-3 rounded-full text-[13px] font-bold">New</button>
+<button id="pinnedToggleBtn" onclick="togglePinned()" class="bg-white border border-[#ede9fe] px-4 py-3 rounded-full text-[13px] font-bold">📌 Top 3</button>
 <div class="relative flex-1">
-<button id="filterBtn" onclick="toggleDropdown()" class="w-full bg-white border border-[#ede9fe] rounded-full px-5 py-3 text-[14px] font-bold shadow-sm flex justify-between items-center"><span id="filterLabel">All</span><span class="text-[#7c3aed]">▼</span></button>
+<button id="filterBtn" onclick="toggleDropdown()" class="w-full bg-white border rounded-full px-4 py-3 text-[13px] font-bold flex justify-between items-center"><span id="filterLabel">All</span><span class="text-[#7c3aed]">▼</span></button>
 <div id="filterDropdown" class="hidden absolute top-[52px] left-0 w-full bg-white border rounded-[16px] shadow-lg z-20 overflow-hidden">
 <div onclick="selectFilter('all','All')" class="px-5 py-3 text-[14px] font-bold hover:bg-[#f9f5ff] cursor-pointer">All</div>
 <div onclick="selectFilter('bangtantv','BANGTANTV')" class="px-5 py-3 text-[14px] font-bold hover:bg-[#f9f5ff] cursor-pointer">BANGTANTV</div>
@@ -93,17 +82,47 @@ body.dark #bottomNav{background:#1e1b2e!important}
 </div>
 </div>
 </div>
-<div class="mt-4 border-[1.5px] border-dashed border-[#d8b4fe] rounded-[24px] p-3 w-full bg-white/50">
+<div class="mt-4 border-[1.5px] border-dashed border-[#d8b4fe] rounded-[24px] p-3 w-full bg-white/50 min-h-[200px]">
 <div id="videoGrid" class="grid grid-cols-2 gap-3 w-full"></div>
-<div id="emptyState" class="hidden text-center py-10"><p class="text-[13px] text-gray-500">No videos found 💜</p></div>
+<div id="emptyState" class="hidden text-center py-16 px-4">
+  <div class="w-16 h-16 bg-[#f5f3ff] rounded-[18px] flex items-center justify-center mx-auto text-[#7c3aed] text-[24px]">♡</div>
+  <p class="text-[14px] text-[#9ca3af] mt-5 font-medium">Add a video to your shelf for easy access</p>
+  <p class="text-[12px] text-[#c4b5fd] mt-2">Paste a YouTube link above to start</p>
+</div>
 </div>
 </main>
 
+<!-- ACTION SHEET -->
+<div id="actionSheet" class="fixed inset-0 bg-black/50 hidden items-end justify-center z-[70] p-4" onclick="closeActionSheet()">
+<div class="bg-white rounded-[24px] p-5 w-full max-w-[480px] shadow-2xl" onclick="event.stopPropagation()">
+<div class="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-4"></div>
+<img id="actionThumb" class="w-full h-[180px] rounded-[16px] object-cover bg-gray-100">
+<p id="actionTitle" class="font-bold text-[16px] mt-3 line-clamp-2"></p>
+<p id="actionChannel" class="text-[12px] text-gray-500 mt-1"></p>
+<div class="grid grid-cols-1 gap-2 mt-5">
+<button onclick="playFromAction()" class="w-full bg-[#7c3aed] text-white py-3.5 rounded-full font-bold text-[14px]">▶ Play & count to History</button>
+<button onclick="pinFromAction()" id="pinActionBtn" class="w-full bg-[#f5f3ff] border border-[#ede9fe] py-3.5 rounded-full font-bold text-[14px]">📌 Pin to top (max 3)</button>
+<button onclick="addToMissionsFromAction()" class="w-full bg-white border border-[#ede9fe] py-3.5 rounded-full font-bold text-[14px]">✦ Add to Missions (daily 2)</button>
+</div>
+<button onclick="closeActionSheet()" class="w-full mt-3 bg-gray-100 py-3 rounded-full font-bold text-[13px]">Cancel</button>
+</div>
+</div>
+
+<!-- DAILY LIMIT POPUP -->
+<div id="limitPopup" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[80] p-4">
+<div class="bg-white rounded-[24px] p-6 w-full max-w-[340px] text-center">
+<p class="text-[20px]">⚠️</p>
+<h3 class="font-bold text-[16px] mt-2">Daily limit reached!</h3>
+<p class="text-[13px] text-gray-500 mt-2">You can add only 2 videos to Missions per day. Come back tomorrow 💜</p>
+<p class="text-[11px] text-[#7c3aed] mt-2 font-bold" id="limitInfo"></p>
+<button onclick="document.getElementById('limitPopup').classList.add('hidden');document.getElementById('limitPopup').classList.remove('flex')" class="w-full mt-4 bg-[#1a1033] text-white py-3 rounded-full font-bold text-[13px]">Cancel</button>
+</div>
+</div>
+
 <div id="video-popup" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-[60]">
 <div class="bg-white rounded-[20px] p-3 w-full max-w-[600px]">
-<div class="aspect-video bg-black rounded-[14px] overflow-hidden relative"><div id="ytPlayer" class="w-full h-full"></div><div id="watchStatus" class="absolute bottom-2 left-2 bg-black/70 text-white text-[11px] px-2 py-1 rounded-full font-mono">0s / auto</div></div>
+<div class="aspect-video bg-black rounded-[14px] overflow-hidden relative"><div id="ytPlayer" class="w-full h-full"></div><div id="watchStatus" class="absolute bottom-2 left-2 bg-black/70 text-white text-[11px] px-2 py-1 rounded-full font-mono">0s</div></div>
 <p id="nowPlaying" class="text-[13px] font-bold mt-3 px-1 truncate"></p>
-<p class="text-[10px] text-gray-400 mt-1 px-1">Auto detects MV time • 85%+ = Correct • Missions + History auto saves</p>
 <p onclick="closeVideo()" class="text-center text-sm mt-3 cursor-pointer bg-gray-100 py-2 rounded-full">✕ Close & Save</p>
 </div>
 </div>
@@ -122,100 +141,138 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database();
 function getYouTubeID(u){if(!u)return"";u=u.trim();if(u.length===11&&!u.includes("/"))return u;let r=/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;let m=u.match(r);return(m&&m[2].length===11)?m[2]:"";}
 function detectType(url){ if(url.includes('shorts/')) return 'short'; if(url.toLowerCase().includes('live')) return 'live'; return 'video'; }
 let videos=JSON.parse(localStorage.getItem('bts_videos')||'[]');
+let pinned=JSON.parse(localStorage.getItem('bts_pinned')||'[]');
+let missionGoals=JSON.parse(localStorage.getItem('borahae_mission_goals')||'{}');
+let lastVisit=parseInt(localStorage.getItem('bts_last_visit')||Date.now());
 if(videos.length===0){videos=[{title:"BTS 'Dynamite' Official MV",id:"gdZLi9oWNZg",channel:"HYBE LABELS",channelId:"UC3IZKseVp17qPvEx70KNzJg",addedAt:Date.now(),type:'video'},{title:"BTS 'Butter' Official MV",id:"WMweEpGlu_U",channel:"HYBE LABELS",channelId:"UC3IZKseVp17qPvEx70KNzJg",addedAt:Date.now(),type:'video'}];localStorage.setItem('bts_videos',JSON.stringify(videos));}
-let pending=null;let player=null;let currentId="";let currentTitle="";let currentType="video";let isNewFilterActive=false;let currentFilter='all';
-let watchInterval=null, watchedSec=0, totalDuration=0, hasCounted=false;
+let pending=null;let player=null;let currentId="";let currentTitle="";let currentType="video";let actionData=null;let isNewFilterActive=false;let isPinnedFilterActive=false;let currentFilter='all';
+let watchInterval=null, watchedSec=0, totalDuration=0;
 const ALLOWED_CHANNEL_IDS=["UC3IZKseVp17qPvEx70KNzJg","UCLkAepWjdylmXSltofFvsYQ"];
-const ALLOWED_CHANNEL_NAMES=["HYBE LABELS","BANGTANTV"];
 function normalizeChannelName(a){let n=(a||"").trim();if(n.toLowerCase().includes("hybe"))return"HYBE LABELS";if(n.toLowerCase().includes("bangtan"))return"BANGTANTV";return n.trim();}
-function isChannelAllowedById(authorUrl, authorName){
-  let url=(authorUrl||"").toLowerCase(); let name=(authorName||"").toUpperCase();
-  if(ALLOWED_CHANNEL_IDS.some(id=>url.includes(id.toLowerCase()))) return true;
-  if(url.includes("hybelabels")||url.includes("bangtantv")) return true;
-  if(ALLOWED_CHANNEL_NAMES.includes(name)) return true; return false;
+function isChannelAllowedById(url,name){let u=(url||"").toLowerCase();let n=(name||"").toUpperCase();if(ALLOWED_CHANNEL_IDS.some(id=>u.includes(id.toLowerCase())))return true;if(u.includes("hybelabels")||u.includes("bangtantv"))return true;if(n==="HYBE LABELS"||n==="BANGTANTV")return true;return false;}
+
+function checkNewBanner(){
+  let newOnes=videos.filter(v=> v.addedAt && v.addedAt > lastVisit);
+  if(newOnes.length>0){
+    document.getElementById('newBanner').classList.remove('hidden');
+    document.getElementById('newCount').innerText=newOnes.length;
+  }
 }
-db.ref('videos').on('value',snap=>{let d=snap.val();if(d){let fb=Object.values(d).map(v=>({title:v.title,id:getYouTubeID(v.id||v.videoId||""),channel:v.channel||"",channelId:v.channelId||"",addedAt:v.createdAt||Date.now(),type:v.type||detectType(v.id||'')})).filter(v=>v.id);fb.forEach(fv=>{if(!videos.some(lv=>lv.id===fv.id))videos.push(fv);});localStorage.setItem('bts_videos',JSON.stringify(videos));applyFilters();}});
+db.ref('videos').on('value',snap=>{let d=snap.val();if(d){let fb=Object.values(d).map(v=>({title:v.title,id:getYouTubeID(v.id||v.videoId||""),channel:v.channel||"",channelId:v.channelId||"",addedAt:v.createdAt||Date.now(),type:v.type||detectType(v.id||'')})).filter(v=>v.id);let addedNew=false;fb.forEach(fv=>{if(!videos.some(lv=>lv.id===fv.id)){videos.push(fv); addedNew=true;}});if(addedNew){localStorage.setItem('bts_videos',JSON.stringify(videos)); checkNewBanner(); applyFilters();}}});
 async function checkLink(){
   const link=document.getElementById('ytLink').value.trim();const preview=document.getElementById('previewBox');const addBtn=document.getElementById('addBtn');
   if(!link){preview.classList.add('hidden');addBtn.disabled=true;pending=null;return;}
-  const id=getYouTubeID(link);if(!id||id.length!==11){preview.classList.add('hidden');addBtn.disabled=true;return;}
+  const id=getYouTubeID(link);if(!id){preview.classList.add('hidden');addBtn.disabled=true;return;}
   try{
     const res=await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${id}`);const data=await res.json();
     const rawChannel=data.author_name||"";const authorUrl=data.author_url||"";const fixedChannel=normalizeChannelName(rawChannel);
     const allowed=isChannelAllowedById(authorUrl, rawChannel);
-    document.getElementById('prevThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;document.getElementById('prevTitle').innerText=data.title||"YouTube Video";document.getElementById('prevChannel').innerText=fixedChannel+" - "+authorUrl;preview.classList.remove('hidden');const exists=videos.some(v=>v.id===id);
-    if(!allowed){document.getElementById('prevDot').innerHTML=`<span class="text-red-500">❌ Blocked - Not official</span>`;addBtn.disabled=true;pending=null;return;}
-    document.getElementById('prevDot').innerHTML=exists?`<span class="text-red-500">Already added</span>`:`<span class="text-green-600">✅ Official - ${fixedChannel} • ${detectType(link)}</span>`;addBtn.disabled=exists;
-    if(!exists){addBtn.className="w-full mt-3 bg-[#7c3aed] text-white py-3 rounded-full font-bold text-[14px] shadow-md";}else{addBtn.className="w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold text-[14px] disabled:opacity-60";}
-    let chId=authorUrl.includes("UC3IZKse")?"UC3IZKseVp17qPvEx70KNzJg":"UCLkAepWjdylmXSltofFvsYQ";
-    pending=exists?null:{id,title:data.title||"BTS Video",channel:fixedChannel,channelId:chId,type:detectType(link)};
-  }catch(e){document.getElementById('prevThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;document.getElementById('prevTitle').innerText="YouTube Video";document.getElementById('previewBox').classList.remove('hidden');pending={id,title:"YouTube Video",channel:"HYBE LABELS",channelId:"UC3IZKseVp17qPvEx70KNzJg",type:detectType(link)};document.getElementById('addBtn').disabled=false;}
+    document.getElementById('prevThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;document.getElementById('prevTitle').innerText=data.title||"YouTube Video";document.getElementById('prevChannel').innerText=fixedChannel;preview.classList.remove('hidden');const exists=videos.some(v=>v.id===id);
+    if(!allowed){document.getElementById('prevDot').innerHTML=`<span class="text-red-500">❌ Blocked</span>`;addBtn.disabled=true;pending=null;return;}
+    document.getElementById('prevDot').innerHTML=exists?`<span class="text-red-500">Already in shelf</span>`:`<span class="text-green-600">✅ ${fixedChannel}</span>`;addBtn.disabled=exists;
+    addBtn.className=exists?"w-full mt-3 bg-[#c4b5fd] text-white py-3 rounded-full font-bold":"w-full mt-3 bg-[#7c3aed] text-white py-3 rounded-full font-bold";
+    pending=exists?null:{id,title:data.title||"BTS Video",channel:fixedChannel,channelId:authorUrl.includes("UC3IZKse")?"UC3IZKseVp17qPvEx70KNzJg":"UCLkAepWjdylmXSltofFvsYQ",type:detectType(link)};
+  }catch(e){document.getElementById('prevThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;preview.classList.remove('hidden');pending={id,title:"YouTube Video",channel:"HYBE LABELS",channelId:"UC3IZKseVp17qPvEx70KNzJg",type:detectType(link)};document.getElementById('addBtn').disabled=false;}
 }
-function addVideo(){if(!pending)return;let nv={title:pending.title,id:pending.id,channel:pending.channel,channelId:pending.channelId,addedAt:Date.now(),type:pending.type||'video'};videos.unshift(nv);localStorage.setItem('bts_videos',JSON.stringify(videos));db.ref('videos').push({title:pending.title,id:pending.id,videoId:pending.id,channel:pending.channel,channelId:pending.channelId,type:pending.type,createdAt:Date.now()});document.getElementById('ytLink').value='';document.getElementById('previewBox').classList.add('hidden');document.getElementById('addBtn').disabled=true;pending=null;applyFilters();}
-function toggleNew(){isNewFilterActive=!isNewFilterActive;const b=document.getElementById('newToggleBtn');if(isNewFilterActive){b.className="bg-[#1a1033] text-white border border-[#1a1033] px-6 py-3 rounded-full text-[14px] font-bold";}else{b.className="bg-white border border-[#ede9fe] text-black px-6 py-3 rounded-full text-[14px] font-bold";}applyFilters();}
+function addVideo(){if(!pending)return;let nv={title:pending.title,id:pending.id,channel:pending.channel,channelId:pending.channelId,addedAt:Date.now(),type:pending.type||'video'};videos.unshift(nv);localStorage.setItem('bts_videos',JSON.stringify(videos));db.ref('videos').push({title:pending.title,id:pending.id,videoId:pending.id,channel:pending.channel,channelId:pending.channelId,type:pending.type,createdAt:Date.now()});document.getElementById('ytLink').value='';document.getElementById('previewBox').classList.add('hidden');document.getElementById('addBtn').disabled=true;pending=null;localStorage.setItem('bts_last_visit', Date.now()); applyFilters();}
+function toggleNew(){isNewFilterActive=!isNewFilterActive;isPinnedFilterActive=false;document.getElementById('newToggleBtn').className=isNewFilterActive?"bg-[#1a1033] text-white px-4 py-3 rounded-full text-[13px] font-bold":"bg-white border px-4 py-3 rounded-full text-[13px] font-bold";document.getElementById('pinnedToggleBtn').className="bg-white border px-4 py-3 rounded-full text-[13px] font-bold";applyFilters(); if(isNewFilterActive) localStorage.setItem('bts_last_visit', Date.now());}
+function togglePinned(){isPinnedFilterActive=!isPinnedFilterActive;isNewFilterActive=false;document.getElementById('pinnedToggleBtn').className=isPinnedFilterActive?"bg-[#1a1033] text-white px-4 py-3 rounded-full text-[13px] font-bold":"bg-white border px-4 py-3 rounded-full text-[13px] font-bold";document.getElementById('newToggleBtn').className="bg-white border px-4 py-3 rounded-full text-[13px] font-bold";applyFilters();}
 function toggleDropdown(){document.getElementById('filterDropdown').classList.toggle('hidden');}
 function selectFilter(v,l){currentFilter=v;document.getElementById('filterLabel').innerText=l;document.getElementById('filterDropdown').classList.add('hidden');applyFilters();}
 document.addEventListener('click',function(e){const b=document.getElementById('filterBtn');const d=document.getElementById('filterDropdown');if(!b.contains(e.target)&&!d.contains(e.target)){d.classList.add('hidden');}});
 
-function applyFilters(){const q=document.getElementById('searchInput').value.toLowerCase();let f=[...videos];if(isNewFilterActive){f=f.filter(v=>v.addedAt&&Date.now()-v.addedAt<2*86400000);}if(currentFilter==='hybe'){f=f.filter(v=>(v.channel||'').toUpperCase().includes('HYBE'));}if(currentFilter==='bangtantv'){f=f.filter(v=>(v.channel||'').toUpperCase().includes('BANGTAN'));}if(q){f=f.filter(v=>v.title.toLowerCase().includes(q)||(v.channel||'').toLowerCase().includes(q));}render(f);}
-function render(list){const g=document.getElementById('videoGrid');g.innerHTML='';if(list.length===0){document.getElementById('emptyState').classList.remove('hidden');return;}document.getElementById('emptyState').classList.add('hidden');list.forEach(v=>{
-  g.innerHTML+=`<div onclick="openVideo('${v.id}','${v.title.replace(/'/g,"\\'")}','${v.type||'video'}')" class="bg-white rounded-[16px] overflow-hidden border shadow-sm relative cursor-pointer"><img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg" onerror="this.src='https://img.youtube.com/vi/${v.id}/mqdefault.jpg'" class="w-full aspect-[16/10] object-cover bg-gray-100"><div class="p-2.5"><p class="text-[12px] font-bold leading-[1.3] line-clamp-2">${v.title}</p><p class="text-[10px] text-gray-400 mt-1 font-bold">${v.channel||''} • ${v.type||'video'}</p></div>${v.addedAt&&Date.now()-v.addedAt<2*86400000?'<span class="absolute top-2 left-2 bg-blue-500 text-white text-[9px] px-2.5 py-1 rounded-full font-bold">New</span>':''}</div>`;
+function getDailyMissions(){ let data=JSON.parse(localStorage.getItem('borahae_mission_daily')||'{}'); let today=new Date().toDateString(); if(data.date!==today){ data={date:today, ids:[], count:0}; } return data; }
+function applyFilters(){const q=document.getElementById('searchInput').value.toLowerCase();let f=[...videos];if(isPinnedFilterActive){f=f.filter(v=>pinned.includes(v.id));}if(isNewFilterActive){f=f.filter(v=>v.addedAt && v.addedAt > (lastVisit - 24*60*60*1000));}if(currentFilter==='hybe'){f=f.filter(v=>(v.channel||'').toUpperCase().includes('HYBE'));}if(currentFilter==='bangtantv'){f=f.filter(v=>(v.channel||'').toUpperCase().includes('BANGTAN'));}if(q){f=f.filter(v=>v.title.toLowerCase().includes(q)||(v.channel||'').toLowerCase().includes(q));}
+let sorted=[...f].sort((a,b)=>{let ap=pinned.includes(a.id), bp=pinned.includes(b.id); if(ap&&!bp) return -1; if(!ap&&bp) return 1; return (b.addedAt||0)-(a.addedAt||0);});
+render(sorted);
+}
+function render(list){const g=document.getElementById('videoGrid');g.innerHTML='';if(list.length===0){document.getElementById('emptyState').classList.remove('hidden');return;}document.getElementById('emptyState').classList.add('hidden');let daily=getDailyMissions(); list.forEach(v=>{
+  let isPinned=pinned.includes(v.id); let inMission=daily.ids.includes(v.id); let goal=missionGoals[v.id]||10;
+  g.innerHTML+=`<div class="bg-white rounded-[16px] overflow-hidden border shadow-sm relative ${isPinned?'ring-2 ring-[#7c3aed]':''}">
+  <div onclick="openAction('${v.id}','${v.title.replace(/'/g,"\\'")}','${v.channel}','${v.type||'video'}')" class="cursor-pointer"><img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg" class="w-full aspect-[16/10] object-cover bg-gray-100"><div class="p-2.5"><p class="text-[12px] font-bold leading-[1.3] line-clamp-2">${v.title}</p><p class="text-[10px] text-gray-400 mt-1 font-bold">${v.channel||''} • ${v.type||'video'}</p></div></div>
+  ${isPinned?'<span class="absolute top-2 right-2 bg-[#7c3aed] text-white text-[10px] w-6 h-6 rounded-full flex items-center justify-center">📌</span>':''}
+  ${v.addedAt&&Date.now()-v.addedAt<2*86400000?'<span class="absolute top-2 left-2 bg-blue-500 text-white text-[9px] px-2 py-1 rounded-full font-bold">New</span>':''}
+  ${inMission?`<div class="flex justify-between items-center px-2.5 pb-2 gap-1">
+    <span class="text-[10px] bg-[#ede9fe] text-[#7c3aed] px-2 py-1 rounded-full font-bold">+${goal}x goal</span>
+    <div class="flex gap-1">
+    <button onclick="editGoal('${v.id}')" class="w-6 h-6 bg-white border rounded-full text-[11px] font-bold">+</button>
+    <button onclick="removeFromMissions('${v.id}')" class="w-6 h-6 bg-[#fff0f0] text-red-500 rounded-full text-[11px] font-bold">✕</button>
+    </div>
+  </div>`:''}
+  </div>`;
 });}
 
-// NEW AUTO PLAYER WITH DURATION DETECTION
+function openAction(id,title,channel,type){actionData={id,title,channel,type};document.getElementById('actionThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;document.getElementById('actionTitle').innerText=title;document.getElementById('actionChannel').innerText=channel+' • '+type;document.getElementById('pinActionBtn').innerText=pinned.includes(id)?'❌ Unpin from top 3':'📌 Pin to top (max 3)';document.getElementById('actionSheet').classList.remove('hidden');document.getElementById('actionSheet').classList.add('flex');}
+function closeActionSheet(){document.getElementById('actionSheet').classList.add('hidden');document.getElementById('actionSheet').classList.remove('flex');}
+function playFromAction(){closeActionSheet(); if(actionData) openVideo(actionData.id, actionData.title, actionData.type);}
+function pinFromAction(){
+  if(!actionData) return;
+  if(pinned.includes(actionData.id)){ pinned=pinned.filter(p=>p!==actionData.id); }
+  else {
+    if(pinned.length>=3){ alert('Only top 3 MVs can be pinned! Unpin one first 💜'); return; }
+    pinned.unshift(actionData.id);
+  }
+  localStorage.setItem('bts_pinned', JSON.stringify(pinned)); closeActionSheet(); applyFilters();
+}
+function addToMissionsFromAction(){
+  if(!actionData) return;
+  let daily=getDailyMissions();
+  if(daily.ids.includes(actionData.id)){ alert('Already in Missions!'); return; }
+  if(daily.count>=2){
+    document.getElementById('limitInfo').innerText=`Today: ${daily.ids.length} / 2 added`;
+    document.getElementById('limitPopup').classList.remove('hidden');document.getElementById('limitPopup').classList.add('flex');
+    return;
+  }
+  daily.ids.push(actionData.id); daily.count=daily.ids.length; daily.date=new Date().toDateString();
+  localStorage.setItem('borahae_mission_daily', JSON.stringify(daily));
+  if(!missionGoals[actionData.id]) missionGoals[actionData.id]=10;
+  localStorage.setItem('borahae_mission_goals', JSON.stringify(missionGoals));
+  closeActionSheet(); applyFilters();
+  alert('Added to Missions! Set goal with + button 💜');
+}
+function removeFromMissions(id){
+  let daily=getDailyMissions(); daily.ids=daily.ids.filter(i=>i!==id); daily.count=daily.ids.length;
+  localStorage.setItem('borahae_mission_daily', JSON.stringify(daily)); applyFilters();
+}
+function editGoal(id){
+  let cur=missionGoals[id]||10;
+  let val=prompt(`How many times to stream this MV? Current: ${cur}x`, cur);
+  if(!val) return; let num=parseInt(val); if(isNaN(num)||num<1) return;
+  missionGoals[id]=num; localStorage.setItem('borahae_mission_goals', JSON.stringify(missionGoals)); applyFilters();
+}
+
 function onYouTubeIframeAPIReady(){}
 function openVideo(id,title,type){
-  currentId=id; currentTitle=title; currentType=type||'video'; watchedSec=0; totalDuration=0; hasCounted=false;
+  currentId=id; currentTitle=title; currentType=type||'video'; watchedSec=0; totalDuration=0;
   document.getElementById('nowPlaying').innerText=title||"";
-  document.getElementById('watchStatus').innerText="Loading duration...";
+  document.getElementById('watchStatus').innerText="Loading...";
   document.getElementById('video-popup').classList.remove('hidden');document.getElementById('video-popup').classList.add('flex');
   if(player){ try{ player.destroy(); }catch(e){} }
-  player=new YT.Player('ytPlayer',{videoId:id, playerVars:{autoplay:1, rel:0, modestbranding:1}, events:{'onReady':(e)=>{ e.target.playVideo(); totalDuration=Math.floor(e.target.getDuration()||0); startTimer(); }, 'onStateChange':(e)=>{ if(e.data===0) finishWatch(); }}});
+  player=new YT.Player('ytPlayer',{videoId:id, playerVars:{autoplay:1, rel:0}, events:{'onReady':(e)=>{ e.target.playVideo(); totalDuration=Math.floor(e.target.getDuration()||0); startTimer(); }, 'onStateChange':(e)=>{ if(e.data===0) finishWatch(); }}});
 }
-function startTimer(){
-  clearInterval(watchInterval);
-  watchInterval=setInterval(()=>{
-    if(player && player.getPlayerState()===1){
-      watchedSec++; if(totalDuration===0) totalDuration=Math.floor(player.getDuration()||0);
-      document.getElementById('watchStatus').innerText=`${watchedSec}s / ${totalDuration||'?'}s • ${currentType}`;
-    }
-  },1000);
-}
+function startTimer(){clearInterval(watchInterval);watchInterval=setInterval(()=>{if(player && player.getPlayerState()===1){watchedSec++; if(totalDuration===0) totalDuration=Math.floor(player.getDuration()||0); document.getElementById('watchStatus').innerText=`${watchedSec}s / ${totalDuration||'?'}s`;}},1000);}
 function finishWatch(){
   clearInterval(watchInterval); if(!currentId) return;
   if(totalDuration===0 && player) totalDuration=Math.floor(player.getDuration()||0); if(totalDuration===0) totalDuration=180;
-  // call history's save function
-  if(window.saveStreamIfValid){
-    // history page's function signature: (videoId, title, member, channel, watchedSec, totalDuration, type)
-    let res = window.saveStreamIfValid(currentId, currentTitle, 'OT7', 'HYBE LABELS', watchedSec, totalDuration, currentType);
-    // also save via parent history logic
-  } else {
-    // fallback local save for standalone
-    let streams=JSON.parse(localStorage.getItem('borahae_history')||'[]');
-    let detailed=JSON.parse(localStorage.getItem('borahae_detailed_logs')||'{}');
-    let now=Date.now();
-    let last=JSON.parse(localStorage.getItem('borahae_last_watch')||'{}');
-    if(now - (last[currentId]?.time||0) < 2*60*1000){ alert('Loop blocked 2 min 💜'); closeVideo(); return; }
-    let required=Math.max(totalDuration-30, totalDuration*0.85); let isCorrect=watchedSec>=required;
-    let dateStr=new Date().toLocaleDateString('en-US',{month:'short', day:'2-digit', year:'numeric'}); let timeStr=new Date().toLocaleTimeString('en-US',{hour:'2-digit', minute:'2-digit'}); let fullISO=new Date().toISOString();
-    let existing=streams.find(s=>s.videoId===currentId);
-    if(existing){ existing.count++; existing.date=dateStr; existing.time=timeStr; } else { streams.unshift({videoId:currentId, title:currentTitle, member:'OT7', channel:'HYBE LABELS', date:dateStr, time:timeStr, duration:`${Math.floor(totalDuration/60)}:${String(totalDuration%60).padStart(2,'0')}`, count:1, type:currentType}); }
-    if(!detailed[currentId]) detailed[currentId]=[]; detailed[currentId].unshift({date:dateStr, fullDate:fullISO, time:timeStr, duration:`${watchedSec}s/${totalDuration}s`, type:isCorrect?'correct':'filtered', seconds:watchedSec, required:totalDuration});
-    localStorage.setItem('borahae_history', JSON.stringify(streams)); localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailed));
-    last[currentId]={time:now}; localStorage.setItem('borahae_last_watch', JSON.stringify(last));
-    alert(isCorrect? `Correct! ${watchedSec}/${totalDuration}s saved to History & Missions 💜` : `Filtered ${watchedSec}s / need ${Math.floor(required)}s`);
-  }
+  let streams=JSON.parse(localStorage.getItem('borahae_history')||'[]');
+  let detailed=JSON.parse(localStorage.getItem('borahae_detailed_logs')||'{}');
+  let now=Date.now(); let last=JSON.parse(localStorage.getItem('borahae_last_watch')||'{}');
+  if(now - (last[currentId]?.time||0) < 120000){ alert('Loop blocked 2 min 💜'); closeVideo(); return; }
+  let required=Math.max(totalDuration-30, totalDuration*0.85); let isCorrect=watchedSec>=required;
+  let dateStr=new Date().toLocaleDateString('en-US',{month:'short', day:'2-digit', year:'numeric'}); let timeStr=new Date().toLocaleTimeString('en-US',{hour:'2-digit', minute:'2-digit'}); let fullISO=new Date().toISOString();
+  let existing=streams.find(s=>s.videoId===currentId);
+  if(existing){ existing.count++; existing.date=dateStr; existing.time=timeStr; existing.duration=`${watchedSec}s/${totalDuration}s`; existing.type=currentType; } else { streams.unshift({videoId:currentId, title:currentTitle, member:'OT7', channel:'HYBE LABELS', date:dateStr, time:timeStr, duration:`${watchedSec}s/${totalDuration}s`, count:1, type:currentType}); }
+  if(!detailed[currentId]) detailed[currentId]=[]; detailed[currentId].unshift({date:dateStr, fullDate:fullISO, time:timeStr, duration:`${watchedSec}s/${totalDuration}s`, type:isCorrect?'correct':'filtered', seconds:watchedSec, required:totalDuration});
+  localStorage.setItem('borahae_history', JSON.stringify(streams)); localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailed));
+  last[currentId]={time:now}; localStorage.setItem('borahae_last_watch', JSON.stringify(last));
+  alert(isCorrect? `Correct! ${watchedSec}/${totalDuration}s saved 💜` : `Filtered ${watchedSec}s need ${Math.floor(required)}s`);
   closeVideo();
 }
-function closeVideo(){clearInterval(watchInterval); if(player){ try{ player.stopVideo(); player.destroy(); }catch(e){} player=null; } document.getElementById('video-popup').classList.add('hidden'); document.getElementById('video-popup').classList.remove('flex'); watchedSec=0; }
-
+function closeVideo(){clearInterval(watchInterval); if(player){ try{ player.stopVideo(); player.destroy(); }catch(e){} player=null; } document.getElementById('video-popup').classList.add('hidden'); document.getElementById('video-popup').classList.remove('flex');}
 function openSidebar(){ if(localStorage.getItem('borahae_navMode')==='navigation') return; document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
-try{
-  const savedUser = JSON.parse(localStorage.getItem('borahaeUser') || '{}');
-  if(savedUser.name){ document.getElementById('sidebarName').innerText=savedUser.name; document.getElementById('sidebarAvatarLetter').innerText=savedUser.name.charAt(0).toUpperCase(); if(savedUser.photo){ document.getElementById('sidebarAvatarImg').src=savedUser.photo; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); } }
-}catch(e){}
-if(localStorage.getItem('borahae_navMode')==='navigation'){ document.getElementById('sidebar').style.display='none'; document.getElementById('bottomNav').style.display='flex'; }
+try{const u=JSON.parse(localStorage.getItem('borahaeUser')||'{}');if(u.name){document.getElementById('sidebarName').innerText=u.name;document.getElementById('sidebarAvatarLetter').innerText=u.name.charAt(0).toUpperCase();if(u.photo){document.getElementById('sidebarAvatarImg').src=u.photo;document.getElementById('sidebarAvatarImg').classList.remove('hidden');document.getElementById('sidebarAvatarLetter').classList.add('hidden');}}}catch(e){}
+if(localStorage.getItem('borahae_navMode')==='navigation'){document.getElementById('sidebar').style.display='none';document.getElementById('bottomNav').style.display='flex';}
 if(localStorage.getItem('borahae_dark')==='true') document.body.classList.add('dark');
-applyFilters();
+checkNewBanner(); applyFilters();
 </script></body></html>
