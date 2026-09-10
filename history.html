@@ -18,6 +18,7 @@
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #f3e8ff;display:none;justify-content:space-around;padding:8px 0 18px 0;z-index:30;max-width:480px;margin:0 auto;}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;opacity:0.5}
 .nav-item.active{opacity:1}
+.tab-active{background:#1a1033;color:white}
 body.dark{background:#0f0a1e!important;color:white!important}
 body.dark header{background:#0f0a1e!important;border-color:#1f1340!important}
 </style>
@@ -30,14 +31,13 @@ body.dark header{background:#0f0a1e!important;border-color:#1f1340!important}
   <span class="font-bold text-[15px]">History</span>
 </header>
 
-<!-- EXACT HOME WALA SIDEBAR - SIRF YEH CHANGE KIYA -->
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
 <aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div>
     <button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button>
   </div>
-  <p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2" style="font-family:'Space Mono',monospace">YOUR SCRAPBOOK</p>
+  <p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
   <nav class="space-y-[2px]">
     <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
     <a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice <span class="ml-auto bg-[#f472b6] text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span></a>
@@ -61,11 +61,19 @@ body.dark header{background:#0f0a1e!important;border-color:#1f1340!important}
 <div class="px-5 pt-6 max-w-[480px] mx-auto">
   <p class="mono text-[11px] tracking-[0.25em] text-[#8b2cf0] font-bold">STREAM JOURNAL</p>
   <h1 class="serif text-[42px] leading-[0.95] mt-2 text-[#1a1033]">The pages you've left<br>behind.</h1>
+
+  <!-- TABS -->
+  <div class="flex gap-2 mt-5">
+    <button onclick="setTab('video')" id="tab-video" class="tab-active px-4 py-2 rounded-full text-[12px] font-bold border">Videos</button>
+    <button onclick="setTab('short')" id="tab-short" class="bg-white px-4 py-2 rounded-full text-[12px] font-bold border">Shorts</button>
+    <button onclick="setTab('live')" id="tab-live" class="bg-white px-4 py-2 rounded-full text-[12px] font-bold border">Live</button>
+  </div>
+
   <div id="streamList" class="mt-5 space-y-3"></div>
   <div id="emptyState" class="mt-5 bg-white/60 border border-dashed border-[#d6c6f5] rounded-[20px] p-8 text-center hidden">
     <div class="w-14 h-14 mx-auto rounded-2xl bg-[#ede6fb] flex items-center justify-center text-[#8b2cf0] text-xl">♡</div>
     <h2 class="serif text-[26px] mt-4 leading-tight text-[#1a1033]">No streams recorded<br>yet</h2>
-    <p class="text-[13px] text-[#8a7ca3] mt-2">Your journal begins when you watch on youtube.com inside the app.</p>
+    <p class="text-[13px] text-[#8a7ca3] mt-2">Watch in-app YouTube, auto saves here with thumbnail.</p>
     <button onclick="location.href='music.html'" class="mt-5 bg-[#8b2cf0] text-white mono text-[13px] font-bold px-6 py-2.5 rounded-full">Find a MV</button>
   </div>
 </div>
@@ -81,7 +89,6 @@ body.dark header{background:#0f0a1e!important;border-color:#1f1340!important}
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
 <div id="bottomNav" class="bottom-nav">
   <a href="home.html" class="nav-item"><span style="font-size:22px">⌂</span><span style="font-size:10px;font-weight:700">Home</span></a>
   <a href="missions.html" class="nav-item"><span style="font-size:22px">✦</span><span style="font-size:10px;font-weight:700">Missions</span></a>
@@ -94,11 +101,7 @@ body.dark header{background:#0f0a1e!important;border-color:#1f1340!important}
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",
-  authDomain: "borahae-fm.firebaseapp.com",
-  projectId: "borahae-fm",
-};
+const firebaseConfig = { apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw", authDomain: "borahae-fm.firebaseapp.com", projectId: "borahae-fm" };
 if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 </script>
@@ -109,63 +112,89 @@ function closeSidebar(){document.getElementById('sidebar').classList.add('-trans
 
 let streams = JSON.parse(localStorage.getItem('borahae_history') || '[]');
 let detailedLogs = JSON.parse(localStorage.getItem('borahae_detailed_logs') || '{}');
+let currentTab = 'video';
+const LOOP_GAP = 2*60*1000;
 
 const OWNER_EMAILS = ['pratimatribhuvan2006@gmail.com','tribhuvanpratima38@gmail.com'].map(e=>e.toLowerCase());
 function getCurrentUser(){ try{ return JSON.parse(localStorage.getItem('borahaeUser')||'{}'); }catch(e){ return {}; } }
 function isOwnerUser(){ const u=getCurrentUser(); return u.email && OWNER_EMAILS.includes(u.email.toLowerCase()); }
-
 function isFreeDayActive(){
-  const now=new Date();
-  const first=new Date(now.getFullYear(), now.getMonth(), 1);
+  const now=new Date(); const first=new Date(now.getFullYear(), now.getMonth(), 1);
   let s=new Date(first); while(s.getDay()!==0) s.setDate(s.getDate()+1);
-  const start=new Date(s); start.setHours(12,0,0,0);
-  const end=new Date(start); end.setDate(end.getDate()+1);
+  const start=new Date(s); start.setHours(12,0,0,0); const end=new Date(start); end.setDate(end.getDate()+1);
   return (now>=start && now<=end)? end : null;
 }
 const FREE_UNTIL = new Date('2027-05-01T00:00:00');
-function hasPremiumAccess(){
-  if(isOwnerUser()) return true;
-  if(localStorage.getItem('isPremium')==='true') return true;
-  if(new Date() < FREE_UNTIL) return true;
-  if(isFreeDayActive()) return true;
-  return false;
+function hasPremiumAccess(){ if(isOwnerUser()) return true; if(localStorage.getItem('isPremium')==='true') return true; if(new Date() < FREE_UNTIL) return true; if(isFreeDayActive()) return true; return false; }
+
+// DELETE + 60 DAYS LOGIC
+function cleanExpiredDeleted(){
+  let deleted = JSON.parse(localStorage.getItem('borahae_deleted')||'[]');
+  let now = Date.now();
+  deleted = deleted.filter(d => (now - d.deletedAt) < 60*24*60*60*1000);
+  localStorage.setItem('borahae_deleted', JSON.stringify(deleted));
+}
+cleanExpiredDeleted();
+
+function deleteVideo(videoId){
+  if(!confirm('Delete this video? It will go to Settings > Deleted for 60 days.')) return;
+  let idx = streams.findIndex(s=>s.videoId===videoId);
+  if(idx===-1) return;
+  let item = streams[idx];
+  item.deletedAt = Date.now();
+  item.originalLogs = detailedLogs[videoId]||[];
+  let deleted = JSON.parse(localStorage.getItem('borahae_deleted')||'[]');
+  deleted.unshift(item);
+  localStorage.setItem('borahae_deleted', JSON.stringify(deleted));
+  streams.splice(idx,1);
+  delete detailedLogs[videoId];
+  localStorage.setItem('borahae_history', JSON.stringify(streams));
+  localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs));
+  saveToCloud(); render();
+}
+
+function setTab(t){
+  currentTab=t;
+  document.getElementById('tab-video').className = t==='video'? 'tab-active px-4 py-2 rounded-full text-[12px] font-bold border' : 'bg-white px-4 py-2 rounded-full text-[12px] font-bold border';
+  document.getElementById('tab-short').className = t==='short'? 'tab-active px-4 py-2 rounded-full text-[12px] font-bold border' : 'bg-white px-4 py-2 rounded-full text-[12px] font-bold border';
+  document.getElementById('tab-live').className = t==='live'? 'tab-active px-4 py-2 rounded-full text-[12px] font-bold border' : 'bg-white px-4 py-2 rounded-full text-[12px] font-bold border';
+  render();
 }
 
 function render(){
   const list = document.getElementById('streamList');
   const empty = document.getElementById('emptyState');
-  if(streams.length===0){
-    empty.classList.remove('hidden'); list.innerHTML=''; return;
-  }
+  let filtered = streams.filter(s=> (s.type||'video')===currentTab);
+  if(filtered.length===0){ empty.classList.remove('hidden'); list.innerHTML=''; return; }
   empty.classList.add('hidden');
-  list.innerHTML = streams.map(s=>`
+  list.innerHTML = filtered.map(s=>`
       <div class="bg-white rounded-[18px] p-3 flex gap-3 border border-purple-50 shadow-sm relative">
-        <img src="https://img.youtube.com/vi/${s.videoId}/mqdefault.jpg" class="w-[110px] h-[68px] rounded-[14px] object-cover shrink-0">
+        <img src="https://img.youtube.com/vi/${s.videoId}/mqdefault.jpg" class="w-[110px] h-[68px] rounded-[14px] object-cover shrink-0 bg-gray-100">
         <div class="flex-1 min-w-0">
           <p class="text-[13px] font-semibold leading-tight line-clamp-2 text-[#1a1033]">${s.title}</p>
           <p class="text-[11px] text-[#8a7ca3] mt-1">${s.channel||'HYBE LABELS'} • ${s.member||'OT7'}</p>
           <p class="text-[11px] text-[#6b5b8a] mt-1">${s.date} ${s.time||''} • ${s.duration||'~3m'}</p>
-          <p class="mono text-[11px] text-[#8b2cf0] mt-1">${s.count}× STREAMS</p>
+          <p class="mono text-[11px] text-[#8b2cf0] mt-1">${s.count}× STREAMS • ${s.type||'video'}</p>
         </div>
-        <button onclick="openMemoir('${s.videoId}')" class="absolute top-3 right-3 w-8 h-8 bg-[#f5f0ff] rounded-full flex items-center justify-center text-[#8b2cf0]">◫</button>
+        <div class="flex flex-col gap-1 absolute top-2 right-2">
+          <button onclick="openMemoir('${s.videoId}')" class="w-8 h-8 bg-[#f5f0ff] rounded-full flex items-center justify-center text-[#8b2cf0] text-[12px]">◫</button>
+          <button onclick="deleteVideo('${s.videoId}')" class="w-8 h-8 bg-[#fff0f0] rounded-full flex items-center justify-center text-red-500 text-[12px]">🗑</button>
+        </div>
       </div>
     `).join('');
 }
 
 function openMemoir(videoId){
-  let s = streams.find(x=>x.videoId===videoId);
-  if(!s) return;
+  let s = streams.find(x=>x.videoId===videoId); if(!s) return;
   let logs = detailedLogs[videoId] || [];
   let correct = logs.filter(l=>l.type==='correct').length;
   let filtered = logs.filter(l=>l.type==='filtered').length;
-  let premium = hasPremiumAccess();
-  let owner = isOwnerUser();
-  let freeDayEnd = isFreeDayActive();
+  let premium = hasPremiumAccess(); let owner = isOwnerUser(); let freeDayEnd = isFreeDayActive();
   document.getElementById('ownerBadge').classList.toggle('hidden',!owner);
   document.getElementById('memoirContent').innerHTML = `
     <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" class="w-full aspect-video rounded-[20px] object-cover">
     <h2 class="serif text-[28px] mt-4 leading-tight">${s.title}</h2>
-    <p class="text-[13px] text-[#8a7ca3] mt-1">${s.channel||'HYBE LABELS'} • Total YouTube Views: ~${(Math.floor(Math.random()*100)+50)}M</p>
+    <p class="text-[13px] text-[#8a7ca3] mt-1">${s.channel||'HYBE LABELS'} • ${s.type||'video'} • ${s.duration}</p>
     <div class="mt-5 grid grid-cols-2 gap-3">
       <div class="bg-white rounded-[16px] p-4 border"><p class="mono text-[10px] text-[#8b2cf0]">MY TOTAL STREAMS</p><p class="text-[22px] font-bold mt-1">${s.count}</p></div>
       <div class="bg-white rounded-[16px] p-4 border"><p class="mono text-[10px] text-[#8b2cf0]">LAST STREAM</p><p class="text-[13px] font-bold mt-1">${s.date}<br>${s.time||''}</p></div>
@@ -173,37 +202,26 @@ function openMemoir(videoId){
     <div class="mt-6 relative">
       <div id="premiumPart" class="${!premium?'blur-lock':''}">
         <div class="mt-2">
-          <button onclick="toggleLogs('all')" class="w-full bg-[#8b2cf0] text-white py-3 rounded-full font-bold text-[13px]">History [auto] - ${logs.length} entries</button>
+          <button onclick="toggleLogs('all')" class="w-full bg-[#8b2cf0] text-white py-3 rounded-full font-bold text-[13px]">History - ${logs.length} entries</button>
           <div id="allLogs" class="mt-3 space-y-2 max-h-[200px] overflow-y-auto bg-white rounded-[16px] p-3 border hidden">
-            ${logs.length? logs.map(l=>`<div class="flex justify-between text-[12px] py-1 border-b"><span>${l.date} ${l.time}</span><span>${l.duration} • ${l.type}</span></div>`).join('') : '<p class="text-[12px] text-gray-400">No detailed logs yet</p>'}
+            ${logs.length? logs.map(l=>`<div class="flex justify-between text-[12px] py-1 border-b"><span>${l.date} ${l.time}</span><span>${l.duration} • ${l.type} • ${l.seconds||0}s/${l.required||'?'}s</span></div>`).join('') : '<p class="text-[12px] text-gray-400">No logs yet</p>'}
           </div>
         </div>
         <div class="mt-4 bg-white rounded-[24px] p-5 border">
-          <h3 class="font-bold text-[15px]">Filtered Streams</h3>
+          <h3 class="font-bold text-[15px]">Correct vs Filtered</h3>
           <div class="flex gap-2 mt-4">
             <button onclick="toggleLogs('correct')" class="flex-1 bg-[#ede6fb] py-2.5 rounded-full text-[12px] font-bold">Correct: ${correct}</button>
             <button onclick="toggleLogs('filtered')" class="flex-1 bg-[#fff0f0] py-2.5 rounded-full text-[12px] font-bold">Filtered: ${filtered}</button>
           </div>
-          <div id="correctLogs" class="mt-3 hidden text-[12px]">${logs.filter(l=>l.type==='correct').map(l=>`<div class="py-1">${l.date} - ${l.duration} ✅ Proper full stream</div>`).join('') || 'No correct streams yet'}</div>
-          <div id="filteredLogs" class="mt-3 hidden text-[12px]">${logs.filter(l=>l.type==='filtered').map(l=>`<div class="py-1">${l.date} - ${l.duration} ⚠️ Skipped / short</div>`).join('') || 'No filtered streams'}</div>
-          <p class="text-[10px] text-gray-400 mt-4">*counts are estimated based on time spent on YouTube. YouTube's official count may vary. A proper stream is counted when you watch >60s without major seek.</p>
+          <div id="correctLogs" class="mt-3 hidden text-[12px]">${logs.filter(l=>l.type==='correct').map(l=>`<div class="py-1">${l.date} - ${l.duration} ✅ Full watch ${l.seconds}s/${l.required}s</div>`).join('') || 'No correct streams yet - full MV dekho!'}</div>
+          <div id="filteredLogs" class="mt-3 hidden text-[12px]">${logs.filter(l=>l.type==='filtered').map(l=>`<div class="py-1">${l.date} - ${l.duration} ⚠️ Short/skip ${l.seconds}s/${l.required}s</div>`).join('') || 'No filtered'}</div>
+          <p class="text-[10px] text-gray-400 mt-4">Correct = watched >= 85% of MV or total-30s. Example: Idol 4:30 = 270s, need 230s+. Short watch = filtered. Missions only count correct.</p>
         </div>
       </div>
-      ${!premium? `
-      <div class="absolute inset-0 lock-overlay flex flex-col justify-end pb-2">
-        <div class="bg-white border border-[#e9d5ff] shadow-[0_10px_40px_rgba(0,0,0,0.12)] rounded-[24px] p-5 text-center">
-          <div class="w-10 h-10 bg-[#f3e8ff] rounded-full flex items-center justify-center mx-auto">🔒</div>
-          <h3 class="font-bold text-[16px] mt-2">Unlock Full Memoir</h3>
-          <p class="text-[12px] text-[#6b7280] mt-1">Correct & filtered history is premium</p>
-          <p class="font-mono text-[11px] mt-2 text-[#8b2cf0] font-bold">$2.99 / month • ₹249</p>
-          <button onclick="buyPremium()" class="w-full mt-3 bg-[#8b2cf0] text-white py-3 rounded-full font-bold text-[13px]">Unlock Now 💜</button>
-          <p class="text-[10px] text-[#9ca3af] mt-2">Free for all until May 1, 2027</p>
-        </div>
-      </div>` : freeDayEnd? `<div class="mt-3 bg-[#fef3c7] text-[#92400e] px-3 py-2 rounded-full text-[11px] font-bold text-center">Free Day active! Ends in <span id="memTimer"></span></div>` : '' }
+      ${!premium? `<div class="absolute inset-0 lock-overlay flex flex-col justify-end pb-2"><div class="bg-white border rounded-[24px] p-5 text-center"><div class="w-10 h-10 bg-[#f3e8ff] rounded-full flex items-center justify-center mx-auto">🔒</div><h3 class="font-bold text-[16px] mt-2">Unlock Full Memoir</h3><p class="text-[12px] text-[#6b7280] mt-1">Premium $2.99 / ₹249</p><button onclick="buyPremium()" class="w-full mt-3 bg-[#8b2cf0] text-white py-3 rounded-full font-bold text-[13px]">Unlock Now 💜</button></div></div>` : ''}
     </div>
   `;
   document.getElementById('memoirPage').classList.remove('hidden');
-  if(premium && freeDayEnd){ startMemTimer(freeDayEnd); }
 }
 function closeMemoir(){document.getElementById('memoirPage').classList.add('hidden');}
 function toggleLogs(type){
@@ -211,38 +229,27 @@ function toggleLogs(type){
   if(type==='correct'){document.getElementById('correctLogs').classList.toggle('hidden'); document.getElementById('filteredLogs').classList.add('hidden');}
   if(type==='filtered'){document.getElementById('filteredLogs').classList.toggle('hidden'); document.getElementById('correctLogs').classList.add('hidden');}
 }
-function startMemTimer(end){ setInterval(()=>{ const d=end-new Date(); if(d<=0) location.reload(); const h=String(Math.floor(d/3600000)).padStart(2,'0'); const m=String(Math.floor(d%3600000/60000)).padStart(2,'0'); const s=String(Math.floor(d%60000/1000)).padStart(2,'0'); const el=document.getElementById('memTimer'); if(el) el.innerText=`${h}:${m}:${s}`; },1000); }
-function buyPremium(){ if(confirm('Test unlock? Real me Play Billing lagega')){ localStorage.setItem('isPremium','true'); location.reload(); } }
+function buyPremium(){ if(confirm('Test unlock?')){ localStorage.setItem('isPremium','true'); location.reload(); } }
 
 async function saveToCloud(){
-  const user = firebase.auth().currentUser;
-  if(!user) return;
-  try{
-    await db.collection('users').doc(user.uid).set({
-      history: streams,
-      detailedLogs: detailedLogs,
-      email: user.email,
-      updatedAt: new Date()
-    }, {merge:true});
-  }catch(e){ console.log('cloud save fail', e); }
+  const user = firebase.auth().currentUser; if(!user) return;
+  try{ await db.collection('users').doc(user.uid).set({ history: streams, detailedLogs: detailedLogs, deleted: JSON.parse(localStorage.getItem('borahae_deleted')||'[]'), email: user.email, updatedAt: new Date() }, {merge:true}); }catch(e){}
 }
 async function loadFromCloud(){
-  const user = firebase.auth().currentUser;
-  if(!user) return;
+  const user = firebase.auth().currentUser; if(!user) return;
   try{
     const doc = await db.collection('users').doc(user.uid).get();
     if(doc.exists && doc.data().history){
-      streams = doc.data().history;
-      detailedLogs = doc.data().detailedLogs || {};
+      streams = doc.data().history; detailedLogs = doc.data().detailedLogs || {};
       localStorage.setItem('borahae_history', JSON.stringify(streams));
       localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs));
       render();
     }
-  }catch(e){ console.log('cloud load fail', e); }
+  }catch(e){}
 }
 firebase.auth().onAuthStateChanged(user=>{
   if(user){
-    document.getElementById('sidebarName').innerText=user.displayName||localStorage.getItem('army_name')||'ARMY demo';
+    document.getElementById('sidebarName').innerText=user.displayName||'ARMY demo';
     document.getElementById('sidebarEmail').innerText=user.email;
     if(user.photoURL){ document.getElementById('sidebarAvatarImg').src=user.photoURL; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }
     loadFromCloud();
@@ -252,24 +259,45 @@ firebase.auth().onAuthStateChanged(user=>{
   let mode=localStorage.getItem('borahae_navMode')||'sidebar';
   if(mode==='navigation'){ document.getElementById('sidebar').style.display='none'; document.getElementById('bottomNav').style.display='flex'; }
   else { document.getElementById('bottomNav').style.display='none'; document.getElementById('sidebar').style.display='flex'; }
-  if(localStorage.getItem('borahae_dark')==='true') document.body.classList.add('dark');
 });
 
-window.saveStreamIfValid = function(videoId, title, member, channel, durationSec){
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('en-US',{month:'short', day:'2-digit', year:'numeric'});
-  const timeStr = now.toLocaleTimeString('en-US',{hour:'2-digit', minute:'2-digit'});
-  let type = durationSec >= 60? 'correct' : 'filtered';
-  let durText = durationSec? `${Math.floor(durationSec/60)}m ${durationSec%60}s` : '~3m';
+// NEW AUTO LOGIC - full MV check
+window.saveStreamIfValid = function(videoId, title, member, channel, watchedSec, totalDuration, typeOverride){
+  // typeOverride = 'video'|'short'|'live' auto from URL
+  let type = typeOverride || 'video';
+  if(!typeOverride){
+    // try guess from title/url later, default video
+    type='video';
+  }
+  // loop check 2 min
+  let last = JSON.parse(localStorage.getItem('borahae_last_watch')||'{}');
+  let now = Date.now();
+  if(now - (last[videoId]?.time||0) < LOOP_GAP){
+    console.log('Loop blocked 2 min'); return false;
+  }
+  // Correct logic: auto duration
+  if(!totalDuration) totalDuration = 180;
+  if(!watchedSec) watchedSec = totalDuration;
+  let required = Math.max(totalDuration-30, totalDuration*0.85);
+  let streamType = watchedSec >= required? 'correct' : 'filtered';
+
+  const nowDate = new Date();
+  const dateStr = nowDate.toLocaleDateString('en-US',{month:'short', day:'2-digit', year:'numeric'});
+  const timeStr = nowDate.toLocaleTimeString('en-US',{hour:'2-digit', minute:'2-digit'});
+  const fullISO = nowDate.toISOString();
+  let durText = `${Math.floor(watchedSec/60)}m ${watchedSec%60}s / ${Math.floor(totalDuration/60)}m ${totalDuration%60}s`;
+
   let existing = streams.find(s=> s.videoId===videoId);
-  if(existing){ existing.count++; existing.date=dateStr; existing.time=timeStr; existing.duration=durText; }
-  else { streams.push({videoId, title: title||'BTS Video', member: member||'OT7', channel: channel||'HYBE LABELS', date: dateStr, time: timeStr, duration: durText, count:1}); }
+  if(existing){ existing.count++; existing.date=dateStr; existing.time=timeStr; existing.duration=durText; existing.type=type; }
+  else { streams.unshift({videoId, title: title||'BTS Video', member: member||'OT7', channel: channel||'HYBE LABELS', date: dateStr, time: timeStr, duration: durText, count:1, type:type}); }
   if(!detailedLogs[videoId]) detailedLogs[videoId]=[];
-  detailedLogs[videoId].unshift({date: dateStr, time: timeStr, duration: durText, type: type, seconds: durationSec});
+  detailedLogs[videoId].unshift({date: dateStr, fullDate: fullISO, time: timeStr, duration: durText, type: streamType, seconds: watchedSec, required: totalDuration, videoId:videoId});
+
   localStorage.setItem('borahae_history', JSON.stringify(streams));
   localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs));
-  saveToCloud();
-  render();
+  last[videoId]={time:now}; localStorage.setItem('borahae_last_watch', JSON.stringify(last));
+  saveToCloud(); render();
+  return streamType;
 }
 render();
 </script>
