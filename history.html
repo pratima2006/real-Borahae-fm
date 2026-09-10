@@ -60,7 +60,6 @@
   </div>
 </div>
 
-<!-- MEMOIR DETAIL PAGE -->
 <div id="memoirPage" class="fixed inset-0 bg-[#faf6ff] z-50 hidden overflow-y-auto">
   <div class="max-w-[480px] mx-auto min-h-screen">
     <div class="sticky top-0 bg-[#faf6ff]/90 backdrop-blur-md border-b border-purple-100 px-4 py-3 flex items-center gap-3">
@@ -72,6 +71,19 @@
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "borahae-fm.firebaseapp.com",
+  projectId: "borahae-fm",
+};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+</script>
+
 <script>
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
@@ -79,7 +91,6 @@ function closeSidebar(){document.getElementById('sidebar').classList.add('-trans
 let streams = JSON.parse(localStorage.getItem('borahae_history') || '[]');
 let detailedLogs = JSON.parse(localStorage.getItem('borahae_detailed_logs') || '{}');
 
-// === OWNER CHECK - SIRF YEH 4 LINE NAYI HAI ===
 const OWNER_EMAILS = ['pratimatribhuvan2006@gmail.com','tribhuvanpratima38@gmail.com'].map(e=>e.toLowerCase());
 function getCurrentUser(){ try{ return JSON.parse(localStorage.getItem('borahaeUser')||'{}'); }catch(e){ return {}; } }
 function isOwnerUser(){ const u=getCurrentUser(); return u.email && OWNER_EMAILS.includes(u.email.toLowerCase()); }
@@ -131,19 +142,15 @@ function openMemoir(videoId){
   let premium = hasPremiumAccess();
   let owner = isOwnerUser();
   let freeDayEnd = isFreeDayActive();
-
   document.getElementById('ownerBadge').classList.toggle('hidden',!owner);
-
   document.getElementById('memoirContent').innerHTML = `
     <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" class="w-full aspect-video rounded-[20px] object-cover">
     <h2 class="serif text-[28px] mt-4 leading-tight">${s.title}</h2>
     <p class="text-[13px] text-[#8a7ca3] mt-1">${s.channel||'HYBE LABELS'} • Total YouTube Views: ~${(Math.floor(Math.random()*100)+50)}M</p>
-
     <div class="mt-5 grid grid-cols-2 gap-3">
       <div class="bg-white rounded-[16px] p-4 border"><p class="mono text-[10px] text-[#8b2cf0]">MY TOTAL STREAMS</p><p class="text-[22px] font-bold mt-1">${s.count}</p></div>
       <div class="bg-white rounded-[16px] p-4 border"><p class="mono text-[10px] text-[#8b2cf0]">LAST STREAM</p><p class="text-[13px] font-bold mt-1">${s.date}<br>${s.time||''}</p></div>
     </div>
-
     <div class="mt-6 relative">
       <div id="premiumPart" class="${!premium?'blur-lock':''}">
         <div class="mt-2">
@@ -163,7 +170,6 @@ function openMemoir(videoId){
           <p class="text-[10px] text-gray-400 mt-4">*counts are estimated based on time spent on YouTube. YouTube's official count may vary. A proper stream is counted when you watch >60s without major seek.</p>
         </div>
       </div>
-
       ${!premium? `
       <div class="absolute inset-0 lock-overlay flex flex-col justify-end pb-2">
         <div class="bg-white border border-[#e9d5ff] shadow-[0_10px_40px_rgba(0,0,0,0.12)] rounded-[24px] p-5 text-center">
@@ -189,6 +195,36 @@ function toggleLogs(type){
 function startMemTimer(end){ setInterval(()=>{ const d=end-new Date(); if(d<=0) location.reload(); const h=String(Math.floor(d/3600000)).padStart(2,'0'); const m=String(Math.floor(d%3600000/60000)).padStart(2,'0'); const s=String(Math.floor(d%60000/1000)).padStart(2,'0'); const el=document.getElementById('memTimer'); if(el) el.innerText=`${h}:${m}:${s}`; },1000); }
 function buyPremium(){ if(confirm('Test unlock? Real me Play Billing lagega')){ localStorage.setItem('isPremium','true'); location.reload(); } }
 
+async function saveToCloud(){
+  const user = firebase.auth().currentUser;
+  if(!user) return;
+  try{
+    await db.collection('users').doc(user.uid).set({
+      history: streams,
+      detailedLogs: detailedLogs,
+      email: user.email,
+      updatedAt: new Date()
+    }, {merge:true});
+  }catch(e){ console.log('cloud save fail', e); }
+}
+async function loadFromCloud(){
+  const user = firebase.auth().currentUser;
+  if(!user) return;
+  try{
+    const doc = await db.collection('users').doc(user.uid).get();
+    if(doc.exists && doc.data().history){
+      streams = doc.data().history;
+      detailedLogs = doc.data().detailedLogs || {};
+      localStorage.setItem('borahae_history', JSON.stringify(streams));
+      localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs));
+      render();
+    }
+  }catch(e){ console.log('cloud load fail', e); }
+}
+firebase.auth().onAuthStateChanged(user=>{
+  if(user) loadFromCloud();
+});
+
 window.saveStreamIfValid = function(videoId, title, member, channel, durationSec){
   const now = new Date();
   const dateStr = now.toLocaleDateString('en-US',{month:'short', day:'2-digit', year:'numeric'});
@@ -202,6 +238,7 @@ window.saveStreamIfValid = function(videoId, title, member, channel, durationSec
   detailedLogs[videoId].unshift({date: dateStr, time: timeStr, duration: durText, type: type, seconds: durationSec});
   localStorage.setItem('borahae_history', JSON.stringify(streams));
   localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs));
+  saveToCloud();
   render();
 }
 render();
