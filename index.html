@@ -213,6 +213,13 @@ function updateHeader(user){
   }
 }
 
+// FIXED: Handle redirect result for APK WebView
+auth.getRedirectResult().then((result)=>{
+  if(result && result.user){ saveUser(result.user); }
+}).catch((e)=>{
+  console.log('Redirect error', e);
+});
+
 auth.onAuthStateChanged((user) => {
   if(user){ saveUser(user); }
   else {
@@ -227,21 +234,72 @@ function handleScrapbook(){
   else { sessionStorage.setItem('want_scrapbook','true'); openAuth('login'); }
 }
 
-// CLEANED - No AppInventor
+// FIXED GOOGLE SIGN IN - Works on Vercel + APK WebView + handles email-already-in-use
 async function signInWithGoogle(){
   const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({prompt: 'select_account'});
+
+  const isWebView = /wv|WebView|Version\/.*Chrome/.test(navigator.userAgent) || window.AndroidInterface;
+
   try {
-    const result = await auth.signInWithPopup(provider);
-    saveUser(result.user);
+    if(isWebView){
+      // APK WebView me popup block hota hai - redirect use karo
+      await auth.signInWithRedirect(provider);
+    } else {
+      const result = await auth.signInWithPopup(provider);
+      saveUser(result.user);
+    }
   }
-  catch(e){ alert("Login failed: "+e.message); }
+  catch(e){
+    console.log('Google login error', e.code, e.message);
+    // CASE 1: Email already exists with password - auto link
+    if(e.code==='auth/account-exists-with-different-credential' || e.code==='auth/email-already-in-use'){
+      try{
+        const email = e.email || (e.customData && e.customData.email);
+        const pendingCred = e.credential;
+        if(!email) { alert('Ye email pehle se password se bana hai. Password se login karo fir Google link hoga.'); return; }
+        const methods = await auth.fetchSignInMethodsForEmail(email);
+        if(methods.includes('password')){
+          let pass = prompt('Ye email pehle password se bana hai. Ek baar password daalo taaki Google se link ho jaye:');
+          if(!pass) return;
+          const cred = firebase.auth.EmailAuthProvider.credential(email, pass);
+          const userCred = await auth.signInWithCredential(cred);
+          if(pendingCred) await userCred.user.linkWithCredential(pendingCred);
+          saveUser(userCred.user);
+        } else if(methods.includes('google.com')){
+          // already google, try direct login
+          alert('Ye email already Google se hai, direct login karo. Error: '+e.message);
+          await auth.signInWithRedirect(provider);
+        }
+      } catch(linkErr){
+        alert('Link failed: '+linkErr.message);
+      }
+    }
+    // CASE 2: Popup blocked / WebView white screen -> use redirect
+    else if(e.code==='auth/popup-blocked' || e.code==='auth/popup-closed-by-user' || e.code==='auth/cancelled-popup-request' || isWebView){
+      try{
+        await auth.signInWithRedirect(provider);
+      } catch(reErr){
+        alert('Redirect failed: '+reErr.message+'. APK me Chrome Custom Tab enable karo.');
+      }
+    }
+    else {
+      alert("Login failed: "+e.message);
+    }
+  }
 }
 
 function doEmailLogin(){
   const e=document.getElementById('loginEmail').value.trim();
   const p=document.getElementById('loginPass').value;
   if(!e||!p) return alert('Email password bhar de');
-  auth.signInWithEmailAndPassword(e,p).then(r=>saveUser(r.user)).catch(err=>alert(err.message));
+  auth.signInWithEmailAndPassword(e,p).then(r=>saveUser(r.user)).catch(err=>{
+    if(err.code==='auth/invalid-credential'){
+      alert('Password galat hai ya account Google se bana hai. Continue with Google use kar.');
+    } else {
+      alert(err.message);
+    }
+  });
 }
 
 function doEmailSignup(){
@@ -251,7 +309,14 @@ function doEmailSignup(){
   if(!e||!p) return alert('Email password bhar de');
   if(p!==c) return alert('Password match nahi ho raha');
   if(!document.getElementById('terms').checked) return alert('Terms agree kar');
-  auth.createUserWithEmailAndPassword(e,p).then(r=>saveUser(r.user)).catch(err=>alert(err.message));
+  auth.createUserWithEmailAndPassword(e,p).then(r=>saveUser(r.user)).catch(err=>{
+    if(err.code==='auth/email-already-in-use'){
+      alert('Ye email pehle se hai! Log In pe jao ya Continue with Google use karo.');
+      switchTab('login');
+    } else {
+      alert(err.message);
+    }
+  });
 }
 
 function forgotPass(){
@@ -262,9 +327,24 @@ function forgotPass(){
 
 function saveUser(user){
   if(!user) return;
-  const obj = {name:user.displayName||user.email.split('@')[0], email:user.email, photo:user.photoURL||'', uid:user.uid};
+  // Firebase user se sahi data le
+  const actualUser = user.uid? user : auth.currentUser;
+  const obj = {
+    name: (actualUser.displayName || actualUser.email.split('@')[0]),
+    email: actualUser.email,
+    photo: actualUser.photoURL||'',
+    uid: actualUser.uid
+  };
+  // Agar local me pehle se custom pfp hai to use rakho
+  try{
+    let old = JSON.parse(localStorage.getItem('borahae_user')||'{}');
+    if(old.photo && old.photo.startsWith('data:')) obj.photo = old.photo;
+  }catch{}
   localStorage.setItem('borahae_user', JSON.stringify(obj));
   localStorage.setItem('borahae_hasAccount', 'true');
+  // naam bhi save
+  if(obj.name) localStorage.setItem('army_name', obj.name);
+  if(obj.photo) localStorage.setItem('army_pfp', obj.photo);
   db.ref('users/'+obj.uid).update({name:obj.name,email:obj.email,joinedAt:Date.now()});
   closeAuth(); updateHeader(obj);
   if(sessionStorage.getItem('want_scrapbook')==='true'){ sessionStorage.removeItem('want_scrapbook'); location.href='home.html'; }
