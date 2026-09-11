@@ -68,11 +68,16 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff}
 </div>
 
 <div id="ownerVotingBox" class="hidden mt-4 bg-white border border-dashed rounded-[16px] p-3">
-<p class="font-bold text-[11px]">Owner: Add Voting</p>
-<input id="vTitle" placeholder="Title" class="w-full mt-2 border rounded-full px-3 py-2 text-[11px]">
-<input id="vLink" placeholder="Link" class="w-full mt-2 border rounded-full px-3 py-2 text-[11px]">
-<input id="vEnd" type="date" class="w-full mt-2 border rounded-full px-3 py-2 text-[11px]">
-<button onclick="addVoting()" class="mt-2 w-full bg-[#7c3aed] text-white py-2 rounded-full text-[11px] font-bold">Add</button>
+<p class="font-bold text-[11px]">Owner: Add Voting ✨</p>
+<input id="vTitle" placeholder="Title - ex: VMA 2026 BTS Best K-pop" class="w-full mt-2 border rounded-full px-3 py-2 text-[11px] outline-none focus:border-[#7c3aed]">
+<input id="vLink" placeholder="Voting Link https://..." class="w-full mt-2 border rounded-full px-3 py-2 text-[11px] outline-none focus:border-[#7c3aed]">
+<textarea id="vDesc" placeholder="Short info - ex: Daily 10 votes, ends 12am KST, use all devices 💜" class="w-full mt-2 border rounded-[12px] px-3 py-2 text-[11px] outline-none focus:border-[#7c3aed] h-[60px]"></textarea>
+<div class="mt-2">
+<label class="text-[9px] font-bold text-[#7c3aed] tracking-widest">VOTING END DATE *</label>
+<input id="vEnd" type="date" class="w-full mt-1 border rounded-full px-3 py-2 text-[11px] outline-none focus:border-[#7c3aed]">
+<p class="text-[8px] text-gray-400 mt-1">Sirf end date dalo, added date auto ayegi. End ke 24h baad auto delete hoga.</p>
+</div>
+<button onclick="addVoting()" class="mt-3 w-full bg-[#7c3aed] text-white py-2.5 rounded-full text-[11px] font-bold">Add Voting + auto date</button>
 </div>
 
 <div id="noticeContent" class="mt-4 space-y-2"></div>
@@ -143,7 +148,29 @@ function fileToBase64(f){return new Promise(r=>{let rd=new FileReader(); rd.onlo
 async function addNotice(){let t=document.getElementById('nTitle').value, d=document.getElementById('nDesc').value; if(!t) return alert('Title'); let img=''; let file=document.getElementById('nImg').files[0]; if(file) img=await fileToBase64(file); db.ref('notices').push({title:t,desc:d,img,date:new Date().toLocaleDateString(),time:new Date().toLocaleTimeString(),createdAt:Date.now()}); document.getElementById('nTitle').value=''; document.getElementById('nDesc').value='';}
 async function addBorahae(){let t=document.getElementById('bTitle').value, a=document.getElementById('bAmount').value; if(!t) return alert('Title'); let img=''; let file=document.getElementById('bImg').files[0]; if(file) img=await fileToBase64(file); db.ref('borahaeDonates').push({title:t,amount:a,img,date:new Date().toLocaleDateString(),time:new Date().toLocaleTimeString(),createdAt:Date.now()}); document.getElementById('bTitle').value=''; document.getElementById('bAmount').value='';}
 function addDonateLink(){let t=document.getElementById('dTitle').value, l=document.getElementById('dLink').value, d=document.getElementById('dDesc').value; if(!t||!l) return alert('Fill'); db.ref('donateLinks').push({title:t,link:l,desc:d,date:new Date().toLocaleDateString(),createdAt:Date.now()}); document.getElementById('dTitle').value=''; document.getElementById('dLink').value=''; document.getElementById('dDesc').value='';}
-function addVoting(){let t=document.getElementById('vTitle').value, l=document.getElementById('vLink').value, e=document.getElementById('vEnd').value; if(!t||!l||!e) return alert('Fill'); db.ref('votings').push({title:t,link:l,endDate:e,date:new Date().toLocaleDateString(),createdAt:Date.now()}); document.getElementById('vTitle').value=''; document.getElementById('vLink').value='';}
+function addVoting(){
+  let t=document.getElementById('vTitle').value.trim(),
+      l=document.getElementById('vLink').value.trim(),
+      d=document.getElementById('vDesc').value.trim(),
+      e=document.getElementById('vEnd').value;
+  if(!t||!l||!e) return alert('Title + Link + End Date bharo');
+  let end = new Date(e); end.setHours(23,59,59,999);
+  if(end < new Date()) return alert('End date future me rakho');
+  db.ref('votings').push({
+    title:t,
+    link:l,
+    desc:d,
+    endDate:e,
+    endTimestamp:end.getTime(),
+    date:new Date().toLocaleDateString(),
+    time:new Date().toLocaleTimeString(),
+    createdAt:Date.now()
+  });
+  document.getElementById('vTitle').value='';
+  document.getElementById('vLink').value='';
+  document.getElementById('vDesc').value='';
+  document.getElementById('vEnd').value='';
+}
 function loadAll(){
   db.ref('notices').on('value',s=>{
     let d=s.val(); let arr=d?Object.values(d).sort((a,b)=>b.createdAt-a.createdAt):[];
@@ -158,9 +185,34 @@ function loadAll(){
     document.getElementById('donateLinksContent').innerHTML= arr.length? arr.map(l=>`<div class="bg-white border rounded-[16px] p-3"><h3 class="font-bold text-[12px]">${l.title}</h3><p class="text-[11px] text-[#6b7280] mt-1">${l.desc||''}</p><a href="${l.link}" target="_blank" class="mt-2 inline-block bg-[#7c3aed] text-white px-4 py-1.5 rounded-full text-[10px] font-bold">Donate ↗</a></div>`).join('') : `<div class="border-[1.5px] border-dashed border-[#d8b4fe] rounded-[20px] p-6 bg-white/50 text-center"><p class="text-[12px] text-[#9ca3af]">No donation links yet</p><p class="text-[10px] text-[#c4b5fd] mt-1">Owner can add links with info</p></div>`;
   });
   db.ref('votings').on('value',s=>{
-    let d=s.val(); let arr=d?Object.values(d).sort((a,b)=>b.createdAt-a.createdAt):[];
-    let now=new Date(); arr=arr.filter(v=> new Date(v.endDate)>=now);
-    document.getElementById('votingsContent').innerHTML= arr.length? arr.map(v=>`<div class="bg-white border rounded-[16px] p-3"><div class="flex justify-between"><span class="text-[8px] bg-[#ede9fe] text-[#7c3aed] px-2 py-0.5 rounded-full font-bold">VOTING</span><span class="text-[9px] text-gray-400">Ends ${v.endDate}</span></div><h3 class="font-bold text-[12px] mt-2">${v.title}</h3><a href="${v.link}" target="_blank" class="mt-2 inline-block bg-black text-white px-4 py-1.5 rounded-full text-[10px] font-bold">Vote Now ↗</a></div>`).join('') : `<div class="border-[1.5px] border-dashed border-[#d8b4fe] rounded-[20px] p-6 bg-white/50 text-center"><p class="text-[12px] text-[#9ca3af]">No active votings right now</p><p class="text-[10px] text-[#c4b5fd] mt-1">Check back later 💜</p></div>`;
+    let data=s.val();
+    if(!data){ document.getElementById('votingsContent').innerHTML=`<div class="border-[1.5px] border-dashed border-[#d8b4fe] rounded-[20px] p-6 bg-white/50 text-center"><p class="text-[12px] text-[#9ca3af]">No active votings right now</p><p class="text-[10px] text-[#c4b5fd] mt-1">Check back later 💜</p></div>`; return; }
+    let now=Date.now();
+    let entries=Object.entries(data);
+    entries.forEach(([key,v])=>{
+      let endTime = v.endTimestamp || new Date(v.endDate).getTime()+86399999;
+      if(now > endTime + 24*60*60*1000){
+        db.ref('votings/'+key).remove();
+      }
+    });
+    let arr=entries.map(([k,v])=>({...v,_key:k})).filter(v=>{
+      let endTime = v.endTimestamp || new Date(v.endDate).getTime()+86399999;
+      return now <= endTime + 24*60*60*1000;
+    }).sort((a,b)=>b.createdAt-a.createdAt);
+    document.getElementById('votingsContent').innerHTML= arr.length? arr.map(v=>{
+      let endTime = v.endTimestamp || new Date(v.endDate).getTime()+86399999;
+      let isEnded = now > endTime;
+      let diff = Math.ceil((endTime - now)/(1000*60*60*24));
+      let boxClass =!isEnded? "bg-[#f5f3ff] border-[#e9d5ff] shadow-sm" : "bg-[#f3f4f6] border-gray-200 opacity-80";
+      let badge =!isEnded? `<span class="text-[8px] bg-[#7c3aed] text-white px-2 py-0.5 rounded-full font-bold">LIVE • ${diff<=0? 'Ends today' : diff+'d left'}</span>` : `<span class="text-[8px] bg-gray-400 text-white px-2 py-0.5 rounded-full font-bold">ENDED</span>`;
+      let btn =!isEnded? `<a href="${v.link}" target="_blank" class="mt-2 inline-block bg-[#1a1033] text-white px-4 py-2 rounded-full text-[10px] font-bold">Vote Now ↗</a>` : `<span class="mt-2 inline-block bg-gray-300 text-gray-500 px-4 py-2 rounded-full text-[10px] font-bold cursor-not-allowed">Voting Ended</span>`;
+      return `<div class="border rounded-[16px] p-3 ${boxClass} transition">
+        <div class="flex justify-between items-center">${badge}<span class="text-[9px] text-gray-400">Ends ${v.endDate} • Added ${v.date||''}</span></div>
+        <h3 class="font-bold text-[12px] mt-2">${v.title}</h3>
+        ${v.desc?`<p class="text-[11px] text-[#4b5563] mt-1 leading-[1.4]">${v.desc}</p>`:''}
+        ${btn}
+      </div>`;
+    }).join('') : `<div class="border-[1.5px] border-dashed border-[#d8b4fe] rounded-[20px] p-6 bg-white/50 text-center"><p class="text-[12px] text-[#9ca3af]">No active votings right now</p></div>`;
   });
 }
 switchMain('notice');
