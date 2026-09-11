@@ -42,7 +42,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff}
 <button id="subDonate" onclick="switchSub('donate')" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Donations</button>
 </div>
 
-<!-- OWNER ONLY -->
 <div id="ownerNoticeBox" class="hidden mt-4 bg-[#f3edff] rounded-[20px] p-3.5 border">
 <p class="font-bold text-[11px]">Owner: Add Notice</p>
 <input id="nTitle" placeholder="Title" class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]">
@@ -205,7 +204,8 @@ function loadAll(){
       let diff = Math.ceil((endTime - now)/(1000*60*60*24));
       let boxClass =!isEnded? "bg-[#f5f3ff] border-[#e9d5ff] shadow-sm" : "bg-[#f3f4f6] border-gray-200 opacity-80";
       let badge =!isEnded? `<span class="text-[8px] bg-[#7c3aed] text-white px-2 py-0.5 rounded-full font-bold">LIVE • ${diff<=0? 'Ends today' : diff+'d left'}</span>` : `<span class="text-[8px] bg-gray-400 text-white px-2 py-0.5 rounded-full font-bold">ENDED</span>`;
-      let btn =!isEnded? `<a href="${v.link}" target="_blank" class="mt-2 inline-block bg-[#1a1033] text-white px-4 py-2 rounded-full text-[10px] font-bold">Vote Now ↗</a>` : `<span class="mt-2 inline-block bg-gray-300 text-gray-500 px-4 py-2 rounded-full text-[10px] font-bold cursor-not-allowed">Voting Ended</span>`;
+      // FIXED: external browser open - vote count hoga
+      let btn =!isEnded? `<button onclick="window.open('${v.link}', '_blank')" class="mt-2 inline-block bg-[#1a1033] text-white px-4 py-2 rounded-full text-[10px] font-bold">Vote Now ↗</button><p class="text-[8px] text-[#7c3aed] mt-1">Opens in browser • Login first if needed 💜</p>` : `<span class="mt-2 inline-block bg-gray-300 text-gray-500 px-4 py-2 rounded-full text-[10px] font-bold cursor-not-allowed">Voting Ended</span>`;
       return `<div class="border rounded-[16px] p-3 ${boxClass} transition">
         <div class="flex justify-between items-center">${badge}<span class="text-[9px] text-gray-400">Ends ${v.endDate} • Added ${v.date||''}</span></div>
         <h3 class="font-bold text-[12px] mt-2">${v.title}</h3>
