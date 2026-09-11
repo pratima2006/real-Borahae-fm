@@ -1,100 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>History - Borahae FM</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Mono:wght@400;700&family=Inter:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
-  body{font-family:'Inter',sans-serif;background:#faf6ff;transition:0.3s}
-.serif{font-family:'DM Serif Display',serif}
-.mono{font-family:'Space Mono',monospace}
-.font-display{font-family:'Playfair Display',serif;}
+body{font-family:'Manrope',sans-serif;background:#faf6ff;transition:0.3s; overscroll-behavior-y:contain;}
+.serif{font-family:'DM Serif Display',serif}.mono{font-family:'Space Mono',monospace}.font-display{font-family:'Playfair Display',serif;}
 .sidebar-bg{background:#28164f;}
-.blur-lock{filter:blur(8px);pointer-events:none;user-select:none;opacity:0.55}
-.lock-overlay{background:linear-gradient(to bottom, transparent 10%, #faf6ff 65%)}
 .paper-grid{background-image:linear-gradient(#e9d5ff1f 1px, transparent 1px),linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px); background-size:22px 22px;}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #f3e8ff;display:none;justify-content:space-around;padding:8px 0 18px 0;z-index:30;max-width:480px;margin:0 auto;}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;opacity:0.5}
-.nav-item.active{opacity:1}
-.tab-active{background:#1a1033;color:white}
-body.dark{background:#0f0a1e!important;color:white!important}
-body.dark header{background:#0f0a1e!important;border-color:#1f1340!important}
+.tab-active{background:#7c3aed;color:white;border-color:#7c3aed}
+.tab-idle{background:white;color:#1a1033;border-color:#e9d5ff}
+#line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#pullIndicator{transform:translateY(-100%);transition:0.2s}
 </style>
 </head>
 <body class="min-h-screen pb-28 paper-grid">
 
-<header class="sticky top-0 z-20 bg-[#faf6ff]/80 backdrop-blur-md border-b border-purple-100 px-4 py-3 flex items-center gap-3">
-  <button onclick="openSidebar()" class="text-xl w-9 h-9 flex items-center justify-center bg-white border border-[#ede9fe] rounded-[10px]">☰</button>
-  <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
-  <span class="font-bold text-[15px]">History</span>
+<div id="pullIndicator" class="fixed top-0 left-0 right-0 z-[60] flex justify-center pt-2 pointer-events-none"><div class="bg-white border shadow px-3 py-1.5 rounded-full text-[10px] font-bold flex gap-1.5 items-center"><span>↻</span> Refreshing...</div></div>
+
+<header class="sticky top-0 z-20 bg-[#faf6ff]/90 backdrop-blur-md border-b border-purple-100 px-4 py-3 flex items-center gap-3">
+<button onclick="openSidebar()" class="text-xl w-9 h-9 flex items-center justify-center bg-white border border-[#ede9fe] rounded-[10px]">☰</button>
+<div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
+<span class="font-bold text-[15px]">History</span>
 </header>
 
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
-<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
-  <div class="flex items-center justify-between">
-    <div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div>
-    <button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button>
-  </div>
-  <p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
-  <nav class="space-y-[2px]">
-    <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
-    <a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice <span class="ml-auto bg-[#f472b6] text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span></a>
-    <a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✦ Missions</a>
-    <a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">▶ Videos</a>
-    <a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">◫ My History <span class="ml-auto w-2 h-2 bg-[#f472b6] rounded-full"></span></a>
-    <a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">? FAQ</a>
-  </nav>
-  <div class="mt-auto">
-    <div class="border-t border-white/10 pt-4 space-y-[2px]">
-      <a href="whatsnew.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✧ What's New</a>
-      <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a>
-    </div>
-    <div id="sidebarUserBox" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3">
-      <div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div>
-      <div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY demo</p><p id="sidebarEmail" class="text-white/50 text-[10px] truncate">keeping the purple light on</p></div>
-    </div>
-  </div>
+<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 flex flex-col p-5">
+<div class="flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div><button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button></div>
+<p class="mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
+<nav class="space-y-[2px]">
+<a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
+<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Board</a>
+<a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✦ Missions</a>
+<a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">▶ Videos</a>
+<a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">◫ My History <span class="ml-auto w-2 h-2 bg-[#f472b6] rounded-full"></span></a>
+<a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">? FAQ</a>
+</nav>
+<div class="mt-auto">
+<div class="border-t border-white/10 pt-4 space-y-[2px]"><a href="whatsnew.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✧ What's New</a><a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a></div>
+<div id="sidebarUserBox" onclick="location.href='settings.html'" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15 transition">
+<div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden flex-shrink-0"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div>
+<div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY</p><p class="text-white/50 text-[10px] truncate">View profile</p></div>
+</div>
+</div>
 </aside>
 
 <div class="px-5 pt-6 max-w-[480px] mx-auto">
-  <p class="mono text-[11px] tracking-[0.25em] text-[#8b2cf0] font-bold">STREAM JOURNAL</p>
-  <h1 class="serif text-[42px] leading-[0.95] mt-2 text-[#1a1033]">The pages you've left<br>behind.</h1>
+<p class="mono text-[11px] tracking-[0.25em] text-[#8b2cf0] font-bold">STREAM JOURNAL</p>
+<h1 class="serif text-[38px] leading-[0.95] mt-2 text-[#1a1033]">The pages you've left behind.</h1>
 
-  <!-- TABS -->
-  <div class="flex gap-2 mt-5">
-    <button onclick="setTab('video')" id="tab-video" class="tab-active px-4 py-2 rounded-full text-[12px] font-bold border">Videos</button>
-    <button onclick="setTab('short')" id="tab-short" class="bg-white px-4 py-2 rounded-full text-[12px] font-bold border">Shorts</button>
-    <button onclick="setTab('live')" id="tab-live" class="bg-white px-4 py-2 rounded-full text-[12px] font-bold border">Live</button>
-  </div>
+<div class="flex gap-2 mt-5">
+<button onclick="setTab('video')" id="tab-video" class="tab-active px-4 py-2 rounded-full text-[11px] font-bold border">Videos</button>
+<button onclick="setTab('short')" id="tab-short" class="tab-idle px-4 py-2 rounded-full text-[11px] font-bold border">Shorts</button>
+<button onclick="setTab('live')" id="tab-live" class="tab-idle px-4 py-2 rounded-full text-[11px] font-bold border">Live</button>
+</div>
 
-  <div id="streamList" class="mt-5 space-y-3"></div>
-  <div id="emptyState" class="mt-5 bg-white/60 border border-dashed border-[#d6c6f5] rounded-[20px] p-8 text-center hidden">
-    <div class="w-14 h-14 mx-auto rounded-2xl bg-[#ede6fb] flex items-center justify-center text-[#8b2cf0] text-xl">♡</div>
-    <h2 class="serif text-[26px] mt-4 leading-tight text-[#1a1033]">No streams recorded<br>yet</h2>
-    <p class="text-[13px] text-[#8a7ca3] mt-2">Watch in-app YouTube, auto saves here with thumbnail.</p>
-    <button onclick="location.href='music.html'" class="mt-5 bg-[#8b2cf0] text-white mono text-[13px] font-bold px-6 py-2.5 rounded-full">Find a MV</button>
-  </div>
+<div id="streamList" class="mt-5 space-y-2.5"></div>
+<div id="emptyState" class="mt-5 bg-white/60 border border-dashed border-[#d6c6f5] rounded-[20px] p-8 text-center hidden">
+<div class="w-14 h-14 mx-auto rounded-2xl bg-[#ede6fb] flex items-center justify-center text-[#8b2cf0] text-xl">♡</div>
+<h2 class="serif text-[24px] mt-4 leading-tight text-[#1a1033]">No streams recorded yet</h2>
+<p class="text-[12px] text-[#8a7ca3] mt-2">Watch 40 sec+, it will auto save here. Pull down to refresh.</p>
+<button onclick="location.href='music.html'" class="mt-5 bg-[#8b2cf0] text-white mono text-[12px] font-bold px-6 py-2.5 rounded-full">Find a MV</button>
+</div>
 </div>
 
 <div id="memoirPage" class="fixed inset-0 bg-[#faf6ff] z-50 hidden overflow-y-auto">
-  <div class="max-w-[480px] mx-auto min-h-screen">
-    <div class="sticky top-0 bg-[#faf6ff]/90 backdrop-blur-md border-b border-purple-100 px-4 py-3 flex items-center gap-3">
-      <button onclick="closeMemoir()" class="w-9 h-9 bg-white border rounded-full flex items-center justify-center">←</button>
-      <p class="font-bold">Memoir</p>
-      <span id="ownerBadge" class="hidden ml-auto text-[10px] bg-[#10b981] text-white px-2 py-0.5 rounded-full font-bold">OWNER • FREE</span>
-    </div>
-    <div id="memoirContent" class="p-5"></div>
-  </div>
+<div class="max-w-[480px] mx-auto min-h-screen">
+<div class="sticky top-0 bg-[#faf6ff]/90 backdrop-blur-md border-b border-purple-100 px-4 py-3 flex items-center gap-3">
+<button onclick="closeMemoir()" class="w-9 h-9 bg-white border rounded-full flex items-center justify-center">←</button><p class="font-bold">Memoir</p>
+</div>
+<div id="memoirContent" class="p-5"></div>
+</div>
 </div>
 
-<div id="bottomNav" class="bottom-nav">
-  <a href="home.html" class="nav-item"><span style="font-size:22px">⌂</span><span style="font-size:10px;font-weight:700">Home</span></a>
-  <a href="missions.html" class="nav-item"><span style="font-size:22px">✦</span><span style="font-size:10px;font-weight:700">Missions</span></a>
-  <a href="music.html" class="nav-item"><span style="font-size:22px">▶</span><span style="font-size:10px;font-weight:700">Videos</span></a>
-  <a href="history.html" class="nav-item active"><span style="font-size:26px;color:#7c3aed">◫</span><span style="font-size:10px;font-weight:700">History</span></a>
-  <a href="settings.html" class="nav-item"><span style="font-size:22px">⚙</span><span style="font-size:10px;font-weight:700">Settings</span></a>
+<!-- DELETE POPUP FIXED SAME AS MUSIC -->
+<div id="deleteConfirm" class="fixed inset-0 bg-black/40 backdrop-blur-[2px] hidden items-center justify-center z-[80] p-4">
+<div class="bg-white rounded-[20px] p-5 w-full max-w-[300px] text-center shadow-xl">
+<div class="w-10 h-10 bg-[#fff1f2] rounded-full flex items-center justify-center mx-auto text-[#e11d48]">🗑</div>
+<h3 class="font-bold text-[13px] mt-3">Move to deleted?</h3><p class="text-[11px] text-gray-500 mt-1">60 days tak Settings me rahega</p>
+<div class="flex gap-2 mt-4"><button onclick="closeDeletePop()" class="flex-1 bg-[#f3f4f6] py-2.5 rounded-full font-bold text-[11px]">Cancel</button><button onclick="confirmDelete()" class="flex-1 bg-[#e11d48] text-white py-2.5 rounded-full font-bold text-[11px]">Move</button></div>
+</div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -107,199 +94,168 @@ const db = firebase.firestore();
 </script>
 
 <script>
-function openSidebar(){ if(localStorage.getItem('borahae_navMode')==='navigation') return; document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
+function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
-
 let streams = JSON.parse(localStorage.getItem('borahae_history') || '[]');
 let detailedLogs = JSON.parse(localStorage.getItem('borahae_detailed_logs') || '{}');
-let currentTab = 'video';
-const LOOP_GAP = 2*60*1000;
+let currentTab = 'video'; let deleteTargetId=null;
+const LOOP_GAP = 60*1000;
 
 const OWNER_EMAILS = ['pratimatribhuvan2006@gmail.com','tribhuvanpratima38@gmail.com'].map(e=>e.toLowerCase());
-function getCurrentUser(){ try{ return JSON.parse(localStorage.getItem('borahaeUser')||'{}'); }catch(e){ return {}; } }
-function isOwnerUser(){ const u=getCurrentUser(); return u.email && OWNER_EMAILS.includes(u.email.toLowerCase()); }
-function isFreeDayActive(){
-  const now=new Date(); const first=new Date(now.getFullYear(), now.getMonth(), 1);
-  let s=new Date(first); while(s.getDay()!==0) s.setDate(s.getDate()+1);
-  const start=new Date(s); start.setHours(12,0,0,0); const end=new Date(start); end.setDate(end.getDate()+1);
-  return (now>=start && now<=end)? end : null;
-}
-const FREE_UNTIL = new Date('2027-05-01T00:00:00');
-function hasPremiumAccess(){ if(isOwnerUser()) return true; if(localStorage.getItem('isPremium')==='true') return true; if(new Date() < FREE_UNTIL) return true; if(isFreeDayActive()) return true; return false; }
+function getCurrentUser(){ try{ return JSON.parse(localStorage.getItem('borahaeUser')||localStorage.getItem('borahae_user')||'{}'); }catch(e){ return {}; } }
 
-// DELETE + 60 DAYS LOGIC
+// PFP same as settings appearance
+function loadSidebarPFP(){
+  try{
+    let u=getCurrentUser(); let name = u.name || localStorage.getItem('army_name') || u.displayName || 'ARMY';
+    document.getElementById('sidebarName').innerText=name;
+    let pic = u.photo || localStorage.getItem('army_pfp') || u.photoURL || '';
+    if(pic){ document.getElementById('sidebarAvatarImg').src=pic; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }
+    else { document.getElementById('sidebarAvatarLetter').innerText=name.charAt(0).toUpperCase(); }
+  }catch(e){}
+}
+loadSidebarPFP();
+
 function cleanExpiredDeleted(){
   let deleted = JSON.parse(localStorage.getItem('borahae_deleted')||'[]');
-  let now = Date.now();
-  deleted = deleted.filter(d => (now - d.deletedAt) < 60*24*60*60*1000);
+  let now = Date.now(); deleted = deleted.filter(d => (now - d.deletedAt) < 60*24*60*60*1000);
   localStorage.setItem('borahae_deleted', JSON.stringify(deleted));
 }
 cleanExpiredDeleted();
 
-function deleteVideo(videoId){
-  if(!confirm('Delete this video? It will go to Settings > Deleted for 60 days.')) return;
-  let idx = streams.findIndex(s=>s.videoId===videoId);
-  if(idx===-1) return;
-  let item = streams[idx];
-  item.deletedAt = Date.now();
-  item.originalLogs = detailedLogs[videoId]||[];
-  let deleted = JSON.parse(localStorage.getItem('borahae_deleted')||'[]');
-  deleted.unshift(item);
+function askDelete(videoId){ deleteTargetId=videoId; document.getElementById('deleteConfirm').classList.remove('hidden'); document.getElementById('deleteConfirm').classList.add('flex'); }
+function closeDeletePop(){ document.getElementById('deleteConfirm').classList.add('hidden'); document.getElementById('deleteConfirm').classList.remove('flex'); deleteTargetId=null; }
+function confirmDelete(){
+  if(!deleteTargetId) return;
+  let idx = streams.findIndex(s=>s.videoId===deleteTargetId); if(idx===-1) return;
+  let item = streams[idx]; item.deletedAt = Date.now(); item.originalLogs = detailedLogs[deleteTargetId]||[];
+  let deleted = JSON.parse(localStorage.getItem('borahae_deleted')||'[]'); deleted.unshift(item);
   localStorage.setItem('borahae_deleted', JSON.stringify(deleted));
-  streams.splice(idx,1);
-  delete detailedLogs[videoId];
-  localStorage.setItem('borahae_history', JSON.stringify(streams));
-  localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs));
-  saveToCloud(); render();
+  streams.splice(idx,1); delete detailedLogs[deleteTargetId];
+  localStorage.setItem('borahae_history', JSON.stringify(streams)); localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs));
+  saveToCloud(); closeDeletePop(); render();
 }
 
 function setTab(t){
   currentTab=t;
-  document.getElementById('tab-video').className = t==='video'? 'tab-active px-4 py-2 rounded-full text-[12px] font-bold border' : 'bg-white px-4 py-2 rounded-full text-[12px] font-bold border';
-  document.getElementById('tab-short').className = t==='short'? 'tab-active px-4 py-2 rounded-full text-[12px] font-bold border' : 'bg-white px-4 py-2 rounded-full text-[12px] font-bold border';
-  document.getElementById('tab-live').className = t==='live'? 'tab-active px-4 py-2 rounded-full text-[12px] font-bold border' : 'bg-white px-4 py-2 rounded-full text-[12px] font-bold border';
+  document.getElementById('tab-video').className = t==='video'? 'tab-active px-4 py-2 rounded-full text-[11px] font-bold border' : 'tab-idle px-4 py-2 rounded-full text-[11px] font-bold border';
+  document.getElementById('tab-short').className = t==='short'? 'tab-active px-4 py-2 rounded-full text-[11px] font-bold border' : 'tab-idle px-4 py-2 rounded-full text-[11px] font-bold border';
+  document.getElementById('tab-live').className = t==='live'? 'tab-active px-4 py-2 rounded-full text-[11px] font-bold border' : 'tab-idle px-4 py-2 rounded-full text-[11px] font-bold border';
   render();
 }
 
+// FIXED RENDER - neat & clean, no 1x streams, time/date right side inside box
 function render(){
-  const list = document.getElementById('streamList');
-  const empty = document.getElementById('emptyState');
+  const list = document.getElementById('streamList'); const empty = document.getElementById('emptyState');
   let filtered = streams.filter(s=> (s.type||'video')===currentTab);
   if(filtered.length===0){ empty.classList.remove('hidden'); list.innerHTML=''; return; }
   empty.classList.add('hidden');
   list.innerHTML = filtered.map(s=>`
-      <div class="bg-white rounded-[18px] p-3 flex gap-3 border border-purple-50 shadow-sm relative">
-        <img src="https://img.youtube.com/vi/${s.videoId}/mqdefault.jpg" class="w-[110px] h-[68px] rounded-[14px] object-cover shrink-0 bg-gray-100">
+    <div class="bg-white rounded-[16px] p-2.5 flex gap-3 border border-[#f3e8ff] shadow-sm relative overflow-hidden">
+      <div class="relative flex-shrink-0">
+        <img src="https://img.youtube.com/vi/${s.videoId}/hqdefault.jpg" class="w-[104px] h-[64px] rounded-[12px] object-cover bg-gray-100">
+      </div>
+      <div class="flex-1 min-w-0 flex">
         <div class="flex-1 min-w-0">
-          <p class="text-[13px] font-semibold leading-tight line-clamp-2 text-[#1a1033]">${s.title}</p>
-          <p class="text-[11px] text-[#8a7ca3] mt-1">${s.channel||'HYBE LABELS'} • ${s.member||'OT7'}</p>
-          <p class="text-[11px] text-[#6b5b8a] mt-1">${s.date} ${s.time||''} • ${s.duration||'~3m'}</p>
-          <p class="mono text-[11px] text-[#8b2cf0] mt-1">${s.count}× STREAMS • ${s.type||'video'}</p>
+          <p class="text-[12px] font-bold leading-[1.25] text-[#1a1033]" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${s.title}</p>
+          <p class="text-[10px] text-[#8a7ca3] mt-1 truncate">${s.channel||'HYBE LABELS'}</p>
         </div>
-        <div class="flex flex-col gap-1 absolute top-2 right-2">
-          <button onclick="openMemoir('${s.videoId}')" class="w-8 h-8 bg-[#f5f0ff] rounded-full flex items-center justify-center text-[#8b2cf0] text-[12px]">◫</button>
-          <button onclick="deleteVideo('${s.videoId}')" class="w-8 h-8 bg-[#fff0f0] rounded-full flex items-center justify-center text-red-500 text-[12px]">🗑</button>
+        <div class="ml-2 flex flex-col items-end justify-between flex-shrink-0">
+          <div class="text-right">
+            <p class="text-[10px] font-bold text-[#1a1033] leading-none">${s.time||''}</p>
+            <p class="text-[9px] text-[#9ca3af] mt-1 leading-none">${s.date||''}</p>
+          </div>
+          <div class="flex gap-1 mt-2">
+            <button onclick="openMemoir('${s.videoId}')" class="w-7 h-7 bg-[#f5f3ff]/80 border border-[#ede9fe] rounded-full flex items-center justify-center text-[#7c3aed] text-[11px] backdrop-blur" title="Memoir">⧉</button>
+            <button onclick="askDelete('${s.videoId}')" class="w-7 h-7 bg-black/5 border border-black/5 rounded-full flex items-center justify-center text-[#e11d48] text-[11px] backdrop-blur hover:bg-[#fff1f2]" title="Delete">✕</button>
+          </div>
         </div>
       </div>
-    `).join('');
+    </div>
+  `).join('');
 }
 
 function openMemoir(videoId){
   let s = streams.find(x=>x.videoId===videoId); if(!s) return;
   let logs = detailedLogs[videoId] || [];
-  let correct = logs.filter(l=>l.type==='correct').length;
-  let filtered = logs.filter(l=>l.type==='filtered').length;
-  let premium = hasPremiumAccess(); let owner = isOwnerUser(); let freeDayEnd = isFreeDayActive();
-  document.getElementById('ownerBadge').classList.toggle('hidden',!owner);
   document.getElementById('memoirContent').innerHTML = `
     <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" class="w-full aspect-video rounded-[20px] object-cover">
-    <h2 class="serif text-[28px] mt-4 leading-tight">${s.title}</h2>
-    <p class="text-[13px] text-[#8a7ca3] mt-1">${s.channel||'HYBE LABELS'} • ${s.type||'video'} • ${s.duration}</p>
-    <div class="mt-5 grid grid-cols-2 gap-3">
-      <div class="bg-white rounded-[16px] p-4 border"><p class="mono text-[10px] text-[#8b2cf0]">MY TOTAL STREAMS</p><p class="text-[22px] font-bold mt-1">${s.count}</p></div>
-      <div class="bg-white rounded-[16px] p-4 border"><p class="mono text-[10px] text-[#8b2cf0]">LAST STREAM</p><p class="text-[13px] font-bold mt-1">${s.date}<br>${s.time||''}</p></div>
-    </div>
-    <div class="mt-6 relative">
-      <div id="premiumPart" class="${!premium?'blur-lock':''}">
-        <div class="mt-2">
-          <button onclick="toggleLogs('all')" class="w-full bg-[#8b2cf0] text-white py-3 rounded-full font-bold text-[13px]">History - ${logs.length} entries</button>
-          <div id="allLogs" class="mt-3 space-y-2 max-h-[200px] overflow-y-auto bg-white rounded-[16px] p-3 border hidden">
-            ${logs.length? logs.map(l=>`<div class="flex justify-between text-[12px] py-1 border-b"><span>${l.date} ${l.time}</span><span>${l.duration} • ${l.type} • ${l.seconds||0}s/${l.required||'?'}s</span></div>`).join('') : '<p class="text-[12px] text-gray-400">No logs yet</p>'}
-          </div>
-        </div>
-        <div class="mt-4 bg-white rounded-[24px] p-5 border">
-          <h3 class="font-bold text-[15px]">Correct vs Filtered</h3>
-          <div class="flex gap-2 mt-4">
-            <button onclick="toggleLogs('correct')" class="flex-1 bg-[#ede6fb] py-2.5 rounded-full text-[12px] font-bold">Correct: ${correct}</button>
-            <button onclick="toggleLogs('filtered')" class="flex-1 bg-[#fff0f0] py-2.5 rounded-full text-[12px] font-bold">Filtered: ${filtered}</button>
-          </div>
-          <div id="correctLogs" class="mt-3 hidden text-[12px]">${logs.filter(l=>l.type==='correct').map(l=>`<div class="py-1">${l.date} - ${l.duration} ✅ Full watch ${l.seconds}s/${l.required}s</div>`).join('') || 'No correct streams yet - full MV dekho!'}</div>
-          <div id="filteredLogs" class="mt-3 hidden text-[12px]">${logs.filter(l=>l.type==='filtered').map(l=>`<div class="py-1">${l.date} - ${l.duration} ⚠️ Short/skip ${l.seconds}s/${l.required}s</div>`).join('') || 'No filtered'}</div>
-          <p class="text-[10px] text-gray-400 mt-4">Correct = watched >= 85% of MV or total-30s. Example: Idol 4:30 = 270s, need 230s+. Short watch = filtered. Missions only count correct.</p>
-        </div>
-      </div>
-      ${!premium? `<div class="absolute inset-0 lock-overlay flex flex-col justify-end pb-2"><div class="bg-white border rounded-[24px] p-5 text-center"><div class="w-10 h-10 bg-[#f3e8ff] rounded-full flex items-center justify-center mx-auto">🔒</div><h3 class="font-bold text-[16px] mt-2">Unlock Full Memoir</h3><p class="text-[12px] text-[#6b7280] mt-1">Premium $2.99 / ₹249</p><button onclick="buyPremium()" class="w-full mt-3 bg-[#8b2cf0] text-white py-3 rounded-full font-bold text-[13px]">Unlock Now 💜</button></div></div>` : ''}
-    </div>
+    <h2 class="serif text-[24px] mt-4 leading-tight">${s.title}</h2>
+    <p class="text-[12px] text-[#8a7ca3] mt-1">${s.channel||'HYBE LABELS'} • ${s.type||'video'}</p>
+    <div class="mt-4 bg-white rounded-[16px] p-3 border"><p class="mono text-[10px] text-[#8b2cf0]">TIMELINE</p>
+    <div class="mt-2 space-y-1 max-h-[300px] overflow-auto">
+    ${logs.length? logs.map(l=>`<div class="flex justify-between text-[11px] py-1.5 border-b border-gray-50"><span>${l.date} ${l.time}</span><span class="text-[#6b7280]">${l.duration}</span></div>`).join('') : '<p class="text-[11px] text-gray-400">No logs</p>'}
+    </div></div>
   `;
   document.getElementById('memoirPage').classList.remove('hidden');
 }
 function closeMemoir(){document.getElementById('memoirPage').classList.add('hidden');}
-function toggleLogs(type){
-  if(type==='all') document.getElementById('allLogs').classList.toggle('hidden');
-  if(type==='correct'){document.getElementById('correctLogs').classList.toggle('hidden'); document.getElementById('filteredLogs').classList.add('hidden');}
-  if(type==='filtered'){document.getElementById('filteredLogs').classList.toggle('hidden'); document.getElementById('correctLogs').classList.add('hidden');}
-}
-function buyPremium(){ if(confirm('Test unlock?')){ localStorage.setItem('isPremium','true'); location.reload(); } }
 
 async function saveToCloud(){
   const user = firebase.auth().currentUser; if(!user) return;
   try{ await db.collection('users').doc(user.uid).set({ history: streams, detailedLogs: detailedLogs, deleted: JSON.parse(localStorage.getItem('borahae_deleted')||'[]'), email: user.email, updatedAt: new Date() }, {merge:true}); }catch(e){}
 }
-async function loadFromCloud(){
-  const user = firebase.auth().currentUser; if(!user) return;
-  try{
-    const doc = await db.collection('users').doc(user.uid).get();
-    if(doc.exists && doc.data().history){
-      streams = doc.data().history; detailedLogs = doc.data().detailedLogs || {};
-      localStorage.setItem('borahae_history', JSON.stringify(streams));
-      localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs));
-      render();
-    }
-  }catch(e){}
-}
-firebase.auth().onAuthStateChanged(user=>{
-  if(user){
-    document.getElementById('sidebarName').innerText=user.displayName||'ARMY demo';
-    document.getElementById('sidebarEmail').innerText=user.email;
-    if(user.photoURL){ document.getElementById('sidebarAvatarImg').src=user.photoURL; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }
-    loadFromCloud();
-  } else {
-    try{ const u=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); if(u.name){ document.getElementById('sidebarName').innerText=u.name; document.getElementById('sidebarAvatarLetter').innerText=u.name.charAt(0).toUpperCase(); if(u.photo){ document.getElementById('sidebarAvatarImg').src=u.photo; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); } document.getElementById('sidebarEmail').innerText=u.email||'keeping the purple light on'; } }catch(e){}
-  }
-  let mode=localStorage.getItem('borahae_navMode')||'sidebar';
-  if(mode==='navigation'){ document.getElementById('sidebar').style.display='none'; document.getElementById('bottomNav').style.display='flex'; }
-  else { document.getElementById('bottomNav').style.display='none'; document.getElementById('sidebar').style.display='flex'; }
+
+// PULL TO REFRESH + AUTO CHECK ACTIVE STREAM
+let startY=0; let pulling=false;
+window.addEventListener('touchstart', e=>{ if(window.scrollY===0){ startY=e.touches[0].clientY; pulling=true; } });
+window.addEventListener('touchmove', e=>{
+  if(!pulling) return;
+  let diff=e.touches[0].clientY-startY;
+  if(diff>80){ document.getElementById('pullIndicator').style.transform='translateY(0)'; }
+});
+window.addEventListener('touchend', e=>{
+  if(!pulling) return; pulling=false;
+  let diff=e.changedTouches[0].clientY-startY;
+  if(diff>80){
+    document.getElementById('pullIndicator').style.transform='translateY(0)';
+    setTimeout(()=>{ checkActiveAndRender(); document.getElementById('pullIndicator').style.transform='translateY(-100%)'; },600);
+  } else { document.getElementById('pullIndicator').style.transform='translateY(-100%)'; }
 });
 
-// NEW AUTO LOGIC - full MV check
-window.saveStreamIfValid = function(videoId, title, member, channel, watchedSec, totalDuration, typeOverride){
-  // typeOverride = 'video'|'short'|'live' auto from URL
-  let type = typeOverride || 'video';
-  if(!typeOverride){
-    // try guess from title/url later, default video
-    type='video';
+function checkActiveAndRender(){
+  // re-load from localStorage (music page may have saved)
+  streams = JSON.parse(localStorage.getItem('borahae_history') || '[]');
+  detailedLogs = JSON.parse(localStorage.getItem('borahae_detailed_logs') || '{}');
+  // check if there is pending active stream that user returned from
+  let activeStr=localStorage.getItem('borahae_active_stream');
+  if(activeStr){
+    try{
+      let active=JSON.parse(activeStr); let now=Date.now(); let watched=Math.floor((now-active.start)/1000); let total=active.duration||180;
+      localStorage.removeItem('borahae_active_stream');
+      if(watched>=40 || watched>=total*0.5){
+        // save
+        let dateStr=new Date().toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});
+        let timeStr=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+        let fullISO=new Date().toISOString();
+        let existing=streams.find(s=>s.videoId===active.id);
+        if(existing){existing.count++; existing.date=dateStr; existing.time=timeStr;}
+        else{
+          let type = total<=61? 'short' : (active.type||'video');
+          streams.unshift({videoId:active.id,title:active.title,member:'OT7',channel:'HYBE LABELS',date:dateStr,time:timeStr,duration:`${watched}s`,count:1,type:type});
+        }
+        if(!detailedLogs[active.id]) detailedLogs[active.id]=[];
+        detailedLogs[active.id].unshift({date:dateStr,fullDate:fullISO,time:timeStr,duration:`${watched}s / ${Math.floor(total/60)}m`,type:'correct',seconds:watched,required:total});
+        localStorage.setItem('borahae_history',JSON.stringify(streams));
+        localStorage.setItem('borahae_detailed_logs',JSON.stringify(detailedLogs));
+        saveToCloud();
+      }
+    }catch(e){}
   }
-  // loop check 2 min
-  let last = JSON.parse(localStorage.getItem('borahae_last_watch')||'{}');
-  let now = Date.now();
-  if(now - (last[videoId]?.time||0) < LOOP_GAP){
-    console.log('Loop blocked 2 min'); return false;
-  }
-  // Correct logic: auto duration
-  if(!totalDuration) totalDuration = 180;
-  if(!watchedSec) watchedSec = totalDuration;
-  let required = Math.max(totalDuration-30, totalDuration*0.85);
-  let streamType = watchedSec >= required? 'correct' : 'filtered';
-
-  const nowDate = new Date();
-  const dateStr = nowDate.toLocaleDateString('en-US',{month:'short', day:'2-digit', year:'numeric'});
-  const timeStr = nowDate.toLocaleTimeString('en-US',{hour:'2-digit', minute:'2-digit'});
-  const fullISO = nowDate.toISOString();
-  let durText = `${Math.floor(watchedSec/60)}m ${watchedSec%60}s / ${Math.floor(totalDuration/60)}m ${totalDuration%60}s`;
-
-  let existing = streams.find(s=> s.videoId===videoId);
-  if(existing){ existing.count++; existing.date=dateStr; existing.time=timeStr; existing.duration=durText; existing.type=type; }
-  else { streams.unshift({videoId, title: title||'BTS Video', member: member||'OT7', channel: channel||'HYBE LABELS', date: dateStr, time: timeStr, duration: durText, count:1, type:type}); }
-  if(!detailedLogs[videoId]) detailedLogs[videoId]=[];
-  detailedLogs[videoId].unshift({date: dateStr, fullDate: fullISO, time: timeStr, duration: durText, type: streamType, seconds: watchedSec, required: totalDuration, videoId:videoId});
-
-  localStorage.setItem('borahae_history', JSON.stringify(streams));
-  localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs));
-  last[videoId]={time:now}; localStorage.setItem('borahae_last_watch', JSON.stringify(last));
-  saveToCloud(); render();
-  return streamType;
+  loadSidebarPFP(); render();
 }
+
+// check on all lifecycle events
+window.addEventListener('pageshow', checkActiveAndRender);
+window.addEventListener('focus', checkActiveAndRender);
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkActiveAndRender(); });
+window.addEventListener('load', checkActiveAndRender);
+
+firebase.auth().onAuthStateChanged(user=>{
+  if(user){ loadSidebarPFP(); db.collection('users').doc(user.uid).get().then(doc=>{
+    if(doc.exists && doc.data().history){ streams=doc.data().history; detailedLogs=doc.data().detailedLogs||{}; localStorage.setItem('borahae_history',JSON.stringify(streams)); localStorage.setItem('borahae_detailed_logs',JSON.stringify(detailedLogs)); render(); }
+  }); }
+});
+
 render();
-</script>
-</body>
-</html>
+</script></body></html>
