@@ -28,7 +28,7 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 <p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
 <nav class="space-y-[2px]">
 <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
-<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice <span class="ml-auto bg-[#f472b6] text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span></a>
+<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Board</a>
 <a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✦ Missions</a>
 <a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">▶ Videos <span class="ml-auto w-2 h-2 bg-[#f472b6] rounded-full"></span></a>
 <a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◫ My History</a>
@@ -96,7 +96,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 </div>
 </main>
 
-<!-- APP LIKE ACTION SHEET -->
 <div id="actionSheet" class="fixed inset-0 bg-black/40 backdrop-blur-[2px] hidden items-end justify-center z-[70] p-3" onclick="closeActionSheet()">
 <div class="bg-white rounded-[24px] p-4 w-full max-w-[360px] shadow-[0_20px_60px_rgba(0,0,0,0.2)]" onclick="event.stopPropagation()">
 <div class="w-8 h-1 bg-gray-200 rounded-full mx-auto mb-3"></div>
@@ -118,7 +117,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 </div>
 </div>
 
-<!-- DELETE POPUP FIXED -->
 <div id="deletePopup" class="fixed inset-0 bg-black/40 backdrop-blur-[2px] hidden items-center justify-center z-[80] p-4">
 <div class="bg-white rounded-[20px] p-5 w-full max-w-[300px] text-center shadow-xl">
 <div class="w-10 h-10 bg-[#fff1f2] rounded-full flex items-center justify-center mx-auto text-[#e11d48]">🗑</div>
@@ -178,11 +176,15 @@ db.ref('videos').on('value',snap=>{
     let id=getYouTubeID(v.id||v.videoId||""); if(!id) return;
     let ex=videos.find(x=>x.id===id);
     if(!ex){
-      videos.push({title:v.title||"BTS Video",id:id,channel:v.channel||"HYBE LABELS",addedAt:v.createdAt||Date.now(),type:v.type||'video',duration:v.duration||durations[id]||0});
+      let dur=v.duration||durations[id]||0;
+      let type = dur>0 && dur<=61? 'short' : (v.type||'video');
+      videos.push({title:v.title||"BTS Video",id:id,channel:v.channel||"HYBE LABELS",addedAt:v.createdAt||Date.now(),type:type,duration:dur});
       if(v.duration) durations[id]=v.duration;
       changed=true;
     } else if(v.duration && (!ex.duration || ex.duration===0)){
-      ex.duration=v.duration; durations[id]=v.duration; changed=true;
+      ex.duration=v.duration; durations[id]=v.duration;
+      if(v.duration<=61) ex.type='short';
+      changed=true;
     }
   });
   if(changed){localStorage.setItem('bts_videos',JSON.stringify(videos));localStorage.setItem('bts_durations',JSON.stringify(durations));applyFilters();}
@@ -238,11 +240,13 @@ async function checkLink(){
     document.getElementById('prevTitle').innerText=title;
     document.getElementById('prevChannel').innerText=channel;
     document.getElementById('prevDot').innerHTML=`<span class="inline-flex items-center gap-1 text-[9px] bg-[#f5f3ff] border border-[#ede9fe] text-[#7c3aed] px-2 py-0.5 rounded-full font-bold"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="3"><path d="M5 12l5 5l10 -10"/></svg> ${channel} • ${formatDuration(realSec)}</span>`;
-    addBtn.disabled=false; addBtn.className="w-full mt-2.5 bg-[#7c3aed] text-white py-2.5 rounded-full font-bold text-[11px]"; pending={id,title,channel,type:detectType(link),duration:realSec};
+    let type = realSec<=61 || link.toLowerCase().includes('shorts')? 'short' : detectType(link);
+    addBtn.disabled=false; addBtn.className="w-full mt-2.5 bg-[#7c3aed] text-white py-2.5 rounded-full font-bold text-[11px]"; pending={id,title,channel,type:type,duration:realSec};
   }catch(e){
     document.getElementById('prevTitle').innerText="YouTube Video"; document.getElementById('prevChannel').innerText="HYBE LABELS";
     document.getElementById('prevDot').innerHTML=`<span class="inline-flex items-center gap-1 text-[9px] bg-[#f5f3ff] border border-[#ede9fe] text-[#7c3aed] px-2 py-0.5 rounded-full font-bold"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="3"><path d="M5 12l5 5l10 -10"/></svg> ${formatDuration(realSec)}</span>`;
-    addBtn.disabled=false; addBtn.className="w-full mt-2.5 bg-[#7c3aed] text-white py-2.5 rounded-full font-bold text-[11px]"; pending={id,title:"YouTube Video",channel:"HYBE LABELS",type:detectType(link),duration:realSec};
+    let type = realSec<=61? 'short' : detectType(link);
+    addBtn.disabled=false; addBtn.className="w-full mt-2.5 bg-[#7c3aed] text-white py-2.5 rounded-full font-bold text-[11px]"; pending={id,title:"YouTube Video",channel:"HYBE LABELS",type:type,duration:realSec};
   }
 }
 function addVideo(){
@@ -254,14 +258,12 @@ function addVideo(){
   document.getElementById('ytLink').value=''; document.getElementById('previewBox').classList.add('hidden'); document.getElementById('addBtn').disabled=true;
   document.getElementById('addBtn').className="w-full mt-2.5 bg-[#c4b5fd] text-white py-2.5 rounded-full font-bold text-[11px] disabled:opacity-60"; pending=null; applyFilters();
 }
-
 function toggleNew(){isNewFilterActive=!isNewFilterActive; if(isNewFilterActive) isPinnedFilterActive=false; applyFilters();}
 function togglePinned(){isPinnedFilterActive=!isPinnedFilterActive; if(isPinnedFilterActive) isNewFilterActive=false; applyFilters();}
 function toggleDropdown(id){document.getElementById(id).classList.toggle('hidden'); if(id==='filterDropdown') document.getElementById('typeDropdown').classList.add('hidden'); else document.getElementById('filterDropdown').classList.add('hidden');}
 function selectFilter(v,l){currentFilter=v; document.getElementById('filterLabel').innerText=l; document.getElementById('filterDropdown').classList.add('hidden'); applyFilters();}
 function selectType(v,l){currentType=v; document.getElementById('typeLabel').innerText=l; document.getElementById('typeDropdown').classList.add('hidden'); applyFilters();}
 function getDaily(){let d=JSON.parse(localStorage.getItem('borahae_mission_daily')||'{}');let today=new Date().toDateString();if(d.date!==today) d={date:today,ids:[]};return d;}
-
 function applyFilters(){
   const q=document.getElementById('searchInput').value.toLowerCase();
   let f=[...videos];
@@ -273,12 +275,10 @@ function applyFilters(){
   if(currentType==='short') f=f.filter(v=>v.type==='short');
   if(q) f=f.filter(v=>v.title.toLowerCase().includes(q));
   let sorted=[...f].sort((a,b)=>{let ap=pinned.includes(a.id),bp=pinned.includes(b.id);if(ap&&!bp)return-1;if(!ap&&bp)return 1;return b.addedAt-a.addedAt;});
-  // highlight buttons
   document.getElementById('newToggleBtn').className = isNewFilterActive? "bg-[#3b82f6] text-white border border-[#3b82f6] px-3.5 py-1.5 rounded-full text-[10px] font-bold transition" : "bg-white border px-3.5 py-1.5 rounded-full text-[10px] font-bold transition";
   document.getElementById('pinnedToggleBtn').className = isPinnedFilterActive? "bg-[#3b82f6] text-white border border-[#3b82f6] px-3.5 py-1.5 rounded-full text-[10px] font-bold transition" : "bg-white border px-3.5 py-1.5 rounded-full text-[10px] font-bold transition";
   render(sorted);
 }
-
 function render(list){
   const g=document.getElementById('videoGrid'); g.innerHTML='';
   if(list.length===0){document.getElementById('emptyState').classList.remove('hidden');return;}
@@ -299,27 +299,21 @@ function render(list){
     </div>`;
   });
 }
-
 function askDelete(id,title){deleteId=id;document.getElementById('deleteTitle').innerText=title;document.getElementById('deletePopup').classList.remove('hidden');document.getElementById('deletePopup').classList.add('flex');}
 function closeDelete(){document.getElementById('deletePopup').classList.add('hidden');document.getElementById('deletePopup').classList.remove('flex');deleteId=null;}
 function confirmDelete(){
   if(!deleteId) return;
-  // only remove from local shelf, not force delete community if other users have it - but owner can still delete firebase
   db.ref('videos').once('value',snap=>{let d=snap.val();if(d){Object.keys(d).forEach(k=>{if((d[k].id||d[k].videoId||"")===deleteId){db.ref('videos/'+k).remove();}});}});
   videos=videos.filter(v=>v.id!==deleteId); pinned=pinned.filter(p=>p!==deleteId); delete durations[deleteId];
   localStorage.setItem('bts_videos',JSON.stringify(videos)); localStorage.setItem('bts_pinned',JSON.stringify(pinned)); localStorage.setItem('bts_durations',JSON.stringify(durations));
   closeDelete(); applyFilters();
 }
-
 function openAction(id,title,channel,type,dur){actionData={id,title,channel,type,duration:parseInt(dur)||durations[id]||0};document.getElementById('actionThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;document.getElementById('actionTitle').innerText=title;document.getElementById('actionChannel').innerText=channel+' • '+type;document.getElementById('actionDurBadge').innerText=formatDuration(actionData.duration);document.getElementById('pinActionBtn').innerText=pinned.includes(id)?'Unpin':'📌 Pin';document.getElementById('actionSheet').classList.remove('hidden');document.getElementById('actionSheet').classList.add('flex');}
 function closeActionSheet(){document.getElementById('actionSheet').classList.add('hidden');document.getElementById('actionSheet').classList.remove('flex');}
-
 function openYouTubeInsideApp(id,title,duration){
-  let active=localStorage.getItem('borahae_active_stream');
-  if(active){let a=JSON.parse(active);let diff=Date.now()-a.start;if(diff<25000){saveFiltered(a.id,a.title,a.duration||180,Math.floor(diff/1000));}}
-  if(localStorage.getItem('borahae_yt_notice')!=='done'){if(!confirm("💜 YouTube.com will open in Chrome tab. Login so history saves! Continue?"))return;localStorage.setItem('borahae_yt_notice','done');}
   let dur=duration||durations[id]||180;
-  localStorage.setItem('borahae_active_stream', JSON.stringify({id:id,title:title,start:Date.now(),duration:dur,type:detectType(id)}));
+  let type = dur<=61? 'short' : 'video';
+  localStorage.setItem('borahae_active_stream', JSON.stringify({id:id,title:title,start:Date.now(),duration:dur,type:type}));
   window.open(`https://www.youtube.com/watch?v=${id}`, '_blank');
 }
 function playFromAction(){closeActionSheet(); if(actionData) openYouTubeInsideApp(actionData.id, actionData.title, actionData.duration);}
@@ -328,28 +322,42 @@ function addToMissionsFromAction(){if(!actionData)return;let daily=getDaily();if
 function removeFromMissions(id){let d=getDaily();d.ids=d.ids.filter(i=>i!==id);localStorage.setItem('borahae_mission_daily',JSON.stringify(d));applyFilters();}
 function editGoal(id){let cur=missionGoals[id]||10;let v=prompt(`Goal? Current ${cur}x`,cur);if(!v)return;let n=parseInt(v);if(isNaN(n))return;missionGoals[id]=n;localStorage.setItem('borahae_mission_goals',JSON.stringify(missionGoals));applyFilters();}
 
-function saveFiltered(videoId,title,totalDuration,watchedSec){let shelfIds=videos.map(v=>v.id);if(!shelfIds.includes(videoId))return;let detailed=JSON.parse(localStorage.getItem('borahae_detailed_logs')||'{}');let dateStr=new Date().toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});let timeStr=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});let fullISO=new Date().toISOString();if(!detailed[videoId])detailed[videoId]=[];detailed[videoId].unshift({date:dateStr,fullDate:fullISO,time:timeStr,duration:`${watchedSec}s / ${formatDuration(totalDuration)}`,type:'filtered',seconds:watchedSec,required:totalDuration});localStorage.setItem('borahae_detailed_logs',JSON.stringify(detailed));}
+function saveFiltered(videoId,title,totalDuration,watchedSec){
+  let shelfIds=videos.map(v=>v.id); if(!shelfIds.includes(videoId)) return;
+  let detailed=JSON.parse(localStorage.getItem('borahae_detailed_logs')||'{}');
+  let dateStr=new Date().toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});
+  let timeStr=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  let fullISO=new Date().toISOString();
+  if(!detailed[videoId])detailed[videoId]=[];
+  detailed[videoId].unshift({date:dateStr,fullDate:fullISO,time:timeStr,duration:`${watchedSec}s / ${formatDuration(totalDuration)}`,type:'filtered',seconds:watchedSec,required:totalDuration});
+  localStorage.setItem('borahae_detailed_logs',JSON.stringify(detailed));
+}
 function saveCorrect(videoId,title,totalDuration,watchedSec){
-  let shelfIds=videos.map(v=>v.id);if(!shelfIds.includes(videoId))return;
-  let streams=JSON.parse(localStorage.getItem('borahae_history')||'[]');let detailed=JSON.parse(localStorage.getItem('borahae_detailed_logs')||'{}');let last=JSON.parse(localStorage.getItem('borahae_last_watch')||'{}');let now=Date.now();
-  if(now-(last[videoId]?.time||0)<60000)return; // 1 min cooldown not 2 min
-  let dateStr=new Date().toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});let timeStr=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});let fullISO=new Date().toISOString();
+  let shelfIds=videos.map(v=>v.id); if(!shelfIds.includes(videoId)) return;
+  let streams=JSON.parse(localStorage.getItem('borahae_history')||'[]');
+  let detailed=JSON.parse(localStorage.getItem('borahae_detailed_logs')||'{}');
+  let last=JSON.parse(localStorage.getItem('borahae_last_watch')||'{}');
+  let now=Date.now();
+  if(now-(last[videoId]?.time||0)<30000) return;
+  let dateStr=new Date().toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});
+  let timeStr=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  let fullISO=new Date().toISOString();
   let existing=streams.find(s=>s.videoId===videoId);
-  if(existing){existing.count++;existing.date=dateStr;existing.time=timeStr;existing.duration=`${watchedSec}s / ${formatDuration(totalDuration)}`;}
-  else{streams.unshift({videoId:videoId,title:title,member:'OT7',channel:'HYBE LABELS',date:dateStr,time:timeStr,duration:`${watchedSec}s / ${formatDuration(totalDuration)}`,count:1,type:'correct'});}
-  if(!detailed[videoId])detailed[videoId]=[];detailed[videoId].unshift({date:dateStr,fullDate:fullISO,time:timeStr,duration:`${watchedSec}s / ${formatDuration(totalDuration)}`,type:'correct',seconds:watchedSec,required:totalDuration});
-  localStorage.setItem('borahae_history',JSON.stringify(streams));localStorage.setItem('borahae_detailed_logs',JSON.stringify(detailed));last[videoId]={time:now};localStorage.setItem('borahae_last_watch',JSON.stringify(last));
+  let type = totalDuration<=61? 'short' : 'video';
+  if(existing){existing.count++; existing.date=dateStr; existing.time=timeStr; existing.duration=`${watchedSec}s / ${formatDuration(totalDuration)}`; existing.type=type;}
+  else{streams.unshift({videoId:videoId,title:title,member:'OT7',channel:'HYBE LABELS',date:dateStr,time:timeStr,duration:`${watchedSec}s / ${formatDuration(totalDuration)}`,count:1,type:type});}
+  if(!detailed[videoId])detailed[videoId]=[]; detailed[videoId].unshift({date:dateStr,fullDate:fullISO,time:timeStr,duration:`${watchedSec}s / ${formatDuration(totalDuration)}`,type:'correct',seconds:watchedSec,required:totalDuration});
+  localStorage.setItem('borahae_history',JSON.stringify(streams)); localStorage.setItem('borahae_detailed_logs',JSON.stringify(detailed));
+  last[videoId]={time:now}; localStorage.setItem('borahae_last_watch',JSON.stringify(last));
 }
 window.addEventListener('pageshow',function(){
-  let activeStr=localStorage.getItem('borahae_active_stream');if(!activeStr)return;
-  let active=JSON.parse(activeStr);let now=Date.now();let diff=now-active.start;let watched=Math.floor(diff/1000);let total=active.duration||180;
+  let activeStr=localStorage.getItem('borahae_active_stream'); if(!activeStr) return;
+  let active=JSON.parse(activeStr); let now=Date.now(); let diff=now-active.start; let watched=Math.floor(diff/1000); let total=active.duration||180;
   localStorage.removeItem('borahae_active_stream');
-  // FIXED: 40 sec OR 50% whichever is smaller - so 1 min stream will count
-  let needed = Math.min(40, Math.floor(total*0.5));
-  if(watched<needed){saveFiltered(active.id,active.title,total,watched);}
-  else{saveCorrect(active.id,active.title,total,watched);}
+  let needed = Math.min(30, Math.floor(total*0.4));
+  if(watched<needed){ saveFiltered(active.id,active.title,total,watched); }
+  else{ saveCorrect(active.id,active.title,total,watched); }
 });
-
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
 document.addEventListener('click',function(e){ if(!e.target.closest('#filterBtn') &&!e.target.closest('#filterDropdown')) document.getElementById('filterDropdown').classList.add('hidden'); if(!e.target.closest('#typeBtn') &&!e.target.closest('#typeDropdown')) document.getElementById('typeDropdown').classList.add('hidden'); });
