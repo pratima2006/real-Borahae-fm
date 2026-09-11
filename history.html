@@ -54,7 +54,6 @@ body{font-family:'Manrope',sans-serif;background:#faf6ff;overscroll-behavior-y:c
     <h1 class="serif text-[38px] leading-[0.95] mt-2 text-[#1a1033]">The pages you've left<br>behind.</h1>
   </div>
 
-  <!-- STICKY SEARCH + TABS + LINE -->
   <div class="sticky top-[57px] z-10 bg-[#faf6ff]/90 backdrop-blur-md px-5 pt-4 pb-3">
     <div class="bg-white border border-[#ede9fe] rounded-full px-4 py-2 flex items-center gap-2">
       <span class="text-[#9ca3af] text-[13px]">⌕</span>
@@ -72,13 +71,12 @@ body{font-family:'Manrope',sans-serif;background:#faf6ff;overscroll-behavior-y:c
     <div id="emptyState" class="mt-5 bg-white/60 border border-dashed border-[#d6c6f5] rounded-[20px] p-8 text-center hidden">
       <div class="w-14 h-14 mx-auto rounded-2xl bg-[#ede6fb] flex items-center justify-center text-[#8b2cf0] text-xl">♡</div>
       <h2 class="serif text-[24px] mt-4 leading-tight text-[#1a1033]">No streams yet</h2>
-      <p class="text-[12px] text-[#8a7ca3] mt-2">Watch 40s+ • Pull down to refresh</p>
+      <p class="text-[12px] text-[#8a7ca3] mt-2">Watch 30s+ • Pull down to refresh</p>
       <button onclick="location.href='music.html'" class="mt-5 bg-[#8b2cf0] text-white mono text-[12px] font-bold px-6 py-2.5 rounded-full">Find a MV</button>
     </div>
   </div>
 </div>
 
-<!-- MEMOIR - TOUCH NAHI KIYA BAS COUNT + FONT + NAMES FIX -->
 <div id="memoirPage" class="fixed inset-0 bg-[#faf6ff] z-50 hidden overflow-y-auto">
 <div class="max-w-[480px] mx-auto min-h-screen">
 <div class="sticky top-0 bg-[#faf6ff]/90 backdrop-blur-md border-b border-purple-100 px-4 py-3 flex items-center gap-3">
@@ -130,10 +128,8 @@ function loadSidebarPFP(){
   }catch(e){}
 }
 loadSidebarPFP();
-
 function cleanExpiredDeleted(){ let deleted = JSON.parse(localStorage.getItem('borahae_deleted')||'[]'); let now = Date.now(); deleted = deleted.filter(d => (now - d.deletedAt) < 60*24*60*60*1000); localStorage.setItem('borahae_deleted', JSON.stringify(deleted)); }
 cleanExpiredDeleted();
-
 function askDelete(videoId){ deleteTargetId=videoId; document.getElementById('deleteConfirm').classList.remove('hidden'); document.getElementById('deleteConfirm').classList.add('flex'); }
 function closeDeletePop(){ document.getElementById('deleteConfirm').classList.add('hidden'); document.getElementById('deleteConfirm').classList.remove('flex'); deleteTargetId=null; }
 function confirmDelete(){
@@ -146,15 +142,12 @@ function confirmDelete(){
   localStorage.setItem('borahae_history', JSON.stringify(streams)); localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs));
   saveToCloud(); closeDeletePop(); render();
 }
-
 function setTab(t){
   currentTab=t;
   document.getElementById('tab-video').className = t==='video'? 'tab-active px-4 py-2 rounded-full text-[11px] font-bold border' : 'tab-idle px-4 py-2 rounded-full text-[11px] font-bold border';
   document.getElementById('tab-short').className = t==='short'? 'tab-active px-4 py-2 rounded-full text-[11px] font-bold border' : 'tab-idle px-4 py-2 rounded-full text-[11px] font-bold border';
   render();
 }
-
-// HISTORY RENDER - CLEAN BOX
 function render(){
   const list = document.getElementById('streamList'); const empty = document.getElementById('emptyState');
   const q = (document.getElementById('searchHistory')?.value||'').toLowerCase();
@@ -188,14 +181,12 @@ function render(){
     </div>
   `).join('');
 }
-
-// MEMOIR - BAS FONT + COUNT + NAMES FIX, DESIGN SAME
 function openMemoir(videoId){
   let s = streams.find(x=>x.videoId===videoId); if(!s) return;
   let logs = detailedLogs[videoId] || [];
   let correctCount = logs.filter(l=>l.type==='correct').length;
   let filteredCount = logs.filter(l=>l.type==='filtered').length;
-  let totalCount = correctCount + filteredCount; // FIXED
+  let totalCount = correctCount + filteredCount;
   let premium = hasPremiumAccess(); let owner = isOwnerUser();
   document.getElementById('ownerBadge').classList.toggle('hidden',!owner);
   document.getElementById('memoirContent').innerHTML = `
@@ -234,12 +225,10 @@ function toggleLogs(type){
   if(type==='filtered'){document.getElementById('filteredLogs').classList.toggle('hidden'); document.getElementById('correctLogs').classList.add('hidden');}
 }
 function buyPremium(){ if(confirm('Test unlock?')){ localStorage.setItem('isPremium','true'); location.reload(); } }
-
 async function saveToCloud(){ const user = firebase.auth().currentUser; if(!user) return; try{ await db.collection('users').doc(user.uid).set({ history: streams, detailedLogs: detailedLogs, deleted: JSON.parse(localStorage.getItem('borahae_deleted')||'[]'), email: user.email, updatedAt: new Date() }, {merge:true}); }catch(e){} }
 async function loadFromCloud(){ const user = firebase.auth().currentUser; if(!user) return; try{ const doc = await db.collection('users').doc(user.uid).get(); if(doc.exists && doc.data().history){ streams = doc.data().history; detailedLogs = doc.data().detailedLogs || {}; localStorage.setItem('borahae_history', JSON.stringify(streams)); localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs)); render(); } }catch(e){} }
 firebase.auth().onAuthStateChanged(user=>{ if(user){ loadSidebarPFP(); loadFromCloud(); } });
 
-// REFRESH + HISTORY AUTO SAVE FIX
 let startY=0; let pulling=false;
 window.addEventListener('touchstart', e=>{ if(window.scrollY===0){ startY=e.touches[0].clientY; pulling=true; } });
 window.addEventListener('touchmove', e=>{ if(!pulling) return; let diff=e.touches[0].clientY-startY; if(diff>80) document.getElementById('pullIndicator').style.transform='translateY(0)'; });
@@ -257,7 +246,9 @@ function checkActiveAndRender(){
     try{
       let active=JSON.parse(activeStr); let now=Date.now(); let watched=Math.floor((now-active.start)/1000); let total=active.duration||180;
       localStorage.removeItem('borahae_active_stream');
-      if(watched>=40 || watched>=total*0.5){
+      // FIXED: 30 sec ya 40% jo pehle ho - teri 1:30 wali pakka save hogi
+      let needed = Math.min(30, Math.floor(total*0.4));
+      if(watched>=needed){
         let dateStr=new Date().toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});
         let timeStr=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
         let fullISO=new Date().toISOString();
@@ -268,10 +259,13 @@ function checkActiveAndRender(){
         else{ streams.unshift({videoId:active.id,title:active.title,member:'OT7',channel:'HYBE LABELS',date:dateStr,time:timeStr,duration:`${watched}s`,count:1,type:type}); }
         if(!detailedLogs[active.id]) detailedLogs[active.id]=[];
         detailedLogs[active.id].unshift({date:dateStr,fullDate:fullISO,time:timeStr,duration:`${watched}s`,type:streamType,seconds:watched,required:total});
-        localStorage.setItem('borahae_history',JSON.stringify(streams)); localStorage.setItem('borahae_detailed_logs',JSON.stringify(detailedLogs));
+        localStorage.setItem('borahae_history',JSON.stringify(streams));
+        localStorage.setItem('borahae_detailed_logs',JSON.stringify(detailedLogs));
+        // loop block reset taaki agla stream bhi save ho
+        localStorage.removeItem('borahae_last_watch');
         saveToCloud();
       }
-    }catch(e){}
+    }catch(e){ console.log(e) }
   }
   loadSidebarPFP(); render();
 }
