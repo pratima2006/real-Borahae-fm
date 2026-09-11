@@ -1,146 +1,207 @@
-<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notice - borahae.fm</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
-body{font-family:'Manrope',sans-serif;background:#fdf8ff;transition:0.3s}
-.font-display{font-family:'Playfair Display',serif}
-.sidebar-bg{background:#28164f}
-.tab-active{background:#e5e7eb!important;color:black!important;font-weight:700}
-.sub-active{background:rgba(124,58,237,0.15)!important;backdrop-filter:blur(4px);border:1px solid #c4b5fd!important;color:black!important}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #f3e8ff;display:none;justify-content:space-around;padding:8px 0 18px 0;z-index:30;max-width:600px;margin:0 auto;}
+body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
+.font-display{font-family:'Playfair Display',serif;}
+.font-mono{font-family:'DM Mono',monospace;}
+.sidebar-bg{background:#28164f;}
+.paper-grid{background-image:linear-gradient(#e9d5ff1f 1px, transparent 1px),linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px); background-size:22px 22px;}
+*{box-sizing:border-box;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #f3e8ff;display:flex;justify-content:space-around;padding:8px 0 18px 0;z-index:30;max-width:480px;margin:0 auto;}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;opacity:0.5}
 .nav-item.active{opacity:1}
-body.dark{background:#0f0a1e!important;color:white}
-body.dark header{background:#0f0a1e!important}
-body.dark.bg-white{background:#1e1440!important;color:white!important;border-color:#2a1f5a!important}
-.switch{position:relative;display:inline-block;width:54px;height:30px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#d1d5db;transition:.3s;border-radius:999px}.slider:before{position:absolute;content:"";height:22px;width:22px;left:4px;bottom:4px;background:white;transition:.3s;border-radius:50%}input:checked+.slider{background:#22c55e}input:checked+.slider:before{transform:translateX(24px)}
-</style>
-</head>
-<body>
-
-<header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
-  <button onclick="openSidebar()" class="w-9 h-9 bg-white border rounded-[10px] flex items-center justify-center">☰</button>
-  <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
-  <span class="font-bold">borahae.fm</span>
+</style></head><body class="paper-grid pb-24">
+<header class="sticky top-0 z-30 bg-[#fdf8ff]/90 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
+<button onclick="openSidebar()" class="w-9 h-9 bg-white border rounded-[10px] flex items-center justify-center text-[20px]">☰</button>
+<div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
 </header>
-
-<div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/50 hidden z-40"></div>
-<aside id="sidebar" class="fixed top-0 left-0 w-[75%] max-w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-transform duration-300 flex flex-col p-5">
-  <div class="flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-8 h-8 bg-[#7c3aed] rounded-xl flex items-center justify-center text-white font-bold">b</div><span class="text-white font-bold">borahae.fm</span></div><button onclick="closeSidebar()" class="text-white text-xl">✕</button></div>
-  <div class="mt-6 flex items-center gap-3 bg-white/10 rounded-[16px] p-3"><img id="sidePfp" src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full object-cover"><div class="overflow-hidden"><p id="sideName" class="text-white text-[13px] font-bold truncate">ARMY</p><p id="sideEmail" class="text-white/60 text-[11px] truncate">...</p></div></div>
-  <nav class="mt-6 space-y-1"><a href="home.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">⌂ Home</a><a href="missions.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">✦ Missions</a><a href="music.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">▶ Videos</a><a href="history.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">◫ History</a><a href="notice.html" class="flex gap-3 px-4 py-3 rounded-full bg-white/10 text-white">🔔 Notice</a><a href="faq.html" class="flex gap-3 px-4 py-3 rounded-full text-white/60">? FAQ</a></nav>
-  <div class="mt-auto pt-6 border-t border-white/10"><a href="settings.html" class="flex gap-3 px-4 py-3 rounded-full text-white/40">⚙ Settings</a></div>
+<div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
+<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 flex flex-col p-5">
+<div class="flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div><button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button></div>
+<p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
+<nav class="space-y-[2px]">
+<a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 text-[13px]">⌂ Home</a>
+<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">🔔 Notice</a>
+<a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 text-[13px]">✦ Missions</a>
+<a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 text-[13px]">▶ Videos</a>
+<a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 text-[13px]">◫ History</a>
+<a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 text-[13px]">? FAQ</a>
+</nav>
+<div class="mt-auto"><div class="border-t border-white/10 pt-4"><a href="settings.html" class="flex gap-3 px-3 py-2.5 rounded-full text-white/40 text-[13px]">⚙ Settings</a></div>
+<div class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3"><img id="sidePfp" src="https://via.placeholder.com/40" class="w-8 h-8 rounded-full"><div class="overflow-hidden"><p id="sideName" class="text-white text-[12px] font-bold truncate">ARMY</p><p id="sideEmail" class="text-white/50 text-[10px] truncate">...</p></div></div></div>
 </aside>
 
-<main class="max-w-[600px] mx-auto px-5 pt-6 pb-28">
-  <h1 class="font-display text-[32px] font-bold">Notice Board</h1>
-  <p class="text-[#6b7280] text-[13px] mt-1">Important votings & announcements</p>
+<main class="w-full max-w-[480px] mx-auto px-4 pt-5">
+<!-- SAME AS YOUR SCREENSHOT -->
+<p class="font-mono text-[11px] tracking-[3px] text-[#7c3aed] font-bold">YOUR BOARD</p>
+<h1 class="font-display text-[32px] leading-[0.95] font-bold mt-1">Stay in the loop.</h1>
+<p class="text-[#6b7280] text-[11px] mt-2 leading-[1.4]">Important updates from us. Votings, donation drives and official notices — all in one place, updated live 💜</p>
 
-  <!-- MAIN 3 TABS -->
-  <div class="flex gap-2 mt-5">
-    <button id="tabNotice" onclick="switchMainTab('notice')" class="tab-active px-5 py-2 rounded-full text-[13px] bg-white border">Notice</button>
-    <button id="tabVotings" onclick="switchMainTab('votings')" class="px-5 py-2 rounded-full text-[13px] bg-white border">Votings</button>
-    <button id="tabDonate" onclick="switchMainTab('donate')" class="px-5 py-2 rounded-full text-[13px] bg-white border">Donate</button>
-  </div>
+<!-- MAIN TABS LIKE New Top3 All -->
+<div class="flex gap-1.5 mt-4">
+<button id="tabNotice" onclick="switchMain('notice')" class="bg-[#1a1033] text-white px-4 py-1.5 rounded-full text-[11px] font-bold">Notice</button>
+<button id="tabDonate" onclick="switchMain('donate')" class="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold">Donations</button>
+<button id="tabVotings" onclick="switchMain('votings')" class="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold">Votings</button>
+</div>
 
-  <!-- NOTICE CONTENT -->
-  <div id="noticeContent" class="mt-5 space-y-3"></div>
+<!-- SUB TABS FOR DONATIONS -->
+<div id="donateSub" class="hidden flex gap-1.5 mt-3">
+<button id="subBorahae" onclick="switchSub('borahae')" class="bg-[#ede9fe] border border-[#c4b5fd] px-3 py-1.5 rounded-full text-[10px] font-bold">Borahae-fm Donate</button>
+<button id="subDonate" onclick="switchSub('donate')" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Donations</button>
+</div>
 
-  <!-- VOTINGS CONTENT -->
-  <div id="votingsContent" class="mt-5 hidden">
-    <div id="ownerAddBox" class="hidden bg-white border border-dashed rounded-[16px] p-4 mb-4"><p class="text-[12px] font-bold">Owner: Add Voting</p><input id="vTitle" placeholder="Title" class="w-full mt-2 border rounded-full px-3 py-2 text-[12px]"><input id="vLink" placeholder="Vote link" class="w-full mt-2 border rounded-full px-3 py-2 text-[12px]"><input id="vEnd" type="date" class="w-full mt-2 border rounded-full px-3 py-2 text-[12px]"><button onclick="addVoting()" class="mt-2 w-full bg-[#7c3aed] text-white py-2 rounded-full text-[12px] font-bold">Add</button></div>
-    <div id="votingsList" class="space-y-3"></div>
-  </div>
+<!-- OWNER BOXES - ONLY FOR YOU -->
+<div id="ownerNoticeBox" class="hidden mt-4 bg-[#f3edff] rounded-[20px] p-3.5 border">
+<p class="font-bold text-[11px]">Owner: Add Notice with photo 💜</p>
+<input id="nTitle" placeholder="Notice title" class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px] outline-none">
+<textarea id="nDesc" placeholder="Description" class="w-full mt-2 bg-white border rounded-[12px] px-3 py-2 text-[11px]"></textarea>
+<input id="nImg" type="file" accept="image/*" class="w-full mt-2 text-[10px]">
+<button onclick="addNotice()" class="mt-2 w-full bg-[#7c3aed] text-white py-2 rounded-full text-[11px] font-bold">Add Notice + auto date/time</button>
+</div>
 
-  <!-- DONATE CONTENT -->
-  <div id="donateContent" class="mt-5 hidden">
-    <div class="flex gap-2"><button id="subBorahae" onclick="switchDonate('borahae')" class="sub-active px-4 py-2 rounded-full text-[12px] bg-white border">Borahae FM Donate</button><button id="subDonate" onclick="switchDonate('donate')" class="px-4 py-2 rounded-full text-[12px] bg-white border">Donate</button></div>
-    <div id="borahaeDonateList" class="mt-4 space-y-3"></div>
-    <div id="donateLinks" class="mt-4 hidden space-y-3"></div>
-  </div>
+<div id="ownerBorahaeBox" class="hidden mt-4 bg-[#f3edff] rounded-[20px] p-3.5 border">
+<p class="font-bold text-[11px]">Owner: Add Donate Proof</p>
+<input id="bTitle" placeholder="e.g. Donated to UNICEF" class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]">
+<input id="bAmount" placeholder="Amount ₹500" class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]">
+<input id="bImg" type="file" accept="image/*" class="w-full mt-2 text-[10px]">
+<button onclick="addBorahae()" class="mt-2 w-full bg-[#7c3aed] text-white py-2 rounded-full text-[11px] font-bold">Add proof</button>
+</div>
+
+<div id="ownerDonateLinkBox" class="hidden mt-4 bg-[#7c3aed] rounded-[20px] p-3.5">
+<p class="font-bold text-[11px] text-white">Add donations link - only you ✨</p>
+<input id="dTitle" placeholder="Site title" class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]">
+<input id="dLink" placeholder="https://donate-link.com" class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]">
+<textarea id="dDesc" placeholder="Info about donation site - why donate?" class="w-full mt-2 bg-white border rounded-[12px] px-3 py-2 text-[11px]"></textarea>
+<button onclick="addDonateLink()" class="mt-2 w-full bg-white text-[#7c3aed] py-2 rounded-full text-[11px] font-bold">Add link</button>
+</div>
+
+<div id="ownerVotingBox" class="hidden mt-4 bg-white border border-dashed rounded-[16px] p-3">
+<p class="font-bold text-[11px]">Owner: Add Voting</p>
+<input id="vTitle" placeholder="Voting title" class="w-full mt-2 border rounded-full px-3 py-2 text-[11px]">
+<input id="vLink" placeholder="Vote link" class="w-full mt-2 border rounded-full px-3 py-2 text-[11px]">
+<input id="vEnd" type="date" class="w-full mt-2 border rounded-full px-3 py-2 text-[11px]">
+<button onclick="addVoting()" class="mt-2 w-full bg-[#7c3aed] text-white py-2 rounded-full text-[11px] font-bold">Add</button>
+</div>
+
+<!-- CONTENTS - SAME PURPLE DIM BOX AS SCREENSHOT -->
+<div id="noticeContent" class="mt-4 space-y-2"></div>
+<div id="borahaeContent" class="mt-4 hidden space-y-2"></div>
+<div id="donateLinksContent" class="mt-4 hidden space-y-2"></div>
+<div id="votingsContent" class="mt-4 hidden space-y-2"></div>
 
 </main>
 
 <div id="bottomNav" class="bottom-nav">
-  <a href="home.html" class="nav-item"><span style="font-size:22px">⌂</span><span style="font-size:10px;font-weight:700">Home</span></a>
-  <a href="missions.html" class="nav-item"><span style="font-size:22px">✦</span><span style="font-size:10px;font-weight:700">Missions</span></a>
-  <a href="music.html" class="nav-item"><span style="font-size:22px">▶</span><span style="font-size:10px;font-weight:700">Videos</span></a>
-  <a href="notice.html" class="nav-item active"><span style="font-size:26px;color:#7c3aed">🔔</span><span style="font-size:10px;font-weight:700">Notice</span></a>
-  <a href="settings.html" class="nav-item"><span style="font-size:22px">⚙</span><span style="font-size:10px;font-weight:700">Settings</span></a>
+<a href="home.html" class="nav-item"><span style="font-size:20px">⌂</span><span style="font-size:9px">Home</span></a>
+<a href="missions.html" class="nav-item"><span style="font-size:20px">✦</span><span style="font-size:9px">Missions</span></a>
+<a href="music.html" class="nav-item"><span style="font-size:20px">▶</span><span style="font-size:9px">Videos</span></a>
+<a href="notice.html" class="nav-item active"><span style="font-size:22px;color:#7c3aed">🔔</span><span style="font-size:9px">Notice</span></a>
+<a href="settings.html" class="nav-item"><span style="font-size:20px">⚙</span><span style="font-size:9px">Settings</span></a>
 </div>
 
 <script>
-const firebaseConfig={apiKey:"AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",authDomain:"borahae-fm-f7075.firebaseapp.com",projectId:"borahae-fm-f7075"}; if(!firebase.apps.length) firebase.initializeApp(firebaseConfig); const db=firebase.firestore(); const OWNER_EMAILS=['pratimatribhuvan2006@gmail.com','tribhuvanpratima38@gmail.com']; let isOwner=false;
+const firebaseConfig={apiKey:"AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",authDomain:"borahae-fm-f7075.firebaseapp.com",databaseURL:"https://borahae-fm-f7075-default-rtdb.firebaseio.com",projectId:"borahae-fm-f7075"};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db=firebase.database(); const auth=firebase.auth();
+const OWNERS=['pratimatribhuvan2006@gmail.com','tribhuvanpratima38@gmail.com'];
+let isOwner=false; let main='notice'; let sub='borahae';
 
-firebase.auth().onAuthStateChanged(user=>{
-  if(user){ document.getElementById('sideEmail').innerText=user.email; document.getElementById('sideName').innerText=user.displayName||'ARMY'; if(user.photoURL) document.getElementById('sidePfp').src=user.photoURL; if(OWNER_EMAILS.includes(user.email.toLowerCase())){ isOwner=true; document.getElementById('ownerAddBox').classList.remove('hidden'); } }
-  let mode=localStorage.getItem('borahae_navMode')||'sidebar'; if(mode==='navigation'){ document.getElementById('sidebar').style.display='none'; document.getElementById('bottomNav').style.display='flex'; } else { document.getElementById('bottomNav').style.display='none'; }
-  if(localStorage.getItem('borahae_dark')==='true') document.body.classList.add('dark');
+auth.onAuthStateChanged(user=>{
+  if(user){
+    document.getElementById('sideEmail').innerText=user.email;
+    document.getElementById('sideName').innerText=user.displayName||'ARMY';
+    if(user.photoURL) document.getElementById('sidePfp').src=user.photoURL;
+    if(OWNERS.includes(user.email.toLowerCase())){ isOwner=true; showOwner(); }
+  }
+  loadAll();
 });
-
-function openSidebar(){ if(localStorage.getItem('borahae_navMode')==='navigation') return; document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebarOverlay').classList.remove('hidden'); }
+function showOwner(){
+  if(main==='notice') document.getElementById('ownerNoticeBox').classList.remove('hidden');
+  if(main==='donate' && sub==='borahae') document.getElementById('ownerBorahaeBox').classList.remove('hidden');
+  if(main==='donate' && sub==='donate') document.getElementById('ownerDonateLinkBox').classList.remove('hidden');
+  if(main==='votings') document.getElementById('ownerVotingBox').classList.remove('hidden');
+}
+function openSidebar(){ document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebarOverlay').classList.remove('hidden'); }
 function closeSidebar(){ document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebarOverlay').classList.add('hidden'); }
 
-// TABS
-function switchMainTab(tab){
-  document.getElementById('tabNotice').classList.remove('tab-active'); document.getElementById('tabVotings').classList.remove('tab-active'); document.getElementById('tabDonate').classList.remove('tab-active');
-  document.getElementById('noticeContent').classList.add('hidden'); document.getElementById('votingsContent').classList.add('hidden'); document.getElementById('donateContent').classList.add('hidden');
-  if(tab==='notice'){ document.getElementById('tabNotice').classList.add('tab-active'); document.getElementById('noticeContent').classList.remove('hidden'); loadNotices(); }
-  if(tab==='votings'){ document.getElementById('tabVotings').classList.add('tab-active'); document.getElementById('votingsContent').classList.remove('hidden'); loadVotings(); }
-  if(tab==='donate'){ document.getElementById('tabDonate').classList.add('tab-active'); document.getElementById('donateContent').classList.remove('hidden'); loadDonates(); }
-}
-function switchDonate(type){
-  document.getElementById('subBorahae').classList.remove('sub-active'); document.getElementById('subDonate').classList.remove('sub-active');
-  document.getElementById('borahaeDonateList').classList.add('hidden'); document.getElementById('donateLinks').classList.add('hidden');
-  if(type==='borahae'){ document.getElementById('subBorahae').classList.add('sub-active'); document.getElementById('borahaeDonateList').classList.remove('hidden'); }
-  else { document.getElementById('subDonate').classList.add('sub-active'); document.getElementById('donateLinks').classList.remove('hidden'); }
-}
+function switchMain(t){
+  main=t;
+  document.getElementById('tabNotice').className="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold";
+  document.getElementById('tabDonate').className="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold";
+  document.getElementById('tabVotings').className="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold";
+  document.getElementById('noticeContent').classList.add('hidden');
+  document.getElementById('borahaeContent').classList.add('hidden');
+  document.getElementById('donateLinksContent').classList.add('hidden');
+  document.getElementById('votingsContent').classList.add('hidden');
+  document.getElementById('donateSub').classList.add('hidden');
+  document.getElementById('ownerNoticeBox').classList.add('hidden');
+  document.getElementById('ownerBorahaeBox').classList.add('hidden');
+  document.getElementById('ownerDonateLinkBox').classList.add('hidden');
+  document.getElementById('ownerVotingBox').classList.add('hidden');
 
-// LOAD NOTICE - FIX 404
-async function loadNotices(){
-  try{
-    let res = await fetch('./notices.json'); if(!res.ok) throw '404';
-    let data = await res.json();
-    document.getElementById('noticeContent').innerHTML = data.map(n=>`<div class="bg-white border border-[#f3e8ff] rounded-[16px] p-4"><div class="flex justify-between"><span class="text-[9px] tracking-[1px] bg-[#f3e8ff] text-[#7c3aed] px-2 py-1 rounded-full font-bold">${n.badge}</span><span class="text-[10px] text-[#9ca3af]">${n.date}</span></div><h3 class="font-bold text-[13px] mt-2">${n.title}</h3><p class="text-[12px] text-[#6b7280] mt-1">${n.desc}</p>${n.link? `<a href="${n.link}" target="_blank" class="mt-3 inline-block bg-[#7c3aed] text-white px-4 py-1.5 rounded-full text-[11px] font-bold">Open ↗</a>`:''}</div>`).join('');
-  }catch(e){ document.getElementById('noticeContent').innerHTML = `<p class="text-[12px] text-gray-400">notices.json not found. GitHub pe file ka naam check kar - notices.json lowercase me hona chahiye same folder me.</p>`; }
+  if(t==='notice'){ document.getElementById('tabNotice').className="bg-[#1a1033] text-white px-4 py-1.5 rounded-full text-[11px] font-bold"; document.getElementById('noticeContent').classList.remove('hidden'); if(isOwner) document.getElementById('ownerNoticeBox').classList.remove('hidden'); }
+  if(t==='donate'){ document.getElementById('tabDonate').className="bg-[#1a1033] text-white px-4 py-1.5 rounded-full text-[11px] font-bold"; document.getElementById('donateSub').classList.remove('hidden'); switchSub(sub); }
+  if(t==='votings'){ document.getElementById('tabVotings').className="bg-[#1a1033] text-white px-4 py-1.5 rounded-full text-[11px] font-bold"; document.getElementById('votingsContent').classList.remove('hidden'); if(isOwner) document.getElementById('ownerVotingBox').classList.remove('hidden'); }
 }
+function switchSub(s){
+  sub=s;
+  document.getElementById('subBorahae').className="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold";
+  document.getElementById('subDonate').className="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold";
+  document.getElementById('borahaeContent').classList.add('hidden');
+  document.getElementById('donateLinksContent').classList.add('hidden');
+  document.getElementById('ownerBorahaeBox').classList.add('hidden');
+  document.getElementById('ownerDonateLinkBox').classList.add('hidden');
+  if(s==='borahae'){ document.getElementById('subBorahae').className="bg-[#ede9fe] border border-[#c4b5fd] px-3 py-1.5 rounded-full text-[10px] font-bold"; document.getElementById('borahaeContent').classList.remove('hidden'); if(isOwner) document.getElementById('ownerBorahaeBox').classList.remove('hidden'); }
+  else { document.getElementById('subDonate').className="bg-[#ede9fe] border border-[#c4b5fd] px-3 py-1.5 rounded-full text-[10px] font-bold"; document.getElementById('donateLinksContent').classList.remove('hidden'); if(isOwner) document.getElementById('ownerDonateLinkBox').classList.remove('hidden'); }
+}
+function fileToBase64(f){ return new Promise(r=>{ let rd=new FileReader(); rd.onload=e=>r(e.target.result); rd.readAsDataURL(f); }); }
 
-// VOTINGS - ONLY OWNER CAN ADD/DELETE, AUTO HIDE ENDED
-function loadVotings(){
-  let votings = JSON.parse(localStorage.getItem('borahae_votings')||'[]');
-  let now = new Date();
-  votings = votings.filter(v=> new Date(v.endDate) >= now); // ended gayab
-  localStorage.setItem('borahae_votings', JSON.stringify(votings));
-  document.getElementById('votingsList').innerHTML = votings.length? votings.map((v,i)=>`<div class="bg-white border rounded-[16px] p-4"><div class="flex justify-between"><span class="text-[10px] bg-[#ede9fe] text-[#7c3aed] px-2 py-1 rounded-full font-bold">VOTING</span><span class="text-[10px] text-gray-400">${v.date} • Ends ${v.endDate}</span></div><h3 class="font-bold text-[13px] mt-2">${v.title}</h3><a href="${v.link}" target="_blank" class="mt-3 inline-block bg-black text-white px-4 py-1.5 rounded-full text-[11px] font-bold">Vote Now ↗</a>${isOwner? `<button onclick="deleteVoting(${i})" class="ml-2 text-[11px] text-red-500 font-bold">Delete</button>`:''}</div>`).join('') : '<p class="text-[12px] text-gray-400">No active votings now 💜</p>';
+async function addNotice(){
+  let title=document.getElementById('nTitle').value; let desc=document.getElementById('nDesc').value; if(!title) return alert('Title');
+  let img=''; let file=document.getElementById('nImg').files[0]; if(file) img=await fileToBase64(file);
+  db.ref('notices').push({title,desc,img,date:new Date().toLocaleDateString(),time:new Date().toLocaleTimeString(),createdAt:Date.now()});
+  document.getElementById('nTitle').value=''; document.getElementById('nDesc').value='';
+}
+async function addBorahae(){
+  let title=document.getElementById('bTitle').value; let amount=document.getElementById('bAmount').value; if(!title) return alert('Title');
+  let img=''; let file=document.getElementById('bImg').files[0]; if(file) img=await fileToBase64(file);
+  db.ref('borahaeDonates').push({title,amount,img,date:new Date().toLocaleDateString(),time:new Date().toLocaleTimeString(),createdAt:Date.now()});
+  document.getElementById('bTitle').value=''; document.getElementById('bAmount').value='';
+}
+function addDonateLink(){
+  let title=document.getElementById('dTitle').value; let link=document.getElementById('dLink').value; let desc=document.getElementById('dDesc').value; if(!title||!link) return alert('Fill');
+  db.ref('donateLinks').push({title,link,desc,date:new Date().toLocaleDateString(),createdAt:Date.now()});
+  document.getElementById('dTitle').value=''; document.getElementById('dLink').value=''; document.getElementById('dDesc').value='';
 }
 function addVoting(){
-  if(!isOwner) return alert('Only owner');
-  let title=document.getElementById('vTitle').value, link=document.getElementById('vLink').value, endDate=document.getElementById('vEnd').value;
-  if(!title||!link||!endDate) return alert('Fill all');
-  let votings=JSON.parse(localStorage.getItem('borahae_votings')||'[]');
-  votings.unshift({title,link,endDate,date:new Date().toLocaleDateString()});
-  localStorage.setItem('borahae_votings', JSON.stringify(votings));
-  loadVotings(); document.getElementById('vTitle').value=''; document.getElementById('vLink').value='';
-}
-function deleteVoting(i){ if(!isOwner) return; let v=JSON.parse(localStorage.getItem('borahae_votings')||'[]'); v.splice(i,1); localStorage.setItem('borahae_votings', JSON.stringify(v)); loadVotings(); }
-
-// DONATE - PERMANENT HISTORY
-function loadDonates(){
-  // Borahae FM Donate History - kabhi delete nahi hoga, owner bhi nahi kar sakta
-  let borahaeDonates = JSON.parse(localStorage.getItem('borahae_fm_donates')||'[{"title":"Donated to UNICEF for BTS Love Myself","amount":"₹500","date":"Aug 2026","proof":""}]');
-  document.getElementById('borahaeDonateList').innerHTML = borahaeDonates.map(d=>`<div class="bg-white border border-[#e9d5ff] rounded-[16px] p-4 shadow-[0_0_20px_rgba(124,58,237,0.1)]"><div class="flex justify-between"><span class="text-[9px] bg-[#f3e8ff] text-[#7c3aed] px-2 py-1 rounded-full font-bold">BORAH AE FM</span><span class="text-[10px] text-gray-400">${d.date}</span></div><h3 class="font-bold text-[13px] mt-2 text-black">${d.title}</h3><p class="text-[12px] mt-1 text-black font-bold">${d.amount}</p></div>`).join('');
-
-  // Donate Links - tu yaha edit kar sakti hai
-  let donateLinks = [{"title":"Donate for BTS Birthday Ads","desc":"Support street ads & cafe events","link":"https://..."}, {"title":"Palestine Relief","desc":"Donate via trusted org","link":"https://..."}];
-  document.getElementById('donateLinks').innerHTML = donateLinks.map(d=>`<div class="bg-white border rounded-[16px] p-4"><h3 class="font-bold text-[13px]">${d.title}</h3><p class="text-[12px] text-[#6b7280] mt-1">${d.desc}</p><a href="${d.link}" target="_blank" class="mt-3 inline-block bg-[#7c3aed] text-white px-4 py-1.5 rounded-full text-[11px] font-bold">Donate ↗</a></div>`).join('');
+  let title=document.getElementById('vTitle').value; let link=document.getElementById('vLink').value; let end=document.getElementById('vEnd').value; if(!title||!link||!end) return alert('Fill');
+  db.ref('votings').push({title,link,endDate:end,date:new Date().toLocaleDateString(),createdAt:Date.now()});
+  document.getElementById('vTitle').value=''; document.getElementById('vLink').value='';
 }
 
-switchMainTab('notice');
-</script>
-</body></html>
+function loadAll(){
+  db.ref('notices').on('value',snap=>{
+    let d=snap.val(); let arr=d?Object.values(d).sort((a,b)=>b.createdAt-a.createdAt):[];
+    document.getElementById('noticeContent').innerHTML= arr.length? arr.map(n=>`<div class="bg-white border rounded-[16px] p-3"><div class="flex justify-between"><span class="text-[8px] bg-[#f3e8ff] text-[#7c3aed] px-2 py-0.5 rounded-full font-bold">NOTICE</span><span class="text-[9px] text-gray-400">${n.date} • ${n.time||''}</span></div><h3 class="font-bold text-[12px] mt-2">${n.title}</h3><p class="text-[11px] text-[#6b7280] mt-1">${n.desc||''}</p>${n.img?`<img src="${n.img}" class="w-full mt-2 rounded-[12px] border">`:''}</div>`).join('') : `<div class="border-[1.5px] border-dashed border-[#d8b4fe] rounded-[20px] p-6 bg-white/50 text-center"><div class="w-10 h-10 bg-[#f5f3ff] rounded-[12px] flex items-center justify-center mx-auto text-[#7c3aed]">♡</div><p class="text-[12px] text-[#9ca3af] mt-3">No notices yet</p><p class="text-[10px] text-[#c4b5fd] mt-1">Stay tuned for updates</p></div>`;
+  });
+  db.ref('borahaeDonates').on('value',snap=>{
+    let d=snap.val(); let arr=d?Object.values(d).sort((a,b)=>b.createdAt-a.createdAt):[];
+    document.getElementById('borahaeContent').innerHTML= arr.length? arr.map(b=>`<div class="bg-white border border-[#e9d5ff] rounded-[16px] p-3"><div class="flex justify-between"><span class="text-[8px] bg-[#f3e8ff] text-[#7c3aed] px-2 py-0.5 rounded-full font-bold">BORAH AE FM</span><span class="text-[9px] text-gray-400">${b.date} • ${b.time||''}</span></div><h3 class="font-bold text-[12px] mt-2">${b.title}</h3><p class="text-[11px] font-bold">${b.amount||''}</p>${b.img?`<img src="${b.img}" class="w-full mt-2 rounded-[12px] border">`:''}</div>`).join('') : `<div class="border-[1.5px] border-dashed border-[#d8b4fe] rounded-[20px] p-6 bg-white/50 text-center"><p class="text-[12px] text-[#9ca3af]">No donation proofs yet</p><p class="text-[10px] text-[#c4b5fd] mt-1">Proofs with date/time will appear here</p></div>`;
+  });
+  db.ref('donateLinks').on('value',snap=>{
+    let d=snap.val(); let arr=d?Object.values(d).sort((a,b)=>b.createdAt-a.createdAt):[];
+    document.getElementById('donateLinksContent').innerHTML= arr.length? arr.map(l=>`<div class="bg-white border rounded-[16px] p-3"><h3 class="font-bold text-[12px]">${l.title}</h3><p class="text-[11px] text-[#6b7280] mt-1">${l.desc||''}</p><a href="${l.link}" target="_blank" class="mt-2 inline-block bg-[#7c3aed] text-white px-4 py-1.5 rounded-full text-[10px] font-bold">Donate ↗</a></div>`).join('') : `<div class="border-[1.5px] border-dashed border-[#d8b4fe] rounded-[20px] p-6 bg-white/50 text-center"><p class="text-[12px] text-[#9ca3af]">No donation links yet</p><p class="text-[10px] text-[#c4b5fd] mt-1">Links with info will appear here</p></div>`;
+  });
+  db.ref('votings').on('value',snap=>{
+    let d=snap.val(); let arr=d?Object.values(d).sort((a,b)=>b.createdAt-a.createdAt):[];
+    let now=new Date(); arr=arr.filter(v=> new Date(v.endDate)>=now);
+    document.getElementById('votingsContent').innerHTML= arr.length? arr.map(v=>`<div class="bg-white border rounded-[16px] p-3"><div class="flex justify-between"><span class="text-[8px] bg-[#ede9fe] text-[#7c3aed] px-2 py-0.5 rounded-full font-bold">VOTING</span><span class="text-[9px] text-gray-400">Ends ${v.endDate}</span></div><h3 class="font-bold text-[12px] mt-2">${v.title}</h3><a href="${v.link}" target="_blank" class="mt-2 inline-block bg-black text-white px-4 py-1.5 rounded-full text-[10px] font-bold">Vote Now ↗</a></div>`).join('') : `<div class="border-[1.5px] border-dashed border-[#d8b4fe] rounded-[20px] p-6 bg-white/50 text-center"><p class="text-[12px] text-[#9ca3af]">No active votings right now</p><p class="text-[10px] text-[#c4b5fd] mt-1">Check back later 💜</p></div>`;
+  });
+}
+switchMain('notice');
+</script></body></html>
