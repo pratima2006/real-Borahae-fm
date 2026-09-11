@@ -6,14 +6,15 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Mono:wght@400;700&family=Inter:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
-body{font-family:'Manrope',sans-serif;background:#faf6ff;transition:0.3s; overscroll-behavior-y:contain;}
+body{font-family:'Manrope',sans-serif;background:#faf6ff;overscroll-behavior-y:contain}
 .serif{font-family:'DM Serif Display',serif}.mono{font-family:'Space Mono',monospace}.font-display{font-family:'Playfair Display',serif;}
 .sidebar-bg{background:#28164f;}
+.blur-lock{filter:blur(8px);pointer-events:none;user-select:none;opacity:0.55}
+.lock-overlay{background:linear-gradient(to bottom, transparent 10%, #faf6ff 65%)}
 .paper-grid{background-image:linear-gradient(#e9d5ff1f 1px, transparent 1px),linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px); background-size:22px 22px;}
 .tab-active{background:#7c3aed;color:white;border-color:#7c3aed}
 .tab-idle{background:white;color:#1a1033;border-color:#e9d5ff}
-#line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-#pullIndicator{transform:translateY(-100%);transition:0.2s}
+#pullIndicator{transform:translateY(-100%);transition:0.25s}
 </style>
 </head>
 <body class="min-h-screen pb-28 paper-grid">
@@ -42,40 +43,53 @@ body{font-family:'Manrope',sans-serif;background:#faf6ff;transition:0.3s; oversc
 <div class="border-t border-white/10 pt-4 space-y-[2px]"><a href="whatsnew.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✧ What's New</a><a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a></div>
 <div id="sidebarUserBox" onclick="location.href='settings.html'" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15 transition">
 <div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden flex-shrink-0"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div>
-<div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY</p><p class="text-white/50 text-[10px] truncate">View profile</p></div>
+<div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY</p><p id="sidebarSub" class="text-white/50 text-[10px] truncate">View profile</p></div>
 </div>
 </div>
 </aside>
 
-<div class="px-5 pt-6 max-w-[480px] mx-auto">
-<p class="mono text-[11px] tracking-[0.25em] text-[#8b2cf0] font-bold">STREAM JOURNAL</p>
-<h1 class="serif text-[38px] leading-[0.95] mt-2 text-[#1a1033]">The pages you've left behind.</h1>
+<div class="max-w-[480px] mx-auto">
+  <div class="px-5 pt-6">
+    <p class="mono text-[11px] tracking-[0.25em] text-[#8b2cf0] font-bold">STREAM JOURNAL</p>
+    <h1 class="serif text-[38px] leading-[0.95] mt-2 text-[#1a1033]">The pages you've left<br>behind.</h1>
+  </div>
 
-<div class="flex gap-2 mt-5">
-<button onclick="setTab('video')" id="tab-video" class="tab-active px-4 py-2 rounded-full text-[11px] font-bold border">Videos</button>
-<button onclick="setTab('short')" id="tab-short" class="tab-idle px-4 py-2 rounded-full text-[11px] font-bold border">Shorts</button>
-<button onclick="setTab('live')" id="tab-live" class="tab-idle px-4 py-2 rounded-full text-[11px] font-bold border">Live</button>
+  <!-- STICKY SEARCH + TABS + LINE -->
+  <div class="sticky top-[57px] z-10 bg-[#faf6ff]/90 backdrop-blur-md px-5 pt-4 pb-3">
+    <div class="bg-white border border-[#ede9fe] rounded-full px-4 py-2 flex items-center gap-2">
+      <span class="text-[#9ca3af] text-[13px]">⌕</span>
+      <input id="searchHistory" oninput="render()" placeholder="Search your history..." class="flex-1 bg-transparent outline-none text-[12px] placeholder:text-[#9ca3af]">
+    </div>
+    <div class="flex gap-2 mt-3">
+      <button onclick="setTab('video')" id="tab-video" class="tab-active px-4 py-2 rounded-full text-[11px] font-bold border transition">Videos</button>
+      <button onclick="setTab('short')" id="tab-short" class="tab-idle px-4 py-2 rounded-full text-[11px] font-bold border transition">Shorts</button>
+    </div>
+    <div class="h-[1px] bg-[#ede9fe] mt-3 w-full"></div>
+  </div>
+
+  <div class="px-5">
+    <div id="streamList" class="mt-3 space-y-2.5"></div>
+    <div id="emptyState" class="mt-5 bg-white/60 border border-dashed border-[#d6c6f5] rounded-[20px] p-8 text-center hidden">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-[#ede6fb] flex items-center justify-center text-[#8b2cf0] text-xl">♡</div>
+      <h2 class="serif text-[24px] mt-4 leading-tight text-[#1a1033]">No streams yet</h2>
+      <p class="text-[12px] text-[#8a7ca3] mt-2">Watch 40s+ • Pull down to refresh</p>
+      <button onclick="location.href='music.html'" class="mt-5 bg-[#8b2cf0] text-white mono text-[12px] font-bold px-6 py-2.5 rounded-full">Find a MV</button>
+    </div>
+  </div>
 </div>
 
-<div id="streamList" class="mt-5 space-y-2.5"></div>
-<div id="emptyState" class="mt-5 bg-white/60 border border-dashed border-[#d6c6f5] rounded-[20px] p-8 text-center hidden">
-<div class="w-14 h-14 mx-auto rounded-2xl bg-[#ede6fb] flex items-center justify-center text-[#8b2cf0] text-xl">♡</div>
-<h2 class="serif text-[24px] mt-4 leading-tight text-[#1a1033]">No streams recorded yet</h2>
-<p class="text-[12px] text-[#8a7ca3] mt-2">Watch 40 sec+, it will auto save here. Pull down to refresh.</p>
-<button onclick="location.href='music.html'" class="mt-5 bg-[#8b2cf0] text-white mono text-[12px] font-bold px-6 py-2.5 rounded-full">Find a MV</button>
-</div>
-</div>
-
+<!-- MEMOIR - TOUCH NAHI KIYA BAS COUNT + FONT + NAMES FIX -->
 <div id="memoirPage" class="fixed inset-0 bg-[#faf6ff] z-50 hidden overflow-y-auto">
 <div class="max-w-[480px] mx-auto min-h-screen">
 <div class="sticky top-0 bg-[#faf6ff]/90 backdrop-blur-md border-b border-purple-100 px-4 py-3 flex items-center gap-3">
-<button onclick="closeMemoir()" class="w-9 h-9 bg-white border rounded-full flex items-center justify-center">←</button><p class="font-bold">Memoir</p>
+<button onclick="closeMemoir()" class="w-9 h-9 bg-white border rounded-full flex items-center justify-center">←</button>
+<p class="font-bold">Memoir</p>
+<span id="ownerBadge" class="hidden ml-auto text-[10px] bg-[#10b981] text-white px-2 py-0.5 rounded-full font-bold">OWNER • FREE</span>
 </div>
 <div id="memoirContent" class="p-5"></div>
 </div>
 </div>
 
-<!-- DELETE POPUP FIXED SAME AS MUSIC -->
 <div id="deleteConfirm" class="fixed inset-0 bg-black/40 backdrop-blur-[2px] hidden items-center justify-center z-[80] p-4">
 <div class="bg-white rounded-[20px] p-5 w-full max-w-[300px] text-center shadow-xl">
 <div class="w-10 h-10 bg-[#fff1f2] rounded-full flex items-center justify-center mx-auto text-[#e11d48]">🗑</div>
@@ -99,28 +113,25 @@ function closeSidebar(){document.getElementById('sidebar').classList.add('-trans
 let streams = JSON.parse(localStorage.getItem('borahae_history') || '[]');
 let detailedLogs = JSON.parse(localStorage.getItem('borahae_detailed_logs') || '{}');
 let currentTab = 'video'; let deleteTargetId=null;
-const LOOP_GAP = 60*1000;
 
 const OWNER_EMAILS = ['pratimatribhuvan2006@gmail.com','tribhuvanpratima38@gmail.com'].map(e=>e.toLowerCase());
 function getCurrentUser(){ try{ return JSON.parse(localStorage.getItem('borahaeUser')||localStorage.getItem('borahae_user')||'{}'); }catch(e){ return {}; } }
+function isOwnerUser(){ const u=getCurrentUser(); return u.email && OWNER_EMAILS.includes(u.email.toLowerCase()); }
+function isFreeDayActive(){ const now=new Date(); const first=new Date(now.getFullYear(), now.getMonth(), 1); let s=new Date(first); while(s.getDay()!==0) s.setDate(s.getDate()+1); const start=new Date(s); start.setHours(12,0,0,0); const end=new Date(start); end.setDate(end.getDate()+1); return (now>=start && now<=end)? end : null; }
+const FREE_UNTIL = new Date('2027-05-01T00:00:00');
+function hasPremiumAccess(){ if(isOwnerUser()) return true; if(localStorage.getItem('isPremium')==='true') return true; if(new Date() < FREE_UNTIL) return true; if(isFreeDayActive()) return true; return false; }
 
-// PFP same as settings appearance
 function loadSidebarPFP(){
   try{
-    let u=getCurrentUser(); let name = u.name || localStorage.getItem('army_name') || u.displayName || 'ARMY';
+    let u=getCurrentUser(); let name = u.name || localStorage.getItem('army_name') || 'ARMY';
     document.getElementById('sidebarName').innerText=name;
-    let pic = u.photo || localStorage.getItem('army_pfp') || u.photoURL || '';
+    let pic = u.photo || localStorage.getItem('army_pfp') || '';
     if(pic){ document.getElementById('sidebarAvatarImg').src=pic; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }
-    else { document.getElementById('sidebarAvatarLetter').innerText=name.charAt(0).toUpperCase(); }
   }catch(e){}
 }
 loadSidebarPFP();
 
-function cleanExpiredDeleted(){
-  let deleted = JSON.parse(localStorage.getItem('borahae_deleted')||'[]');
-  let now = Date.now(); deleted = deleted.filter(d => (now - d.deletedAt) < 60*24*60*60*1000);
-  localStorage.setItem('borahae_deleted', JSON.stringify(deleted));
-}
+function cleanExpiredDeleted(){ let deleted = JSON.parse(localStorage.getItem('borahae_deleted')||'[]'); let now = Date.now(); deleted = deleted.filter(d => (now - d.deletedAt) < 60*24*60*60*1000); localStorage.setItem('borahae_deleted', JSON.stringify(deleted)); }
 cleanExpiredDeleted();
 
 function askDelete(videoId){ deleteTargetId=videoId; document.getElementById('deleteConfirm').classList.remove('hidden'); document.getElementById('deleteConfirm').classList.add('flex'); }
@@ -140,34 +151,37 @@ function setTab(t){
   currentTab=t;
   document.getElementById('tab-video').className = t==='video'? 'tab-active px-4 py-2 rounded-full text-[11px] font-bold border' : 'tab-idle px-4 py-2 rounded-full text-[11px] font-bold border';
   document.getElementById('tab-short').className = t==='short'? 'tab-active px-4 py-2 rounded-full text-[11px] font-bold border' : 'tab-idle px-4 py-2 rounded-full text-[11px] font-bold border';
-  document.getElementById('tab-live').className = t==='live'? 'tab-active px-4 py-2 rounded-full text-[11px] font-bold border' : 'tab-idle px-4 py-2 rounded-full text-[11px] font-bold border';
   render();
 }
 
-// FIXED RENDER - neat & clean, no 1x streams, time/date right side inside box
+// HISTORY RENDER - CLEAN BOX
 function render(){
   const list = document.getElementById('streamList'); const empty = document.getElementById('emptyState');
+  const q = (document.getElementById('searchHistory')?.value||'').toLowerCase();
   let filtered = streams.filter(s=> (s.type||'video')===currentTab);
+  if(q) filtered = filtered.filter(s=> (s.title||'').toLowerCase().includes(q) || (s.channel||'').toLowerCase().includes(q));
   if(filtered.length===0){ empty.classList.remove('hidden'); list.innerHTML=''; return; }
   empty.classList.add('hidden');
   list.innerHTML = filtered.map(s=>`
-    <div class="bg-white rounded-[16px] p-2.5 flex gap-3 border border-[#f3e8ff] shadow-sm relative overflow-hidden">
-      <div class="relative flex-shrink-0">
-        <img src="https://img.youtube.com/vi/${s.videoId}/hqdefault.jpg" class="w-[104px] h-[64px] rounded-[12px] object-cover bg-gray-100">
-      </div>
+    <div class="bg-white rounded-[16px] p-2.5 flex gap-3 border border-[#f3e8ff] shadow-sm relative">
+      <img src="https://img.youtube.com/vi/${s.videoId}/mqdefault.jpg" class="w-[102px] h-[62px] rounded-[12px] object-cover bg-gray-100 shrink-0">
       <div class="flex-1 min-w-0 flex">
-        <div class="flex-1 min-w-0">
+        <div class="flex-1 min-w-0 pr-1">
           <p class="text-[12px] font-bold leading-[1.25] text-[#1a1033]" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${s.title}</p>
           <p class="text-[10px] text-[#8a7ca3] mt-1 truncate">${s.channel||'HYBE LABELS'}</p>
         </div>
-        <div class="ml-2 flex flex-col items-end justify-between flex-shrink-0">
-          <div class="text-right">
-            <p class="text-[10px] font-bold text-[#1a1033] leading-none">${s.time||''}</p>
-            <p class="text-[9px] text-[#9ca3af] mt-1 leading-none">${s.date||''}</p>
+        <div class="flex flex-col items-end justify-between shrink-0">
+          <div class="text-right leading-none">
+            <p class="text-[10px] font-bold text-[#1a1033]">${s.time||''}</p>
+            <p class="text-[9px] text-[#9ca3af] mt-[3px]">${s.date||''}</p>
           </div>
           <div class="flex gap-1 mt-2">
-            <button onclick="openMemoir('${s.videoId}')" class="w-7 h-7 bg-[#f5f3ff]/80 border border-[#ede9fe] rounded-full flex items-center justify-center text-[#7c3aed] text-[11px] backdrop-blur" title="Memoir">⧉</button>
-            <button onclick="askDelete('${s.videoId}')" class="w-7 h-7 bg-black/5 border border-black/5 rounded-full flex items-center justify-center text-[#e11d48] text-[11px] backdrop-blur hover:bg-[#fff1f2]" title="Delete">✕</button>
+            <button onclick="openMemoir('${s.videoId}')" class="w-7 h-7 bg-[#f5f3ff]/80 border border-[#ede9fe] rounded-full flex items-center justify-center hover:bg-[#ede9fe] transition" title="Memoir">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </button>
+            <button onclick="askDelete('${s.videoId}')" class="w-7 h-7 bg-black/5 border border-black/5 rounded-full flex items-center justify-center hover:bg-[#fff1f2] transition" title="Delete">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+            </button>
           </div>
         </div>
       </div>
@@ -175,87 +189,95 @@ function render(){
   `).join('');
 }
 
+// MEMOIR - BAS FONT + COUNT + NAMES FIX, DESIGN SAME
 function openMemoir(videoId){
   let s = streams.find(x=>x.videoId===videoId); if(!s) return;
   let logs = detailedLogs[videoId] || [];
+  let correctCount = logs.filter(l=>l.type==='correct').length;
+  let filteredCount = logs.filter(l=>l.type==='filtered').length;
+  let totalCount = correctCount + filteredCount; // FIXED
+  let premium = hasPremiumAccess(); let owner = isOwnerUser();
+  document.getElementById('ownerBadge').classList.toggle('hidden',!owner);
   document.getElementById('memoirContent').innerHTML = `
     <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" class="w-full aspect-video rounded-[20px] object-cover">
-    <h2 class="serif text-[24px] mt-4 leading-tight">${s.title}</h2>
-    <p class="text-[12px] text-[#8a7ca3] mt-1">${s.channel||'HYBE LABELS'} • ${s.type||'video'}</p>
-    <div class="mt-4 bg-white rounded-[16px] p-3 border"><p class="mono text-[10px] text-[#8b2cf0]">TIMELINE</p>
-    <div class="mt-2 space-y-1 max-h-[300px] overflow-auto">
-    ${logs.length? logs.map(l=>`<div class="flex justify-between text-[11px] py-1.5 border-b border-gray-50"><span>${l.date} ${l.time}</span><span class="text-[#6b7280]">${l.duration}</span></div>`).join('') : '<p class="text-[11px] text-gray-400">No logs</p>'}
-    </div></div>
+    <h2 class="serif text-[28px] mt-4 leading-tight">${s.title}</h2>
+    <p class="text-[13px] text-[#8a7ca3] mt-1">${s.channel||'HYBE LABELS'} • ${s.type||'video'}</p>
+    <div class="mt-5 grid grid-cols-2 gap-3">
+      <div class="bg-white rounded-[16px] p-4 border"><p class="mono text-[10px] text-[#8b2cf0]">MY TOTAL STREAMS</p><p class="font-display text-[28px] font-bold mt-1 leading-none">${totalCount || s.count || 0}</p></div>
+      <div class="bg-white rounded-[16px] p-4 border"><p class="mono text-[10px] text-[#8b2cf0]">LAST STREAM</p><p class="text-[13px] font-bold mt-1">${s.date}<br>${s.time||''}</p></div>
+    </div>
+    <div class="mt-6 relative">
+      <div id="premiumPart" class="${!premium?'blur-lock':''}">
+        <div class="mt-4 bg-white rounded-[24px] p-5 border">
+          <h3 class="font-bold text-[15px]">The way you loved it</h3>
+          <div class="flex gap-2 mt-4">
+            <button onclick="toggleLogs('correct')" class="flex-1 bg-[#ede6fb] py-2.5 rounded-full text-[11px] font-bold">Heartfelt: ${correctCount}</button>
+            <button onclick="toggleLogs('filtered')" class="flex-1 bg-[#fff0f0] py-2.5 rounded-full text-[11px] font-bold">Fleeting: ${filteredCount}</button>
+          </div>
+          <div id="correctLogs" class="mt-3 hidden text-[11px] bg-[#faf6ff] rounded-[12px] p-3 border">
+            ${correctCount? `<p class="font-bold text-[11px] mb-2">Heartfelt Plays - poora dekha 💜 (${correctCount})</p><p class="text-[20px] font-display font-bold">${correctCount}</p>` : 'No heartfelt yet - pura MV bina mute/loop ke dekho (90%+)!'}
+          </div>
+          <div id="filteredLogs" class="mt-3 hidden text-[11px] bg-[#fffafa] rounded-[12px] p-3 border">
+            ${filteredCount? `<p class="font-bold text-[11px] mb-2">Fleeting Plays - chhota dekha (${filteredCount})</p><p class="text-[20px] font-display font-bold">${filteredCount}</p>` : 'No fleeting'}
+          </div>
+          <p class="text-[9px] text-gray-400 mt-3">Heartfelt = 90% ya pura MV, Fleeting = 1 min se kam. Total = Heartfelt + Fleeting</p>
+        </div>
+      </div>
+      ${!premium? `<div class="absolute inset-0 lock-overlay flex flex-col justify-end pb-2"><div class="bg-white border rounded-[24px] p-5 text-center"><div class="w-10 h-10 bg-[#f3e8ff] rounded-full flex items-center justify-center mx-auto">🔒</div><h3 class="font-bold text-[16px] mt-2">Unlock Full Memoir</h3><p class="text-[12px] text-[#6b7280] mt-1">Premium $2.99 / ₹249</p><button onclick="buyPremium()" class="w-full mt-3 bg-[#8b2cf0] text-white py-3 rounded-full font-bold text-[13px]">Unlock Now 💜</button></div></div>` : ''}
+    </div>
   `;
   document.getElementById('memoirPage').classList.remove('hidden');
 }
 function closeMemoir(){document.getElementById('memoirPage').classList.add('hidden');}
-
-async function saveToCloud(){
-  const user = firebase.auth().currentUser; if(!user) return;
-  try{ await db.collection('users').doc(user.uid).set({ history: streams, detailedLogs: detailedLogs, deleted: JSON.parse(localStorage.getItem('borahae_deleted')||'[]'), email: user.email, updatedAt: new Date() }, {merge:true}); }catch(e){}
+function toggleLogs(type){
+  if(type==='correct'){document.getElementById('correctLogs').classList.toggle('hidden'); document.getElementById('filteredLogs').classList.add('hidden');}
+  if(type==='filtered'){document.getElementById('filteredLogs').classList.toggle('hidden'); document.getElementById('correctLogs').classList.add('hidden');}
 }
+function buyPremium(){ if(confirm('Test unlock?')){ localStorage.setItem('isPremium','true'); location.reload(); } }
 
-// PULL TO REFRESH + AUTO CHECK ACTIVE STREAM
+async function saveToCloud(){ const user = firebase.auth().currentUser; if(!user) return; try{ await db.collection('users').doc(user.uid).set({ history: streams, detailedLogs: detailedLogs, deleted: JSON.parse(localStorage.getItem('borahae_deleted')||'[]'), email: user.email, updatedAt: new Date() }, {merge:true}); }catch(e){} }
+async function loadFromCloud(){ const user = firebase.auth().currentUser; if(!user) return; try{ const doc = await db.collection('users').doc(user.uid).get(); if(doc.exists && doc.data().history){ streams = doc.data().history; detailedLogs = doc.data().detailedLogs || {}; localStorage.setItem('borahae_history', JSON.stringify(streams)); localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs)); render(); } }catch(e){} }
+firebase.auth().onAuthStateChanged(user=>{ if(user){ loadSidebarPFP(); loadFromCloud(); } });
+
+// REFRESH + HISTORY AUTO SAVE FIX
 let startY=0; let pulling=false;
 window.addEventListener('touchstart', e=>{ if(window.scrollY===0){ startY=e.touches[0].clientY; pulling=true; } });
-window.addEventListener('touchmove', e=>{
-  if(!pulling) return;
-  let diff=e.touches[0].clientY-startY;
-  if(diff>80){ document.getElementById('pullIndicator').style.transform='translateY(0)'; }
-});
+window.addEventListener('touchmove', e=>{ if(!pulling) return; let diff=e.touches[0].clientY-startY; if(diff>80) document.getElementById('pullIndicator').style.transform='translateY(0)'; });
 window.addEventListener('touchend', e=>{
-  if(!pulling) return; pulling=false;
-  let diff=e.changedTouches[0].clientY-startY;
-  if(diff>80){
-    document.getElementById('pullIndicator').style.transform='translateY(0)';
-    setTimeout(()=>{ checkActiveAndRender(); document.getElementById('pullIndicator').style.transform='translateY(-100%)'; },600);
-  } else { document.getElementById('pullIndicator').style.transform='translateY(-100%)'; }
+  if(!pulling) return; pulling=false; let diff=e.changedTouches[0].clientY-startY;
+  if(diff>80){ document.getElementById('pullIndicator').style.transform='translateY(0)'; setTimeout(()=>{ checkActiveAndRender(); document.getElementById('pullIndicator').style.transform='translateY(-100%)'; },600); }
+  else { document.getElementById('pullIndicator').style.transform='translateY(-100%)'; }
 });
 
 function checkActiveAndRender(){
-  // re-load from localStorage (music page may have saved)
   streams = JSON.parse(localStorage.getItem('borahae_history') || '[]');
   detailedLogs = JSON.parse(localStorage.getItem('borahae_detailed_logs') || '{}');
-  // check if there is pending active stream that user returned from
   let activeStr=localStorage.getItem('borahae_active_stream');
   if(activeStr){
     try{
       let active=JSON.parse(activeStr); let now=Date.now(); let watched=Math.floor((now-active.start)/1000); let total=active.duration||180;
       localStorage.removeItem('borahae_active_stream');
       if(watched>=40 || watched>=total*0.5){
-        // save
         let dateStr=new Date().toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});
         let timeStr=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
         let fullISO=new Date().toISOString();
         let existing=streams.find(s=>s.videoId===active.id);
-        if(existing){existing.count++; existing.date=dateStr; existing.time=timeStr;}
-        else{
-          let type = total<=61? 'short' : (active.type||'video');
-          streams.unshift({videoId:active.id,title:active.title,member:'OT7',channel:'HYBE LABELS',date:dateStr,time:timeStr,duration:`${watched}s`,count:1,type:type});
-        }
+        let type = total<=61? 'short' : (active.type||'video');
+        let streamType = watched>=Math.max(total*0.9, total-10)? 'correct' : 'filtered';
+        if(existing){ existing.date=dateStr; existing.time=timeStr; }
+        else{ streams.unshift({videoId:active.id,title:active.title,member:'OT7',channel:'HYBE LABELS',date:dateStr,time:timeStr,duration:`${watched}s`,count:1,type:type}); }
         if(!detailedLogs[active.id]) detailedLogs[active.id]=[];
-        detailedLogs[active.id].unshift({date:dateStr,fullDate:fullISO,time:timeStr,duration:`${watched}s / ${Math.floor(total/60)}m`,type:'correct',seconds:watched,required:total});
-        localStorage.setItem('borahae_history',JSON.stringify(streams));
-        localStorage.setItem('borahae_detailed_logs',JSON.stringify(detailedLogs));
+        detailedLogs[active.id].unshift({date:dateStr,fullDate:fullISO,time:timeStr,duration:`${watched}s`,type:streamType,seconds:watched,required:total});
+        localStorage.setItem('borahae_history',JSON.stringify(streams)); localStorage.setItem('borahae_detailed_logs',JSON.stringify(detailedLogs));
         saveToCloud();
       }
     }catch(e){}
   }
   loadSidebarPFP(); render();
 }
-
-// check on all lifecycle events
 window.addEventListener('pageshow', checkActiveAndRender);
 window.addEventListener('focus', checkActiveAndRender);
 document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkActiveAndRender(); });
 window.addEventListener('load', checkActiveAndRender);
-
-firebase.auth().onAuthStateChanged(user=>{
-  if(user){ loadSidebarPFP(); db.collection('users').doc(user.uid).get().then(doc=>{
-    if(doc.exists && doc.data().history){ streams=doc.data().history; detailedLogs=doc.data().detailedLogs||{}; localStorage.setItem('borahae_history',JSON.stringify(streams)); localStorage.setItem('borahae_detailed_logs',JSON.stringify(detailedLogs)); render(); }
-  }); }
-});
-
 render();
 </script></body></html>
