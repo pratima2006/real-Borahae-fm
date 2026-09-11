@@ -3,7 +3,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.youtube.com/iframe_api"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
 body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
@@ -13,6 +12,9 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 .paper-grid{background-image:linear-gradient(#e9d5ff1f 1px, transparent 1px),linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px); background-size:22px 22px;}
 *{box-sizing:border-box;}
 .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#actionSheet{transition:opacity 0.25s ease}
+#actionSheet.sheet{transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.32,0.72,0,1)}
+#actionSheet.show.sheet{transform:translateY(0)}
 </style></head><body class="paper-grid pb-24">
 <header class="sticky top-0 z-30 bg-[#fdf8ff]/90 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
 <button onclick="openSidebar()" class="w-9 h-9 bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center text-[20px] cursor-pointer">☰</button>
@@ -50,7 +52,7 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 
 <div class="mt-4 bg-[#f3edff] rounded-[20px] p-3.5 w-full border">
 <div class="flex items-center gap-2"><span class="text-[12px]">🔗</span><h3 class="font-bold text-[12px]">Add MVs for shelf</h3><span class="ml-auto text-[8px] bg-white px-2 py-0.5 rounded-full">For all ARMYs</span></div>
-<input id="ytLink" oninput="checkLink()" placeholder="youtube.com/watch?v=... or shorts/..." class="w-full mt-2.5 bg-white border rounded-full px-4 py-2.5 text-[12px] outline-none focus:border-[#7c3aed]">
+<input id="ytLink" oninput="debouncedCheck()" placeholder="youtube.com/watch?v=... or shorts/..." class="w-full mt-2.5 bg-white border rounded-full px-4 py-2.5 text-[12px] outline-none focus:border-[#7c3aed]">
 <div id="previewBox" class="hidden mt-2.5 bg-white rounded-[14px] p-2.5 border flex gap-3">
 <div class="relative flex-shrink-0">
 <img id="prevThumb" class="w-[112px] h-[64px] rounded-[10px] object-cover bg-gray-100">
@@ -97,7 +99,7 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 </main>
 
 <div id="actionSheet" class="fixed inset-0 bg-black/40 backdrop-blur-[2px] hidden items-end justify-center z-[70] p-3" onclick="closeActionSheet()">
-<div class="bg-white rounded-[24px] p-4 w-full max-w-[360px] shadow-[0_20px_60px_rgba(0,0,0,0.2)]" onclick="event.stopPropagation()">
+<div class="sheet bg-white rounded-[24px] p-4 w-full max-w-[360px] shadow-[0_20px_60px_rgba(0,0,0,0.2)]" onclick="event.stopPropagation()">
 <div class="w-8 h-1 bg-gray-200 rounded-full mx-auto mb-3"></div>
 <div class="flex gap-3">
 <div class="relative flex-shrink-0">
@@ -138,8 +140,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 </div>
 </div>
 
-<div id="hiddenPlayers" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden"></div>
-
 <script>
 const firebaseConfig={apiKey:"AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",authDomain:"borahae-fm-f7075.firebaseapp.com",databaseURL:"https://borahae-fm-f7075-default-rtdb.firebaseio.com",projectId:"borahae-fm-f7075"};
 firebase.initializeApp(firebaseConfig);const db=firebase.database(); const auth=firebase.auth();
@@ -153,7 +153,6 @@ let missionGoals=JSON.parse(localStorage.getItem('borahae_mission_goals')||'{}')
 let durations=JSON.parse(localStorage.getItem('bts_durations')||'{"gdZLi9oWNZg":219,"WMweEpGlu_U":167,"Jc5wIl_y5j4":274}');
 if(videos.length===0){videos=[{title:"BTS 'Dynamite' Official MV",id:"gdZLi9oWNZg",channel:"HYBE LABELS",addedAt:Date.now(),type:'video',duration:219},{title:"BTS 'Butter' Official MV",id:"WMweEpGlu_U",channel:"HYBE LABELS",addedAt:Date.now(),type:'video',duration:167}];localStorage.setItem('bts_videos',JSON.stringify(videos));}
 let pending=null;let actionData=null;let deleteId=null;let isNewFilterActive=false;let isPinnedFilterActive=false;let currentFilter='all';let currentType='all';
-let ytReady=false; function onYouTubeIframeAPIReady(){ ytReady=true; }
 function normalize(a){let n=(a||"").trim();if(n.toLowerCase().includes("hybe"))return"HYBE LABELS";if(n.toLowerCase().includes("bangtan"))return"BANGTANTV";return n.trim();}
 
 auth.onAuthStateChanged(user=>{
@@ -169,47 +168,45 @@ auth.onAuthStateChanged(user=>{
   }
 });
 
+let fbDebounce=null;
 db.ref('videos').on('value',snap=>{
-  let d=snap.val();if(!d) return;
-  let changed=false;
-  Object.values(d).forEach(v=>{
-    let id=getYouTubeID(v.id||v.videoId||""); if(!id) return;
-    let ex=videos.find(x=>x.id===id);
-    if(!ex){
-      let dur=v.duration||durations[id]||0;
-      let type = dur>0 && dur<=61? 'short' : (v.type||'video');
-      videos.push({title:v.title||"BTS Video",id:id,channel:v.channel||"HYBE LABELS",addedAt:v.createdAt||Date.now(),type:type,duration:dur});
-      if(v.duration) durations[id]=v.duration;
-      changed=true;
-    } else if(v.duration && (!ex.duration || ex.duration===0)){
-      ex.duration=v.duration; durations[id]=v.duration;
-      if(v.duration<=61) ex.type='short';
-      changed=true;
-    }
-  });
-  if(changed){localStorage.setItem('bts_videos',JSON.stringify(videos));localStorage.setItem('bts_durations',JSON.stringify(durations));applyFilters();}
+  clearTimeout(fbDebounce);
+  fbDebounce=setTimeout(()=>{
+    let d=snap.val();if(!d) return;
+    let changed=false;
+    Object.values(d).forEach(v=>{
+      let id=getYouTubeID(v.id||v.videoId||""); if(!id) return;
+      let ex=videos.find(x=>x.id===id);
+      if(!ex){
+        let dur=v.duration||durations[id]||0;
+        let type = dur>0 && dur<=61? 'short' : (v.type||'video');
+        videos.push({title:v.title||"BTS Video",id:id,channel:v.channel||"HYBE LABELS",addedAt:v.createdAt||Date.now(),type:type,duration:dur});
+        if(v.duration) durations[id]=v.duration;
+        changed=true;
+      }
+    });
+    if(changed){localStorage.setItem('bts_videos',JSON.stringify(videos));localStorage.setItem('bts_durations',JSON.stringify(durations));applyFilters();}
+  },500);
 });
 
-async function fetchRealDuration(id){
+async function fetchRealDurationFast(id){
   if(durations[id] && durations[id]>0) return durations[id];
   try{
+    const controller = new AbortController();
+    const t = setTimeout(()=>controller.abort(), 3000);
     let url=`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.youtube.com/watch?v='+id)}`;
-    let res=await fetch(url); let j=await res.json(); let html=j.contents||"";
+    let res=await fetch(url,{signal:controller.signal}); clearTimeout(t);
+    let j=await res.json(); let html=j.contents||"";
     let m1=html.match(/"approxDurationMs":"(\d+)"/);
     if(m1){let sec=Math.round(parseInt(m1[1])/1000); if(sec>10){ durations[id]=sec; localStorage.setItem('bts_durations',JSON.stringify(durations)); return sec; }}
     let m2=html.match(/"lengthSeconds":"(\d+)"/);
     if(m2){let sec=parseInt(m2[1]); if(sec>10){ durations[id]=sec; localStorage.setItem('bts_durations',JSON.stringify(durations)); return sec; }}
   }catch(e){}
-  return new Promise(resolve=>{
-    if(!ytReady){ setTimeout(()=>resolve(durations[id]||180),800); return; }
-    let div=document.createElement('div'); let uid='yt_'+id+'_'+Date.now(); div.id=uid; document.getElementById('hiddenPlayers').appendChild(div);
-    try{
-      let player=new YT.Player(uid,{videoId:id,width:1,height:1,
-        events:{onReady:(ev)=>{setTimeout(()=>{let d=Math.floor(ev.target.getDuration()||0); try{ev.target.destroy();}catch(e){} div.remove(); if(d>10){durations[id]=d; localStorage.setItem('bts_durations',JSON.stringify(durations)); resolve(d);} else resolve(durations[id]||180);},1000);}, onError:()=>{div.remove(); resolve(durations[id]||180);}}
-      });
-    }catch(err){ div.remove(); resolve(durations[id]||180); }
-  });
+  return durations[id]||0;
 }
+
+let checkTimer=null; let lastCheckedId="";
+function debouncedCheck(){ clearTimeout(checkTimer); checkTimer=setTimeout(()=>checkLink(),380); }
 
 async function checkLink(){
   const link=document.getElementById('ytLink').value.trim();
@@ -218,45 +215,49 @@ async function checkLink(){
   if(!link){preview.classList.add('hidden');addBtn.disabled=true;pending=null;return;}
   const id=getYouTubeID(link);
   if(!id||id.length!==11){preview.classList.add('hidden');addBtn.disabled=true;return;}
+  if(lastCheckedId===id && pending) return;
   document.getElementById('prevThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;
-  document.getElementById('prevTitle').innerText="Fetching info...";
-  document.getElementById('prevChannel').innerText="Getting duration...";
+  document.getElementById('prevTitle').innerText="Checking...";
+  document.getElementById('prevChannel').innerText="Fetching...";
   document.getElementById('prevDuration').innerText="...";
-  document.getElementById('prevDot').innerHTML=`<span class="text-[10px] text-gray-400">⏳ checking</span>`;
+  document.getElementById('prevDot').innerHTML=`<span class="text-[10px] text-gray-400">⏳</span>`;
   preview.classList.remove('hidden');
   const exists=videos.some(v=>v.id===id);
   if(exists){
     document.getElementById('prevTitle').innerText="Already in shelf";
-    document.getElementById('prevChannel').innerText="Duplicate";
     document.getElementById('prevDot').innerHTML=`<span class="text-[10px] text-red-500 font-bold">Already added</span>`;
     document.getElementById('prevDuration').innerText=formatDuration(durations[id]||0);
-    addBtn.disabled=true; addBtn.className="w-full mt-2.5 bg-[#e5e7eb] text-[#9ca3af] py-2.5 rounded-full font-bold text-[11px]"; pending=null; return;
+    addBtn.disabled=true; addBtn.className="w-full mt-2.5 bg-[#e5e7eb] text-[#9ca3af] py-2.5 rounded-full font-bold text-[11px]"; pending=null; lastCheckedId=id; return;
   }
-  let realSec=await fetchRealDuration(id);
-  document.getElementById('prevDuration').innerText=formatDuration(realSec);
   try{
     let res=await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${id}`);
     let data=await res.json(); let title=data.title||"BTS Video"; let channel=normalize(data.author_name||"HYBE LABELS");
     document.getElementById('prevTitle').innerText=title;
     document.getElementById('prevChannel').innerText=channel;
-    document.getElementById('prevDot').innerHTML=`<span class="inline-flex items-center gap-1 text-[9px] bg-[#f5f3ff] border border-[#ede9fe] text-[#7c3aed] px-2 py-0.5 rounded-full font-bold"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="3"><path d="M5 12l5 5l10 -10"/></svg> ${channel} • ${formatDuration(realSec)}</span>`;
-    let type = realSec<=61 || link.toLowerCase().includes('shorts')? 'short' : detectType(link);
-    addBtn.disabled=false; addBtn.className="w-full mt-2.5 bg-[#7c3aed] text-white py-2.5 rounded-full font-bold text-[11px]"; pending={id,title,channel,type:type,duration:realSec};
+    let realSec = durations[id]||0;
+    if(!realSec){
+      fetchRealDurationFast(id).then(sec=>{
+        if(sec>0){ document.getElementById('prevDuration').innerText=formatDuration(sec); document.getElementById('prevDot').innerHTML=`<span class="inline-flex items-center gap-1 text-[9px] bg-[#f5f3ff] border border-[#ede9fe] text-[#7c3aed] px-2 py-0.5 rounded-full font-bold">✓ ${channel} • ${formatDuration(sec)}</span>`; if(pending && pending.id===id){ pending.duration=sec; pending.type=sec<=61?'short':pending.type; } }
+      });
+    }
+    document.getElementById('prevDuration').innerText=realSec?formatDuration(realSec):"0:00";
+    document.getElementById('prevDot').innerHTML=`<span class="inline-flex items-center gap-1 text-[9px] bg-[#f5f3ff] border border-[#ede9fe] text-[#7c3aed] px-2 py-0.5 rounded-full font-bold">✓ ${channel}</span>`;
+    let type = (realSec && realSec<=61) || link.toLowerCase().includes('shorts')? 'short' : detectType(link);
+    addBtn.disabled=false; addBtn.className="w-full mt-2.5 bg-[#7c3aed] text-white py-2.5 rounded-full font-bold text-[11px]"; pending={id,title,channel,type:type,duration:realSec||180}; lastCheckedId=id;
   }catch(e){
-    document.getElementById('prevTitle').innerText="YouTube Video"; document.getElementById('prevChannel').innerText="HYBE LABELS";
-    document.getElementById('prevDot').innerHTML=`<span class="inline-flex items-center gap-1 text-[9px] bg-[#f5f3ff] border border-[#ede9fe] text-[#7c3aed] px-2 py-0.5 rounded-full font-bold"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="3"><path d="M5 12l5 5l10 -10"/></svg> ${formatDuration(realSec)}</span>`;
-    let type = realSec<=61? 'short' : detectType(link);
-    addBtn.disabled=false; addBtn.className="w-full mt-2.5 bg-[#7c3aed] text-white py-2.5 rounded-full font-bold text-[11px]"; pending={id,title:"YouTube Video",channel:"HYBE LABELS",type:type,duration:realSec};
+    document.getElementById('prevTitle').innerText="YouTube Video";
+    document.getElementById('prevDot').innerHTML=`<span class="text-[9px] bg-[#f5f3ff] border px-2 py-0.5 rounded-full font-bold">✓ Ready</span>`;
+    addBtn.disabled=false; addBtn.className="w-full mt-2.5 bg-[#7c3aed] text-white py-2.5 rounded-full font-bold text-[11px]"; pending={id,title:"YouTube Video",channel:"HYBE LABELS",type:detectType(link),duration:durations[id]||180}; lastCheckedId=id;
   }
 }
 function addVideo(){
   if(!pending) return;
-  let nv={title:pending.title,id:pending.id,channel:pending.channel,addedAt:Date.now(),type:pending.type||'video',duration:pending.duration||180};
+  let nv={title:pending.title,id:pending.id,channel:pending.channel,addedAt:Date.now(),type:pending.type||'video',duration:pending.duration||durations[pending.id]||180};
   videos.unshift(nv); durations[nv.id]=nv.duration;
   localStorage.setItem('bts_videos',JSON.stringify(videos)); localStorage.setItem('bts_durations',JSON.stringify(durations));
   db.ref('videos').push({title:nv.title,id:nv.id,videoId:nv.id,channel:nv.channel,type:nv.type,duration:nv.duration,createdAt:Date.now()});
   document.getElementById('ytLink').value=''; document.getElementById('previewBox').classList.add('hidden'); document.getElementById('addBtn').disabled=true;
-  document.getElementById('addBtn').className="w-full mt-2.5 bg-[#c4b5fd] text-white py-2.5 rounded-full font-bold text-[11px] disabled:opacity-60"; pending=null; applyFilters();
+  document.getElementById('addBtn').className="w-full mt-2.5 bg-[#c4b5fd] text-white py-2.5 rounded-full font-bold text-[11px] disabled:opacity-60"; pending=null; lastCheckedId=""; applyFilters();
 }
 function toggleNew(){isNewFilterActive=!isNewFilterActive; if(isNewFilterActive) isPinnedFilterActive=false; applyFilters();}
 function togglePinned(){isPinnedFilterActive=!isPinnedFilterActive; if(isPinnedFilterActive) isNewFilterActive=false; applyFilters();}
@@ -280,24 +281,26 @@ function applyFilters(){
   render(sorted);
 }
 function render(list){
-  const g=document.getElementById('videoGrid'); g.innerHTML='';
-  if(list.length===0){document.getElementById('emptyState').classList.remove('hidden');return;}
+  const g=document.getElementById('videoGrid');
+  if(list.length===0){g.innerHTML='';document.getElementById('emptyState').classList.remove('hidden');return;}
   document.getElementById('emptyState').classList.add('hidden');
   let daily=getDaily();
-  list.forEach(v=>{
+  let html='';
+  for(let i=0;i<list.length;i++){
+    let v=list[i];
     let isP=pinned.includes(v.id); let inMission=daily.ids.includes(v.id); let dur=v.duration||durations[v.id]||0; let isNew=Date.now()-v.addedAt<2*86400000;
-    g.innerHTML+=`<div class="bg-white rounded-[14px] overflow-hidden border shadow-sm relative group ${isP?'ring-2 ring-[#7c3aed]':''}">
+    html+=`<div class="bg-white rounded-[14px] overflow-hidden border shadow-sm relative group ${isP?'ring-2 ring-[#7c3aed]':''}">
       <div onclick="openAction('${v.id}','${v.title.replace(/'/g,"\\'")}','${v.channel}','${v.type||'video'}','${dur}')" class="cursor-pointer relative">
-        <img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg" class="w-full aspect-[16/10] object-cover bg-gray-100">
+        <img loading="lazy" src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" class="w-full aspect-[16/10] object-cover bg-gray-100">
         <span class="absolute bottom-1 right-1 bg-black/80 text-white text-[9px] px-1.5 py-0.5 rounded-[4px] font-mono leading-none">${formatDuration(dur)}</span>
         ${isNew?'<span class="absolute top-1.5 left-1.5 bg-blue-500/15 border border-blue-500 text-white text-[8px] px-2 py-0.5 rounded-full font-bold backdrop-blur">New</span>':''}
-        ${isP?'<span class="absolute top-1.5 right-8 bg-[#7c3aed] text-white text-[7px] px-1.5 py-0.5 rounded-full font-bold">📌</span>':''}
       </div>
       <div class="p-2"><p class="text-[10.5px] font-bold leading-[1.25] line-clamp-2">${v.title}</p><p class="text-[9px] text-gray-400 font-bold mt-0.5">${v.channel||''}</p></div>
-      <button onclick="event.stopPropagation();askDelete('${v.id}','${v.title.replace(/'/g,"\\'")}')" class="absolute top-1.5 right-1.5 w-6 h-6 bg-black/30 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white text-[10px] hover:bg-red-500/90 transition">✕</button>
-      ${inMission?`<div class="flex justify-between items-center px-2 pb-2"><span class="text-[8px] bg-[#ede9fe] text-[#7c3aed] px-2 py-0.5 rounded-full font-bold">+${missionGoals[v.id]||10}x</span><div class="flex gap-1"><button onclick="event.stopPropagation();editGoal('${v.id}')" class="w-5 h-5 bg-white border rounded-full text-[9px] flex items-center justify-center">+</button><button onclick="event.stopPropagation();removeFromMissions('${v.id}')" class="w-5 h-5 bg-[#fff0f0] text-red-500 rounded-full text-[8px] flex items-center justify-center">✕</button></div></div>`:''}
+      <button onclick="event.stopPropagation();askDelete('${v.id}','${v.title.replace(/'/g,"\\'")}')" class="absolute top-1.5 right-1.5 w-6 h-6 bg-black/30 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white text-[10px]">✕</button>
+      ${inMission?`<div class="flex justify-between items-center px-2 pb-2"><span class="text-[8px] bg-[#ede9fe] text-[#7c3aed] px-2 py-0.5 rounded-full font-bold">+${missionGoals[v.id]||10}x</span></div>`:''}
     </div>`;
-  });
+  }
+  requestAnimationFrame(()=>{ g.innerHTML=html; });
 }
 function askDelete(id,title){deleteId=id;document.getElementById('deleteTitle').innerText=title;document.getElementById('deletePopup').classList.remove('hidden');document.getElementById('deletePopup').classList.add('flex');}
 function closeDelete(){document.getElementById('deletePopup').classList.add('hidden');document.getElementById('deletePopup').classList.remove('flex');deleteId=null;}
@@ -308,8 +311,22 @@ function confirmDelete(){
   localStorage.setItem('bts_videos',JSON.stringify(videos)); localStorage.setItem('bts_pinned',JSON.stringify(pinned)); localStorage.setItem('bts_durations',JSON.stringify(durations));
   closeDelete(); applyFilters();
 }
-function openAction(id,title,channel,type,dur){actionData={id,title,channel,type,duration:parseInt(dur)||durations[id]||0};document.getElementById('actionThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;document.getElementById('actionTitle').innerText=title;document.getElementById('actionChannel').innerText=channel+' • '+type;document.getElementById('actionDurBadge').innerText=formatDuration(actionData.duration);document.getElementById('pinActionBtn').innerText=pinned.includes(id)?'Unpin':'📌 Pin';document.getElementById('actionSheet').classList.remove('hidden');document.getElementById('actionSheet').classList.add('flex');}
-function closeActionSheet(){document.getElementById('actionSheet').classList.add('hidden');document.getElementById('actionSheet').classList.remove('flex');}
+function openAction(id,title,channel,type,dur){
+  actionData={id,title,channel,type,duration:parseInt(dur)||durations[id]||0};
+  document.getElementById('actionThumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+  document.getElementById('actionTitle').innerText=title;
+  document.getElementById('actionChannel').innerText=channel+' • '+type;
+  document.getElementById('actionDurBadge').innerText=formatDuration(actionData.duration);
+  document.getElementById('pinActionBtn').innerText=pinned.includes(id)?'Unpin':'📌 Pin';
+  const sheet=document.getElementById('actionSheet');
+  sheet.classList.remove('hidden'); sheet.classList.add('flex');
+  requestAnimationFrame(()=>sheet.classList.add('show'));
+}
+function closeActionSheet(){
+  const sheet=document.getElementById('actionSheet');
+  sheet.classList.remove('show');
+  setTimeout(()=>{ sheet.classList.add('hidden'); sheet.classList.remove('flex'); },280);
+}
 function openYouTubeInsideApp(id,title,duration){
   let dur=duration||durations[id]||180;
   let type = dur<=61? 'short' : 'video';
@@ -321,7 +338,6 @@ function pinFromAction(){if(!actionData)return;if(pinned.includes(actionData.id)
 function addToMissionsFromAction(){if(!actionData)return;let daily=getDaily();if(daily.ids.includes(actionData.id)){alert('Already in Missions!');return;}if(daily.ids.length>=2){document.getElementById('limitInfo').innerText=`Today: ${daily.ids.length}/2`;document.getElementById('limitPopup').classList.remove('hidden');document.getElementById('limitPopup').classList.add('flex');return;}daily.ids.push(actionData.id);daily.date=new Date().toDateString();localStorage.setItem('borahae_mission_daily',JSON.stringify(daily));if(!missionGoals[actionData.id])missionGoals[actionData.id]=10;localStorage.setItem('borahae_mission_goals',JSON.stringify(missionGoals));closeActionSheet();applyFilters();}
 function removeFromMissions(id){let d=getDaily();d.ids=d.ids.filter(i=>i!==id);localStorage.setItem('borahae_mission_daily',JSON.stringify(d));applyFilters();}
 function editGoal(id){let cur=missionGoals[id]||10;let v=prompt(`Goal? Current ${cur}x`,cur);if(!v)return;let n=parseInt(v);if(isNaN(n))return;missionGoals[id]=n;localStorage.setItem('borahae_mission_goals',JSON.stringify(missionGoals));applyFilters();}
-
 function saveFiltered(videoId,title,totalDuration,watchedSec){
   let shelfIds=videos.map(v=>v.id); if(!shelfIds.includes(videoId)) return;
   let detailed=JSON.parse(localStorage.getItem('borahae_detailed_logs')||'{}');
