@@ -1,0 +1,127 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Profile - borahae.fm</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>body{font-family:'Manrope',sans-serif;background:#fdf8ff;color:#1a1033}.font-display{font-family:'Playfair Display',serif}.font-mono{font-family:'DM Mono',monospace}.paper-grid{background-image:linear-gradient(#e9d5ff1f 1px, transparent 1px),linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px);background-size:22px 22px}.sidebar-bg{background:#28164f}</style>
+</head><body class="paper-grid pb-20">
+
+<header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
+<button onclick="history.back()" class="w-9 h-9 bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center">←</button>
+<div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
+<span class="font-bold text-[14px]">Profile</span>
+</header>
+
+<div class="max-w-[480px] md:max-w-[600px] mx-auto">
+<!-- BANNER -->
+<div id="banner" class="h-[150px] w-full bg-gradient-to-br from-[#e9d5ff] to-[#c4b5fd] bg-cover bg-center relative">
+<div class="absolute inset-0 bg-black/10"></div>
+</div>
+
+<div class="px-5 -mt-12 relative z-10">
+<img id="pfp" src="https://via.placeholder.com/84" class="w-[84px] h-[84px] rounded-[22px] border-[4px] border-white object-cover bg-white shadow-[0_8px_20px_rgba(0,0,0,0.15)]">
+<h1 id="pName" class="font-display text-[28px] font-bold mt-3 leading-[0.9]">ARMY</h1>
+<p id="pUsername" class="text-[#7c3aed] font-bold text-[12px] mt-1">@army • Joined Aug 2026</p>
+<p id="pBio" class="text-[12px] text-[#6b7280] mt-2 leading-[1.4]">keeping the purple light on 💜</p>
+
+<!-- BUTTONS - Purple = Follow -->
+<div class="flex gap-2 mt-4">
+<button id="purpleBtn" onclick="togglePurple()" class="bg-[#1a1033] text-white px-6 py-2.5 rounded-full text-[12px] font-bold">Purple 💜</button>
+<button id="editBtn" onclick="location.href='settings.html'" class="hidden bg-white border border-[#ede9fe] px-6 py-2.5 rounded-full text-[12px] font-bold">Edit Profile</button>
+<button onclick="shareProfile()" class="bg-white border border-[#ede9fe] px-4 py-2.5 rounded-full text-[12px] font-bold">Share</button>
+<button id="reportBtn" onclick="reportUser()" class="bg-[#fff1f2] border border-[#fecdd3] text-[#e11d48] px-4 py-2.5 rounded-full text-[11px] font-bold">Report</button>
+</div>
+
+<!-- STATS -->
+<div class="grid grid-cols-3 gap-2 mt-6">
+<div class="bg-white border border-[#f3e8ff] rounded-[18px] p-4 text-center shadow-sm"><p id="totalStreams" class="font-display text-[22px] font-bold leading-none">0</p><p class="font-mono text-[9px] tracking-[1.5px] text-gray-500 mt-1.5">TOTAL STREAMS</p></div>
+<div class="bg-white border border-[#f3e8ff] rounded-[18px] p-4 text-center shadow-sm"><p id="streakCount" class="font-display text-[22px] font-bold leading-none">0 🔥</p><p class="font-mono text-[9px] tracking-[1.5px] text-gray-500 mt-1.5">STREAK</p></div>
+<div class="bg-white border border-[#f3e8ff] rounded-[18px] p-4 text-center shadow-sm"><p id="purpleCount" class="font-display text-[22px] font-bold leading-none">0</p><p class="font-mono text-[9px] tracking-[1.5px] text-gray-500 mt-1.5">PURPLED BY</p></div>
+</div>
+
+<!-- STREAK BOX -->
+<div class="mt-4 bg-white border border-[#f3e8ff] rounded-[22px] p-4 shadow-sm">
+<div class="flex justify-between items-center"><h3 class="font-bold text-[12px]">Streak</h3><span class="text-[10px] bg-[#faf5ff] border px-2 py-0.5 rounded-full">7 days</span></div>
+<div id="streakDays" class="flex gap-1.5 mt-3"></div>
+<p class="text-[10px] text-gray-400 mt-2">Purple light kabhi off mat hone de ✨</p>
+</div>
+
+<!-- RECENTLY WATCHED - 10 with Private Toggle -->
+<div class="mt-4 bg-white border border-[#f3e8ff] rounded-[22px] p-4 shadow-sm">
+<div class="flex justify-between items-center"><h3 class="font-bold text-[12px]">Recently watched <span id="privBadge" class="ml-1 text-[8px] bg-[#f5f3ff] border border-[#ede9fe] px-2 py-0.5 rounded-full">PUBLIC</span></h3>
+<label id="privToggleWrap" class="hidden flex items-center gap-1.5 text-[10px] font-bold"><input type="checkbox" id="privToggle" onchange="togglePrivacy()"> Private</label></div>
+<div id="recentList" class="mt-3 space-y-2"></div>
+<div id="recentEmpty" class="hidden text-center py-6"><p class="text-[12px] text-gray-400">No recent watches yet</p></div>
+<div id="privateLock" class="hidden text-center py-6 border border-dashed border-[#d8b4fe] rounded-[16px] mt-3"><p class="text-[20px]">🔒</p><p class="text-[11px] text-gray-500 mt-1">This ARMY keeps it private</p></div>
+</div>
+
+<!-- TOP 7 -->
+<div class="mt-4 bg-[#1a1033] rounded-[22px] p-4 text-white">
+<h3 class="font-bold text-[12px]">Top 7 MVs</h3>
+<div id="topList" class="mt-3 space-y-2 text-[11px] text-white/70"></div>
+</div>
+
+</div>
+</div>
+
+<script>
+const firebaseConfig={apiKey:"AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",authDomain:"borahae-fm-f7075.firebaseapp.com",databaseURL:"https://borahae-fm-f7075-default-rtdb.firebaseio.com",projectId:"borahae-fm-f7075"};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db=firebase.database(), auth=firebase.auth();
+const params=new URLSearchParams(location.search); let targetUid=params.get('uid')||'me';
+let isMyProfile=false;
+
+function getLocal(){ try{ return JSON.parse(localStorage.getItem('borahaeUser')||'{}'); }catch(e){ return {}; } }
+
+auth.onAuthStateChanged(user=>{
+  let local=getLocal(); let myUid=user?.uid||local.uid;
+  if(targetUid==='me') targetUid=myUid;
+  isMyProfile = (targetUid===myUid);
+  if(isMyProfile){ document.getElementById('editBtn').classList.remove('hidden'); document.getElementById('purpleBtn').classList.add('hidden'); document.getElementById('reportBtn').classList.add('hidden'); document.getElementById('privToggleWrap').classList.remove('hidden'); }
+  loadProfile();
+});
+
+function loadProfile(){
+  let local=getLocal();
+  // Load from local + firebase users/{uid}
+  db.ref('users/'+targetUid).on('value',s=>{
+    let u=s.val()||{};
+    let name=u.name||local.name||'ARMY'; let pfp=u.pfp||u.photo||local.photo||'https://via.placeholder.com/84'; let banner=u.banner||'';
+    document.getElementById('pName').innerText=name;
+    document.getElementById('pUsername').innerText='@'+name.toLowerCase().replace(/\s+/g,'')+' • Joined '+(u.joinDate||'Aug 2026');
+    document.getElementById('pBio').innerText=u.bio||'keeping the purple light on 💜';
+    document.getElementById('pfp').src=pfp;
+    if(banner) document.getElementById('banner').style.backgroundImage=`url(${banner})`;
+    document.getElementById('totalStreams').innerText=u.totalStreams|| (JSON.parse(localStorage.getItem('borahae_history')||'[]').length || 0);
+    document.getElementById('streakCount').innerText=(u.streak||0)+' 🔥';
+    document.getElementById('purpleCount').innerText=u.purpledCount||0;
+    // privacy
+    let isPrivate=u.isPrivate||false;
+    document.getElementById('privToggle').checked=isPrivate;
+    document.getElementById('privBadge').innerText=isPrivate?'PRIVATE':'PUBLIC';
+    // streak days UI
+    let days=['M','T','W','T','F','S','S']; let streak=u.streak||2;
+    document.getElementById('streakDays').innerHTML=days.map((d,i)=>`<div class="flex-1 h-[36px] rounded-[10px] flex items-center justify-center text-[10px] font-bold ${i<streak?'bg-[#7c3aed] text-white':'bg-[#f5f3ff] text-[#a78bfa]'}">${d}</div>`).join('');
+    // recent
+    if(isPrivate &&!isMyProfile){ document.getElementById('privateLock').classList.remove('hidden'); document.getElementById('recentList').classList.add('hidden'); }
+    else { document.getElementById('privateLock').classList.add('hidden'); document.getElementById('recentList').classList.remove('hidden'); loadRecent(u); }
+    // purple check
+    if(!isMyProfile){ db.ref('purples/'+targetUid+'/'+(auth.currentUser?.uid||getLocal().uid)).on('value',snap=>{ document.getElementById('purpleBtn').innerText=snap.exists()?'Purpled ✓':'Purple 💜'; document.getElementById('purpleBtn').className=snap.exists()?'bg-white border border-[#ede9fe] text-[#7c3aed] px-6 py-2.5 rounded-full text-[12px] font-bold':'bg-[#1a1033] text-white px-6 py-2.5 rounded-full text-[12px] font-bold'; }); }
+  });
+}
+
+function loadRecent(u){
+  let history = u.recent || JSON.parse(localStorage.getItem('borahae_history')||'[]').slice(0,10);
+  if(!history.length){ document.getElementById('recentEmpty').classList.remove('hidden'); return; }
+  document.getElementById('recentList').innerHTML=history.slice(0,10).map(h=>`<div class="flex gap-2 items-center bg-[#faf5ff] border border-[#f3e8ff] rounded-[14px] p-2"><img src="https://img.youtube.com/vi/${h.videoId||'dQw4w9WgXcQ'}/mqdefault.jpg" class="w-[48px] h-[28px] rounded-[8px] object-cover"><div class="flex-1 min-w-0"><p class="text-[11px] font-bold truncate">${h.title||h.videoId}</p><p class="text-[9px] text-gray-400">${h.date||''}</p></div></div>`).join('');
+  document.getElementById('topList').innerHTML=history.slice(0,7).map((h,i)=>`<div class="flex gap-2"><span class="font-mono text-[10px] text-white/40">0${i+1}</span><span class="truncate">${h.title||'Dynamite'}</span></div>`).join('');
+}
+
+function togglePurple(){
+  let myUid=auth.currentUser?.uid||getLocal().uid; if(!myUid) return alert('Login first');
+  let ref=db.ref('purples/'+targetUid+'/'+myUid);
+  ref.once('value',s=>{ if(s.exists()){ ref.remove(); db.ref('users/'+targetUid+'/purpledCount').transaction(c=>(c||1)-1); } else { ref.set({time:Date.now()}); db.ref('users/'+targetUid+'/purpledCount').transaction(c=>(c||0)+1); } });
+}
+function togglePrivacy(){ let v=document.getElementById('privToggle').checked; db.ref('users/'+targetUid).update({isPrivate:v}); }
+function shareProfile(){ navigator.clipboard.writeText(location.href); alert('Link copied 💜'); }
+function reportUser(){ let r=prompt('Reason?'); if(r) db.ref('reports/'+targetUid).push({reason:r, by: auth.currentUser?.uid||'anon', time:Date.now()}); alert('Reported to owner'); }
+</script></body></html>
