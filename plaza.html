@@ -2,10 +2,20 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-<style>body{font-family:'Manrope',sans-serif;background:#fdf8ff;color:#1a1033}.font-display{font-family:'Playfair Display',serif}.font-mono{font-family:'DM Mono',monospace}.paper-grid{background-image:linear-gradient(#e9d5ff1f 1px, transparent 1px),linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px);background-size:22px 22px}.sidebar-bg{background:#28164f}</style>
+<style>
+body{font-family:'Manrope',sans-serif;background:#fdf8ff;color:#1a1033}
+.font-display{font-family:'Playfair Display',serif}.font-mono{font-family:'DM Mono',monospace}
+.paper-grid{background-image:linear-gradient(#e9d5ff1f 1px, transparent 1px),linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px);background-size:22px 22px}
+.sidebar-bg{background:#28164f}
+.sticky-composer{position:sticky;top:57px;z-index:20;background:#fdf8ff;padding-bottom:12px}
+.modal-bg{backdrop-filter:blur(6px);background:rgba(0,0,0,0.25)}
+@keyframes pop{0%{transform:scale(0.92);opacity:0}100%{transform:scale(1);opacity:1}}
+.animate-pop{animation:pop 0.2s ease-out}
+.reply-line{border-left:2px solid #e9d5ff}
+</style>
 </head><body class="paper-grid">
 
-<header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
+<header class="sticky top-0 z-30 bg-[#fdf8ff]/90 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
 <button onclick="openSidebar()" class="w-9 h-9 bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center text-[20px]">☰</button>
 <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
 </header>
@@ -24,100 +34,139 @@
 <a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">? FAQ</a>
 </nav>
 <div class="mt-auto"><div class="border-t border-white/10 pt-4"><a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a></div>
-<div id="sideBox" onclick="goProfile()" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15 transition"><img id="sidePfp" src="https://via.placeholder.com/32" class="w-8 h-8 rounded-full object-cover bg-white/10"><div class="overflow-hidden"><p id="sideName" class="text-white text-[12px] font-bold truncate">ARMY</p><p class="text-white/50 text-[10px] truncate">View profile</p></div></div></div>
+<div id="sideBox" onclick="goProfile()" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer"><img id="sidePfp" src="https://via.placeholder.com/32" class="w-8 h-8 rounded-full object-cover bg-white/10"><div class="overflow-hidden"><p id="sideName" class="text-white text-[12px] font-bold truncate">ARMY</p><p class="text-white/50 text-[10px] truncate">View profile</p></div></div></div>
 </aside>
 
-<main class="max-w-[480px] md:max-w-[600px] mx-auto px-5 pt-6 pb-24">
-<!-- TITLE SAME AS HOME -->
-<div>
-<p class="font-mono text-[11px] tracking-[2.5px] text-[#7c3aed]">YOUR LETTERS · LIVE NOW</p>
-<h1 class="font-display text-[40px] leading-[0.95] font-bold mt-3">Borahae<br><span class="text-[#7c3aed]">Plaza.</span></h1>
-<p class="text-[#6b7280] text-[15px] mt-3 leading-[1.4]">Where whispers turn into letters. Talk, help, and purple each other — quietly, together 💜</p>
+<main class="max-w-[480px] md:max-w-[600px] mx-auto px-5 pt-6 pb-10">
+<div><p class="font-mono text-[11px] tracking-[2.5px] text-[#7c3aed]">YOUR LETTERS · LIVE NOW</p><h1 class="font-display text-[40px] leading-[0.95] font-bold mt-3">Borahae<br><span class="text-[#7c3aed]">Plaza.</span></h1><p class="text-[#6b7280] text-[14px] mt-3">Where whispers turn into letters. Talk, help, and purple each other — quietly, together 💜</p></div>
+
+<div class="flex gap-1.5 mt-5">
+<button id="fMine" onclick="setFilter('mine')" class="bg-white border border-[#ede9fe] px-3.5 py-1.5 rounded-full text-[10px] font-bold">My letters</button>
+<button id="fOfficial" onclick="setFilter('official')" class="bg-white border border-[#ede9fe] px-3.5 py-1.5 rounded-full text-[10px] font-bold">Borahae-fm</button>
 </div>
 
-<!-- FILTER BUTTONS - Double click logic -->
-<div class="flex gap-1.5 mt-6 overflow-x-auto">
-<button id="fAll" onclick="setFilter('all')" class="bg-[#1a1033] text-white px-4 py-2 rounded-full text-[11px] font-bold whitespace-nowrap">All letters</button>
-<button id="fMine" onclick="setFilter('mine')" class="bg-white border border-[#ede9fe] px-4 py-2 rounded-full text-[11px] font-bold whitespace-nowrap">My letters</button>
-<button id="fOfficial" onclick="setFilter('official')" class="bg-white border border-[#ede9fe] px-4 py-2 rounded-full text-[11px] font-bold whitespace-nowrap">Borahae-fm</button>
+<div class="sticky-composer mt-4">
+<div class="bg-white rounded-[18px] border border-[#f3e8ff] p-2.5 flex gap-2.5 shadow-sm">
+<img id="myPfp" src="https://via.placeholder.com/32" class="w-8 h-8 rounded-full object-cover bg-[#f5f3ff] flex-shrink-0">
+<div class="flex-1 flex gap-2 items-end">
+<textarea id="msgInput" placeholder="Write a letter... @mention" class="flex-1 bg-[#faf5ff] border border-[#f3e8ff] rounded-[12px] px-3 py-2 text-[12px] outline-none min-h-[38px] max-h-[80px] resize-none focus:border-[#c4b5fd]"></textarea>
+<button onclick="postLetter()" class="bg-[#1a1033] text-white w-8 h-8 rounded-full flex items-center justify-center text-[14px] flex-shrink-0">↗</button>
 </div>
-<p class="text-[9px] text-gray-400 mt-2">Tip: Same button pe dobara click karne pe All dikhega</p>
-
-<!-- WRITE BOX -->
-<div class="mt-5 bg-white rounded-[24px] border border-[#f3e8ff] p-3.5 flex gap-3 shadow-sm">
-<img id="myPfp" src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full object-cover bg-[#f5f3ff] flex-shrink-0">
-<div class="flex-1"><textarea id="msgInput" placeholder="Write a letter... @ to mention ARMY" class="w-full bg-[#faf5ff] border border-[#f3e8ff] rounded-[14px] px-3.5 py-2.5 text-[13px] outline-none min-h-[56px] resize-none focus:border-[#c4b5fd]"></textarea>
-<div class="flex justify-end mt-2.5"><button onclick="postLetter()" class="bg-[#7c3aed] text-white px-6 py-2 rounded-full text-[12px] font-bold shadow-[0_6px_20px_rgba(124,58,237,0.2)]">Post letter ↗</button></div></div>
+</div>
+<div class="mt-3 h-[1px] w-full bg-[#e9d5ff]/70"></div>
 </div>
 
-<div id="feed" class="mt-8 space-y-3"></div>
+<div id="feed" class="mt-2 space-y-3"></div>
 </main>
+
+<!-- POPUP -->
+<div id="popupModal" class="fixed inset-0 z-[60] hidden modal-bg flex items-end md:items-center justify-center p-4">
+<div id="popupBox" class="animate-pop bg-white rounded-[22px] w-full max-w-[340px] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
+<h3 id="popupTitle" class="font-display text-[18px] font-bold">Delete?</h3>
+<p id="popupText" class="text-[12px] text-[#6b7280] mt-1"></p>
+<textarea id="popupInput" class="hidden w-full mt-3 bg-[#faf5ff] border border-[#f3e8ff] rounded-[12px] p-2.5 text-[12px] outline-none min-h-[80px]"></textarea>
+<input id="popupReason" class="hidden w-full mt-3 bg-[#faf5ff] border border-[#f3e8ff] rounded-[12px] p-2.5 text-[12px] outline-none" placeholder="Reason...">
+<div class="flex gap-2 mt-4"><button onclick="closePopup()" class="flex-1 bg-[#f5f3ff] border border-[#ede9fe] py-2.5 rounded-full text-[11px] font-bold">Cancel</button><button id="popupConfirm" class="flex-1 bg-[#1a1033] text-white py-2.5 rounded-full text-[11px] font-bold">Confirm</button></div>
+</div>
+</div>
 
 <script>
 const firebaseConfig={apiKey:"AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",authDomain:"borahae-fm-f7075.firebaseapp.com",databaseURL:"https://borahae-fm-f7075-default-rtdb.firebaseio.com",projectId:"borahae-fm-f7075"};
 if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db=firebase.database(), auth=firebase.auth();
-let currentFilter='all'; let allLetters=[];
+let currentFilter='all'; let allLetters=[]; let pendingAction=null;
 
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
-function goProfile(){ const u=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); location.href='profile.html?uid='+(auth.currentUser?.uid||u.uid||'me'); }
+function getLocal(){ try{ return JSON.parse(localStorage.getItem('borahaeUser')||'{}'); }catch(e){return{};} }
+function goProfile(uid){ if(uid){ location.href='profile.html?uid='+uid; return; } const u=getLocal(); location.href='profile.html?uid='+(auth.currentUser?.uid||u.uid||'me'); }
 
 auth.onAuthStateChanged(u=>{
+  let l=getLocal();
   if(u){ document.getElementById('sideName').innerText=u.displayName||'ARMY'; if(u.photoURL){ document.getElementById('sidePfp').src=u.photoURL; document.getElementById('myPfp').src=u.photoURL; } }
-  else { let l=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); if(l.name) document.getElementById('sideName').innerText=l.name; if(l.photo){ document.getElementById('sidePfp').src=l.photo; document.getElementById('myPfp').src=l.photo; } }
+  else if(l.name){ document.getElementById('sideName').innerText=l.name; if(l.photo){ document.getElementById('sidePfp').src=l.photo; document.getElementById('myPfp').src=l.photo; } }
 });
 
 function setFilter(type){
-  if(currentFilter===type){ type='all'; } // second click = show all
+  if(currentFilter===type){ type='all'; }
   currentFilter=type;
-  document.getElementById('fAll').className = type==='all'? "bg-[#1a1033] text-white px-4 py-2 rounded-full text-[11px] font-bold" : "bg-white border border-[#ede9fe] px-4 py-2 rounded-full text-[11px] font-bold";
-  document.getElementById('fMine').className = type==='mine'? "bg-[#1a1033] text-white px-4 py-2 rounded-full text-[11px] font-bold" : "bg-white border border-[#ede9fe] px-4 py-2 rounded-full text-[11px] font-bold";
-  document.getElementById('fOfficial').className = type==='official'? "bg-[#1a1033] text-white px-4 py-2 rounded-full text-[11px] font-bold" : "bg-white border border-[#ede9fe] px-4 py-2 rounded-full text-[11px] font-bold";
+  document.getElementById('fMine').className = type==='mine'? "bg-[#1a1033] text-white px-3.5 py-1.5 rounded-full text-[10px] font-bold" : "bg-white border border-[#ede9fe] px-3.5 py-1.5 rounded-full text-[10px] font-bold";
+  document.getElementById('fOfficial').className = type==='official'? "bg-[#1a1033] text-white px-3.5 py-1.5 rounded-full text-[10px] font-bold" : "bg-white border border-[#ede9fe] px-3.5 py-1.5 rounded-full text-[10px] font-bold";
   render();
 }
 
-function postLetter(){
-  let t=document.getElementById('msgInput').value.trim(); if(!t) return;
-  let user=auth.currentUser; let local=JSON.parse(localStorage.getItem('borahaeUser')||'{}');
-  db.ref('plaza').push({text:t, uid: user?.uid||local.uid||'anon_'+Date.now(), name: user?.displayName||local.name||'ARMY', pfp: user?.photoURL||local.photo||'', role: local.email?.includes('pratima')?'official':'army', createdAt: Date.now()});
-  document.getElementById('msgInput').value='';
+function postLetter(parentKey){
+  let inputId = parentKey? 'replyInput-'+parentKey : 'msgInput';
+  let t=document.getElementById(inputId).value.trim(); if(!t) return;
+  let user=auth.currentUser; let local=getLocal();
+  let isOfficial = (local.email && local.email.includes('pratima')) || (user && user.email && user.email.includes('pratima'));
+  if(parentKey){
+    db.ref('plaza/'+parentKey+'/replies').push({text:t, uid: user?.uid||local.uid||'anon_'+Date.now(), name: user?.displayName||local.name||'ARMY', pfp: user?.photoURL||local.photo||'', createdAt: Date.now()});
+  } else {
+    db.ref('plaza').push({text:t, uid: user?.uid||local.uid||'anon_'+Date.now(), name: user?.displayName||local.name||'ARMY', pfp: user?.photoURL||local.photo||'', role: isOfficial?'official':'army', createdAt: Date.now(), likes:0});
+  }
+  document.getElementById(inputId).value='';
+  if(parentKey) document.getElementById('replyBox-'+parentKey).classList.add('hidden');
 }
 
-db.ref('plaza').limitToLast(100).on('value',s=>{
+db.ref('plaza').limitToLast(120).on('value',s=>{
   let d=s.val(); if(!d){ allLetters=[]; render(); return; }
   allLetters=Object.entries(d).map(([k,v])=>({...v,_key:k})).sort((a,b)=>b.createdAt-a.createdAt);
   render();
 });
 
 function render(){
-  let myUid=auth.currentUser?.uid || JSON.parse(localStorage.getItem('borahaeUser')||'{}').uid;
+  let myUid=auth.currentUser?.uid || getLocal().uid;
   let filtered=allLetters;
   if(currentFilter==='mine') filtered=allLetters.filter(x=>x.uid===myUid);
   if(currentFilter==='official') filtered=allLetters.filter(x=>x.role==='official');
-  if(filtered.length===0){ document.getElementById('feed').innerHTML=`<div class="border border-dashed border-[#d8b4fe] rounded-[24px] p-8 bg-white text-center"><div class="w-12 h-12 bg-[#f5f3ff] rounded-[14px] flex items-center justify-center mx-auto text-[#7c3aed]">✉</div><p class="text-[13px] text-gray-500 mt-3">${currentFilter==='mine'?'You haven\'t written any letters yet':'No letters yet. Be the first to write 💜'}</p></div>`; return; }
+  if(filtered.length===0){ document.getElementById('feed').innerHTML=`<div class="border border-dashed border-[#d8b4fe] rounded-[20px] p-8 bg-white text-center mt-2"><p class="text-[12px] text-gray-400">No letters yet 💜</p></div>`; return; }
   document.getElementById('feed').innerHTML=filtered.map(m=>{
-    let isMe=m.uid===myUid;
-    return `<div class="bg-white border border-[#f3e8ff] rounded-[22px] p-4 shadow-sm">
+    let isMe=m.uid===myUid; let isOfficial=m.role==='official'; let liked = m.likedBy && m.likedBy[myUid];
+    let repliesHtml = m.replies? Object.entries(m.replies).map(([rk, rv])=>`
+      <div class="reply-line ml-3 pl-3 mt-2.5 flex gap-2">
+        <img src="${rv.pfp||'https://via.placeholder.com/28'}" class="w-6 h-6 rounded-full object-cover flex-shrink-0 mt-0.5">
+        <div class="flex-1 bg-[#faf5ff] border border-[#f3e8ff] rounded-[12px] px-3 py-2"><div class="flex justify-between"><p class="font-bold text-[11px] cursor-pointer" onclick="goProfile('${rv.uid}')">${rv.name}</p><p class="text-[8px] text-gray-400">${new Date(rv.createdAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</p></div><p class="text-[11px] mt-1 leading-[1.5]">${formatText(rv.text)}</p></div>
+      </div>`).join('') : '';
+    return `<div class="${isOfficial?'bg-gradient-to-br from-[#7c3aed] to-[#4c1d95] text-white border-[#7c3aed]':'bg-white border-[#f3e8ff]'} border rounded-[20px] p-3.5 shadow-sm">
       <div class="flex justify-between items-start">
-        <div class="flex gap-3 items-center cursor-pointer" onclick="location.href='profile.html?uid=${m.uid}'">
-          <img src="${m.pfp||'https://via.placeholder.com/32'}" class="w-9 h-9 rounded-full object-cover bg-[#f5f3ff]">
-          <div><div class="flex items-center gap-1.5"><p class="font-bold text-[13px] leading-none">${m.name}</p>${m.role==='official'?'<span class="bg-[#1a1033] text-white text-[8px] px-1.5 py-0.5 rounded-full font-bold">TEAM</span>':''}</div><p class="text-[10px] text-gray-400 mt-1">${new Date(m.createdAt).toLocaleDateString()} • ${new Date(m.createdAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</p></div>
-        </div>
-        <div class="relative">
-          <button onclick="toggleMenu('${m._key}')" class="w-8 h-8 bg-[#faf5ff] border border-[#f3e8ff] rounded-full flex items-center justify-center text-[16px]">⋯</button>
-          <div id="menu-${m._key}" class="hidden absolute right-0 top-10 bg-white border border-[#ede9fe] rounded-[14px] shadow-[0_10px_30px_rgba(0,0,0,0.12)] p-1.5 w-[160px] z-30">
-            ${isMe?`<button onclick="deleteLetter('${m._key}')" class="w-full text-left px-3 py-2.5 text-[11px] font-bold rounded-full hover:bg-gray-50">Delete letter</button><button onclick="editLetter('${m._key}')" class="w-full text-left px-3 py-2.5 text-[11px] font-bold rounded-full hover:bg-gray-50">Edit letter</button>`:`<button onclick="location.href='profile.html?uid=${m.uid}'" class="w-full text-left px-3 py-2.5 text-[11px] font-bold rounded-full bg-[#f5f3ff] text-[#7c3aed] border border-[#ede9fe]">View profile 💜</button><button onclick="reportLetter('${m._key}')" class="w-full text-left px-3 py-2.5 text-[11px] font-bold rounded-full text-[#e11d48] hover:bg-[#fff1f2] mt-1">Report</button>`}
+        <div class="flex gap-2.5 items-center cursor-pointer" onclick="goProfile('${m.uid}')"><img src="${m.pfp||'https://via.placeholder.com/32'}" class="w-8 h-8 rounded-full object-cover ${isOfficial?'border border-white/30':''}"><div><div class="flex items-center gap-1"><p class="font-bold text-[12px] leading-none">${m.name}</p>${isOfficial?'<span class="bg-white text-[#7c3aed] text-[7px] px-1.5 py-0.5 rounded-full font-bold">OFFICIAL</span>':''}</div><p class="text-[10px] ${isOfficial?'text-white/60':'text-gray-400'} mt-1">${new Date(m.createdAt).toLocaleDateString()}</p></div></div>
+        <div class="relative"><button onclick="toggleMenu('${m._key}')" class="w-7 h-7 ${isOfficial?'bg-white/15':'bg-[#faf5ff] border border-[#f3e8ff]'} rounded-full flex items-center justify-center text-[14px]">⋯</button>
+          <div id="menu-${m._key}" class="hidden absolute right-0 top-8 bg-white border border-[#ede9fe] rounded-[14px] shadow-xl p-1.5 w-[150px] z-30">
+            ${isMe?`<button onclick="openDelete('${m._key}')" class="w-full text-left px-3 py-2 text-[11px] font-bold rounded-full hover:bg-gray-50 text-black">Delete</button><button onclick="openEdit('${m._key}')" class="w-full text-left px-3 py-2 text-[11px] font-bold rounded-full hover:bg-gray-50 text-black">Edit</button>`:`<button onclick="goProfile('${m.uid}')" class="w-full text-left px-3 py-2 text-[11px] font-bold rounded-full bg-[#f5f3ff] text-[#7c3aed] border border-[#ede9fe]">View profile 💜</button><button onclick="openReport('${m._key}')" class="w-full text-left px-3 py-2 text-[11px] font-bold rounded-full text-[#e11d48] hover:bg-[#fff1f2] mt-1">Report</button>`}
           </div>
         </div>
       </div>
-      <p class="text-[13px] mt-3 leading-[1.6] whitespace-pre-wrap text-[#2a1555]">${m.text.replace(/@(\w+)/g,'<span class="text-[#7c3aed] font-bold">@$1</span>')}</p>
+      <p class="text-[12px] mt-3 leading-[1.6] whitespace-pre-wrap">${formatText(m.text)}</p>
+      <div class="flex items-center gap-2 mt-3">
+        <button onclick="toggleLike('${m._key}')" class="flex items-center gap-1 px-2.5 py-1 rounded-full border text-[11px] ${liked? (isOfficial?'bg-white text-[#7c3aed] border-white':'bg-[#7c3aed] text-white border-[#7c3aed]') : (isOfficial?'bg-white/15 border-white/20 text-white':'bg-[#faf5ff] border-[#f3e8ff] text-[#7c3aed]')}"><span class="text-[13px]">${liked?'♥':'♡'}</span><span class="text-[10px] font-bold">${m.likes||0}</span></button>
+        <button onclick="toggleReplyBox('${m._key}','${m.name}')" class="flex items-center gap-1 px-2.5 py-1 rounded-full border bg-white border-[#ede9fe] text-gray-500 text-[11px]"><span>↩</span><span class="text-[10px] font-bold">Reply</span><span class="text-[9px] bg-gray-100 px-1.5 py-0.5 rounded-full">${m.replies?Object.keys(m.replies).length:0}</span></button>
+      </div>
+      <div id="replyBox-${m._key}" class="hidden mt-3 flex gap-2"><img src="${document.getElementById('myPfp').src}" class="w-6 h-6 rounded-full"><div class="flex-1 flex gap-1.5"><input id="replyInput-${m._key}" placeholder="Reply to ${m.name}..." class="flex-1 bg-[#faf5ff] border border-[#f3e8ff] rounded-full px-3 py-1.5 text-[11px] outline-none"><button onclick="postLetter('${m._key}')" class="bg-[#1a1033] text-white w-7 h-7 rounded-full flex items-center justify-center">↗</button></div></div>
+      ${repliesHtml}
     </div>`;
   }).join('');
 }
 
-function toggleMenu(k){ let el=document.getElementById('menu-'+k); el.classList.toggle('hidden'); }
-function deleteLetter(k){ if(confirm('Delete this letter?')) db.ref('plaza/'+k).remove(); }
-function editLetter(k){ let cur=allLetters.find(x=>x._key===k); let n=prompt('Edit letter',cur.text); if(n && n.trim()) db.ref('plaza/'+k).update({text:n.trim()}); }
-function reportLetter(k){ let r=prompt('Reason for report?'); if(r){ db.ref('reports/'+k).push({letterId:k, reason:r, time:Date.now(), by: auth.currentUser?.uid||'anon'}); alert('Reported to owner'); } }
+function formatText(txt){ return txt.replace(/@([a-zA-Z0-9_]+)/g, (m,name)=>`<span onclick="event.stopPropagation(); findAndGoProfile('${name}')" class="text-[#7c3aed] font-bold cursor-pointer hover:underline">@${name}</span>`); }
+function findAndGoProfile(name){ let f=allLetters.find(l=> l.name.toLowerCase().replace(/\s/g,'').includes(name.toLowerCase())); if(f) goProfile(f.uid); }
+function toggleMenu(k){ let el=document.getElementById('menu-'+k); document.querySelectorAll('[id^=menu-]').forEach(x=>{ if(x.id!==el.id) x.classList.add('hidden'); }); el.classList.toggle('hidden'); }
+function toggleReplyBox(k,name){ let box=document.getElementById('replyBox-'+k); box.classList.toggle('hidden'); if(!box.classList.contains('hidden')){ document.getElementById('replyInput-'+k).value='@'+name+' '; document.getElementById('replyInput-'+k).focus(); } }
+function toggleLike(k){ let myUid=auth.currentUser?.uid || getLocal().uid || 'anon'; let ref=db.ref('plaza/'+k); ref.transaction(curr=>{ if(!curr) return curr; curr.likedBy=curr.likedBy||{}; curr.likes=curr.likes||0; if(curr.likedBy[myUid]){ delete curr.likedBy[myUid]; curr.likes=Math.max(0,curr.likes-1); } else { curr.likedBy[myUid]=true; curr.likes++; } return curr; }); }
+
+function openPopup(title,text,confirmText,onConfirm,showInput,showReason){
+  document.getElementById('popupTitle').innerText=title; document.getElementById('popupText').innerText=text;
+  document.getElementById('popupInput').classList.add('hidden'); document.getElementById('popupReason').classList.add('hidden');
+  if(showInput) document.getElementById('popupInput').classList.remove('hidden');
+  if(showReason) document.getElementById('popupReason').classList.remove('hidden');
+  document.getElementById('popupConfirm').innerText=confirmText;
+  document.getElementById('popupModal').classList.remove('hidden');
+  pendingAction=onConfirm;
+  document.getElementById('popupConfirm').onclick=()=>{ if(pendingAction) pendingAction(); closePopup(); };
+}
+function closePopup(){ document.getElementById('popupModal').classList.add('hidden'); }
+function openDelete(k){ openPopup('Delete letter?','This cannot be undone.','Delete',()=>{ db.ref('plaza/'+k).remove(); }); }
+function openEdit(k){ let cur=allLetters.find(x=>x._key===k); document.getElementById('popupInput').value=cur.text; openPopup('Edit letter','Update your letter','Save',()=>{ let v=document.getElementById('popupInput').value.trim(); if(v) db.ref('plaza/'+k).update({text:v}); }, true, false); }
+function openReport(k){ openPopup('Report letter?','Tell us the reason','Report',()=>{ let r=document.getElementById('popupReason').value.trim(); if(r) db.ref('reports/'+k).push({letterId:k, reason:r, time:Date.now(), by: auth.currentUser?.uid||'anon'}); }, false, true); }
+document.getElementById('popupModal').addEventListener('click', e=>{ if(e.target.id==='popupModal') closePopup(); });
 </script></body></html>
