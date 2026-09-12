@@ -188,13 +188,13 @@ function loadAll(){
     if(!data){ document.getElementById('votingsContent').innerHTML=`<div class="border-[1.5px] border-dashed border-[#d8b4fe] rounded-[20px] p-6 bg-white/50 text-center"><p class="text-[12px] text-[#9ca3af]">No active votings right now</p><p class="text-[10px] text-[#c4b5fd] mt-1">Check back later 💜</p></div>`; return; }
     let now=Date.now();
     let entries=Object.entries(data);
-    entries.forEach(([key,v])=>{
+    entries.forEach(([key][v])=>{
       let endTime = v.endTimestamp || new Date(v.endDate).getTime()+86399999;
       if(now > endTime + 24*60*60*1000){
         db.ref('votings/'+key).remove();
       }
     });
-    let arr=entries.map(([k,v])=>({...v,_key:k})).filter(v=>{
+    let arr=entries.map(([k][v])=>({...v,_key:k})).filter(v=>{
       let endTime = v.endTimestamp || new Date(v.endDate).getTime()+86399999;
       return now <= endTime + 24*60*60*1000;
     }).sort((a,b)=>b.createdAt-a.createdAt);
@@ -204,8 +204,7 @@ function loadAll(){
       let diff = Math.ceil((endTime - now)/(1000*60*60*24));
       let boxClass =!isEnded? "bg-[#f5f3ff] border-[#e9d5ff] shadow-sm" : "bg-[#f3f4f6] border-gray-200 opacity-80";
       let badge =!isEnded? `<span class="text-[8px] bg-[#7c3aed] text-white px-2 py-0.5 rounded-full font-bold">LIVE • ${diff<=0? 'Ends today' : diff+'d left'}</span>` : `<span class="text-[8px] bg-gray-400 text-white px-2 py-0.5 rounded-full font-bold">ENDED</span>`;
-      // FIXED: external browser open - vote count hoga
-      let btn =!isEnded? `<button onclick="window.open('${v.link}', '_blank')" class="mt-2 inline-block bg-[#1a1033] text-white px-4 py-2 rounded-full text-[10px] font-bold">Vote Now ↗</button><p class="text-[8px] text-[#7c3aed] mt-1">Opens in browser • Login first if needed 💜</p>` : `<span class="mt-2 inline-block bg-gray-300 text-gray-500 px-4 py-2 rounded-full text-[10px] font-bold cursor-not-allowed">Voting Ended</span>`;
+      let btn =!isEnded? `<button onclick="window.AppInventor.setWebViewString('EXTERNAL::${v.link}')" class="mt-2 inline-block bg-[#1a1033] text-white px-4 py-2 rounded-full text-[10px] font-bold">Vote Now ↗</button><p class="text-[8px] text-[#7c3aed] mt-1">Opens in Chrome • Login first if needed 💜</p>` : `<span class="mt-2 inline-block bg-gray-300 text-gray-500 px-4 py-2 rounded-full text-[10px] font-bold cursor-not-allowed">Voting Ended</span>`;
       return `<div class="border rounded-[16px] p-3 ${boxClass} transition">
         <div class="flex justify-between items-center">${badge}<span class="text-[9px] text-gray-400">Ends ${v.endDate} • Added ${v.date||''}</span></div>
         <h3 class="font-bold text-[12px] mt-2">${v.title}</h3>
