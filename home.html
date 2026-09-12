@@ -4,6 +4,9 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Home - borahae.fm</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
   html{scroll-behavior:smooth;}
@@ -22,7 +25,7 @@
   <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
 </header>
 
-<!-- SIDEBAR - Updated -->
+<!-- SIDEBAR - Updated with Plaza + Colored NEW -->
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
 <aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
   <div class="flex items-center justify-between">
@@ -32,10 +35,11 @@
   <p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
   <nav class="space-y-[2px]">
     <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">⌂ Home <span class="ml-auto w-2 h-2 bg-[#f472b6] rounded-full"></span></a>
-    <a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice <span class="ml-auto bg-[#f472b6] text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span></a>
+    <a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice <span id="newNotice" class="ml-auto hidden text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span></a>
     <a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✦ Missions</a>
     <a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">▶ Videos</a>
     <a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◫ My History</a>
+    <a href="plaza.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">☾ Borahae Plaza</a>
     <a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">? FAQ</a>
   </nav>
   <div class="mt-auto">
@@ -43,14 +47,14 @@
       <a href="whatsnew.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✧ What's New</a>
       <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a>
     </div>
-    <div id="sidebarUserBox" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3">
-      <div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div>
-      <div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY demo</p><p class="text-white/50 text-[10px] truncate">keeping the purple light on</p></div>
+    <div id="sidebarUserBox" onclick="goProfile()" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15 transition">
+      <div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden flex-shrink-0"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div>
+      <div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY demo</p><p class="text-white/50 text-[10px] truncate">View profile</p></div>
     </div>
   </div>
 </aside>
 
-<!-- HOME CONTENT - Same as before -->
+<!-- HOME CONTENT - Same as before - Kuch delete nahi kiya -->
 <main class="max-w-[480px] md:max-w-[600px] mx-auto px-5 pt-6 pb-20">
   <div>
     <p class="font-mono text-[11px] tracking-[2.5px] text-[#7c3aed]">YOUR SCRAPBOOK <span class="text-black/30 mx-2">·</span> AUG 29, 2026</p>
@@ -82,21 +86,25 @@
 </main>
 
 <script>
+const firebaseConfig={apiKey:"AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",authDomain:"borahae-fm-f7075.firebaseapp.com",databaseURL:"https://borahae-fm-f7075-default-rtdb.firebaseio.com",projectId:"borahae-fm-f7075"};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebarOverlay').classList.add('hidden');}
-// Dynamic User Logic
+function goProfile(){ const u=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); const uid=firebase.auth().currentUser?.uid||u.uid||'me'; location.href='profile.html?uid='+uid; }
+// Dynamic User Logic + Profile box
 try{
   const savedUser = JSON.parse(localStorage.getItem('borahaeUser') || '{}');
-  if(savedUser.name){
-    document.getElementById('sidebarName').innerText = savedUser.name;
-    document.getElementById('sidebarAvatarLetter').innerText = savedUser.name.charAt(0).toUpperCase();
-    if(savedUser.photo){
-      document.getElementById('sidebarAvatarImg').src = savedUser.photo;
-      document.getElementById('sidebarAvatarImg').classList.remove('hidden');
-      document.getElementById('sidebarAvatarLetter').classList.add('hidden');
-    }
-  }
+  const name = savedUser.name || localStorage.getItem('army_name') || 'ARMY demo';
+  if(name){ document.getElementById('sidebarName').innerText=name; document.getElementById('sidebarAvatarLetter').innerText=name.charAt(0).toUpperCase(); }
+  const photo = savedUser.photo || localStorage.getItem('army_pfp');
+  if(photo){ document.getElementById('sidebarAvatarImg').src=photo; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }
 }catch(e){}
+// NEW LOGIC - Pink = Notice, Yellow = Donate, Green = Voting
+db.ref('notices').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; let seen=parseInt(localStorage.getItem('lastNoticeSeen')||'0'); if(last.createdAt>seen){ let el=document.getElementById('newNotice'); el.classList.remove('hidden'); el.className='ml-auto text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#f472b6]'; el.innerText='NEW'; }});
+db.ref('borahaeDonates').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; let seen=parseInt(localStorage.getItem('lastDonateSeen')||'0'); if(last.createdAt>seen){ let el=document.getElementById('newNotice'); el.classList.remove('hidden'); el.className='ml-auto text-black text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#facc15]'; el.innerText='NEW'; }});
+db.ref('donateLinks').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; let seen=parseInt(localStorage.getItem('lastDonateSeen')||'0'); if(last.createdAt>seen){ let el=document.getElementById('newNotice'); el.classList.remove('hidden'); el.className='ml-auto text-black text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#facc15]'; el.innerText='NEW'; }});
+db.ref('votings').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; let seen=parseInt(localStorage.getItem('lastVotingSeen')||'0'); if(last.createdAt>seen){ let el=document.getElementById('newNotice'); el.classList.remove('hidden'); el.className='ml-auto text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#22c55e]'; el.innerText='NEW'; }});
 </script>
 </body>
 </html>
