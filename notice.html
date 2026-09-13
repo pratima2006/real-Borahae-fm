@@ -19,7 +19,6 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff}
 <button onclick="openSidebar()" class="w-9 h-9 bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center text-[20px] cursor-pointer">☰</button>
 <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
 </header>
-
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
 <aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 flex flex-col p-5">
 <div class="flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div><button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button></div>
@@ -46,65 +45,26 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff}
 <p class="font-mono text-[11px] tracking-[3px] text-[#7c3aed] font-bold">YOUR BOARD</p>
 <h1 class="font-display text-[32px] leading-[0.95] font-bold mt-1">Stay in the loop.</h1>
 <p class="text-[#6b7280] text-[11px] mt-2 leading-[1.4]">Important updates, donation drives and votings — all in one place, updated live 💜</p>
-
 <div class="flex gap-1.5 mt-4">
 <button id="tabNotice" onclick="switchMain('notice')" class="bg-[#1a1033] text-white px-4 py-1.5 rounded-full text-[11px] font-bold">Notice</button>
 <button id="tabDonate" onclick="switchMain('donate')" class="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold">Donations</button>
 <button id="tabVotings" onclick="switchMain('votings')" class="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold">Votings</button>
 </div>
-
 <div id="donateSub" class="hidden flex gap-1.5 mt-3">
 <button id="subBorahae" onclick="switchSub('borahae')" class="bg-[#ede9fe] border border-[#c4b5fd] px-3 py-1.5 rounded-full text-[10px] font-bold">Borahae-fm Donate</button>
 <button id="subDonate" onclick="switchSub('donate')" class="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold">Donations</button>
 </div>
-
-<div id="ownerNoticeBox" class="hidden mt-4 bg-[#fef9c3] rounded-[20px] p-3.5 border border-[#fde68a]">
-<p class="font-bold text-[11px]">Owner: Add Notice</p>
-<input id="nTitle" placeholder="Title" class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]">
-<textarea id="nDesc" placeholder="Description" class="w-full mt-2 bg-white border rounded-[12px] px-3 py-2 text-[11px]"></textarea>
-<input id="nImg" type="file" accept="image/*" class="w-full mt-2 text-[10px]">
-<button onclick="addNotice()" class="mt-2 w-full bg-[#7c3aed] text-white py-2 rounded-full text-[11px] font-bold">Add + auto date/time</button>
-</div>
-
-<div id="ownerBorahaeBox" class="hidden mt-4 bg-[#dcfce7] rounded-[20px] p-3.5 border border-[#86efac]">
-<p class="font-bold text-[11px]">Owner: Add Proof</p>
-<input id="bTitle" placeholder="Title" class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]">
-<input id="bAmount" placeholder="Amount" class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]">
-<input id="bImg" type="file" accept="image/*" class="w-full mt-2 text-[10px]">
-<button onclick="addBorahae()" class="mt-2 w-full bg-[#16a34a] text-white py-2 rounded-full text-[11px] font-bold">Add proof</button>
-</div>
-
-<div id="ownerDonateLinkBox" class="hidden mt-4 bg-[#7c3aed] rounded-[20px] p-3.5">
-<p class="font-bold text-[11px] text-white">Add donations link - only you ✨</p>
-<input id="dTitle" placeholder="Site title" class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]">
-<input id="dLink" placeholder="https://..." class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]">
-<textarea id="dDesc" placeholder="Info about site" class="w-full mt-2 bg-white border rounded-[12px] px-3 py-2 text-[11px]"></textarea>
-<button onclick="addDonateLink()" class="mt-2 w-full bg-white text-[#7c3aed] py-2 rounded-full text-[11px] font-bold">Add link</button>
-</div>
-
-<div id="ownerVotingBox" class="hidden mt-4 bg-white border border-dashed rounded-[16px] p-3">
-<p class="font-bold text-[11px]">Owner: Add Voting ✨</p>
-<input id="vTitle" placeholder="Title" class="w-full mt-2 border rounded-full px-3 py-2 text-[11px] outline-none focus:border-[#7c3aed]">
-<input id="vLink" placeholder="Voting Link https://..." class="w-full mt-2 border rounded-full px-3 py-2 text-[11px] outline-none focus:border-[#7c3aed]">
-<textarea id="vDesc" placeholder="Short info" class="w-full mt-2 border rounded-[12px] px-3 py-2 text-[11px] h-[60px]"></textarea>
-<div class="mt-2"><label class="text-[9px] font-bold text-[#7c3aed] tracking-widest">VOTING END DATE *</label><input id="vEnd" type="date" class="w-full mt-1 border rounded-full px-3 py-2 text-[11px]"></div>
-<button onclick="addVoting()" class="mt-3 w-full bg-[#7c3aed] text-white py-2.5 rounded-full text-[11px] font-bold">Add Voting + auto date</button>
-</div>
-
+<div id="ownerNoticeBox" class="hidden mt-4 bg-[#fef9c3] rounded-[20px] p-3.5 border border-[#fde68a]"><p class="font-bold text-[11px]">Owner: Add Notice</p><input id="nTitle" placeholder="Title" class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]"><textarea id="nDesc" placeholder="Description" class="w-full mt-2 bg-white border rounded-[12px] px-3 py-2 text-[11px]"></textarea><input id="nImg" type="file" accept="image/*" class="w-full mt-2 text-[10px]"><button onclick="addNotice()" class="mt-2 w-full bg-[#7c3aed] text-white py-2 rounded-full text-[11px] font-bold">Add + auto date/time</button></div>
+<div id="ownerBorahaeBox" class="hidden mt-4 bg-[#dcfce7] rounded-[20px] p-3.5 border border-[#86efac]"><p class="font-bold text-[11px]">Owner: Add Proof</p><input id="bTitle" placeholder="Title" class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]"><input id="bAmount" placeholder="Amount" class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]"><input id="bImg" type="file" accept="image/*" class="w-full mt-2 text-[10px]"><button onclick="addBorahae()" class="mt-2 w-full bg-[#16a34a] text-white py-2 rounded-full text-[11px] font-bold">Add proof</button></div>
+<div id="ownerDonateLinkBox" class="hidden mt-4 bg-[#7c3aed] rounded-[20px] p-3.5"><p class="font-bold text-[11px] text-white">Add donations link - only you ✨</p><input id="dTitle" placeholder="Site title" class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]"><input id="dLink" placeholder="https://..." class="w-full mt-2 bg-white border rounded-full px-3 py-2 text-[11px]"><textarea id="dDesc" placeholder="Info" class="w-full mt-2 bg-white border rounded-[12px] px-3 py-2 text-[11px]"></textarea><button onclick="addDonateLink()" class="mt-2 w-full bg-white text-[#7c3aed] py-2 rounded-full text-[11px] font-bold">Add link</button></div>
+<div id="ownerVotingBox" class="hidden mt-4 bg-white border border-dashed rounded-[16px] p-3"><p class="font-bold text-[11px]">Owner: Add Voting ✨</p><input id="vTitle" placeholder="Title" class="w-full mt-2 border rounded-full px-3 py-2 text-[11px]"><input id="vLink" placeholder="https://..." class="w-full mt-2 border rounded-full px-3 py-2 text-[11px]"><textarea id="vDesc" placeholder="Short info" class="w-full mt-2 border rounded-[12px] px-3 py-2 text-[11px] h-[60px]"></textarea><div class="mt-2"><label class="text-[9px] font-bold text-[#7c3aed] tracking-widest">END DATE *</label><input id="vEnd" type="date" class="w-full mt-1 border rounded-full px-3 py-2 text-[11px]"></div><button onclick="addVoting()" class="mt-3 w-full bg-[#7c3aed] text-white py-2.5 rounded-full text-[11px] font-bold">Add Voting + auto date</button></div>
 <div id="noticeContent" class="mt-4 space-y-3"></div>
 <div id="borahaeContent" class="mt-4 hidden space-y-3"></div>
 <div id="donateLinksContent" class="mt-4 hidden space-y-3"></div>
 <div id="votingsContent" class="mt-4 hidden space-y-3"></div>
 </main>
 
-<!-- DELETE POPUP -->
-<div id="deleteModal" class="fixed inset-0 z-[70] hidden modal-bg flex items-end md:items-center justify-center p-4">
-<div class="animate-pop bg-white rounded-[22px] w-full max-w-[320px] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
-<div class="w-10 h-10 bg-[#fff1f2] rounded-full flex items-center justify-center mx-auto text-[#e11d48]">✕</div>
-<h3 class="font-bold text-[14px] text-center mt-3">Delete this?</h3><p class="text-[11px] text-gray-500 text-center mt-1">This cannot be undone.</p>
-<div class="flex gap-2 mt-5"><button onclick="closeDelete()" class="flex-1 bg-[#f5f3ff] border py-2.5 rounded-full text-[11px] font-bold">Cancel</button><button id="confirmDeleteBtn" class="flex-1 bg-[#e11d48] text-white py-2.5 rounded-full text-[11px] font-bold">Delete</button></div>
-</div>
-</div>
+<div id="deleteModal" class="fixed inset-0 z-[70] hidden modal-bg flex items-end md:items-center justify-center p-4"><div class="animate-pop bg-white rounded-[22px] w-full max-w-[320px] p-5 shadow-xl"><div class="w-10 h-10 bg-[#fff1f2] rounded-full flex items-center justify-center mx-auto text-[#e11d48]">✕</div><h3 class="font-bold text-[14px] text-center mt-3">Delete this?</h3><p class="text-[11px] text-gray-500 text-center mt-1">This cannot be undone.</p><div class="flex gap-2 mt-5"><button onclick="closeDelete()" class="flex-1 bg-[#f5f3ff] border py-2.5 rounded-full text-[11px] font-bold">Cancel</button><button id="confirmDeleteBtn" class="flex-1 bg-[#e11d48] text-white py-2.5 rounded-full text-[11px] font-bold">Delete</button></div></div></div>
 
 <script>
 const firebaseConfig={apiKey:"AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",authDomain:"borahae-fm-f7075.firebaseapp.com",databaseURL:"https://borahae-fm-f7075-default-rtdb.firebaseio.com",projectId:"borahae-fm-f7075"};
@@ -115,141 +75,73 @@ let isOwner=false, main='notice', sub='borahae', pendingDelete={path:''};
 
 function openExternal(url){
   if(!url) return;
-  try{
-    if(window.AppInventor && window.AppInventor.setWebViewString){
-      window.AppInventor.setWebViewString('EXTERNAL::'+url);
-    } else {
-      window.open(url, '_blank');
-    }
-  }catch(e){ window.open(url,'_blank'); }
+  url=url.trim();
+  if(!url.startsWith('http')) url='https://'+url;
+  if(window.AppInventor && window.AppInventor.setWebViewString){
+    window.AppInventor.setWebViewString('EXTERNAL::'+url);
+  } else {
+    window.open(url,'_blank');
+  }
 }
 
 auth.onAuthStateChanged(u=>{
   if(u){
-    const name = u.displayName || localStorage.getItem('army_name') || 'ARMY';
-    const pic = u.photoURL || localStorage.getItem('army_pfp') || '';
-    document.getElementById('sidebarName').innerText = name;
-    if(pic){
-      document.getElementById('sidebarAvatarImg').src = pic;
-      document.getElementById('sidebarAvatarImg').classList.remove('hidden');
-      document.getElementById('sidebarAvatarLetter').classList.add('hidden');
-    } else {
-      document.getElementById('sidebarAvatarLetter').innerText = name.charAt(0).toUpperCase();
-    }
-    try{ localStorage.setItem('borahaeUser', JSON.stringify({name:name, photo:pic, email:u.email, uid:u.uid})); }catch(e){}
-    if(OWNERS.includes(u.email.toLowerCase())){ isOwner=true; showOwner(); loadAll(); }
+    const name=u.displayName||localStorage.getItem('army_name')||'ARMY';
+    const pic=u.photoURL||localStorage.getItem('army_pfp')||'';
+    document.getElementById('sidebarName').innerText=name;
+    if(pic){ sidebarAvatarImg.src=pic; sidebarAvatarImg.classList.remove('hidden'); sidebarAvatarLetter.classList.add('hidden'); }
+    else sidebarAvatarLetter.innerText=name.charAt(0).toUpperCase();
+    try{ localStorage.setItem('borahaeUser', JSON.stringify({name:name,photo:pic,email:u.email,uid:u.uid})); }catch(e){}
+    if(OWNERS.includes(u.email.toLowerCase())){ isOwner=true; showOwner(); }
   } else {
-    try{ let lu=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); if(lu.name){ document.getElementById('sidebarName').innerText=lu.name; if(lu.photo){ document.getElementById('sidebarAvatarImg').src=lu.photo; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); } } }catch(e){}
+    try{ let lu=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); if(lu.name){ sidebarName.innerText=lu.name; if(lu.photo){ sidebarAvatarImg.src=lu.photo; sidebarAvatarImg.classList.remove('hidden'); sidebarAvatarLetter.classList.add('hidden'); } } }catch(e){}
   }
   loadAll();
 });
-
-function showOwner(){
-  if(main==='notice') document.getElementById('ownerNoticeBox').classList.remove('hidden');
-  if(main==='donate' && sub==='borahae') document.getElementById('ownerBorahaeBox').classList.remove('hidden');
-  if(main==='donate' && sub==='donate') document.getElementById('ownerDonateLinkBox').classList.remove('hidden');
-  if(main==='votings') document.getElementById('ownerVotingBox').classList.remove('hidden');
-}
-function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
-function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
-function switchMain(t){
-  main=t;
-  document.getElementById('tabNotice').className="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold";
-  document.getElementById('tabDonate').className="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold";
-  document.getElementById('tabVotings').className="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold";
-  document.getElementById('noticeContent').classList.add('hidden'); document.getElementById('borahaeContent').classList.add('hidden'); document.getElementById('donateLinksContent').classList.add('hidden'); document.getElementById('votingsContent').classList.add('hidden'); document.getElementById('donateSub').classList.add('hidden');
-  document.getElementById('ownerNoticeBox').classList.add('hidden'); document.getElementById('ownerBorahaeBox').classList.add('hidden'); document.getElementById('ownerDonateLinkBox').classList.add('hidden'); document.getElementById('ownerVotingBox').classList.add('hidden');
-  if(t==='notice'){document.getElementById('tabNotice').className="bg-[#1a1033] text-white px-4 py-1.5 rounded-full text-[11px] font-bold";document.getElementById('noticeContent').classList.remove('hidden'); if(isOwner) document.getElementById('ownerNoticeBox').classList.remove('hidden');}
-  if(t==='donate'){document.getElementById('tabDonate').className="bg-[#1a1033] text-white px-4 py-1.5 rounded-full text-[11px] font-bold";document.getElementById('donateSub').classList.remove('hidden'); switchSub(sub);}
-  if(t==='votings'){document.getElementById('tabVotings').className="bg-[#1a1033] text-white px-4 py-1.5 rounded-full text-[11px] font-bold";document.getElementById('votingsContent').classList.remove('hidden'); if(isOwner) document.getElementById('ownerVotingBox').classList.remove('hidden');}
-}
-function switchSub(s){
-  sub=s;
-  document.getElementById('subBorahae').className="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold";
-  document.getElementById('subDonate').className="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold";
-  document.getElementById('borahaeContent').classList.add('hidden'); document.getElementById('donateLinksContent').classList.add('hidden');
-  document.getElementById('ownerBorahaeBox').classList.add('hidden'); document.getElementById('ownerDonateLinkBox').classList.add('hidden');
-  if(s==='borahae'){document.getElementById('subBorahae').className="bg-[#ede9fe] border border-[#c4b5fd] px-3 py-1.5 rounded-full text-[10px] font-bold"; document.getElementById('borahaeContent').classList.remove('hidden'); if(isOwner) document.getElementById('ownerBorahaeBox').classList.remove('hidden');}
-  else {document.getElementById('subDonate').className="bg-[#ede9fe] border border-[#c4b5fd] px-3 py-1.5 rounded-full text-[10px] font-bold"; document.getElementById('donateLinksContent').classList.remove('hidden'); if(isOwner) document.getElementById('ownerDonateLinkBox').classList.remove('hidden');}
-}
+function showOwner(){ if(main==='notice') ownerNoticeBox.classList.remove('hidden'); if(main==='donate'&&sub==='borahae') ownerBorahaeBox.classList.remove('hidden'); if(main==='donate'&&sub==='donate') ownerDonateLinkBox.classList.remove('hidden'); if(main==='votings') ownerVotingBox.classList.remove('hidden'); }
+function openSidebar(){sidebar.classList.remove('-translate-x-full');sidebarOverlay.classList.remove('hidden');}
+function closeSidebar(){sidebar.classList.add('-translate-x-full');sidebarOverlay.classList.add('hidden');}
+function switchMain(t){ main=t; tabNotice.className="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold"; tabDonate.className="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold"; tabVotings.className="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold"; noticeContent.classList.add('hidden'); borahaeContent.classList.add('hidden'); donateLinksContent.classList.add('hidden'); votingsContent.classList.add('hidden'); donateSub.classList.add('hidden'); ownerNoticeBox.classList.add('hidden'); ownerBorahaeBox.classList.add('hidden'); ownerDonateLinkBox.classList.add('hidden'); ownerVotingBox.classList.add('hidden'); if(t==='notice'){tabNotice.className="bg-[#1a1033] text-white px-4 py-1.5 rounded-full text-[11px] font-bold"; noticeContent.classList.remove('hidden'); if(isOwner) ownerNoticeBox.classList.remove('hidden');} if(t==='donate'){tabDonate.className="bg-[#1a1033] text-white px-4 py-1.5 rounded-full text-[11px] font-bold"; donateSub.classList.remove('hidden'); switchSub(sub);} if(t==='votings'){tabVotings.className="bg-[#1a1033] text-white px-4 py-1.5 rounded-full text-[11px] font-bold"; votingsContent.classList.remove('hidden'); if(isOwner) ownerVotingBox.classList.remove('hidden');} }
+function switchSub(s){ sub=s; subBorahae.className="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold"; subDonate.className="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold"; borahaeContent.classList.add('hidden'); donateLinksContent.classList.add('hidden'); ownerBorahaeBox.classList.add('hidden'); ownerDonateLinkBox.classList.add('hidden'); if(s==='borahae'){subBorahae.className="bg-[#ede9fe] border border-[#c4b5fd] px-3 py-1.5 rounded-full text-[10px] font-bold"; borahaeContent.classList.remove('hidden'); if(isOwner) ownerBorahaeBox.classList.remove('hidden');} else {subDonate.className="bg-[#ede9fe] border border-[#c4b5fd] px-3 py-1.5 rounded-full text-[10px] font-bold"; donateLinksContent.classList.remove('hidden'); if(isOwner) ownerDonateLinkBox.classList.remove('hidden');} }
 function fileToBase64(f){return new Promise(r=>{let rd=new FileReader(); rd.onload=e=>r(e.target.result); rd.readAsDataURL(f);});}
 async function addNotice(){let t=nTitle.value,d=nDesc.value; if(!t) return alert('Title'); let img=''; let file=nImg.files[0]; if(file) img=await fileToBase64(file); db.ref('notices').push({title:t,desc:d,img,date:new Date().toLocaleDateString(),time:new Date().toLocaleTimeString(),createdAt:Date.now()}); nTitle.value=''; nDesc.value='';}
 async function addBorahae(){let t=bTitle.value,a=bAmount.value; if(!t) return alert('Title'); let img=''; let file=bImg.files[0]; if(file) img=await fileToBase64(file); db.ref('borahaeDonates').push({title:t,amount:a,img,date:new Date().toLocaleDateString(),time:new Date().toLocaleTimeString(),createdAt:Date.now()}); bTitle.value=''; bAmount.value='';}
 function addDonateLink(){let t=dTitle.value,l=dLink.value,d=dDesc.value; if(!t||!l) return alert('Fill'); db.ref('donateLinks').push({title:t,link:l,desc:d,date:new Date().toLocaleDateString(),createdAt:Date.now()}); dTitle.value=''; dLink.value=''; dDesc.value='';}
-function addVoting(){let t=vTitle.value.trim(),l=vLink.value.trim(),d=vDesc.value.trim(),e=vEnd.value; if(!t||!l||!e) return alert('Title + Link + End Date bharo'); let end=new Date(e); end.setHours(23,59,59,999); if(end<new Date()) return alert('Future date'); db.ref('votings').push({title:t,link:l,desc:d,endDate:e,endTimestamp:end.getTime(),date:new Date().toLocaleDateString(),time:new Date().toLocaleTimeString(),createdAt:Date.now()}); vTitle.value=''; vLink.value=''; vDesc.value=''; vEnd.value='';}
+function addVoting(){let t=vTitle.value.trim(),l=vLink.value.trim(),d=vDesc.value.trim(),e=vEnd.value; if(!t||!l||!e) return alert('Title+Link+Date'); let end=new Date(e); end.setHours(23,59,59,999); if(end<new Date()) return alert('Future date'); db.ref('votings').push({title:t,link:l,desc:d,endDate:e,endTimestamp:end.getTime(),date:new Date().toLocaleDateString(),time:new Date().toLocaleTimeString(),createdAt:Date.now()}); vTitle.value=''; vLink.value=''; vDesc.value=''; vEnd.value='';}
+function askDelete(path){ pendingDelete.path=path; deleteModal.classList.remove('hidden'); }
+function closeDelete(){ deleteModal.classList.add('hidden'); }
+confirmDeleteBtn.onclick=()=>{ if(pendingDelete.path) db.ref(pendingDelete.path).remove(); closeDelete(); };
+deleteModal.addEventListener('click',e=>{ if(e.target.id==='deleteModal') closeDelete(); });
 
-function askDelete(path){ pendingDelete.path=path; document.getElementById('deleteModal').classList.remove('hidden'); }
-function closeDelete(){ document.getElementById('deleteModal').classList.add('hidden'); }
-document.getElementById('confirmDeleteBtn').onclick=()=>{ if(pendingDelete.path) db.ref(pendingDelete.path).remove(); closeDelete(); };
-document.getElementById('deleteModal').addEventListener('click',e=>{ if(e.target.id==='deleteModal') closeDelete(); });
+function escapeHtml(s){ return s? s.replace(/"/g,'&quot;') : ''; }
 
 function loadAll(){
   db.ref('notices').on('value',s=>{
     let data=s.val(); let arr=data?Object.entries(data).map(([k,v])=>({...v,_key:k})).sort((a,b)=>b.createdAt-a.createdAt):[];
-    document.getElementById('noticeContent').innerHTML= arr.length? arr.map(n=>`
-      <div class="relative border border-[#fde68a] bg-[#fefce8] rounded-[18px] p-3.5 shadow-sm">
-        ${isOwner?`<button onclick="askDelete('notices/${n._key}')" class="absolute top-2 right-2 w-6 h-6 bg-white border border-[#fde68a] rounded-full flex items-center justify-center text-[10px] text-gray-500 hover:bg-[#fff1f2] hover:text-[#e11d48]">✕</button>`:''}
-        <div class="flex justify-between pr-6"><span class="text-[8px] bg-[#facc15] text-[#713f12] px-2.5 py-1 rounded-full font-bold tracking-wide">NOTICE • ${n.date||''}</span><span class="text-[9px] text-gray-400">Added ${n.date||''}</span></div>
-        <h3 class="font-extrabold text-[13px] mt-2.5 text-[#1a1033] leading-[1.3]">${n.title}</h3>
-        <p class="text-[11px] font-semibold text-[#1a1033] mt-1.5 leading-[1.6] desc-pre">${n.desc||''}</p>
-        ${n.img?`<img src="${n.img}" class="w-full mt-3 rounded-[12px] border border-[#fde68a]">`:''}
-      </div>`).join('') : `<div class="border-[1.5px] border-dashed border-[#d8b4fe] rounded-[20px] p-6 bg-white/50 text-center"><p class="text-[12px] text-[#9ca3af]">No notices yet</p></div>`;
+    noticeContent.innerHTML= arr.length? arr.map(n=>`<div class="relative border border-[#fde68a] bg-[#fefce8] rounded-[18px] p-3.5 shadow-sm">${isOwner?`<button onclick="askDelete('notices/${n._key}')" class="absolute top-2 right-2 w-6 h-6 bg-white border rounded-full flex items-center justify-center text-[10px]">✕</button>`:''}<div class="flex justify-between pr-6"><span class="text-[8px] bg-[#facc15] text-[#713f12] px-2.5 py-1 rounded-full font-bold">NOTICE • ${n.date||''}</span><span class="text-[9px] text-gray-400">Added ${n.date||''}</span></div><h3 class="font-extrabold text-[13px] mt-2.5 text-[#1a1033]">${n.title}</h3><p class="text-[11px] font-semibold text-[#1a1033] mt-1.5 leading-[1.6] desc-pre">${n.desc||''}</p>${n.img?`<img src="${n.img}" class="w-full mt-3 rounded-[12px] border">`:''}</div>`).join('') : `<div class="border-dashed border-2 rounded-[20px] p-6 text-center text-gray-400 text-[12px]">No notices</div>`;
   });
   db.ref('borahaeDonates').on('value',s=>{
     let data=s.val(); let arr=data?Object.entries(data).map(([k,v])=>({...v,_key:k})).sort((a,b)=>b.createdAt-a.createdAt):[];
-    document.getElementById('borahaeContent').innerHTML= arr.length? arr.map(b=>`
-      <div class="relative border border-[#86efac] bg-[#f0fdf4] rounded-[18px] p-3.5 shadow-sm">
-        ${isOwner?`<button onclick="askDelete('borahaeDonates/${b._key}')" class="absolute top-2 right-2 w-6 h-6 bg-white border border-[#86efac] rounded-full flex items-center justify-center text-[10px] text-gray-500 hover:text-[#e11d48]">✕</button>`:''}
-        <div class="flex justify-between pr-6"><span class="text-[8px] bg-[#16a34a] text-white px-2.5 py-1 rounded-full font-bold">BORAE FM DONATE</span><span class="text-[9px] text-gray-500">${b.date||''}</span></div>
-        <h3 class="font-bold text-[12px] mt-2">${b.title}</h3><p class="text-[11px] font-bold text-[#16a34a]">${b.amount||''}</p>${b.img?`<img src="${b.img}" class="w-full mt-2 rounded-[12px] border">`:''}
-      </div>`).join('') : `<div class="border-[1.5px] border-dashed border-[#d8b4fe] rounded-[20px] p-6 bg-white/50 text-center"><p class="text-[12px] text-[#9ca3af]">No proofs yet</p></div>`;
+    borahaeContent.innerHTML= arr.length? arr.map(b=>`<div class="relative border border-[#86efac] bg-[#f0fdf4] rounded-[18px] p-3.5">${isOwner?`<button onclick="askDelete('borahaeDonates/${b._key}')" class="absolute top-2 right-2 w-6 h-6 bg-white border rounded-full text-[10px]">✕</button>`:''}<div class="flex justify-between pr-6"><span class="text-[8px] bg-[#16a34a] text-white px-2.5 py-1 rounded-full font-bold">BORAE FM DONATE</span><span class="text-[9px] text-gray-500">${b.date||''}</span></div><h3 class="font-bold text-[12px] mt-2">${b.title}</h3><p class="text-[11px] font-bold text-[#16a34a]">${b.amount||''}</p>${b.img?`<img src="${b.img}" class="w-full mt-2 rounded-[12px] border">`:''}</div>`).join('') : `<div class="border-dashed border-2 rounded-[20px] p-6 text-center text-gray-400 text-[12px]">No proofs</div>`;
   });
   db.ref('donateLinks').on('value',s=>{
     let data=s.val(); let arr=data?Object.entries(data).map(([k,v])=>({...v,_key:k})).sort((a,b)=>b.createdAt-a.createdAt):[];
-    document.getElementById('donateLinksContent').innerHTML= arr.length? arr.map(l=>`
-      <div class="relative bg-white border border-[#ede9fe] rounded-[18px] p-3.5 shadow-sm">
-        ${isOwner?`<button onclick="askDelete('donateLinks/${l._key}')" class="absolute top-2 right-2 w-6 h-6 bg-[#faf5ff] border rounded-full flex items-center justify-center text-[10px]">✕</button>`:''}
-        <h3 class="font-bold text-[12px] pr-6">${l.title}</h3><p class="text-[11px] text-[#6b7280] mt-1 desc-pre">${l.desc||''}</p>
-        <div class="flex justify-between items-end mt-3"><button onclick="openExternal('${l.link}')" class="bg-[#7c3aed] text-white px-5 py-2 rounded-full text-[10px] font-bold">Donate ↗</button><span class="text-[9px] text-gray-400">Added ${l.date||''}</span></div>
-      </div>`).join('') : `<div class="border-[1.5px] border-dashed border-[#d8b4fe] rounded-[20px] p-6 bg-white/50 text-center"><p class="text-[12px] text-[#9ca3af]">No links yet</p></div>`;
+    donateLinksContent.innerHTML= arr.length? arr.map(l=>{
+      let safeLink=escapeHtml(l.link);
+      return `<div class="relative bg-white border rounded-[18px] p-3.5">${isOwner?`<button onclick="askDelete('donateLinks/${l._key}')" class="absolute top-2 right-2 w-6 h-6 bg-[#faf5ff] border rounded-full text-[10px]">✕</button>`:''}<h3 class="font-bold text-[12px] pr-6">${l.title}</h3><p class="text-[11px] text-[#6b7280] mt-1 desc-pre">${l.desc||''}</p><div class="flex justify-between items-end mt-3"><button data-url="${safeLink}" onclick="openExternal(this.dataset.url)" class="bg-[#7c3aed] text-white px-5 py-2 rounded-full text-[10px] font-bold">Donate ↗</button><span class="text-[9px] text-gray-400">Added ${l.date||''}</span></div></div>`;
+    }).join('') : `<div class="border-dashed border-2 rounded-[20px] p-6 text-center text-gray-400 text-[12px]">No links</div>`;
   });
   db.ref('votings').on('value',s=>{
-    let data=s.val(); if(!data){ document.getElementById('votingsContent').innerHTML=`<div class="border-[1.5px] border-dashed border-[#d8b4fe] rounded-[20px] p-6 bg-white/50 text-center"><p class="text-[12px] text-[#9ca3af]">No active votings</p></div>`; return; }
-    let now=Date.now();
-    Object.entries(data).forEach(([k,v])=>{
-      let endTime=v.endTimestamp||new Date(v.endDate).getTime()+86399999;
-      if(now > endTime + 86400000) db.ref('votings/'+k).remove();
-    });
-    let arr=Object.entries(data).map(([k,v])=>({...v,_key:k})).filter(v=>{
-      let endTime=v.endTimestamp||new Date(v.endDate).getTime()+86399999;
-      return now <= endTime + 86400000;
-    }).sort((a,b)=>b.createdAt-a.createdAt);
-
-    document.getElementById('votingsContent').innerHTML= arr.map(v=>{
-      let endTime=v.endTimestamp||new Date(v.endDate).getTime()+86399999;
-      let isEnded=now>endTime;
-      let diff=Math.ceil((endTime-now)/86400000);
-      let boxClass="", badge="", btn="", added=`Added ${v.date||''}`;
-      if(isEnded){
-        boxClass="bg-[#f3f4f6] border-[#d1d5db] opacity-80";
-        badge=`<span class="text-[8px] bg-[#9ca3af] text-white px-2.5 py-1 rounded-full font-bold">ENDED</span>`;
-        btn=`<div class="flex justify-between items-end mt-3"><span class="bg-[#6b7280] text-white px-5 py-2 rounded-full text-[10px] font-bold">Ended</span><span class="text-[9px] text-gray-400">${added}</span></div>`;
-      } else if(diff <= 3){
-        boxClass="bg-[#fff1f2] border-[#fecdd3]";
-        badge=`<span class="text-[8px] bg-[#e11d48] text-white px-2.5 py-1 rounded-full font-bold animate-pulse">LIVE • ${diff<=0?'Ends today':diff+'d left'}</span>`;
-        btn=`<div class="flex justify-between items-end mt-3"><button onclick="openExternal('${v.link}')" class="bg-[#1a1033] text-white px-5 py-2 rounded-full text-[10px] font-bold">Vote Now ↗</button><span class="text-[9px] text-[#e11d48]/70">${added}</span></div>`;
-      } else {
-        boxClass="bg-[#ede9fe] border-[#c4b5fd]";
-        badge=`<span class="text-[8px] bg-[#5b21b6] text-white px-2.5 py-1 rounded-full font-bold">LIVE • ${diff}d left</span>`;
-        btn=`<div class="flex justify-between items-end mt-3"><button onclick="openExternal('${v.link}')" class="bg-[#1a1033] text-white px-5 py-2 rounded-full text-[10px] font-bold">Vote Now ↗</button><span class="text-[9px] text-[#7c3aed]/70">${added}</span></div>`;
-      }
-      return `<div class="relative border rounded-[18px] p-3.5 ${boxClass}">
-        ${isOwner?`<button onclick="askDelete('votings/${v._key}')" class="absolute top-2 right-2 w-6 h-6 bg-white border rounded-full flex items-center justify-center text-[10px] hover:bg-[#fff1f2] hover:text-[#e11d48]">✕</button>`:''}
-        <div class="flex justify-between items-center pr-6">${badge}<span class="text-[9px] text-gray-500">Ends ${v.endDate}</span></div>
-        <h3 class="font-bold text-[13px] mt-2.5">${v.title}</h3>
-        ${v.desc?`<p class="text-[11px] text-[#4b5563] mt-1.5 leading-[1.5] desc-pre">${v.desc}</p>`:''}
-        ${btn}
-      </div>`;
+    let data=s.val(); if(!data){ votingsContent.innerHTML=`<div class="border-dashed border-2 rounded-[20px] p-6 text-center text-gray-400 text-[12px]">No votings</div>`; return; }
+    let now=Date.now(); Object.entries(data).forEach(([k,v])=>{ let et=v.endTimestamp||new Date(v.endDate).getTime()+86399999; if(now>et+86400000) db.ref('votings/'+k).remove(); });
+    let arr=Object.entries(data).map(([k,v])=>({...v,_key:k})).filter(v=>{ let et=v.endTimestamp||new Date(v.endDate).getTime()+86399999; return now<=et+86400000; }).sort((a,b)=>b.createdAt-a.createdAt);
+    votingsContent.innerHTML= arr.map(v=>{
+      let et=v.endTimestamp||new Date(v.endDate).getTime()+86399999; let isEnded=now>et; let diff=Math.ceil((et-now)/86400000);
+      let box="", badge="", btn="", added=`Added ${v.date||''}`; let safeLink=escapeHtml(v.link);
+      if(isEnded){ box="bg-[#f3f4f6] border-[#d1d5db] opacity-80"; badge=`<span class="text-[8px] bg-[#9ca3af] text-white px-2.5 py-1 rounded-full font-bold">ENDED</span>`; btn=`<div class="flex justify-between mt-3"><span class="bg-[#6b7280] text-white px-5 py-2 rounded-full text-[10px] font-bold">Ended</span><span class="text-[9px] text-gray-400">${added}</span></div>`; }
+      else if(diff<=3){ box="bg-[#fff1f2] border-[#fecdd3]"; badge=`<span class="text-[8px] bg-[#e11d48] text-white px-2.5 py-1 rounded-full font-bold animate-pulse">LIVE • ${diff<=0?'Ends today':diff+'d left'}</span>`; btn=`<div class="flex justify-between mt-3"><button data-url="${safeLink}" onclick="openExternal(this.dataset.url)" class="bg-[#1a1033] text-white px-5 py-2 rounded-full text-[10px] font-bold">Vote Now ↗</button><span class="text-[9px] text-[#e11d48]/70">${added}</span></div>`; }
+      else { box="bg-[#ede9fe] border-[#c4b5fd]"; badge=`<span class="text-[8px] bg-[#5b21b6] text-white px-2.5 py-1 rounded-full font-bold">LIVE • ${diff}d left</span>`; btn=`<div class="flex justify-between mt-3"><button data-url="${safeLink}" onclick="openExternal(this.dataset.url)" class="bg-[#1a1033] text-white px-5 py-2 rounded-full text-[10px] font-bold">Vote Now ↗</button><span class="text-[9px] text-[#7c3aed]/70">${added}</span></div>`; }
+      return `<div class="relative border rounded-[18px] p-3.5 ${box}">${isOwner?`<button onclick="askDelete('votings/${v._key}')" class="absolute top-2 right-2 w-6 h-6 bg-white border rounded-full flex items-center justify-center text-[10px] hover:bg-[#fff1f2] hover:text-[#e11d48]">✕</button>`:''}<div class="flex justify-between items-center pr-6">${badge}<span class="text-[9px] text-gray-500">Ends ${v.endDate}</span></div><h3 class="font-bold text-[13px] mt-2.5">${v.title}</h3>${v.desc?`<p class="text-[11px] text-[#4b5563] mt-1.5 desc-pre">${v.desc}</p>`:''}${btn}</div>`;
     }).join('');
   });
 }
