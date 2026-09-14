@@ -27,8 +27,8 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;color:#1a1033;overflow-
 <nav class="space-y-[2px]">
 <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
 <a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice</a>
-<a href="plaza.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">☾ Borahae Plaza</a>
 <a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">✦ Missions</a>
+<a href="plaza.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">☾ Borahae Plaza</a>
 <a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">▶ Videos</a>
 <a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◫ My History</a>
 </nav>
@@ -56,14 +56,30 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;color:#1a1033;overflow-
   </div>
 </main>
 
-<!-- ADD MODAL -->
+<!-- ADD MODAL - PIC JAISA -->
 <div id="addModal" class="fixed inset-0 z-[70] hidden modal-bg flex items-center justify-center p-4">
-  <div class="animate-pop bg-white rounded-[20px] p-5 w-full max-w-[360px]">
-    <div class="flex justify-between items-center"><h3 class="font-bold text-[14px]">Add Mission</h3><button onclick="closeAddModal()" class="w-7 h-7 bg-gray-100 rounded-full">✕</button></div>
-    <input id="missionTitle" placeholder="Title e.g. Dynamite" class="w-full mt-4 border rounded-[12px] px-3 py-2.5 text-[12px] outline-none focus:border-[#7c3aed]">
-    <input id="missionLink" placeholder="YouTube Link or ID" class="w-full mt-3 border rounded-[12px] px-3 py-2.5 text-[12px] outline-none focus:border-[#7c3aed]">
-    <input id="missionGoal" type="number" value="5" placeholder="Goal" class="w-full mt-3 border rounded-[12px] px-3 py-2.5 text-[12px] outline-none focus:border-[#7c3aed]">
-    <button onclick="saveMission()" class="w-full mt-4 bg-[#7c3aed] text-white py-3 rounded-full text-[12px] font-bold">Save Mission</button>
+  <div class="animate-pop bg-white rounded-[22px] p-5 w-full max-w-[360px] shadow-xl">
+    <div class="flex justify-between items-center"><h3 class="font-bold text-[14px]">Add Mission</h3><button onclick="closeAddModal()" class="w-7 h-7 bg-gray-100 rounded-full flex items-center justify-center text-[12px]">✕</button></div>
+
+    <label class="text-[10px] font-bold text-gray-600 mt-4 block">Title</label>
+    <input id="missionTitle" placeholder="Title e.g. Dynamite" class="w-full mt-1 border border-[#ede9fe] rounded-[12px] px-3 py-2.5 text-[12px] outline-none focus:border-[#7c3aed] focus:ring-1 focus:ring-[#ede9fe]">
+
+    <label class="text-[10px] font-bold text-gray-600 mt-3 block">YouTube Link</label>
+    <div class="relative mt-1">
+      <input id="missionLink" oninput="checkYTLink()" placeholder="https://youtu.be/... or ID" class="w-full border border-[#ede9fe] rounded-[12px] px-3 py-2.5 pr-8 text-[12px] outline-none focus:border-[#7c3aed]">
+      <span id="ytTick" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 bg-[#22c55e] text-white rounded-full flex items-center justify-center text-[11px]">✓</span>
+    </div>
+
+    <div id="thumbPreview" class="hidden mt-3 rounded-[12px] overflow-hidden border border-[#f3e8ff] relative">
+      <img id="thumbImg" src="" class="w-full h-[120px] object-cover">
+      <div class="absolute bottom-0 left-0 right-0 bg-black/50 backdrop-blur px-2 py-1"><p id="thumbId" class="text-[9px] font-mono text-white/80 truncate"></p></div>
+    </div>
+
+    <label class="text-[10px] font-bold text-gray-600 mt-3 block">How many times to stream?</label>
+    <input id="missionGoal" type="number" min="1" max="50" value="5" class="w-[90px] mt-1 border border-[#ede9fe] rounded-[10px] px-3 py-2 text-[12px] outline-none focus:border-[#7c3aed]">
+
+    <button onclick="saveMission()" class="w-full mt-5 bg-[#7c3aed] text-white py-3 rounded-full text-[12px] font-bold">+ Add Mission</button>
+    <p id="ownerOnlyNote" class="text-[9px] text-gray-400 mt-2 text-center">Only owner can add • pratimatribhuvan2006@gmail.com</p>
   </div>
 </div>
 
@@ -73,13 +89,34 @@ firebase.initializeApp(firebaseConfig); const db=firebase.database(); const auth
 
 const OWNER_EMAILS = ["pratimatribhuvan2006@gmail.com"];
 
-let videos=[], counts={}, isOwner=false, currentUserEmail="", premiumExtraCount=0;
+let videos=[], counts={}, isOwner=false, currentUserEmail="", premiumExtraCount=0, lastValidYTId="";
 
 function getYouTubeID(urlOrId){
   if(!urlOrId) return ""; urlOrId=urlOrId.trim();
   if(urlOrId.length===11 &&!urlOrId.includes("/")) return urlOrId;
   try{ let u=new URL(urlOrId); if(u.hostname.includes('youtu.be')) return u.pathname.slice(1).slice(0,11); if(u.searchParams.get('v')) return u.searchParams.get('v').slice(0,11); let p=u.pathname.split('/'); let i=p.indexOf('shorts'); if(i!==-1) return p[i+1].slice(0,11); i=p.indexOf('embed'); if(i!==-1) return p[i+1].slice(0,11);}catch(e){ let m=urlOrId.match(/(youtu.be\/|v\/|embed\/|shorts\/|watch\?v=)([^#\&\?]{11})/); if(m) return m[2]; }
-  return urlOrId.slice(0,11);
+  if(urlOrId.match(/^[a-zA-Z0-9_-]{11}$/)) return urlOrId;
+  return "";
+}
+
+function checkYTLink(){
+  let link = document.getElementById('missionLink').value.trim();
+  let id = getYouTubeID(link);
+  let tick = document.getElementById('ytTick');
+  let preview = document.getElementById('thumbPreview');
+  if(id.length===11){
+    lastValidYTId = id;
+    tick.classList.remove('hidden'); tick.classList.add('flex');
+    document.getElementById('missionLink').classList.add('border-[#22c55e]');
+    document.getElementById('thumbImg').src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+    document.getElementById('thumbId').innerText = id;
+    preview.classList.remove('hidden');
+  } else {
+    tick.classList.add('hidden'); tick.classList.remove('flex');
+    document.getElementById('missionLink').classList.remove('border-[#22c55e]');
+    preview.classList.add('hidden');
+    lastValidYTId = "";
+  }
 }
 
 function recalcCountsFromHistory(){
@@ -143,19 +180,24 @@ db.ref('missions').on('value', (snap)=>{
 function openSidebar(){ document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebarOverlay').classList.add('hidden');}
 function openAddModal(isPremiumAdd=false){
-  if(!isOwner &&!isPremiumAdd) return;
+  if(!isOwner &&!isPremiumAdd){ alert('Only owner can add missions'); return; }
   if(isPremiumAdd && premiumExtraCount>=2) { alert('Daily limit 2 reached'); return; }
   document.getElementById('addModal').classList.remove('hidden'); document.getElementById('addModal').classList.add('flex');
   document.getElementById('addModal').dataset.premium = isPremiumAdd?'true':'false';
+  document.getElementById('missionTitle').value=''; document.getElementById('missionLink').value=''; document.getElementById('missionGoal').value='5';
+  document.getElementById('thumbPreview').classList.add('hidden'); document.getElementById('ytTick').classList.add('hidden');
+  lastValidYTId="";
 }
 function closeAddModal(){ document.getElementById('addModal').classList.add('hidden'); document.getElementById('addModal').classList.remove('flex'); }
 function saveMission(){
   let title=document.getElementById('missionTitle').value.trim();
   let link=document.getElementById('missionLink').value.trim();
   let goal=parseInt(document.getElementById('missionGoal').value)||5;
-  let id=getYouTubeID(link);
-  if(!title ||!id){ alert('Title & valid YouTube link required'); return; }
+  let id=lastValidYTId || getYouTubeID(link);
+  if(!title){ alert('Title required'); return; }
+  if(!id || id.length!==11){ alert('Valid YouTube link required'); return; }
   let isPremiumAdd = document.getElementById('addModal').dataset.premium==='true';
+  if(!isOwner &&!isPremiumAdd){ alert('Only owner'); return; }
   let newRef = db.ref('missions').push();
   newRef.set({title:title, id:id, videoId:id, link:link, goal:goal, requiredStreams:goal, createdAt:Date.now(), addedBy: currentUserEmail, isPremiumExtra: isPremiumAdd}).then(()=>{
     if(isPremiumAdd){
@@ -165,7 +207,7 @@ function saveMission(){
       extra.count=(extra.count||0)+1; extra.date=todayStr;
       localStorage.setItem('borahae_premium_extra_today', JSON.stringify(extra));
     }
-    closeAddModal(); document.getElementById('missionTitle').value=''; document.getElementById('missionLink').value='';
+    closeAddModal();
   });
 }
 function deleteMission(key, e){
@@ -194,8 +236,12 @@ auth.onAuthStateChanged(user=>{
     currentUserEmail = (user.email||'').toLowerCase();
     isOwner = OWNER_EMAILS.map(e=>e.toLowerCase()).includes(currentUserEmail);
     if(isOwner) document.getElementById('ownerAddBtn').classList.remove('hidden');
+    else document.getElementById('ownerAddBtn').classList.add('hidden');
     document.getElementById('sidebarName').innerText=user.displayName||localStorage.getItem('army_name')||'ARMY';
     if(user.photoURL){ document.getElementById('sidebarAvatarImg').src=user.photoURL; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }
+  } else {
+    isOwner = OWNER_EMAILS.includes((JSON.parse(localStorage.getItem('borahaeUser')||'{}').email||'').toLowerCase());
+    if(isOwner) document.getElementById('ownerAddBtn').classList.remove('hidden');
   }
   render();
 });
