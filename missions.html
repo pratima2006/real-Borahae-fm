@@ -5,82 +5,75 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
-  html{scroll-behavior:smooth;}
-  body{font-family:'Manrope',sans-serif; background:#fdf8ff; color:#1a1033;}
+body{font-family:'Manrope',sans-serif;background:#fdf8ff;color:#1a1033;overflow-x:hidden;}
 .font-display{font-family:'Playfair Display',serif;}
 .font-mono{font-family:'DM Mono',monospace;}
 .paper-grid{background-image:linear-gradient(#e9d5ff1f 1px, transparent 1px),linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px); background-size:22px 22px;}
 .sidebar-bg{background:#28164f;}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #f3e8ff;display:none;justify-content:space-around;padding:8px 0 18px 0;z-index:30;max-width:600px;margin:0 auto;}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;opacity:0.5}
-.nav-item.active{opacity:1}
-.progress-fill{transition: width 0.8s ease, background 0.8s ease}
-</style></head><body class="paper-grid pb-28">
+@keyframes pop{0%{transform:scale(0.94);opacity:0}100%{transform:scale(1);opacity:1}}
+.animate-pop{animation:pop.22s cubic-bezier(.16,1,.3,1)}
+.modal-bg{backdrop-filter:blur(6px);background:rgba(0,0,0,0.25)}
+</style></head><body class="paper-grid pb-24">
 
-<!-- HEADER - SAME AS HOME -->
-<header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
-  <button onclick="openSidebar()" class="w-9 h-9 bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center text-[20px]">☰</button>
-  <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
+<header class="sticky top-0 z-30 bg-[#fdf8ff]/90 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
+<button onclick="openSidebar()" class="w-9 h-9 bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center text-[20px]">☰</button>
+<div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
 </header>
 
-<!-- SIDEBAR - EXACT HOME WALA COPY -->
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
-<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
-  <div class="flex items-center justify-between">
-    <div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div>
-    <button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button>
-  </div>
-  <p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
-  <nav class="space-y-[2px]">
-    <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
-    <a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice <span class="ml-auto bg-[#f472b6] text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span></a>
-    <a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">✦ Missions <span class="ml-auto w-2 h-2 bg-[#f472b6] rounded-full"></span></a>
-    <a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">▶ Videos</a>
-    <a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◫ My History</a>
-    <a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">? FAQ</a>
-  </nav>
-  <div class="mt-auto">
-    <div class="border-t border-white/10 pt-4 space-y-[2px]">
-      <a href="whatsnew.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✧ What's New</a>
-      <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a>
-    </div>
-    <div id="sidebarUserBox" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3">
-      <div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div>
-      <div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY demo</p><p class="text-white/50 text-[10px] truncate">keeping the purple light on</p></div>
-    </div>
-  </div>
+<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 flex flex-col p-5">
+<div class="flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div><button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button></div>
+<p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
+<nav class="space-y-[2px]">
+<a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
+<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice</a>
+<a href="plaza.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">☾ Borahae Plaza</a>
+<a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">✦ Missions</a>
+<a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">▶ Videos</a>
+<a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◫ My History</a>
+</nav>
+<div class="mt-auto">
+<div class="border-t border-white/10 pt-4"><a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a></div>
+<div id="sidebarUserBox" onclick="window.location.href='profile.html'" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15"><div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden"/><span id="sidebarAvatarLetter">A</span></div><div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY</p><p id="sidebarSub" class="text-white/50 text-[10px] truncate">View profile</p></div></div>
+</div>
 </aside>
 
 <main class="max-w-[480px] md:max-w-[600px] mx-auto px-5 pt-8">
-  <p class="font-mono text-[11px] tracking-[2.5px] text-[#7c3aed]">STARTER MISSIONS / BANGTANTV</p>
-  <h1 class="font-display text-[36px] font-bold mt-2">A little mission for today.</h1>
-  <p class="text-[12px] text-[#6b7280] mt-2">Auto MV duration • Full watch = Correct • 2 min loop blocked</p>
-  <div id="missionList" class="mt-8 space-y-4"><p class="text-center text-gray-400 text-[13px] mt-10">Loading missions... 💜</p></div>
+  <div class="flex justify-between items-start">
+    <div>
+      <p class="font-mono text-[10px] tracking-[3px] text-[#7c3aed] font-bold">TODAY'S MISSIONS</p>
+      <h1 class="font-display text-[32px] font-bold mt-1 leading-[0.95]">A little mission for today.</h1>
+      <p class="text-[12px] text-[#6b7280] mt-2">Today's focus, watched with intention — every view matters.</p>
+    </div>
+    <button id="ownerAddBtn" onclick="openAddModal()" class="hidden bg-[#7c3aed] text-white w-9 h-9 rounded-full text-[20px] font-bold shadow-md">+</button>
+  </div>
+
+  <div id="missionList" class="mt-6 space-y-3"><p class="text-center text-gray-400 text-[12px] mt-10">Loading missions... 💜</p></div>
+
+  <div id="premiumAddBox" class="hidden mt-4 border-2 border-dashed border-[#e9d5ff] bg-white/50 rounded-[16px] p-4 text-center cursor-pointer" onclick="openAddModal(true)">
+    <p class="text-[12px] font-bold text-[#7c3aed]">+ Add your mission</p>
+    <p class="text-[10px] text-gray-500 mt-1">Premium • 2 extra daily</p>
+  </div>
 </main>
 
-<div id="video-popup" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-[60]">
-  <div class="bg-white rounded-[20px] p-3 w-full max-w-[600px]">
-    <div class="aspect-video bg-black rounded-[14px] overflow-hidden relative"><div id="ytPlayer"></div><div id="watchTimer" class="absolute bottom-2 left-2 bg-black/70 text-white text-[11px] px-2 py-1 rounded-full font-mono">0s / auto...</div></div>
-    <div class="mt-3 flex gap-2"><button onclick="closeVideo()" class="flex-1 bg-gray-100 py-3 rounded-xl font-bold text-[13px]">Close & Save</button></div>
-    <p class="text-[10px] text-gray-400 mt-2 text-center">Auto detects MV duration • 85%+ watch = Correct • Same link match = mission count</p>
+<!-- ADD MODAL -->
+<div id="addModal" class="fixed inset-0 z-[70] hidden modal-bg flex items-center justify-center p-4">
+  <div class="animate-pop bg-white rounded-[20px] p-5 w-full max-w-[360px]">
+    <div class="flex justify-between items-center"><h3 class="font-bold text-[14px]">Add Mission</h3><button onclick="closeAddModal()" class="w-7 h-7 bg-gray-100 rounded-full">✕</button></div>
+    <input id="missionTitle" placeholder="Title e.g. Dynamite" class="w-full mt-4 border rounded-[12px] px-3 py-2.5 text-[12px] outline-none focus:border-[#7c3aed]">
+    <input id="missionLink" placeholder="YouTube Link or ID" class="w-full mt-3 border rounded-[12px] px-3 py-2.5 text-[12px] outline-none focus:border-[#7c3aed]">
+    <input id="missionGoal" type="number" value="5" placeholder="Goal" class="w-full mt-3 border rounded-[12px] px-3 py-2.5 text-[12px] outline-none focus:border-[#7c3aed]">
+    <button onclick="saveMission()" class="w-full mt-4 bg-[#7c3aed] text-white py-3 rounded-full text-[12px] font-bold">Save Mission</button>
   </div>
 </div>
 
-<div id="bottomNav" class="bottom-nav">
-  <a href="home.html" class="nav-item"><span style="font-size:22px">⌂</span><span style="font-size:10px;font-weight:700">Home</span></a>
-  <a href="missions.html" class="nav-item active"><span style="font-size:26px;color:#7c3aed">✦</span><span style="font-size:10px;font-weight:700">Missions</span></a>
-  <a href="music.html" class="nav-item"><span style="font-size:22px">▶</span><span style="font-size:10px;font-weight:700">Videos</span></a>
-  <a href="history.html" class="nav-item"><span style="font-size:22px">◫</span><span style="font-size:10px;font-weight:700">History</span></a>
-  <a href="settings.html" class="nav-item"><span style="font-size:22px">⚙</span><span style="font-size:10px;font-weight:700">Settings</span></a>
-</div>
-
-<script src="https://www.youtube.com/iframe_api"></script>
 <script>
 const firebaseConfig = { apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw", authDomain: "borahae-fm-f7075.firebaseapp.com", databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com", projectId: "borahae-fm-f7075" };
-firebase.initializeApp(firebaseConfig); const db=firebase.database();
+firebase.initializeApp(firebaseConfig); const db=firebase.database(); const auth=firebase.auth();
 
-let videos=[], counts={}, currentId='', ytPlayerObj=null, watchInterval=null, watchedSec=0, totalDuration=0;
-const LOOP_BLOCK_MS = 2*60*1000;
+const OWNER_EMAILS = ["pratimatribhuvan2006@gmail.com"];
+
+let videos=[], counts={}, isOwner=false, currentUserEmail="", premiumExtraCount=0;
 
 function getYouTubeID(urlOrId){
   if(!urlOrId) return ""; urlOrId=urlOrId.trim();
@@ -88,89 +81,99 @@ function getYouTubeID(urlOrId){
   try{ let u=new URL(urlOrId); if(u.hostname.includes('youtu.be')) return u.pathname.slice(1).slice(0,11); if(u.searchParams.get('v')) return u.searchParams.get('v').slice(0,11); let p=u.pathname.split('/'); let i=p.indexOf('shorts'); if(i!==-1) return p[i+1].slice(0,11); i=p.indexOf('embed'); if(i!==-1) return p[i+1].slice(0,11);}catch(e){ let m=urlOrId.match(/(youtu.be\/|v\/|embed\/|shorts\/|watch\?v=)([^#\&\?]{11})/); if(m) return m[2]; }
   return urlOrId.slice(0,11);
 }
+
 function recalcCountsFromHistory(){
   let detailed=JSON.parse(localStorage.getItem('borahae_detailed_logs')||'{}');
-  let missionStart=JSON.parse(localStorage.getItem('borahae_mission_start')||'{}');
+  let todayStr = new Date().toDateString();
   counts={};
   Object.keys(detailed).forEach(vid=>{
-    let startTime=missionStart[vid]||0;
-    let correctLogs=detailed[vid].filter(l=>{
-      let logTime=new Date(l.fullDate||'').getTime()||0;
-      if(startTime===0) return l.type==='correct';
-      return l.type==='correct' && (logTime===0 || logTime>=startTime);
+    let todayLogs = detailed[vid].filter(l=>{
+      let d = new Date(l.fullDate || l.date || '');
+      return d.toDateString() === todayStr && l.type==='correct';
     });
-    if(correctLogs.length>0) counts[vid]=correctLogs.length;
+    if(todayLogs.length>0) counts[vid]=todayLogs.length;
   });
+  let extra = JSON.parse(localStorage.getItem('borahae_premium_extra_today')||'{}');
+  if(extra.date!== todayStr) { extra={date:todayStr, count:0}; localStorage.setItem('borahae_premium_extra_today', JSON.stringify(extra)); }
+  premiumExtraCount = extra.count||0;
 }
+
 function render(){
  recalcCountsFromHistory();
  const list=document.getElementById('missionList');
- if(videos.length===0){list.innerHTML=`<p class="text-center text-gray-400 text-[13px] mt-10">No missions yet 💜</p>`; return;}
+ if(videos.length===0){list.innerHTML=`<p class="text-center text-gray-400 text-[12px] mt-10">No missions today 💜<br><span class="text-[10px]">Owner will add soon</span></p>`; return;}
  let sorted=[...videos].sort((a,b)=>{
    let ca=counts[a.id]||0, cb=counts[b.id]||0;
-   let aDone=ca>=(a.goal||12), bDone=cb>=(b.goal||12);
+   let aDone=ca>=(a.goal||5), bDone=cb>=(b.goal||5);
    if(aDone &&!bDone) return 1; if(!aDone && bDone) return -1; return 0;
  });
  list.innerHTML='';
  sorted.forEach(v=>{
-   let c=counts[v.id]||0; let goal=v.goal||12; let p=Math.min(100, Math.round(c/goal*100));
+   let c=counts[v.id]||0; let goal=v.goal||5; let p=Math.min(100, Math.round(c/goal*100));
    let isDone=c>=goal;
-   let cardClass=isDone?'bg-[#fef9c3] border-[#fde68a] opacity-80':'bg-white border-[#ede9fe]';
-   list.innerHTML+=`<div onclick="openVideo('${v.id}')" class="${cardClass} border rounded-[18px] p-4 flex gap-4 cursor-pointer hover:shadow-md transition relative overflow-hidden">
-    ${isDone? `<div class="absolute top-2 right-2 w-6 h-6 bg-[#22c55e] rounded-full flex items-center justify-center text-white text-[12px]">✓</div>`:''}
-    <img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg" onerror="this.src='https://img.youtube.com/vi/${v.id}/mqdefault.jpg'" class="w-[72px] h-[72px] rounded-[14px] object-cover border bg-gray-100 shrink-0">
-    <div class="flex-1 min-w-0"><h3 class="font-bold text-[14px] flex items-center gap-2">${v.title} ${isDone? `<span class="text-[10px] bg-[#22c55e] text-white px-2 py-0.5 rounded-full">completed</span>`:''}</h3>
-      <p class="text-[11px] text-gray-500 mt-0.5">Auto duration • ${goal} full watches</p>
-      <div class="flex justify-between mt-2"><span class="text-[12px] text-gray-500">${c} / ${goal} correct</span><span class="text-[12px] font-bold ${isDone?'text-[#eab308]':'text-[#7c3aed]'}">${p}%</span></div>
-      <div class="w-full h-[6px] bg-gray-100 rounded-full mt-1.5 overflow-hidden"><div class="h-full progress-fill rounded-full" style="width:${p}%; background:${isDone?'#facc15':`linear-gradient(90deg, #7c3aed, #a78bfa ${Math.max(20,p)}%, #facc15)`}"></div></div>
+   list.innerHTML+=`<div class="${isDone?'bg-[#fef9c3] border-[#fde68a]':'bg-white border-[#ede9fe]'} border rounded-[16px] p-3 flex gap-3 relative">
+    ${isOwner? `<button onclick="deleteMission('${v.key}', event)" class="absolute top-2 right-2 w-6 h-6 bg-black/10 hover:bg-black/20 rounded-full flex items-center justify-center text-[12px] font-bold z-10">✕</button>` : ''}
+    ${isDone? `<div class="absolute top-2 ${isOwner?'right-9':'right-2'} w-5 h-5 bg-[#22c55e] rounded-full flex items-center justify-center text-white text-[10px]">✓</div>`:''}
+    <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" class="w-[56px] h-[56px] rounded-[12px] object-cover border bg-gray-100 shrink-0">
+    <div class="flex-1 min-w-0 pr-6"><h3 class="font-bold text-[12px] truncate">${v.title}</h3>
+      <div class="flex justify-between mt-1.5"><span class="text-[11px] text-gray-500">${c} / ${goal} watched today</span><span class="text-[11px] font-bold ${isDone?'text-[#eab308]':'text-[#7c3aed]'}">${p}%</span></div>
+      <div class="w-full h-[5px] bg-gray-100 rounded-full mt-1.5 overflow-hidden"><div class="h-full rounded-full" style="width:${p}%; background:${isDone?'#facc15':'#7c3aed'}"></div></div>
     </div></div>`;
  });
+ let isPremium = localStorage.getItem('borahae_premium')==='true';
+ let premiumBox = document.getElementById('premiumAddBox');
+ if(isPremium &&!isOwner){
+   if(premiumExtraCount < 2) premiumBox.classList.remove('hidden');
+   else premiumBox.classList.add('hidden');
+ } else premiumBox.classList.add('hidden');
 }
+
 db.ref('missions').on('value', (snap)=>{
   let data=snap.val();
-  if(!data){ videos=[{"title":"Dynamite","id":"gdZLi9oWNZg","goal":12},{"title":"Butter","id":"WMweEpGlu_U","goal":12}]; }
-  else {
-    videos=Object.values(data).reverse().map(m=>{
+  videos=[];
+  if(data){
+    Object.entries(data).forEach(([key, m])=>{
       let rawId=m.id||m.videoId||m.link||""; let id=getYouTubeID(rawId);
-      let missionStart=JSON.parse(localStorage.getItem('borahae_mission_start')||'{}');
-      if(!missionStart[id]){ missionStart[id]=Date.now(); localStorage.setItem('borahae_mission_start', JSON.stringify(missionStart)); }
-      return { title:m.title||"Untitled", id:id, goal:m.requiredStreams||m.goal||12 };
-    }).filter(v=>v.id.length===11);
+      if(id.length===11) videos.push({ key:key, title:m.title||"Untitled", id:id, goal:m.requiredStreams||m.goal||5 });
+    });
   }
   render();
 });
 
-function openSidebar(){ if(localStorage.getItem('borahae_navMode')==='navigation') return; document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebarOverlay').classList.remove('hidden');}
+function openSidebar(){ document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebarOverlay').classList.add('hidden');}
-function onYouTubeIframeAPIReady(){}
-function openVideo(id){
-  currentId=id; watchedSec=0; totalDuration=0;
-  document.getElementById('video-popup').classList.remove('hidden'); document.getElementById('video-popup').classList.add('flex');
-  document.getElementById('watchTimer').innerText='Loading duration...';
-  if(ytPlayerObj){ try{ ytPlayerObj.destroy(); }catch(e){} }
-  ytPlayerObj = new YT.Player('ytPlayer', { videoId:id, playerVars:{autoplay:1, rel:0}, events:{'onReady':(e)=>{ e.target.playVideo(); totalDuration=Math.floor(e.target.getDuration()||0); startTimer(); }, 'onStateChange':onPlayerStateChange }});
+function openAddModal(isPremiumAdd=false){
+  if(!isOwner &&!isPremiumAdd) return;
+  if(isPremiumAdd && premiumExtraCount>=2) { alert('Daily limit 2 reached'); return; }
+  document.getElementById('addModal').classList.remove('hidden'); document.getElementById('addModal').classList.add('flex');
+  document.getElementById('addModal').dataset.premium = isPremiumAdd?'true':'false';
 }
-function startTimer(){ clearInterval(watchInterval); watchInterval=setInterval(()=>{ if(ytPlayerObj && ytPlayerObj.getPlayerState()===1){ watchedSec++; if(totalDuration===0) totalDuration=Math.floor(ytPlayerObj.getDuration()||0); document.getElementById('watchTimer').innerText=`${watchedSec}s / ${totalDuration||'?'}s`; } },1000); }
-function onPlayerStateChange(e){ if(e.data===0) finishWatch(); }
-function finishWatch(){
-  clearInterval(watchInterval); if(!currentId) return;
-  if(totalDuration===0 && ytPlayerObj) totalDuration=Math.floor(ytPlayerObj.getDuration()||0); if(totalDuration===0) totalDuration=210;
-  let now=Date.now(); let last=JSON.parse(localStorage.getItem('borahae_last_watch')||'{}');
-  if(now - (last[currentId]?.time||0) < LOOP_BLOCK_MS){ alert('Loop! 2 min wait karo 💜'); closeVideo(); return; }
-  let required=Math.max(totalDuration-30, totalDuration*0.85); let isCorrect=watchedSec>=required;
-  let detailed=JSON.parse(localStorage.getItem('borahae_detailed_logs')||'{}'); let history=JSON.parse(localStorage.getItem('borahae_history')||'[]');
-  let title=videos.find(v=>v.id===currentId)?.title||'BTS Video';
-  let dateStr=new Date().toLocaleDateString('en-US',{month:'short', day:'2-digit', year:'numeric'}); let timeStr=new Date().toLocaleTimeString('en-US',{hour:'2-digit', minute:'2-digit'}); let fullISO=new Date().toISOString();
-  if(!detailed[currentId]) detailed[currentId]=[];
-  detailed[currentId].unshift({date:dateStr, fullDate:fullISO, time:timeStr, duration:`${watchedSec}s / ${totalDuration}s`, type:isCorrect?'correct':'filtered', seconds:watchedSec, required:totalDuration, videoId:currentId});
-  let existing=history.find(h=>h.videoId===currentId); if(existing){ existing.count=(existing.count||0)+1; existing.date=dateStr; existing.time=timeStr; } else { history.unshift({videoId:currentId, title:title, member:'OT7', channel:'BANGTANTV', date:dateStr, time:timeStr, duration:`${Math.floor(totalDuration/60)}:${String(totalDuration%60).padStart(2,'0')}`, count:1, type:'video'}); }
-  localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailed)); localStorage.setItem('borahae_history', JSON.stringify(history));
-  last[currentId]={time:now}; localStorage.setItem('borahae_last_watch', JSON.stringify(last));
-  closeVideo(); render(); alert(isCorrect? `Correct! ${watchedSec}/${totalDuration}s 💜` : `Filtered - ${watchedSec}s only, need ${Math.floor(required)}s+`);
+function closeAddModal(){ document.getElementById('addModal').classList.add('hidden'); document.getElementById('addModal').classList.remove('flex'); }
+function saveMission(){
+  let title=document.getElementById('missionTitle').value.trim();
+  let link=document.getElementById('missionLink').value.trim();
+  let goal=parseInt(document.getElementById('missionGoal').value)||5;
+  let id=getYouTubeID(link);
+  if(!title ||!id){ alert('Title & valid YouTube link required'); return; }
+  let isPremiumAdd = document.getElementById('addModal').dataset.premium==='true';
+  let newRef = db.ref('missions').push();
+  newRef.set({title:title, id:id, videoId:id, link:link, goal:goal, requiredStreams:goal, createdAt:Date.now(), addedBy: currentUserEmail, isPremiumExtra: isPremiumAdd}).then(()=>{
+    if(isPremiumAdd){
+      let todayStr = new Date().toDateString();
+      let extra = JSON.parse(localStorage.getItem('borahae_premium_extra_today')||'{}');
+      if(extra.date!==todayStr) extra={date:todayStr, count:0};
+      extra.count=(extra.count||0)+1; extra.date=todayStr;
+      localStorage.setItem('borahae_premium_extra_today', JSON.stringify(extra));
+    }
+    closeAddModal(); document.getElementById('missionTitle').value=''; document.getElementById('missionLink').value='';
+  });
 }
-function closeVideo(){ clearInterval(watchInterval); if(ytPlayerObj){ try{ ytPlayerObj.stopVideo(); ytPlayerObj.destroy(); }catch(e){} ytPlayerObj=null; } document.getElementById('video-popup').classList.add('hidden'); document.getElementById('video-popup').classList.remove('flex'); currentId=''; watchedSec=0; }
+function deleteMission(key, e){
+  if(e) e.stopPropagation();
+  if(!isOwner){ alert('Only owner can delete'); return; }
+  if(confirm('Delete this mission?')) db.ref('missions/'+key).remove();
+}
 
-// HOME WALA USER LOGIC SAME TO SAME
 try{
   const savedUser = JSON.parse(localStorage.getItem('borahaeUser') || '{}');
   if(savedUser.name){
@@ -181,16 +184,20 @@ try{
       document.getElementById('sidebarAvatarImg').classList.remove('hidden');
       document.getElementById('sidebarAvatarLetter').classList.add('hidden');
     }
+    currentUserEmail = (savedUser.email||'').toLowerCase();
+    isOwner = OWNER_EMAILS.map(e=>e.toLowerCase()).includes(currentUserEmail);
+    if(isOwner) document.getElementById('ownerAddBtn').classList.remove('hidden');
   }
 }catch(e){}
-firebase.auth().onAuthStateChanged(user=>{
+auth.onAuthStateChanged(user=>{
   if(user){
-    document.getElementById('sidebarName').innerText=user.displayName||localStorage.getItem('army_name')||'ARMY demo';
-    document.getElementById('sidebarEmail').innerText=user.email;
+    currentUserEmail = (user.email||'').toLowerCase();
+    isOwner = OWNER_EMAILS.map(e=>e.toLowerCase()).includes(currentUserEmail);
+    if(isOwner) document.getElementById('ownerAddBtn').classList.remove('hidden');
+    document.getElementById('sidebarName').innerText=user.displayName||localStorage.getItem('army_name')||'ARMY';
     if(user.photoURL){ document.getElementById('sidebarAvatarImg').src=user.photoURL; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }
   }
-  let mode=localStorage.getItem('borahae_navMode')||'sidebar';
-  if(mode==='navigation'){ document.getElementById('sidebar').style.display='none'; document.getElementById('bottomNav').style.display='flex'; } else { document.getElementById('bottomNav').style.display='none'; document.getElementById('sidebar').style.display='flex'; }
+  render();
 });
-setInterval(render, 4000);
+setInterval(render, 5000);
 </script></body></html>
