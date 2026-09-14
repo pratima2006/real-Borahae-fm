@@ -11,35 +11,35 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   html{scroll-behavior:smooth;}
   body{font-family:'Manrope',sans-serif; background:#fdf8ff; color:#1e1033; margin:0; -webkit-font-smoothing:antialiased;}
-.font-display{font-family:'Playfair Display',serif;}
+.font-display{font-family:'Manrope',sans-serif;}
 .font-mono{font-family:'DM Mono',monospace;}
 .hero-bg{background: radial-gradient(120% 80% at 90% 0%, #f5d0fe 0%, #fce7ff 20%, #fdf8ff 60%);}
 @keyframes pop{0%{transform:scale(0.94);opacity:0}100%{transform:scale(1);opacity:1}}
 .animate-pop{animation:pop.22s cubic-bezier(.16,1,.3,1)}
 .modal-bg{backdrop-filter:blur(8px);background:rgba(30,16,51,0.45)}
-#splashScreen{position:fixed; inset:0; z-index:9999; background:rgba(253,248,255,0.92); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); display:flex; align-items:center; justify-content:center; padding:28px; transition:opacity 0.7s ease;}
+#splashScreen{position:fixed; inset:0; z-index:9999; background:#fbf5ff; display:flex; align-items:center; justify-content:center; padding:28px; transition:opacity 0.8s ease;}
 </style>
 </head>
 <body class="hero-bg">
 
-<!-- SPLASH - PREMIUM SIMPLE -->
+<!-- SPLASH - NO BOX, SIMPLE ITALIC -->
 <div id="splashScreen">
-  <div class="w-full max-w-[320px]">
-    <p class="font-mono text-[9px] tracking-[3px] text-[#a78bfa]">BORAHAE.FM • FOR YOU</p>
-    <div class="mt-6 bg-white border border-[#f3e8ff] rounded-[18px] p-5 shadow-[0_8px_30px_rgba(124,58,237,0.08)]">
-      <h2 id="splashQuote" class="text-[15px] leading-[1.5] font-semibold text-[#1e1033] tracking-tight">
-        Love yourself, love myself, peace.
-      </h2>
-      <p id="splashAuthor" class="text-[11px] text-[#6b7280] mt-4 text-right font-bold">— Suga</p>
-    </div>
-    <div class="flex items-center gap-2 mt-5 justify-center">
-      <div class="w-1 h-1 bg-[#c4b5fd] rounded-full animate-pulse"></div>
-      <p class="font-mono text-[8px] tracking-[2.5px] text-[#a78bfa]">LOADING YOUR LIGHT</p>
-      <div class="w-1 h-1 bg-[#c4b5fd] rounded-full animate-pulse"></div>
+  <div class="w-full max-w-[300px] text-center">
+    <p class="font-mono text-[10px] tracking-[4px] text-[#c4b5fd] text-center">BORAHAE.FM • FOR YOU</p>
+
+    <h2 id="splashQuote" class="text-[16px] leading-[1.6] font-semibold text-[#1a1033] mt-10 tracking-tight" style="font-style: italic; font-weight: 600;">
+      Let's never lose our light, ARMY.
+    </h2>
+    <p id="splashAuthor" class="text-[12px] text-[#6b7280] mt-6 text-right pr-2" style="font-style: italic; font-weight: 500;">— ARMY</p>
+
+    <div class="flex items-center justify-center gap-2 mt-12">
+      <div class="w-1 h-1 bg-[#d8b4fe] rounded-full animate-pulse"></div>
+      <p class="font-mono text-[9px] tracking-[3px] text-[#c4b5fd]">LOADING YOUR LIGHT</p>
+      <div class="w-1 h-1 bg-[#d8b4fe] rounded-full animate-pulse"></div>
     </div>
   </div>
 </div>
@@ -81,7 +81,7 @@
           <div class="absolute top-[45px] right-[35px] w-[90px] h-[90px] border border-white/25 rounded-full"></div>
           <div class="absolute top-[60px] right-[50px] w-[60px] h-[60px] border border-white/15 rounded-full"></div>
           <div class="relative z-10 flex justify-between"><span class="font-mono text-[9px] tracking-[2.5px] text-white/70">MISSION 001 / BANGTANTV</span></div>
-          <div class="relative z-10 mt-10"><h2 class="font-display text-[44px] leading-[0.88] text-white font-bold tracking-tight">The<br>purple<br>hour.</h2></div>
+          <div class="relative z-10 mt-10"><h2 class="text-[44px] leading-[0.88] text-white font-bold tracking-tight">The<br>purple<br>hour.</h2></div>
           <div class="relative z-10"><div class="flex items-center gap-2.5"><div class="w-[36px] h-[36px] bg-[#f472b6] rounded-full flex items-center justify-center shadow-md"><span class="text-black text-[12px] ml-[1px]">▶</span></div><span class="text-white text-[12px] font-semibold">Watch together</span></div><p class="text-[11px] text-white/60 mt-3 leading-[1.3] max-w-[200px]">A little place to leave your mark on the streams that mean something.</p></div>
           <div class="absolute bottom-0 left-0 right-0 bg-[#1a1033]/90 backdrop-blur px-5 py-3 flex justify-between items-center rounded-b-[20px]"><span class="font-mono text-[8px] tracking-[2px] text-white/40">YOUR STREAM JOURNAL</span><span class="text-[11px] text-[#f472b6] font-bold">♥ borahae</span></div>
         </div>
@@ -93,16 +93,16 @@
 
 <section id="how-it-works" class="bg-white border-y border-[#eee6f8]">
   <div class="max-w-[1100px] mx-auto divide-y md:divide-y-0 md:grid md:grid-cols-3 md:divide-x divide-[#eee6f8]">
-    <div class="p-7 py-10"><p class="font-mono text-[11px] text-[#7c3aed]">01</p><h3 class="font-display text-[20px] font-bold mt-3">Find your mission</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">Start with hand-picked BANGTANTV moments, or bring in a favorite YouTube video.</p></div>
-    <div class="p-7 py-10"><p class="font-mono text-[11px] text-[#7c3aed]">02</p><h3 class="font-display text-[20px] font-bold mt-3">Watch with intention</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">The in-app player keeps your watch flow in one place, without losing the feeling.</p></div>
-    <div class="p-7 py-10"><p class="font-mono text-[11px] text-[#7c3aed]">03</p><h3 class="font-display text-[20px] font-bold mt-3">Leave your mark</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">One completed stream, recorded. Your personal progress and our shared leaderboard grow together.</p></div>
+    <div class="p-7 py-10"><p class="font-mono text-[11px] text-[#7c3aed]">01</p><h3 class="font-bold text-[18px] mt-3">Find your mission</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">Start with hand-picked BANGTANTV moments, or bring in a favorite YouTube video.</p></div>
+    <div class="p-7 py-10"><p class="font-mono text-[11px] text-[#7c3aed]">02</p><h3 class="font-bold text-[18px] mt-3">Watch with intention</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">The in-app player keeps your watch flow in one place, without losing the feeling.</p></div>
+    <div class="p-7 py-10"><p class="font-mono text-[11px] text-[#7c3aed]">03</p><h3 class="font-bold text-[18px] mt-3">Leave your mark</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">One completed stream, recorded. Your personal progress and our shared leaderboard grow together.</p></div>
   </div>
 </section>
 
 <section class="bg-[#fdf8ff] py-12 px-5">
   <div class="max-w-[1100px] mx-auto">
     <p class="font-mono text-[10px] tracking-[3px] text-[#7c3aed]">A SOFT PLACE FOR LOUD LOVE</p>
-    <h2 class="font-display text-[36px] md:text-[52px] leading-[0.9] font-bold mt-3 tracking-tight">The comeback<br>energy, kept<br>close.</h2>
+    <h2 class="text-[36px] md:text-[52px] leading-[0.9] font-bold mt-3 tracking-tight">The comeback<br>energy, kept<br>close.</h2>
     <div class="grid md:grid-cols-2 gap-4 mt-8 max-w-[720px]">
       <div class="bg-[#f5f0ff] rounded-[22px] p-6 border border-[#f3e8ff]"><div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-[#7c3aed]">◎</div><h3 class="font-bold text-[15px] mt-10">Your daily rhythm</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">A gentle daily goal makes showing up feel like a ritual, not a chore.</p></div>
       <div class="bg-white rounded-[22px] p-6 border border-[#f3e8ff] shadow-[0_4px_20px_rgba(0,0,0,0.03)]"><div class="w-8 h-8 flex items-center justify-center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><h3 class="font-bold text-[15px] mt-10">Our purple light</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">Celebrate milestones with ARMY around the world, one stream at a time.</p></div>
@@ -137,46 +137,28 @@ const boraQuotes = [
   {q:"Go on your path, even if you live for a day.", by:"Jimin"},
   {q:"Trust yourself.", by:"J-Hope"},
   {q:"Try without succeeding, overcome limits daily.", by:"Jin"},
-  {q:"Love yourself, love myself, peace.", by:"Suga"},
   {q:"You were born to be real, not perfect.", by:"Suga"},
-  {q:"No matter who you are, where you're from, just speak yourself.", by:"Namjoon"},
-  {q:"Even if you're not perfect, you're limited edition.", by:"Namjoon"},
+  {q:"No matter who you are, where you're from, just speak yourself.", by:"RM"},
+  {q:"Even if you're not perfect, you're limited edition.", by:"RM"},
   {q:"Your presence can give happiness.", by:"Jin"},
   {q:"We shine brightest when we shine together.", by:"Jin"},
   {q:"If you can't fly, then run. If you can't run, then walk. Keep moving.", by:"Jungkook"},
   {q:"Effort makes you. You will regret if you don't do your best now.", by:"Jungkook"},
-  {q:"Don't be trapped in someone else's dream.", by:"Taehyung"},
+  {q:"Don't be trapped in someone else's dream.", by:"V"},
   {q:"The moment you think of giving up, think of why you held on so long.", by:"J-Hope"},
   {q:"Even when you're in darkness, you shine the brightest.", by:"J-Hope"},
-  {q:"I purple you. I will trust and love you for a long time.", by:"Taehyung"},
-  {q:"Borahae means I will love you till the end.", by:"Taehyung"},
+  {q:"I purple you. I will trust and love you for a long time.", by:"V"},
+  {q:"Borahae means I will love you till the end.", by:"V"},
   {q:"Let's never lose our light, ARMY.", by:"ARMY"},
   {q:"Every stream is a love letter we write together.", by:"ARMY"},
-  {q:"Keep the light, even when the night feels long.", by:"ARMY"},
   {q:"We are bulletproof, when we are together.", by:"BTS"},
   {q:"Don't ever be afraid to dream, ARMY.", by:"Jungkook"},
   {q:"Your hard work today is your story tomorrow.", by:"Suga"},
   {q:"Music transcends language.", by:"J-Hope"},
-  {q:"Go on your path.", by:"Jimin"},
-  {q:"You are the only one who can make yourself happy.", by:"Taehyung"},
-  {q:"There is beauty in everything.", by:"Jimin"},
-  {q:"I am who I am. That's all there is.", by:"Jimin"},
-  {q:"Life is more beautiful when you look at it with love.", by:"Jin"},
-  {q:"Love yourself first if you want to love others.", by:"Namjoon"},
-  {q:"It does not matter how slowly you go, as long as you do not stop.", by:"ARMY"},
   {q:"Small steps every day lead to big results.", by:"ARMY"},
   {q:"Your love keeps the purple light alive.", by:"ARMY"},
-  {q:"Streaming with heart is louder than numbers.", by:"ARMY"},
-  {q:"Together we keep the light on.", by:"BTS"},
-  {q:"Stay gold, stay you.", by:"BTS"},
-  {q:"Dream, hope, forward, love.", by:"ARMY"},
   {q:"You never walk alone, ARMY walks with you.", by:"BTS"},
-  {q:"Love is not something we give or get, it is something we nurture.", by:"Namjoon"},
-  {q:"Even the darkest night will end and the sun will rise.", by:"BTS"},
-  {q:"You gave me the best of me, so you'll give you the best of you.", by:"Jungkook"},
-  {q:"Be the morning that comes after the dark.", by:"J-Hope"},
-  {q:"We were only seven, but we have you all now.", by:"BTS"},
-  {q:"You shine the brightest when you are yourself.", by:"ARMY"}
+  {q:"You gave me the best of me, so you'll give you the best of you.", by:"Jungkook"}
 ];
 function getUniqueQuote(){
   let used = JSON.parse(localStorage.getItem('bora_used_quotes')||'[]');
@@ -195,7 +177,7 @@ function getUniqueQuote(){
     let splash = document.getElementById('splashScreen');
     splash.style.opacity='0';
     setTimeout(()=>{ splash.style.display='none'; },700);
-  }, 4200);
+  }, 4500);
 })();
 
 const firebaseConfig = { apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw", authDomain: "borahae-fm-f7075.firebaseapp.com", databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com", projectId: "borahae-fm-f7075", storageBucket: "borahae-fm-f7075.firebasestorage.app", messagingSenderId: "319118277965", appId: "1:319118277965:web:eece2a5bf15708aab3cb04" };
