@@ -11,7 +11,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
   html{scroll-behavior:smooth;}
   body{font-family:'Manrope',sans-serif; background:#fdf8ff; color:#1e1033; margin:0; -webkit-font-smoothing:antialiased;}
@@ -21,21 +21,26 @@
 @keyframes pop{0%{transform:scale(0.94);opacity:0}100%{transform:scale(1);opacity:1}}
 .animate-pop{animation:pop.22s cubic-bezier(.16,1,.3,1)}
 .modal-bg{backdrop-filter:blur(8px);background:rgba(30,16,51,0.45)}
-#splashScreen{position:fixed; inset:0; z-index:9999; background:rgba(253,248,255,0.88); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); display:flex; align-items:center; justify-content:center; padding:24px; transition:opacity 0.6s ease;}
+#splashScreen{position:fixed; inset:0; z-index:9999; background:rgba(253,248,255,0.92); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); display:flex; align-items:center; justify-content:center; padding:28px; transition:opacity 0.7s ease;}
 </style>
 </head>
 <body class="hero-bg">
 
-<!-- SPLASH QUOTE - WHITE SCREEN KI JAGAH -->
+<!-- SPLASH - PREMIUM SIMPLE -->
 <div id="splashScreen">
-  <div class="text-center max-w-[320px]">
-    <p class="font-mono text-[9px] tracking-[3px] text-[#a78bfa] mb-5">BORAHAE.FM • FOR YOU</p>
-    <h2 id="splashQuote" class="font-display text-[22px] leading-[1.3] font-bold text-[#1a1033]" style="font-style:italic;">
-      “Love yourself, love myself, peace.”
-    </h2>
-    <p id="splashAuthor" class="font-mono text-[11px] text-[#6b7280] mt-5 font-bold">— Suga</p>
-    <div class="mt-8 w-8 h-[1px] bg-[#e9d5ff] mx-auto"></div>
-    <p class="font-mono text-[8px] tracking-[2px] text-[#a78bfa] mt-3 animate-pulse">LOADING YOUR LIGHT...</p>
+  <div class="w-full max-w-[320px]">
+    <p class="font-mono text-[9px] tracking-[3px] text-[#a78bfa]">BORAHAE.FM • FOR YOU</p>
+    <div class="mt-6 bg-white border border-[#f3e8ff] rounded-[18px] p-5 shadow-[0_8px_30px_rgba(124,58,237,0.08)]">
+      <h2 id="splashQuote" class="text-[15px] leading-[1.5] font-semibold text-[#1e1033] tracking-tight">
+        Love yourself, love myself, peace.
+      </h2>
+      <p id="splashAuthor" class="text-[11px] text-[#6b7280] mt-4 text-right font-bold">— Suga</p>
+    </div>
+    <div class="flex items-center gap-2 mt-5 justify-center">
+      <div class="w-1 h-1 bg-[#c4b5fd] rounded-full animate-pulse"></div>
+      <p class="font-mono text-[8px] tracking-[2.5px] text-[#a78bfa]">LOADING YOUR LIGHT</p>
+      <div class="w-1 h-1 bg-[#c4b5fd] rounded-full animate-pulse"></div>
+    </div>
   </div>
 </div>
 
@@ -122,36 +127,56 @@
 
 <script>
 const boraQuotes = [
+  {q:"If you can't fly, then run. Today we run.", by:"BTS"},
+  {q:"Love myself, love yourself.", by:"Namjoon"},
+  {q:"Teamwork makes the dream work.", by:"ARMY"},
+  {q:"The dawn right before the sun rises is the darkest.", by:"Namjoon"},
+  {q:"Take your hands off what you can't control and get your hands on what you can change.", by:"Suga"},
+  {q:"Living without passion is like being dead.", by:"Jungkook"},
+  {q:"Don't let your dreams just be dreams.", by:"Taehyung"},
+  {q:"Go on your path, even if you live for a day.", by:"Jimin"},
+  {q:"Trust yourself.", by:"J-Hope"},
+  {q:"Try without succeeding, overcome limits daily.", by:"Jin"},
   {q:"Love yourself, love myself, peace.", by:"Suga"},
   {q:"You were born to be real, not perfect.", by:"Suga"},
-  {q:"No matter who you are, where you're from, your skin colour, your gender identity, just speak yourself.", by:"RM"},
-  {q:"Even if you're not perfect, you're limited edition.", by:"RM"},
-  {q:"Teamwork makes the dream work.", by:"RM"},
-  {q:"If you want to love others, I think you should love yourself first.", by:"RM"},
-  {q:"Life is more beautiful when you look at it with love.", by:"Jin"},
-  {q:"Your presence can give happiness. I hope you remember that.", by:"Jin"},
+  {q:"No matter who you are, where you're from, just speak yourself.", by:"Namjoon"},
+  {q:"Even if you're not perfect, you're limited edition.", by:"Namjoon"},
+  {q:"Your presence can give happiness.", by:"Jin"},
   {q:"We shine brightest when we shine together.", by:"Jin"},
-  {q:"If you can't fly, then run. If you can't run, then walk. If you can't walk, then crawl, but whatever you do, keep moving.", by:"Jungkook"},
-  {q:"Living without passion is like being dead.", by:"Jungkook"},
-  {q:"Effort makes you. You will regret someday if you don't do your best now.", by:"Jungkook"},
-  {q:"Don't be trapped in someone else's dream.", by:"V"},
-  {q:"You are the only one who can make yourself happy.", by:"V"},
-  {q:"When things get hard, stop for a while and look back and see how far you've come.", by:"V"},
-  {q:"Go on your path, even if you live for a day.", by:"Jimin"},
-  {q:"There is beauty in everything, just not everybody sees it.", by:"Jimin"},
-  {q:"I am who I am. That's all there is.", by:"Jimin"},
-  {q:"The moment you think of giving up, think of the reason why you held on so long.", by:"J-Hope"},
+  {q:"If you can't fly, then run. If you can't run, then walk. Keep moving.", by:"Jungkook"},
+  {q:"Effort makes you. You will regret if you don't do your best now.", by:"Jungkook"},
+  {q:"Don't be trapped in someone else's dream.", by:"Taehyung"},
+  {q:"The moment you think of giving up, think of why you held on so long.", by:"J-Hope"},
   {q:"Even when you're in darkness, you shine the brightest.", by:"J-Hope"},
-  {q:"Music transcends language.", by:"J-Hope"},
-  {q:"I purple you. I will trust and love you for a long time.", by:"V"},
-  {q:"Borahae means I will love you until the end.", by:"V"},
+  {q:"I purple you. I will trust and love you for a long time.", by:"Taehyung"},
+  {q:"Borahae means I will love you till the end.", by:"Taehyung"},
   {q:"Let's never lose our light, ARMY.", by:"ARMY"},
   {q:"Every stream is a love letter we write together.", by:"ARMY"},
   {q:"Keep the light, even when the night feels long.", by:"ARMY"},
   {q:"We are bulletproof, when we are together.", by:"BTS"},
-  {q:"The flower that blooms in adversity is the most rare and beautiful.", by:"Jin"},
   {q:"Don't ever be afraid to dream, ARMY.", by:"Jungkook"},
-  {q:"Your hard work today is your story tomorrow.", by:"Suga"}
+  {q:"Your hard work today is your story tomorrow.", by:"Suga"},
+  {q:"Music transcends language.", by:"J-Hope"},
+  {q:"Go on your path.", by:"Jimin"},
+  {q:"You are the only one who can make yourself happy.", by:"Taehyung"},
+  {q:"There is beauty in everything.", by:"Jimin"},
+  {q:"I am who I am. That's all there is.", by:"Jimin"},
+  {q:"Life is more beautiful when you look at it with love.", by:"Jin"},
+  {q:"Love yourself first if you want to love others.", by:"Namjoon"},
+  {q:"It does not matter how slowly you go, as long as you do not stop.", by:"ARMY"},
+  {q:"Small steps every day lead to big results.", by:"ARMY"},
+  {q:"Your love keeps the purple light alive.", by:"ARMY"},
+  {q:"Streaming with heart is louder than numbers.", by:"ARMY"},
+  {q:"Together we keep the light on.", by:"BTS"},
+  {q:"Stay gold, stay you.", by:"BTS"},
+  {q:"Dream, hope, forward, love.", by:"ARMY"},
+  {q:"You never walk alone, ARMY walks with you.", by:"BTS"},
+  {q:"Love is not something we give or get, it is something we nurture.", by:"Namjoon"},
+  {q:"Even the darkest night will end and the sun will rise.", by:"BTS"},
+  {q:"You gave me the best of me, so you'll give you the best of you.", by:"Jungkook"},
+  {q:"Be the morning that comes after the dark.", by:"J-Hope"},
+  {q:"We were only seven, but we have you all now.", by:"BTS"},
+  {q:"You shine the brightest when you are yourself.", by:"ARMY"}
 ];
 function getUniqueQuote(){
   let used = JSON.parse(localStorage.getItem('bora_used_quotes')||'[]');
@@ -164,19 +189,18 @@ function getUniqueQuote(){
 }
 (function(){
   let data = getUniqueQuote();
-  document.getElementById('splashQuote').innerText = '“'+data.q+'”';
+  document.getElementById('splashQuote').innerText = data.q;
   document.getElementById('splashAuthor').innerText = '— '+data.by;
   setTimeout(()=>{
     let splash = document.getElementById('splashScreen');
     splash.style.opacity='0';
-    setTimeout(()=>{ splash.style.display='none'; },600);
-  }, 2600);
+    setTimeout(()=>{ splash.style.display='none'; },700);
+  }, 4200);
 })();
 
 const firebaseConfig = { apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw", authDomain: "borahae-fm-f7075.firebaseapp.com", databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com", projectId: "borahae-fm-f7075", storageBucket: "borahae-fm-f7075.firebasestorage.app", messagingSenderId: "319118277965", appId: "1:319118277965:web:eece2a5bf15708aab3cb04" };
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth(); const db = firebase.database();
-
 function openAuth(t){ authModal.classList.remove('hidden'); authModal.classList.add('flex'); switchTab(t||'login'); }
 function closeAuth(){ authModal.classList.add('hidden'); authModal.classList.remove('flex'); }
 function openProfile(){ profileModal.classList.remove('hidden'); profileModal.classList.add('flex'); }
@@ -185,87 +209,21 @@ function openSwitchFromProfile(){ closeProfile(); setTimeout(()=>{ switchModal.c
 function closeSwitchModal(){ switchModal.classList.add('hidden'); switchModal.classList.remove('flex'); }
 function handleAddAccount(){ closeSwitchModal(); setTimeout(()=>openAuth('login'),150); }
 function switchTab(t){ if(t==='login'){ loginForm.classList.remove('hidden'); signupForm.classList.add('hidden'); tabLogin.className='flex-1 py-3 font-bold text-[11px] bg-[#7c3aed] text-white'; tabSignup.className='flex-1 py-3 font-bold text-[11px] bg-[#f3f0ff] text-[#6b7280]'; } else { signupForm.classList.remove('hidden'); loginForm.classList.add('hidden'); tabSignup.className='flex-1 py-3 font-bold text-[11px] bg-[#7c3aed] text-white'; tabLogin.className='flex-1 py-3 font-bold text-[11px] bg-[#f3f0ff] text-[#6b7280]'; } }
-
-function saveToMulti(u){
-  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
-  let obj={uid:u.uid||u.email,email:u.email,name:u.displayName||u.email.split('@')[0],photo:u.photoURL||u.photo||''};
-  let i=list.findIndex(a=>a.email.toLowerCase()===obj.email.toLowerCase());
-  if(i>-1) list[i]={...list[i],...obj}; else list.push(obj);
-  localStorage.setItem('borahae_accounts',JSON.stringify(list));
-  localStorage.setItem('borahaeUser',JSON.stringify(obj));
-  localStorage.setItem('borahae_last_active', obj.email);
-}
-function renderSwitchList(){
-  let cur=(JSON.parse(localStorage.getItem('borahaeUser')||'{}').email||'').toLowerCase();
-  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
-  switchList.innerHTML=list.map(a=>`<div onclick="switchAccount('${a.email}')" class="flex items-center gap-3 p-2.5 rounded-[14px] ${a.email.toLowerCase()===cur?'bg-white/15':''} hover:bg-white/10 cursor-pointer"><img src="${a.photo||''}" onerror="this.src='https://via.placeholder.com/32'" class="w-8 h-8 rounded-full object-cover bg-white/20"><div class="flex-1 overflow-hidden"><p class="text-white text-[11px] font-bold truncate">${a.name}</p><p class="text-white/50 text-[9px] truncate">${a.email}</p></div>${a.email.toLowerCase()===cur?'<span class="text-[#a78bfa] text-[12px]">✓</span>':''}</div>`).join('')||'<p class="text-white/50 text-[11px] text-center py-4">No accounts yet</p>';
-}
-function switchAccount(email){
-  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
-  let acc=list.find(a=>a.email.toLowerCase()===email.toLowerCase());
-  if(!acc) return;
-  localStorage.setItem('borahaeUser',JSON.stringify(acc));
-  localStorage.setItem('borahae_last_active', acc.email);
-  localStorage.setItem('army_name',acc.name);
-  if(acc.photo) localStorage.setItem('army_pfp',acc.photo);
-  updateHeaderFromLocal(acc);
-  closeSwitchModal();
-}
-function updateHeaderFromLocal(acc){
-  beforeLogin.classList.add('hidden'); beforeLogin.classList.remove('flex');
-  afterLogin.classList.remove('hidden'); afterLogin.classList.add('flex');
-  userEmailShow.innerText=acc.email;
-  profileEmail.innerText=acc.email;
-  if(acc.photo){ userPhotoShow.src=acc.photo; profilePhotoBig.src=acc.photo; userPhotoShow.classList.remove('hidden'); profilePhotoBig.classList.remove('hidden'); userInitial.classList.add('hidden'); profileInitialBig.classList.add('hidden'); }
-  else { userPhotoShow.classList.add('hidden'); profilePhotoBig.classList.add('hidden'); userInitial.classList.remove('hidden'); profileInitialBig.classList.remove('hidden'); profileInitialBig.classList.add('flex'); userInitial.innerText=acc.email.charAt(0).toUpperCase(); profileInitialBig.innerText=acc.email.charAt(0).toUpperCase(); }
-}
-function updateHeader(user){
-  if(user){
-    saveToMulti(user);
-    updateHeaderFromLocal({email:user.email,name:user.displayName||user.email.split('@')[0],photo:user.photoURL||user.photo||''});
-  } else {
-    let local=JSON.parse(localStorage.getItem('borahaeUser')||'null');
-    if(local){ updateHeaderFromLocal(local); }
-    else { beforeLogin.classList.remove('hidden'); beforeLogin.classList.add('flex'); afterLogin.classList.add('hidden'); afterLogin.classList.remove('flex'); }
-  }
-}
-function updateRealArmyStrip(){
-  db.ref('users').limitToLast(10).once('value',snap=>{
-    let users=[]; snap.forEach(c=>{ users.push(c.val()); });
-    users=users.reverse();
-    let count=snap.numChildren();
-    document.getElementById('liveArmyCount').innerText= count>0? count.toLocaleString()+' ARMY' : '0 ARMY';
-    let container=document.getElementById('realArmyPfps');
-    if(users.length===0){ container.innerHTML='<div class="w-7 h-7 rounded-full bg-[#f3e8ff] border-2 border-white flex items-center justify-center text-[10px] font-bold text-[#7c3aed]">A</div>'; return; }
-    container.innerHTML=users.slice(0,4).map((u,i)=>`<img src="${u.photo||'https://via.placeholder.com/40'}" onerror="this.src='https://via.placeholder.com/40'" class="w-7 h-7 rounded-full border-2 border-white object-cover ${i>0?'-ml-1.5':''}">`).join('');
-  });
-}
+function saveToMulti(u){ let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); let obj={uid:u.uid||u.email,email:u.email,name:u.displayName||u.email.split('@')[0],photo:u.photoURL||u.photo||''}; let i=list.findIndex(a=>a.email.toLowerCase()===obj.email.toLowerCase()); if(i>-1) list[i]={...list[i],...obj}; else list.push(obj); localStorage.setItem('borahae_accounts',JSON.stringify(list)); localStorage.setItem('borahaeUser',JSON.stringify(obj)); localStorage.setItem('borahae_last_active', obj.email); }
+function renderSwitchList(){ let cur=(JSON.parse(localStorage.getItem('borahaeUser')||'{}').email||'').toLowerCase(); let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); switchList.innerHTML=list.map(a=>`<div onclick="switchAccount('${a.email}')" class="flex items-center gap-3 p-2.5 rounded-[14px] ${a.email.toLowerCase()===cur?'bg-white/15':''} hover:bg-white/10 cursor-pointer"><img src="${a.photo||''}" onerror="this.src='https://via.placeholder.com/32'" class="w-8 h-8 rounded-full object-cover bg-white/20"><div class="flex-1 overflow-hidden"><p class="text-white text-[11px] font-bold truncate">${a.name}</p><p class="text-white/50 text-[9px] truncate">${a.email}</p></div>${a.email.toLowerCase()===cur?'<span class="text-[#a78bfa] text-[12px]">✓</span>':''}</div>`).join('')||'<p class="text-white/50 text-[11px] text-center py-4">No accounts yet</p>'; }
+function switchAccount(email){ let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); let acc=list.find(a=>a.email.toLowerCase()===email.toLowerCase()); if(!acc) return; localStorage.setItem('borahaeUser',JSON.stringify(acc)); localStorage.setItem('borahae_last_active', acc.email); localStorage.setItem('army_name',acc.name); if(acc.photo) localStorage.setItem('army_pfp',acc.photo); updateHeaderFromLocal(acc); closeSwitchModal(); }
+function updateHeaderFromLocal(acc){ beforeLogin.classList.add('hidden'); beforeLogin.classList.remove('flex'); afterLogin.classList.remove('hidden'); afterLogin.classList.add('flex'); userEmailShow.innerText=acc.email; profileEmail.innerText=acc.email; if(acc.photo){ userPhotoShow.src=acc.photo; profilePhotoBig.src=acc.photo; userPhotoShow.classList.remove('hidden'); profilePhotoBig.classList.remove('hidden'); userInitial.classList.add('hidden'); profileInitialBig.classList.add('hidden'); } else { userPhotoShow.classList.add('hidden'); profilePhotoBig.classList.add('hidden'); userInitial.classList.remove('hidden'); profileInitialBig.classList.remove('hidden'); profileInitialBig.classList.add('flex'); userInitial.innerText=acc.email.charAt(0).toUpperCase(); profileInitialBig.innerText=acc.email.charAt(0).toUpperCase(); } }
+function updateHeader(user){ if(user){ saveToMulti(user); updateHeaderFromLocal({email:user.email,name:user.displayName||user.email.split('@')[0],photo:user.photoURL||user.photo||''}); } else { let local=JSON.parse(localStorage.getItem('borahaeUser')||'null'); if(local){ updateHeaderFromLocal(local); } else { beforeLogin.classList.remove('hidden'); beforeLogin.classList.add('flex'); afterLogin.classList.add('hidden'); afterLogin.classList.remove('flex'); } } }
+function updateRealArmyStrip(){ db.ref('users').limitToLast(10).once('value',snap=>{ let users=[]; snap.forEach(c=>{ users.push(c.val()); }); users=users.reverse(); let count=snap.numChildren(); document.getElementById('liveArmyCount').innerText= count>0? count.toLocaleString()+' ARMY' : '0 ARMY'; let container=document.getElementById('realArmyPfps'); if(users.length===0){ container.innerHTML='<div class="w-7 h-7 rounded-full bg-[#f3e8ff] border-2 border-white flex items-center justify-center text-[10px] font-bold text-[#7c3aed]">A</div>'; return; } container.innerHTML=users.slice(0,4).map((u,i)=>`<img src="${u.photo||'https://via.placeholder.com/40'}" onerror="this.src='https://via.placeholder.com/40'" class="w-7 h-7 rounded-full border-2 border-white object-cover ${i>0?'-ml-1.5':''}">`).join(''); }); }
 updateRealArmyStrip();
 db.ref('users').on('value',()=>updateRealArmyStrip());
-async function doEmailLogin(e){
-  e.preventDefault();
-  let email=loginEmail.value.trim(), pass=loginPass.value;
-  loginBtn.innerText='Logging...'; loginBtn.disabled=true;
-  try{ let cred=await auth.signInWithEmailAndPassword(email,pass); closeAuth(); }catch(err){ alert(err.message); } finally{ loginBtn.innerText='Log In'; loginBtn.disabled=false; }
-}
-async function doEmailSignup(e){
-  e.preventDefault();
-  let email=signupEmail.value.trim(), pass=signupPass.value, conf=signupConfirm.value;
-  if(pass!==conf) return alert('Passwords not match');
-  signupBtn.innerText='Creating...'; signupBtn.disabled=true;
-  try{ let cred=await auth.createUserWithEmailAndPassword(email,pass); await db.ref('users/'+cred.user.uid).set({email, name:email.split('@')[0], joinDate:new Date().toLocaleDateString()}); closeAuth(); }catch(err){ alert(err.message); } finally{ signupBtn.innerText='Sign Up'; signupBtn.disabled=false; }
-}
-async function signInWithGoogle(){
-  let provider=new firebase.auth.GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'});
-  try{ let result=await auth.signInWithPopup(provider); await db.ref('users/'+result.user.uid).update({email:result.user.email, name:result.user.displayName, photo:result.user.photoURL, lastLogin:Date.now()}); closeAuth(); }catch(err){ alert(err.message); }
-}
+async function doEmailLogin(e){ e.preventDefault(); let email=loginEmail.value.trim(), pass=loginPass.value; loginBtn.innerText='Logging...'; loginBtn.disabled=true; try{ let cred=await auth.signInWithEmailAndPassword(email,pass); closeAuth(); }catch(err){ alert(err.message); } finally{ loginBtn.innerText='Log In'; loginBtn.disabled=false; } }
+async function doEmailSignup(e){ e.preventDefault(); let email=signupEmail.value.trim(), pass=signupPass.value, conf=signupConfirm.value; if(pass!==conf) return alert('Passwords not match'); signupBtn.innerText='Creating...'; signupBtn.disabled=true; try{ let cred=await auth.createUserWithEmailAndPassword(email,pass); await db.ref('users/'+cred.user.uid).set({email, name:email.split('@')[0], joinDate:new Date().toLocaleDateString()}); closeAuth(); }catch(err){ alert(err.message); } finally{ signupBtn.innerText='Sign Up'; signupBtn.disabled=false; } }
+async function signInWithGoogle(){ let provider=new firebase.auth.GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'}); try{ let result=await auth.signInWithPopup(provider); await db.ref('users/'+result.user.uid).update({email:result.user.email, name:result.user.displayName, photo:result.user.photoURL, lastLogin:Date.now()}); closeAuth(); }catch(err){ alert(err.message); } }
 function forgotPass(){ let email=loginEmail.value.trim(); if(!email) return alert('Enter email'); auth.sendPasswordResetEmail(email).then(()=>alert('Reset sent')).catch(e=>alert(e.message)); }
 function handleScrapbook(){ let local=JSON.parse(localStorage.getItem('borahaeUser')||'null'); if(auth.currentUser || local) location.href='home.html'; else openAuth('login'); }
 function logOut(){ auth.signOut(); localStorage.removeItem('borahaeUser'); localStorage.removeItem('borahae_last_active'); location.reload(); }
 let lastActive=JSON.parse(localStorage.getItem('borahaeUser')||'null');
 if(lastActive){ updateHeaderFromLocal(lastActive); }
-auth.onAuthStateChanged(user=>{
-  if(user){ updateHeader({uid:user.uid,email:user.email,displayName:user.displayName,photo:user.photoURL,photoURL:user.photoURL}); }
-  else { if(!lastActive) updateHeader(null); }
-});
+auth.onAuthStateChanged(user=>{ if(user){ updateHeader({uid:user.uid,email:user.email,displayName:user.displayName,photo:user.photoURL,photoURL:user.photoURL}); } else { if(!lastActive) updateHeader(null); } });
 </script></body></html>
