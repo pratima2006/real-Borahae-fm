@@ -13,7 +13,10 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 .sidebar-bg{background:#28164f;}
 .paper-grid{background-image:linear-gradient(#e9d5ff1f 1px, transparent 1px),linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px); background-size:22px 22px;}
 *{box-sizing:border-box;}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #f3e8ff;display:none;justify-content:space-around;padding:8px 0 18px 0;z-index:30;max-width:480px;margin:0 auto;}
+@keyframes pop{0%{transform:scale(0.94);opacity:0}100%{transform:scale(1);opacity:1}}
+.animate-pop{animation:pop.22s cubic-bezier(.16,1,.3,1)}
+.modal-bg{backdrop-filter:blur(6px);background:rgba(0,0,0,0.25)}
+.crop-bg{background:rgba(0,0,0,0.7);backdrop-filter:blur(8px)}
 </style></head><body class="paper-grid pb-24">
 
 <header class="sticky top-0 z-30 bg-[#fdf8ff]/90 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
@@ -30,16 +33,15 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 <p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
 <nav class="space-y-[2px]">
 <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
-<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice <span class="ml-auto bg-[#f472b6] text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span></a>
+<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice</a>
+<a href="plaza.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">☾ Borahae Plaza</a>
 <a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✦ Missions</a>
 <a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">▶ Videos</a>
 <a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◫ My History</a>
-<a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">? FAQ</a>
 </nav>
 <div class="mt-auto">
 <div class="border-t border-white/10 pt-4"><a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">⚙ Settings <span class="ml-auto w-2 h-2 bg-[#f472b6] rounded-full"></span></a></div>
-<!-- FIXED SIDEBAR USER BOX - ONLY NAME + PFP, CLICK TO SETTINGS -->
-<div id="sidebarUserBox" onclick="goToSettings()" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15 transition">
+<div id="sidebarUserBox" onclick="openPage('appearance')" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15 transition">
 <div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden flex-shrink-0"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div>
 <div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY</p><p id="sidebarSub" class="text-white/50 text-[10px] truncate">View profile</p></div>
 </div>
@@ -47,177 +49,285 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 </aside>
 
 <main class="w-full max-w-[480px] mx-auto px-4 pt-5 pb-28">
-<p class="font-mono text-[10px] tracking-[3px] text-[#7c3aed] font-bold">YOUR DETAILS</p>
+
+<!-- MAIN SETTINGS LIST PAGE -->
+<div id="settingsMain">
+<p class="font-mono text-[10px] tracking-[3px] text-[#7c3aed] font-bold">SETTINGS</p>
 <h1 class="font-display text-[32px] leading-[0.95] font-bold mt-1">Keep your page yours.</h1>
-<p class="text-[#6b7280] text-[12px] mt-2 leading-[1.4]">A few quiet settings for the person behind the streams.</p>
+<div class="mt-6 space-y-2">
+<button onclick="openPage('appearance')" class="w-full bg-white border border-[#f3e8ff] rounded-[16px] p-4 flex items-center justify-between hover:bg-[#fdf8ff]"><div class="flex items-center gap-3"><div class="w-8 h-8 bg-[#f5f3ff] rounded-full flex items-center justify-center text-[14px]">◍</div><div class="text-left"><p class="font-bold text-[12px] text-black">Appearance</p><p class="text-[10px] text-gray-500">PFP, banner, name</p></div></div><span class="text-gray-400">›</span></button>
+<button onclick="openPage('manageAccounts')" class="w-full bg-white border border-[#f3e8ff] rounded-[16px] p-4 flex items-center justify-between hover:bg-[#fdf8ff]"><div class="flex items-center gap-3"><div class="w-8 h-8 bg-[#f5f3ff] rounded-full flex items-center justify-center">⇄</div><div class="text-left"><p class="font-bold text-[12px] text-black">Manage accounts</p><p class="text-[10px] text-gray-500" id="accCountLabel">0 accounts</p></div></div><span class="text-gray-400">›</span></button>
+<button onclick="openPage('bin')" class="w-full bg-white border border-[#f3e8ff] rounded-[16px] p-4 flex items-center justify-between hover:bg-[#fdf8ff]"><div class="flex items-center gap-3"><div class="w-8 h-8 bg-[#fff1f2] rounded-full flex items-center justify-center">🗑</div><div class="text-left"><p class="font-bold text-[12px] text-black">Bin</p><p class="text-[10px] text-gray-500" id="binCountMain">Deleted history • 60 days</p></div></div><span class="text-gray-400">›</span></button>
+<button onclick="window.location.href='faq.html'" class="w-full bg-white border border-[#f3e8ff] rounded-[16px] p-4 flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-8 h-8 bg-[#f5f3ff] rounded-full flex items-center justify-center">?</div><p class="font-bold text-[12px] text-black">FAQ</p></div><span class="text-gray-400">›</span></button>
+<button onclick="openPage('whatsNew')" class="w-full bg-white border border-[#f3e8ff] rounded-[16px] p-4 flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-8 h-8 bg-[#f5f3ff] rounded-full flex items-center justify-center">✦</div><p class="font-bold text-[12px] text-black">What's new</p></div><span class="text-gray-400">›</span></button>
+</div>
+<p class="text-[9px] text-gray-400 text-center mt-8">borahae.fm v1.0 • Made for ARMY 💜</p>
+</div>
 
-<!-- APPEARANCE BOX SMALLER -->
-<div id="appearanceBox" class="mt-5 bg-white rounded-[20px] p-4 border border-[#f3e8ff] shadow-sm">
+<!-- APPEARANCE PAGE -->
+<div id="appearancePage" class="hidden">
+<button onclick="openPage('main')" class="flex items-center gap-2 text-[12px] font-bold"><span class="w-7 h-7 bg-white border rounded-full flex items-center justify-center">‹</span> Back</button>
+<div class="mt-4 bg-white rounded-[20px] p-4 border border-[#f3e8ff] shadow-sm">
 <p class="font-mono text-[9px] tracking-[2px] text-[#8b2cf0] font-bold">APPEARANCE</p>
-
-<div class="flex items-center gap-3 mt-3">
+<!-- BANNER -->
+<div class="mt-3 relative">
+<img id="bannerPreview" class="w-full h-[88px] rounded-[14px] object-cover bg-[#f3edff] border" src="">
+<button onclick="openGallery('banner')" class="absolute bottom-2 right-2 w-6 h-6 bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center text-white text-[10px] border border-white/30">✎</button>
+<p class="text-[9px] text-gray-400 mt-1">Banner • 16:9 recommended</p>
+</div>
+<!-- PFP -->
+<div class="flex items-center gap-3 mt-4">
 <div class="relative">
-<img id="mainPfp" src="https://via.placeholder.com/64" class="w-[54px] h-[54px] rounded-[14px] object-cover bg-[#f3edff] border">
-<button onclick="openGallery()" class="absolute -bottom-1 -right-1 w-5 h-5 bg-[#7c3aed] rounded-full flex items-center justify-center text-white text-[10px] border-2 border-white">✎</button>
+<img id="mainPfp" src="https://via.placeholder.com/64" class="w-[64px] h-[64px] rounded-[18px] object-cover bg-[#f3edff] border">
+<button onclick="openGallery('pfp')" class="absolute -bottom-1 -right-1 w-6 h-6 bg-[#7c3aed] rounded-full flex items-center justify-center text-white text-[10px] border-2 border-white">✎</button>
 </div>
 <div class="flex-1 min-w-0">
-<div class="flex items-center gap-2">
 <p id="mainName" class="font-bold text-[15px] truncate">ARMY</p>
-<button onclick="openGallery()" class="w-6 h-6 rounded-full border border-[#ede9fe] flex items-center justify-center text-[#7c3aed] text-[12px] bg-[#f9f5ff]" title="Edit PFP">✎</button>
-</div>
-<p id="mainEmail" class="text-[11px] text-gray-500 truncate">Joined Aug 30, 2026</p>
+<p id="mainEmail" class="text-[11px] text-gray-500 truncate">Joined</p>
 </div>
 </div>
-
-<div class="mt-4"><label class="text-[11px] font-bold">Display name</label><input id="displayName" value="ARMY" class="w-full mt-1.5 bg-white border border-[#e9d5ff] rounded-full px-4 py-2.5 text-[12px] font-bold outline-none focus:border-[#7c3aed]"></div>
-<div class="mt-3"><label class="text-[11px] font-bold">Avatar URL <span class="font-normal text-gray-400 text-[10px]">(optional - direct link)</span></label><input id="avatarUrl" placeholder="https://...jpg" class="w-full mt-1.5 bg-[#f9f5ff] border border-[#f3e8ff] rounded-full px-4 py-2.5 text-[11px] outline-none"><p class="text-[9px] text-gray-400 mt-1">Link daloge to wahi PFP banega, gallery wala prefer hota hai</p></div>
+<div class="mt-4"><label class="text-[11px] font-bold">Display name</label><input id="displayName" class="w-full mt-1.5 bg-white border border-[#e9d5ff] rounded-full px-4 py-2.5 text-[12px] font-bold outline-none focus:border-[#7c3aed]"></div>
+<div class="mt-3"><label class="text-[11px] font-bold">Avatar URL <span class="font-normal text-gray-400 text-[10px]">(optional)</span></label><input id="avatarUrl" placeholder="https://...jpg" class="w-full mt-1.5 bg-[#f9f5ff] border border-[#f3e8ff] rounded-full px-4 py-2.5 text-[11px] outline-none"></div>
 <div class="mt-3"><label class="text-[11px] font-bold">Email address</label><input id="emailAddr" disabled class="w-full mt-1.5 bg-[#f3f4f6] border rounded-full px-4 py-2.5 text-[11px] text-gray-500"></div>
 
-<button onclick="saveProfile()" class="w-full mt-4 bg-[#7c3aed] text-white py-2.5 rounded-full font-bold text-[12px]">Save profile</button>
-
-<!-- LOG OUT DIM RED BOX -->
-<div onclick="openLogoutPopup()" class="mt-3 bg-[#fff1f2] border border-[#ffe4e6] rounded-full px-4 py-2.5 flex items-center justify-center gap-2 cursor-pointer hover:bg-[#ffe4e6] transition">
+<div class="flex justify-end items-center gap-2 mt-5">
+<button onclick="saveProfile()" class="bg-[#7c3aed] text-white px-6 py-2.5 rounded-full font-bold text-[11px]">Save profile</button>
+</div>
+<div onclick="openLogoutPopup()" class="mt-3 bg-[#fff1f2] border border-[#ffe4e6] rounded-full px-4 py-2.5 flex items-center justify-center gap-2 cursor-pointer hover:bg-[#ffe4e6]">
 <span class="text-[#e11d48] text-[13px]">↪</span><span class="text-[#e11d48] font-bold text-[12px]">Log out</span>
 </div>
 </div>
-
-<!-- DELETED HISTORY BOX SMALLER -->
-<div class="mt-4 bg-white rounded-[20px] p-4 border border-[#f3e8ff] shadow-sm">
-<div class="flex justify-between items-center"><h3 class="font-bold text-[12px]">🗑 Deleted History</h3><span id="deletedCount" class="text-[9px] bg-[#f3f0ff] px-2 py-0.5 rounded-full font-bold">0 items</span></div>
-<p class="text-[10px] text-gray-500 mt-1">60 days me auto delete</p>
-<div id="deletedList" class="mt-3 space-y-2"></div>
-<div id="deletedEmpty" class="text-center py-5 text-[11px] text-gray-400 hidden">No deleted videos 💜</div>
 </div>
+
+<!-- BIN PAGE -->
+<div id="binPage" class="hidden">
+<button onclick="openPage('main')" class="flex items-center gap-2 text-[12px] font-bold"><span class="w-7 h-7 bg-white border rounded-full flex items-center justify-center">‹</span> Back to settings</button>
+<h2 class="font-display text-[22px] font-bold mt-4">Bin</h2>
+<p class="text-[11px] text-gray-500 mt-1">Videos stay for 60 days, then auto delete forever. <span id="binCount" class="font-bold">0 items</span></p>
+<div id="deletedList" class="mt-4 space-y-2"></div>
+<div id="deletedEmpty" class="hidden text-center py-10 bg-white border border-dashed rounded-[20px] mt-4"><p class="text-[12px] text-gray-400">No deleted videos 💜</p></div>
+</div>
+
+<!-- MANAGE ACCOUNTS PAGE -->
+<div id="manageAccountsPage" class="hidden">
+<button onclick="openPage('main')" class="flex items-center gap-2 text-[12px] font-bold"><span class="w-7 h-7 bg-white border rounded-full flex items-center justify-center">‹</span> Back</button>
+<h2 class="font-display text-[22px] font-bold mt-4">Manage accounts</h2>
+<p class="text-[11px] text-gray-500 mt-1">Tap to switch, X to remove from this device.</p>
+<div id="manageAccountsList" class="mt-4 space-y-2"></div>
+<div class="mt-4 flex gap-2"><button onclick="closeManageToMain()" class="flex-1 bg-white border py-2.5 rounded-full text-[11px] font-bold">Cancel</button><button onclick="window.location.href='index.html'" class="flex-1 bg-[#1a1033] text-white py-2.5 rounded-full text-[11px] font-bold">+ Add account</button></div>
+</div>
+
+<!-- WHATS NEW PAGE -->
+<div id="whatsNewPage" class="hidden">
+<button onclick="openPage('main')" class="flex items-center gap-2 text-[12px] font-bold"><span class="w-7 h-7 bg-white border rounded-full flex items-center justify-center">‹</span> Back</button>
+<h2 class="font-display text-[22px] font-bold mt-4">What's new</h2>
+<div class="mt-4 bg-white border rounded-[16px] p-4"><p class="font-bold text-[12px]">v1.0 • Switch accounts, Bin 60 days, Banner edit</p><p class="text-[11px] text-gray-500 mt-1">Made for ARMY 💜</p></div>
+</div>
+
 </main>
 
-<!-- HIDDEN FILE INPUT -->
-<input id="galleryInput" type="file" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
+<input id="galleryInput" type="file" accept="image/*" class="hidden">
+<input id="bannerInput" type="file" accept="image/*" class="hidden">
 
-<!-- PFP EDIT POPUP -->
-<div id="pfpPopup" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[90] p-4">
-<div class="bg-white rounded-[20px] p-4 w-full max-w-[340px] max-h-[85vh] overflow-auto">
-<div class="flex justify-between items-center"><h3 class="font-bold text-[12px]">Edit profile photo</h3><button onclick="closePfpPopup()" class="w-7 h-7 bg-gray-100 rounded-full text-[14px]">✕</button></div>
-<div class="mt-3 bg-[#f9f5ff] rounded-[14px] overflow-hidden p-2">
-<img id="cropImage" src="" class="w-full max-h-[300px] object-contain hidden">
-</div>
-<div class="grid grid-cols-2 gap-2 mt-3">
-<button onclick="doCrop()" class="bg-white border py-2 rounded-full font-bold text-[11px]">✂ Crop</button>
-<button onclick="doDeletePfp()" class="bg-[#fff1f2] border border-[#fecdd3] text-[#e11d48] py-2 rounded-full font-bold text-[11px]">🗑 Delete</button>
-<button onclick="openGallery()" class="bg-white border py-2 rounded-full font-bold text-[11px]">🔄 Replace</button>
-<button onclick="savePfp()" class="bg-[#7c3aed] text-white py-2 rounded-full font-bold text-[11px]">Save</button>
-</div>
-<p class="text-[9px] text-gray-400 mt-2 text-center">Crop pe click karke drag karke crop kar sakte ho</p>
+<!-- CROP MODAL FOR PFP & BANNER -->
+<div id="cropModal" class="fixed inset-0 crop-bg hidden items-center justify-center z-[90] p-4">
+<div class="bg-white rounded-[20px] p-3 w-full max-w-[360px]">
+<div class="flex justify-between items-center"><h3 id="cropTitle" class="font-bold text-[12px]">Crop photo</h3><button onclick="closeCrop()" class="w-7 h-7 bg-gray-100 rounded-full">✕</button></div>
+<div class="mt-3 bg-[#111] rounded-[14px] overflow-hidden p-1"><img id="cropImage" src="" class="w-full max-h-[360px] object-contain"></div>
+<div class="flex gap-2 mt-3"><button onclick="closeCrop()" class="flex-1 bg-gray-100 py-2.5 rounded-full font-bold text-[11px]">Cancel</button><button onclick="changeImage()" class="flex-1 bg-white border py-2.5 rounded-full font-bold text-[11px]">Change</button><button onclick="doSaveCrop()" class="flex-1 bg-[#7c3aed] text-white py-2.5 rounded-full font-bold text-[11px]">Save</button></div>
 </div>
 </div>
+
+<!-- BIN POPUPS -->
+<div id="binRestorePopup" class="fixed inset-0 z-[80] hidden modal-bg flex items-center justify-center p-4"><div class="animate-pop bg-white rounded-[20px] p-5 w-full max-w-[300px] text-center"><p class="font-bold text-[13px]">Restore this video?</p><p class="text-[10px] text-gray-500 mt-1">It will go back to History</p><div class="flex gap-2 mt-4"><button onclick="closeBinPopups()" class="flex-1 bg-gray-100 py-2.5 rounded-full font-bold text-[11px]">Cancel</button><button id="binRestoreBtn" class="flex-1 bg-[#7c3aed] text-white py-2.5 rounded-full font-bold text-[11px]">Restore</button></div></div></div>
+<div id="binDeletePopup" class="fixed inset-0 z-[80] hidden modal-bg flex items-center justify-center p-4"><div class="animate-pop bg-white rounded-[22px] p-5 w-full max-w-[300px]"><div class="flex justify-between"><h3 class="font-bold text-[13px]">Delete forever?</h3><button onclick="closeBinPopups()" class="w-6 h-6 bg-gray-100 rounded-full text-[10px]">✕</button></div><p class="text-[10px] text-gray-500 mt-1">This will be deleted forever from Bin.</p><div class="flex gap-2 mt-4"><button onclick="closeBinPopups()" class="flex-1 bg-gray-100 py-2.5 rounded-full text-[11px] font-bold">Cancel</button><button id="binDeleteBtn" class="flex-1 bg-[#e11d48] text-white py-2.5 rounded-full text-[11px] font-bold">Delete</button></div></div></div>
+
+<!-- ACCOUNT DELETE POPUPS -->
+<div id="accDel1" class="fixed inset-0 z-[80] hidden modal-bg flex items-center justify-center p-4"><div class="animate-pop bg-white rounded-[22px] p-5 w-full max-w-[320px] text-center"><div class="w-10 h-10 bg-[#fff1f2] rounded-full mx-auto flex items-center justify-center text-[#e11d48]">!</div><h3 class="font-bold mt-3 text-[13px]">Remove account from device?</h3><div class="flex gap-2 mt-4"><button onclick="closeAccDel()" class="flex-1 bg-gray-100 py-2.5 rounded-full text-[11px] font-bold">Cancel</button><button onclick="openAccDel2()" class="flex-1 bg-[#e11d48] text-white py-2.5 rounded-full text-[11px] font-bold">Delete</button></div></div></div>
+<div id="accDel2" class="fixed inset-0 z-[85] hidden modal-bg flex items-center justify-center p-4"><div class="animate-pop bg-white rounded-[22px] p-5 w-full max-w-[340px]"><div class="flex justify-between"><h3 class="font-bold text-[13px] text-[#e11d48]">Permanently delete?</h3><button onclick="closeAccDel()" class="w-6 h-6 bg-gray-100 rounded-full text-[10px]">✕</button></div><p class="text-[9px] text-gray-400 mt-2">*The deleted account won't be recovered. Every info about this account — history, missions, points, detailed logs will be deleted forever & won't be recovered. If you login again, it will be added as new.</p><p class="text-[11px] font-bold mt-3">Type <span class="text-[#e11d48]">"Delete My This Account"</span></p><input id="accTypeInput" class="w-full mt-2 border border-[#fecdd3] rounded-full px-4 py-2.5 text-[11px] outline-none focus:border-[#e11d48]" placeholder="Delete My This Account"><div class="flex gap-2 mt-4"><button onclick="closeAccDel()" class="flex-1 bg-gray-100 py-2.5 rounded-full text-[11px] font-bold">Cancel</button><button id="accFinalBtn" disabled class="flex-1 bg-[#e11d48]/30 text-white py-2.5 rounded-full text-[11px] font-bold">Delete</button></div></div></div>
+<div id="accSuccess" class="fixed inset-0 z-[90] hidden modal-bg flex items-center justify-center p-4"><div class="animate-pop bg-white rounded-[22px] p-5 w-full max-w-[300px] text-center"><div class="w-10 h-10 bg-[#dcfce7] rounded-full mx-auto flex items-center justify-center">✓</div><h3 class="font-bold mt-3 text-[13px]">Account deleted forever</h3><p class="text-[10px] text-gray-500 mt-1">All history & missions for this account are deleted.</p><button onclick="closeAccSuccess()" class="mt-4 w-full bg-[#1a1033] text-white py-2.5 rounded-full text-[11px] font-bold">Okay</button></div></div>
 
 <!-- LOGOUT POPUP -->
-<div id="logoutPopup" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[90] p-4">
-<div class="bg-white rounded-[20px] p-5 w-full max-w-[300px] text-center">
-<p class="text-[20px]">👋</p>
-<h3 class="font-bold text-[13px] mt-1">Log out?</h3>
-<p class="text-[11px] text-gray-500 mt-1">You will be taken to start page</p>
-<div class="flex gap-2 mt-4"><button onclick="closeLogout()" class="flex-1 bg-gray-100 py-2.5 rounded-full font-bold text-[11px]">Cancel</button><button onclick="confirmLogout()" class="flex-1 bg-[#e11d48] text-white py-2.5 rounded-full font-bold text-[11px]">Log out</button></div>
-</div>
-</div>
+<div id="logoutPopup" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[90] p-4"><div class="bg-white rounded-[20px] p-5 w-full max-w-[300px] text-center"><p class="text-[20px]">👋</p><h3 class="font-bold text-[13px] mt-1">Log out?</h3><p class="text-[11px] text-gray-500 mt-1">You will be taken to start page</p><div class="flex gap-2 mt-4"><button onclick="closeLogout()" class="flex-1 bg-gray-100 py-2.5 rounded-full font-bold text-[11px]">Cancel</button><button onclick="confirmLogout()" class="flex-1 bg-[#e11d48] text-white py-2.5 rounded-full font-bold text-[11px]">Log out</button></div></div></div>
 
 <script>
 const firebaseConfig = { apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw", authDomain: "borahae-fm-f7075.firebaseapp.com", databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com", projectId: "borahae-fm-f7075", };
 firebase.initializeApp(firebaseConfig); const auth = firebase.auth();
-let cropper=null; let currentBase64=null;
+let cropper=null; let currentBase64=null; let cropType='pfp'; let currentUserData={}; let binTargetId=null; let accToDelete=null;
 
-function goToSettings(){ document.getElementById('appearanceBox').scrollIntoView({behavior:'smooth'}); closeSidebar(); }
-function openSidebar(){ document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebarOverlay').classList.remove('hidden'); }
-function closeSidebar(){ document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebarOverlay').classList.add('hidden'); }
+function openPage(p){
+  document.getElementById('settingsMain').classList.add('hidden');
+  document.getElementById('appearancePage').classList.add('hidden');
+  document.getElementById('binPage').classList.add('hidden');
+  document.getElementById('manageAccountsPage').classList.add('hidden');
+  document.getElementById('whatsNewPage').classList.add('hidden');
+  if(p==='main') document.getElementById('settingsMain').classList.remove('hidden');
+  if(p==='appearance') document.getElementById('appearancePage').classList.remove('hidden');
+  if(p==='bin'){ document.getElementById('binPage').classList.remove('hidden'); renderBin(); }
+  if(p==='manageAccounts'){ document.getElementById('manageAccountsPage').classList.remove('hidden'); renderManageAccounts(); }
+  if(p==='whatsNew') document.getElementById('whatsNewPage').classList.remove('hidden');
+  closeSidebar();
+}
+function closeManageToMain(){ openPage('main'); }
+function openSidebar(){ sidebar.classList.remove('-translate-x-full'); sidebarOverlay.classList.remove('hidden'); }
+function closeSidebar(){ sidebar.classList.add('-translate-x-full'); sidebarOverlay.classList.add('hidden'); }
 
 auth.onAuthStateChanged(user=>{
   if(user){
+    currentUserData={uid:user.uid, email:user.email, name:user.displayName||localStorage.getItem('army_name')||'ARMY', photo:user.photoURL||localStorage.getItem('army_pfp')||''};
     document.getElementById('emailAddr').value=user.email;
     document.getElementById('mainEmail').innerText=user.email;
-    let name=user.displayName||localStorage.getItem('army_name')||'ARMY';
-    document.getElementById('mainName').innerText=name;
-    document.getElementById('sidebarName').innerText=name;
-    document.getElementById('displayName').value=name;
-    let pic=user.photoURL||localStorage.getItem('army_pfp')||'';
-    if(pic){ document.getElementById('mainPfp').src=pic; document.getElementById('sidebarAvatarImg').src=pic; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }
+    document.getElementById('mainName').innerText=currentUserData.name;
+    document.getElementById('sidebarName').innerText=currentUserData.name;
+    document.getElementById('displayName').value=currentUserData.name;
+    if(currentUserData.photo){ mainPfp.src=currentUserData.photo; sidebarAvatarImg.src=currentUserData.photo; sidebarAvatarImg.classList.remove('hidden'); sidebarAvatarLetter.classList.add('hidden'); }
+    saveToMulti(currentUserData);
   } else {
-    try{ let u=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); if(u.name){ document.getElementById('sidebarName').innerText=u.name; document.getElementById('mainName').innerText=u.name; document.getElementById('displayName').value=u.name; if(u.photo){ document.getElementById('mainPfp').src=u.photo; document.getElementById('sidebarAvatarImg').src=u.photo; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); } } }catch(e){}
+    try{ let u=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); if(u.name){ sidebarName.innerText=u.name; mainName.innerText=u.name; displayName.value=u.name; if(u.photo){ mainPfp.src=u.photo; sidebarAvatarImg.src=u.photo; sidebarAvatarImg.classList.remove('hidden'); sidebarAvatarLetter.classList.add('hidden'); } } }catch(e){}
   }
-  renderDeleted();
+  loadBanner();
+  renderBin(); renderCounts();
 });
 
+function saveToMulti(obj){
+  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
+  let idx=list.findIndex(a=>a.email.toLowerCase()===obj.email.toLowerCase());
+  if(idx>-1) list[idx]={...list[idx],...obj}; else list.push(obj);
+  localStorage.setItem('borahae_accounts', JSON.stringify(list));
+  renderCounts();
+}
+function renderCounts(){
+  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
+  document.getElementById('accCountLabel').innerText=`${list.length} accounts`;
+  let del=JSON.parse(localStorage.getItem('borahae_deleted')||'[]');
+  document.getElementById('binCountMain').innerText=`${del.length} items • 60 days`;
+}
+function loadBanner(){ let b=localStorage.getItem('army_banner'); if(b) document.getElementById('bannerPreview').src=b; }
+
 function saveProfile(){
-  let name=document.getElementById('displayName').value.trim();
-  let url=document.getElementById('avatarUrl').value.trim();
+  let name=displayName.value.trim(); let url=avatarUrl.value.trim();
   if(!name) return alert('Name daal');
-  localStorage.setItem('army_name', name);
-  document.getElementById('mainName').innerText=name;
-  document.getElementById('sidebarName').innerText=name;
-  let u=JSON.parse(localStorage.getItem('borahaeUser')||'{}');
-  u.name=name;
-  if(url){ u.photo=url; localStorage.setItem('army_pfp', url); document.getElementById('mainPfp').src=url; document.getElementById('sidebarAvatarImg').src=url; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }
+  localStorage.setItem('army_name', name); mainName.innerText=name; sidebarName.innerText=name;
+  let u=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); u.name=name;
+  if(url){ u.photo=url; localStorage.setItem('army_pfp', url); mainPfp.src=url; sidebarAvatarImg.src=url; sidebarAvatarImg.classList.remove('hidden'); sidebarAvatarLetter.classList.add('hidden'); }
   localStorage.setItem('borahaeUser', JSON.stringify(u));
-  let user=auth.currentUser; if(user){ user.updateProfile({displayName:name, photoURL:url||user.photoURL}); }
+  if(currentUserData.email){ let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); list=list.map(a=>a.email===currentUserData.email?{...a,name,photo:url||a.photo}:a); localStorage.setItem('borahae_accounts', JSON.stringify(list)); }
+  let user=auth.currentUser; if(user) user.updateProfile({displayName:name, photoURL:url||user.photoURL});
   alert('Saved! 💜');
 }
 
-function openGallery(){ document.getElementById('galleryInput').click(); }
-function handleFileSelect(e){
-  let file=e.target.files[0]; if(!file) return;
+// GALLERY + CROP
+function openGallery(type){
+  cropType=type;
+  if(type==='banner') bannerInput.click(); else galleryInput.click();
+}
+galleryInput.addEventListener('change', e=>handleFile(e.target.files[0]));
+bannerInput.addEventListener('change', e=>handleFile(e.target.files[0]));
+function handleFile(file){
+  if(!file) return;
   let reader=new FileReader();
   reader.onload=ev=>{
     currentBase64=ev.target.result;
-    document.getElementById('cropImage').src=currentBase64;
-    document.getElementById('cropImage').classList.remove('hidden');
-    document.getElementById('pfpPopup').classList.remove('hidden'); document.getElementById('pfpPopup').classList.add('flex');
-    setTimeout(initCropper,200);
+    cropImage.src=currentBase64;
+    cropModal.classList.remove('hidden'); cropModal.classList.add('flex');
+    cropTitle.innerText= cropType==='banner'? 'Crop banner (16:9)' : 'Crop PFP (1:1)';
+    setTimeout(()=>{ if(cropper) cropper.destroy(); cropper=new Cropper(cropImage,{aspectRatio: cropType==='banner'? 16/9 : 1, viewMode:1, autoCropArea:0.9}); },150);
   };
   reader.readAsDataURL(file);
 }
-function initCropper(){
-  let img=document.getElementById('cropImage');
-  if(cropper) cropper.destroy();
-  cropper=new Cropper(img,{aspectRatio:1, viewMode:1, autoCropArea:0.8});
+function closeCrop(){ cropModal.classList.add('hidden'); cropModal.classList.remove('flex'); if(cropper){ cropper.destroy(); cropper=null; } }
+function changeImage(){ closeCrop(); openGallery(cropType); }
+function doSaveCrop(){
+  if(!cropper) return;
+  let w= cropType==='banner'? 800: 300; let h= cropType==='banner'? 450: 300;
+  let canvas=cropper.getCroppedCanvas({width:w,height:h}); currentBase64=canvas.toDataURL('image/jpeg',0.9);
+  if(cropType==='banner'){ localStorage.setItem('army_banner', currentBase64); bannerPreview.src=currentBase64; }
+  else { localStorage.setItem('army_pfp', currentBase64); mainPfp.src=currentBase64; sidebarAvatarImg.src=currentBase64; sidebarAvatarImg.classList.remove('hidden'); sidebarAvatarLetter.classList.add('hidden'); let u=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); u.photo=currentBase64; localStorage.setItem('borahaeUser',JSON.stringify(u)); }
+  closeCrop();
 }
-function doCrop(){ if(!cropper) return; let canvas=cropper.getCroppedCanvas({width:300,height:300}); currentBase64=canvas.toDataURL('image/jpeg',0.9); cropper.destroy(); cropper=null; document.getElementById('cropImage').src=currentBase64; setTimeout(initCropper,200); }
-function doDeletePfp(){
-  if(!confirm('PFP delete karna hai?')) return;
-  localStorage.removeItem('army_pfp');
-  let u=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); delete u.photo; localStorage.setItem('borahaeUser',JSON.stringify(u));
-  document.getElementById('mainPfp').src='https://via.placeholder.com/64';
-  document.getElementById('sidebarAvatarImg').classList.add('hidden'); document.getElementById('sidebarAvatarLetter').classList.remove('hidden');
-  document.getElementById('avatarUrl').value='';
-  closePfpPopup();
-}
-function savePfp(){
-  if(!currentBase64) return;
-  localStorage.setItem('army_pfp', currentBase64);
-  document.getElementById('mainPfp').src=currentBase64;
-  document.getElementById('sidebarAvatarImg').src=currentBase64;
-  document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden');
-  let u=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); u.photo=currentBase64; localStorage.setItem('borahaeUser',JSON.stringify(u));
-  let user=auth.currentUser; if(user) user.updateProfile({photoURL:currentBase64});
-  closePfpPopup(); alert('PFP saved 💜');
-}
-function closePfpPopup(){ document.getElementById('pfpPopup').classList.add('hidden'); document.getElementById('pfpPopup').classList.remove('flex'); if(cropper){ cropper.destroy(); cropper=null; } }
 
-function openLogoutPopup(){ document.getElementById('logoutPopup').classList.remove('hidden'); document.getElementById('logoutPopup').classList.add('flex'); }
-function closeLogout(){ document.getElementById('logoutPopup').classList.add('hidden'); document.getElementById('logoutPopup').classList.remove('flex'); }
+function openLogoutPopup(){ logoutPopup.classList.remove('hidden'); logoutPopup.classList.add('flex'); }
+function closeLogout(){ logoutPopup.classList.add('hidden'); logoutPopup.classList.remove('flex'); }
 async function confirmLogout(){
   try{ await auth.signOut(); }catch(e){}
   localStorage.removeItem('borahaeUser'); localStorage.removeItem('army_name'); localStorage.removeItem('army_pfp'); localStorage.removeItem('borahae_navMode');
   window.location.href='index.html';
 }
 
-function renderDeleted(){
+// BIN LOGIC - 60 days
+function renderBin(){
   let deleted=JSON.parse(localStorage.getItem('borahae_deleted')||'[]');
-  let now=Date.now(); deleted=deleted.filter(d=> (now-(d.deletedAt||0))<60*24*60*60*1000);
+  let now=Date.now();
+  deleted=deleted.filter(d=> (now-(d.deletedAt||0)) < 60*24*60*60*1000);
   localStorage.setItem('borahae_deleted', JSON.stringify(deleted));
-  document.getElementById('deletedCount').innerText=`${deleted.length} items`;
+  document.getElementById('binCount').innerText=`${deleted.length} items`;
+  document.getElementById('binCountMain').innerText=`${deleted.length} items • 60 days`;
   const list=document.getElementById('deletedList'); const empty=document.getElementById('deletedEmpty');
   if(deleted.length===0){ list.innerHTML=''; empty.classList.remove('hidden'); return; }
   empty.classList.add('hidden');
-  list.innerHTML=deleted.map(d=>`<div class="flex gap-2 items-center bg-[#faf6ff] border border-[#f3e8ff] rounded-[14px] p-2"><img src="https://img.youtube.com/vi/${d.videoId}/mqdefault.jpg" class="w-[48px] h-[30px] rounded-[6px] object-cover"><div class="flex-1 min-w-0"><p class="text-[11px] font-bold truncate">${d.title}</p><p class="text-[9px] text-gray-500">${Math.floor((now-d.deletedAt)/86400000)}d ago</p></div><button onclick="restoreDeleted('${d.videoId}')" class="w-7 h-7 bg-[#ede6fb] rounded-full text-[11px]">↩</button><button onclick="permanentDelete('${d.videoId}')" class="w-7 h-7 bg-[#fff0f0] rounded-full text-[11px]">✕</button></div>`).join('');
+  list.innerHTML=deleted.map(d=>{
+    let daysLeft = 60 - Math.floor((now-d.deletedAt)/86400000);
+    let leftText = daysLeft<=0? 'deleting today' : daysLeft===1? '1 day left' : `${daysLeft} days left`;
+    return `<div class="flex gap-2 items-center bg-white border rounded-[14px] p-2"><img src="https://img.youtube.com/vi/${d.videoId}/mqdefault.jpg" class="w-[56px] h-[36px] rounded-[8px] object-cover"><div class="flex-1 min-w-0"><p class="text-[11px] font-bold truncate text-black">${d.title}</p><p class="text-[8px] text-[#e11d48] font-bold">${leftText}</p></div><button onclick="askRestore('${d.videoId}')" class="w-8 h-8 bg-[#ede6fb] rounded-full text-[12px]">↩</button><button onclick="askBinDelete('${d.videoId}')" class="w-8 h-8 bg-[#fff1f2] rounded-full text-[12px]">🗑</button></div>`;
+  }).join('');
 }
-function restoreDeleted(id){ let deleted=JSON.parse(localStorage.getItem('borahae_deleted')||'[]'); let item=deleted.find(d=>d.videoId===id); if(!item) return; let streams=JSON.parse(localStorage.getItem('borahae_history')||'[]'); let logs=JSON.parse(localStorage.getItem('borahae_detailed_logs')||'{}'); streams.unshift({videoId:item.videoId,title:item.title,member:item.member||'OT7',channel:item.channel||'HYBE LABELS',date:item.date,time:item.time,duration:item.duration,count:item.count||1,type:item.type||'video'}); if(item.originalLogs) logs[id]=item.originalLogs; localStorage.setItem('borahae_history',JSON.stringify(streams)); localStorage.setItem('borahae_detailed_logs',JSON.stringify(logs)); deleted=deleted.filter(d=>d.videoId!==id); localStorage.setItem('borahae_deleted',JSON.stringify(deleted)); renderDeleted(); }
-function permanentDelete(id){ if(!confirm('Permanently delete?')) return; let deleted=JSON.parse(localStorage.getItem('borahae_deleted')||'[]'); deleted=deleted.filter(d=>d.videoId!==id); localStorage.setItem('borahae_deleted',JSON.stringify(deleted)); renderDeleted(); }
+function askRestore(id){ binTargetId=id; binRestorePopup.classList.remove('hidden'); binRestorePopup.classList.add('flex'); }
+function askBinDelete(id){ binTargetId=id; binDeletePopup.classList.remove('hidden'); binDeletePopup.classList.add('flex'); }
+function closeBinPopups(){ binRestorePopup.classList.add('hidden'); binRestorePopup.classList.remove('flex'); binDeletePopup.classList.add('hidden'); binDeletePopup.classList.remove('flex'); }
+document.getElementById('binRestoreBtn').onclick=()=>{
+  let deleted=JSON.parse(localStorage.getItem('borahae_deleted')||'[]'); let item=deleted.find(d=>d.videoId===binTargetId); if(!item){ closeBinPopups(); return; }
+  let streams=JSON.parse(localStorage.getItem('borahae_history')||'[]'); let logs=JSON.parse(localStorage.getItem('borahae_detailed_logs')||'{}');
+  streams.unshift({videoId:item.videoId,title:item.title,member:item.member||'OT7',channel:item.channel||'HYBE LABELS',date:item.date,time:item.time,duration:item.duration,count:item.count||1,type:item.type||'video'});
+  if(item.originalLogs) logs[binTargetId]=item.originalLogs;
+  localStorage.setItem('borahae_history',JSON.stringify(streams)); localStorage.setItem('borahae_detailed_logs',JSON.stringify(logs));
+  deleted=deleted.filter(d=>d.videoId!==binTargetId); localStorage.setItem('borahae_deleted',JSON.stringify(deleted)); closeBinPopups(); renderBin();
+};
+document.getElementById('binDeleteBtn').onclick=()=>{
+  let deleted=JSON.parse(localStorage.getItem('borahae_deleted')||'[]'); deleted=deleted.filter(d=>d.videoId!==binTargetId); localStorage.setItem('borahae_deleted',JSON.stringify(deleted)); closeBinPopups(); renderBin();
+};
+
+// MANAGE ACCOUNTS PAGE
+function renderManageAccounts(){
+  let curEmail = (JSON.parse(localStorage.getItem('borahaeUser')||'{}').email || auth.currentUser?.email || '').toLowerCase();
+  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
+  document.getElementById('manageAccountsList').innerHTML = list.map(a=>{
+    let active = a.email.toLowerCase()===curEmail;
+    return `<div class="flex items-center gap-3 bg-white border ${active?'border-[#c4b5fd] bg-[#f5f3ff]':''} rounded-[16px] p-3">
+      <div onclick="switchToAcc('${a.email}')" class="flex items-center gap-3 flex-1 cursor-pointer"><img src="${a.photo||''}" class="w-10 h-10 rounded-full bg-[#ede9fe] object-cover"><div class="flex-1 overflow-hidden"><p class="font-bold text-[12px] truncate text-black">${a.name} ${active?'<span class=\'text-[9px] text-[#7c3aed]\'>• current</span>':''}</p><p class="text-[10px] text-gray-500 truncate">${a.email}</p></div>${active?`<span class="text-[#7c3aed]">✓</span>`:''}</div>
+      <button onclick="askAccDel1('${a.email}')" class="w-8 h-8 bg-[#fff1f2] border border-[#fecdd3] rounded-full text-[#e11d48]">✕</button>
+    </div>`;
+  }).join('') || `<p class="text-[11px] text-gray-400 text-center py-6">No accounts</p>`;
+}
+function switchToAcc(email){
+  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); let acc=list.find(a=>a.email===email); if(!acc) return;
+  localStorage.setItem('borahaeUser', JSON.stringify(acc)); localStorage.setItem('army_name', acc.name); if(acc.photo) localStorage.setItem('army_pfp', acc.photo);
+  location.reload();
+}
+function askAccDel1(email){ accToDelete=email; document.getElementById('accDel1').classList.remove('hidden'); document.getElementById('accDel1').classList.add('flex'); }
+function closeAccDel(){ document.getElementById('accDel1').classList.add('hidden'); document.getElementById('accDel1').classList.remove('flex'); document.getElementById('accDel2').classList.add('hidden'); document.getElementById('accDel2').classList.remove('flex'); document.getElementById('accTypeInput').value=''; document.getElementById('accFinalBtn').disabled=true; document.getElementById('accFinalBtn').className="flex-1 bg-[#e11d48]/30 text-white py-2.5 rounded-full text-[11px] font-bold"; }
+function openAccDel2(){ document.getElementById('accDel1').classList.add('hidden'); document.getElementById('accDel1').classList.remove('flex'); document.getElementById('accDel2').classList.remove('hidden'); document.getElementById('accDel2').classList.add('flex'); }
+
+document.getElementById('accTypeInput').addEventListener('input', e=>{
+  let btn=document.getElementById('accFinalBtn');
+  if(e.target.value==='Delete My This Account'){ btn.disabled=false; btn.className="flex-1 bg-[#e11d48] text-white py-2.5 rounded-full text-[11px] font-bold"; }
+  else { btn.disabled=true; btn.className="flex-1 bg-[#e11d48]/30 text-white py-2.5 rounded-full text-[11px] font-bold"; }
+});
+document.getElementById('accFinalBtn').onclick=()=>{
+  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); let acc=list.find(a=>a.email===accToDelete);
+  if(!acc) return;
+  // DELETE ALL DATA FOR THIS ACCOUNT
+  let uid=acc.uid||acc.email;
+  // remove history, missions, logs linked to uid if you store per uid, here we clear global but you can scope
+  localStorage.removeItem('borahae_history_'+uid); localStorage.removeItem('borahae_missions_'+uid); localStorage.removeItem('borahae_points_'+uid);
+  // if you use single storage, filter by email? For now delete global to respect request
+  if(list.length===1){ // last account - clear all
+    localStorage.removeItem('borahae_history'); localStorage.removeItem('borahae_detailed_logs'); localStorage.removeItem('borahae_deleted'); localStorage.removeItem('borahae_missions');
+  }
+  list=list.filter(a=>a.email!==accToDelete); localStorage.setItem('borahae_accounts', JSON.stringify(list));
+  let cur=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); if(cur.email===accToDelete){ localStorage.removeItem('borahaeUser'); }
+  closeAccDel();
+  document.getElementById('accSuccess').classList.remove('hidden'); document.getElementById('accSuccess').classList.add('flex');
+  renderManageAccounts(); renderCounts();
+};
+function closeAccSuccess(){ document.getElementById('accSuccess').classList.add('hidden'); document.getElementById('accSuccess').classList.remove('flex'); if(JSON.parse(localStorage.getItem('borahae_accounts')||'[]').length===0){ window.location.href='index.html'; } }
 </script></body></html>
