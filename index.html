@@ -11,28 +11,42 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
 <style>
   html{scroll-behavior:smooth;}
   body{font-family:'Manrope',sans-serif; background:#fdf8ff; color:#1e1033; margin:0; -webkit-font-smoothing:antialiased;}
 .font-display{font-family:'Playfair Display',serif;}
 .font-mono{font-family:'DM Mono',monospace;}
 .hero-bg{background: radial-gradient(120% 80% at 90% 0%, #f5d0fe 0%, #fce7ff 20%, #fdf8ff 60%);}
-.paper-grid{background-image: linear-gradient(#e9d5ff1f 1px, transparent 1px), linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px);background-size:22px 22px;}
 @keyframes pop{0%{transform:scale(0.94);opacity:0}100%{transform:scale(1);opacity:1}}
 .animate-pop{animation:pop.22s cubic-bezier(.16,1,.3,1)}
 .modal-bg{backdrop-filter:blur(8px);background:rgba(30,16,51,0.45)}
+#splashScreen{position:fixed; inset:0; z-index:9999; background:rgba(253,248,255,0.88); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); display:flex; align-items:center; justify-content:center; padding:24px; transition:opacity 0.6s ease;}
 </style>
 </head>
 <body class="hero-bg">
-<nav class="flex items-center justify-between px-4 md:px-6 py-4 md:py-5 max-w-[1100px] mx-auto">
+
+<!-- SPLASH QUOTE - WHITE SCREEN KI JAGAH -->
+<div id="splashScreen">
+  <div class="text-center max-w-[320px]">
+    <p class="font-mono text-[9px] tracking-[3px] text-[#a78bfa] mb-5">BORAHAE.FM • FOR YOU</p>
+    <h2 id="splashQuote" class="font-display text-[22px] leading-[1.3] font-bold text-[#1a1033]" style="font-style:italic;">
+      “Love yourself, love myself, peace.”
+    </h2>
+    <p id="splashAuthor" class="font-mono text-[11px] text-[#6b7280] mt-5 font-bold">— Suga</p>
+    <div class="mt-8 w-8 h-[1px] bg-[#e9d5ff] mx-auto"></div>
+    <p class="font-mono text-[8px] tracking-[2px] text-[#a78bfa] mt-3 animate-pulse">LOADING YOUR LIGHT...</p>
+  </div>
+</div>
+
+<nav class="flex items-center justify-between px-4 md:px-6 py-4 max-w-[1100px] mx-auto">
   <div class="flex items-center gap-2.5">
     <div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px] font-bold">b</div>
     <span class="font-bold text-[14px]">borahae<span class="text-[#7c3aed]">.fm</span></span>
   </div>
   <div id="beforeLogin" class="flex items-center gap-2">
     <button onclick="openAuth('login')" class="font-mono text-[11px] font-bold text-[#6b7280] px-2">Sign in</button>
-    <button onclick="openAuth('signup')" class="bg-[#7c3aed] text-white px-3.5 py-2 rounded-full text-[11px] font-bold">Join the<br class="md:hidden"> light</button>
+    <button onclick="openAuth('signup')" class="bg-[#7c3aed] text-white px-3.5 py-2 rounded-full text-[11px] font-bold">Join the light</button>
   </div>
   <div id="afterLogin" class="hidden items-center gap-2">
     <span id="userEmailShow" class="font-mono text-[10px] font-bold truncate max-w-[110px]"></span>
@@ -48,33 +62,23 @@
     <div class="mt-7 flex flex-col gap-3 w-fit">
       <button onclick="handleScrapbook()" class="bg-[#7c3aed] text-white px-6 py-[13px] rounded-full font-semibold text-[13px] flex items-center gap-2 shadow-[0_10px_30px_rgba(124,58,237,0.3)]">Open your scrapbook <span>→</span></button>
       <button onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})" class="bg-white border border-[#e5e7eb] px-6 py-[13px] rounded-full font-semibold text-[13px] text-[#111]">See how it works</button>
-      <!-- 12,480 ARMY STRIP - EXACT LIKE PIC 1 -->
       <div class="flex items-center gap-3 mt-3">
-        <div class="flex items-center">
-          <div class="w-7 h-7 rounded-full bg-[#f3e8ff] border-2 border-white flex items-center justify-center text-[10px] font-bold text-[#7c3aed]">A</div>
-          <div class="w-7 h-7 rounded-full bg-[#ede9fe] border-2 border-white flex items-center justify-center text-[10px] font-bold text-[#7c3aed] -ml-1.5">J</div>
-          <div class="w-7 h-7 rounded-full bg-[#e9d5ff] border-2 border-white flex items-center justify-center text-[10px] font-bold text-[#7c3aed] -ml-1.5">M</div>
-          <div class="w-7 h-7 rounded-full bg-[#f5f3ff] border-2 border-white flex items-center justify-center text-[10px] font-bold text-[#7c3aed] -ml-1.5">S</div>
-        </div>
-        <p class="text-[11px] leading-[1.2] text-[#6b7280]"><span class="font-bold text-[#1e1033]" id="liveArmyCount">12,480 ARMY</span> keeping watch<br>together</p>
+        <div id="realArmyPfps" class="flex items-center -space-x-1.5"><div class="w-7 h-7 rounded-full bg-[#f3e8ff] border-2 border-white flex items-center justify-center text-[10px] font-bold text-[#7c3aed]">A</div></div>
+        <p class="text-[11px] leading-[1.2] text-[#6b7280]"><span class="font-bold text-[#1e1033]" id="liveArmyCount">0 ARMY</span> keeping watch<br>together</p>
       </div>
     </div>
   </div>
-  <!-- CARD - EXACT LIKE PIC 1 -->
   <div class="relative mt-10 md:mt-0 md:w-[52%] flex justify-center md:justify-end">
     <div class="relative w-[300px] md:w-[380px] rotate-[-1deg]">
-      <div class="bg-white p-[9px] rounded-[26px] shadow-[0_20px_60px_rgba(100,30,150,0.15)]">
-        <div class="paper-grid bg-[#28164f] rounded-[20px] p-5 h-[380px] flex flex-col justify-between relative overflow-hidden">
-          <div class="absolute top-[40px] right-[30px] w-[120px] h-[120px] bg-[#a78bfa]/40 rounded-full blur-[20px]"></div>
-          <div class="absolute top-[50px] right-[40px] w-[80px] h-[80px] border border-white/20 rounded-full"></div>
-          <div class="absolute top-[60px] right-[50px] w-[60px] h-[60px] border border-white/10 rounded-full"></div>
-          <div class="relative z-10 flex justify-between"><span class="font-mono text-[9px] tracking-[2.5px] text-white/60">MISSION 001 / BANGTANTV</span></div>
-          <div class="relative z-10 mt-8"><h2 class="font-display text-[42px] leading-[0.9] text-white font-bold">The<br>purple<br>hour.</h2></div>
-          <div class="relative z-10">
-            <div class="flex items-center gap-2.5 mt-2"><div class="w-[36px] h-[36px] bg-[#f472b6] rounded-full flex items-center justify-center"><span class="text-black text-[12px]">▶</span></div><span class="text-white text-[12px] font-semibold">Watch together</span></div>
-            <p class="text-[11px] text-white/50 mt-3 leading-[1.3] max-w-[220px]">A little place to leave your mark on the</p>
-          </div>
-          <div class="absolute bottom-0 left-0 right-0 bg-[#1a1033] px-5 py-3 flex justify-between items-center rounded-b-[20px]"><span class="font-mono text-[8px] tracking-[2px] text-white/40">YOUR STREAM JOURNAL</span><span class="text-[11px] text-[#f472b6] font-bold">♥ borahae</span></div>
+      <div class="bg-white p-[8px] rounded-[28px] shadow-[0_20px_60px_rgba(100,30,150,0.18)]">
+        <div class="rounded-[20px] h-[390px] flex flex-col justify-between relative overflow-hidden p-5" style="background: radial-gradient(120% 90% at 80% 10%, #8b5cf6 0%, #6d28d9 20%, #4c1d95 45%, #28164f 100%);">
+          <div class="absolute top-[30px] right-[20px] w-[160px] h-[160px] rounded-full" style="background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, rgba(167,139,250,0.4) 30%, transparent 70%); filter: blur(2px);"></div>
+          <div class="absolute top-[45px] right-[35px] w-[90px] h-[90px] border border-white/25 rounded-full"></div>
+          <div class="absolute top-[60px] right-[50px] w-[60px] h-[60px] border border-white/15 rounded-full"></div>
+          <div class="relative z-10 flex justify-between"><span class="font-mono text-[9px] tracking-[2.5px] text-white/70">MISSION 001 / BANGTANTV</span></div>
+          <div class="relative z-10 mt-10"><h2 class="font-display text-[44px] leading-[0.88] text-white font-bold tracking-tight">The<br>purple<br>hour.</h2></div>
+          <div class="relative z-10"><div class="flex items-center gap-2.5"><div class="w-[36px] h-[36px] bg-[#f472b6] rounded-full flex items-center justify-center shadow-md"><span class="text-black text-[12px] ml-[1px]">▶</span></div><span class="text-white text-[12px] font-semibold">Watch together</span></div><p class="text-[11px] text-white/60 mt-3 leading-[1.3] max-w-[200px]">A little place to leave your mark on the streams that mean something.</p></div>
+          <div class="absolute bottom-0 left-0 right-0 bg-[#1a1033]/90 backdrop-blur px-5 py-3 flex justify-between items-center rounded-b-[20px]"><span class="font-mono text-[8px] tracking-[2px] text-white/40">YOUR STREAM JOURNAL</span><span class="text-[11px] text-[#f472b6] font-bold">♥ borahae</span></div>
         </div>
       </div>
       <div class="absolute -bottom-3 -left-3 bg-[#f472b6] text-black font-bold text-[11px] px-4 py-2 rounded-full rotate-[-6deg] shadow-md flex items-center gap-1.5"><span>★</span> love notes, not numbers</div>
@@ -90,64 +94,178 @@
   </div>
 </section>
 
-<!-- SECOND PIC SECTION - EXACT LIKE PIC 2 -->
 <section class="bg-[#fdf8ff] py-12 px-5">
   <div class="max-w-[1100px] mx-auto">
     <p class="font-mono text-[10px] tracking-[3px] text-[#7c3aed]">A SOFT PLACE FOR LOUD LOVE</p>
     <h2 class="font-display text-[36px] md:text-[52px] leading-[0.9] font-bold mt-3 tracking-tight">The comeback<br>energy, kept<br>close.</h2>
     <div class="grid md:grid-cols-2 gap-4 mt-8 max-w-[720px]">
-      <div class="bg-[#f5f0ff] rounded-[22px] p-6 border border-[#f3e8ff]">
-        <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-[#7c3aed]">◎</div>
-        <h3 class="font-bold text-[15px] mt-10">Your daily rhythm</h3>
-        <p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">A gentle daily goal makes showing up feel like a ritual, not a chore.</p>
-      </div>
-      <div class="bg-white rounded-[22px] p-6 border border-[#f3e8ff] shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-        <div class="w-8 h-8 flex items-center justify-center text-[#1e1033]"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
-        <h3 class="font-bold text-[15px] mt-10">Our purple light</h3>
-        <p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">Celebrate milestones with ARMY around the world, one stream at a time.</p>
-      </div>
+      <div class="bg-[#f5f0ff] rounded-[22px] p-6 border border-[#f3e8ff]"><div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-[#7c3aed]">◎</div><h3 class="font-bold text-[15px] mt-10">Your daily rhythm</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">A gentle daily goal makes showing up feel like a ritual, not a chore.</p></div>
+      <div class="bg-white rounded-[22px] p-6 border border-[#f3e8ff] shadow-[0_4px_20px_rgba(0,0,0,0.03)]"><div class="w-8 h-8 flex items-center justify-center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><h3 class="font-bold text-[15px] mt-10">Our purple light</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">Celebrate milestones with ARMY around the world, one stream at a time.</p></div>
     </div>
   </div>
 </section>
 
-<!-- AUTH - SMALLER -->
 <div id="authModal" class="fixed inset-0 modal-bg hidden items-center justify-center p-4 z-[100]">
   <div class="animate-pop bg-white w-full max-w-[340px] rounded-[22px] overflow-hidden shadow-xl">
     <div class="flex"><button id="tabLogin" onclick="switchTab('login')" class="flex-1 py-3 font-bold text-[11px] bg-[#7c3aed] text-white">Log In</button><button id="tabSignup" onclick="switchTab('signup')" class="flex-1 py-3 font-bold text-[11px] bg-[#f3f0ff] text-[#6b7280]">Sign Up</button></div>
     <div class="p-5">
-      <form id="loginForm" autocomplete="on" onsubmit="doEmailLogin(event)"><h2 class="font-bold text-[16px] text-center">Welcome Back</h2><p class="text-[10px] text-[#6b7280] text-center mt-1">Sign in to continue</p><label class="text-[10px] font-semibold mt-4 block">Email</label><input id="loginEmail" autocomplete="email" type="email" required placeholder="your@email.com" class="w-full border rounded-[12px] py-2.5 px-4 text-[11px] mt-1 outline-none focus:border-[#7c3aed]"><label class="text-[10px] font-semibold mt-3 flex justify-between"><span>Password</span><span onclick="forgotPass()" class="text-[#7c3aed] text-[9px] font-bold cursor-pointer">Forgot?</span></label><input id="loginPass" autocomplete="current-password" type="password" required placeholder="••••••••" class="w-full border rounded-[12px] py-2.5 px-4 text-[11px] mt-1 outline-none focus:border-[#7c3aed]"><button type="submit" id="loginBtn" class="w-full mt-4 bg-[#7c3aed] text-white rounded-[12px] py-2.5 font-bold text-[11px]">Log In</button><div class="flex items-center gap-3 my-4"><div class="flex-1 h-[1px] bg-[#e5e7eb]"></div><span class="text-[8px] text-[#9ca3af] font-bold tracking-widest">OR</span><div class="flex-1 h-[1px] bg-[#e5e7eb]"></div></div><button type="button" onclick="signInWithGoogle()" class="w-full bg-[#1e1033] text-white rounded-full py-3 flex items-center justify-center gap-2 text-[11px] font-bold"><img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-4 h-4 bg-white rounded-full p-0.5"> Continue with Google</button></form>
-      <form id="signupForm" class="hidden" autocomplete="on" onsubmit="doEmailSignup(event)"><h2 class="font-bold text-[16px] text-center">Create Account</h2><label class="text-[10px] font-semibold mt-4 block">Email</label><input id="signupEmail" autocomplete="email" type="email" required class="w-full border rounded-[12px] py-2.5 px-4 text-[11px] mt-1"><label class="text-[10px] font-semibold mt-3 block">Password</label><input id="signupPass" autocomplete="new-password" type="password" required class="w-full border rounded-[12px] py-2.5 px-4 text-[11px] mt-1"><label class="text-[10px] font-semibold mt-3 block">Confirm Password</label><input id="signupConfirm" type="password" required class="w-full border rounded-[12px] py-2.5 px-4 text-[11px] mt-1"><button type="submit" id="signupBtn" class="w-full mt-4 bg-[#7c3aed] text-white rounded-[12px] py-2.5 font-bold text-[11px]">Sign Up</button><div class="flex items-center gap-3 my-3"><div class="flex-1 h-[1px] bg-[#e5e7eb]"></div><span class="text-[8px] text-[#9ca3af] font-bold">OR</span><div class="flex-1 h-[1px] bg-[#e5e7eb]"></div></div><button type="button" onclick="signInWithGoogle()" class="w-full bg-[#1e1033] text-white rounded-full py-3 flex items-center justify-center gap-2 text-[11px] font-bold"><img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-4 h-4 bg-white rounded-full p-0.5"> Continue with Google</button></form>
+      <form id="loginForm" autocomplete="on" onsubmit="doEmailLogin(event)"><h2 class="font-bold text-[16px] text-center">Welcome Back</h2><p class="text-[10px] text-[#6b7280] text-center mt-1">Sign in to continue</p><label class="text-[10px] font-semibold mt-4 block">Email</label><input id="loginEmail" autocomplete="username" type="email" required placeholder="your@email.com" class="w-full border rounded-[12px] py-2.5 px-4 text-[11px] mt-1 outline-none focus:border-[#7c3aed]"><label class="text-[10px] font-semibold mt-3 flex justify-between"><span>Password</span><span onclick="forgotPass()" class="text-[#7c3aed] text-[9px] font-bold cursor-pointer">Forgot?</span></label><input id="loginPass" autocomplete="current-password" type="password" required placeholder="••••••••" class="w-full border rounded-[12px] py-2.5 px-4 text-[11px] mt-1 outline-none focus:border-[#7c3aed]"><button type="submit" id="loginBtn" class="w-full mt-4 bg-[#7c3aed] text-white rounded-[12px] py-2.5 font-bold text-[11px]">Log In</button><div class="flex items-center gap-3 my-4"><div class="flex-1 h-[1px] bg-[#e5e7eb]"></div><span class="text-[8px] text-[#9ca3af] font-bold tracking-widest">OR</span><div class="flex-1 h-[1px] bg-[#e5e7eb]"></div></div><button type="button" onclick="signInWithGoogle()" class="w-full bg-[#1e1033] text-white rounded-full py-3 flex items-center justify-center gap-2 text-[11px] font-bold"><img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-4 h-4 bg-white rounded-full p-0.5"> Continue with Google</button></form>
+      <form id="signupForm" class="hidden" autocomplete="on" onsubmit="doEmailSignup(event)"><h2 class="font-bold text-[16px] text-center">Create Account</h2><label class="text-[10px] font-semibold mt-4 block">Email</label><input id="signupEmail" autocomplete="username" type="email" required class="w-full border rounded-[12px] py-2.5 px-4 text-[11px] mt-1"><label class="text-[10px] font-semibold mt-3 block">Password</label><input id="signupPass" autocomplete="new-password" type="password" required class="w-full border rounded-[12px] py-2.5 px-4 text-[11px] mt-1"><label class="text-[10px] font-semibold mt-3 block">Confirm Password</label><input id="signupConfirm" autocomplete="new-password" type="password" required class="w-full border rounded-[12px] py-2.5 px-4 text-[11px] mt-1"><button type="submit" id="signupBtn" class="w-full mt-4 bg-[#7c3aed] text-white rounded-[12px] py-2.5 font-bold text-[11px]">Sign Up</button><div class="flex items-center gap-3 my-3"><div class="flex-1 h-[1px] bg-[#e5e7eb]"></div><span class="text-[8px] text-[#9ca3af] font-bold">OR</span><div class="flex-1 h-[1px] bg-[#e5e7eb]"></div></div><button type="button" onclick="signInWithGoogle()" class="w-full bg-[#1e1033] text-white rounded-full py-3 flex items-center justify-center gap-2 text-[11px] font-bold"><img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-4 h-4 bg-white rounded-full p-0.5"> Continue with Google</button></form>
       <button onclick="closeAuth()" class="w-full mt-3 text-[10px] font-bold text-[#6b7280]">maybe later →</button>
     </div>
   </div>
 </div>
 
-<!-- PROFILE POPUP - SMALL + SWITCH -->
-<div id="profileModal" class="fixed inset-0 modal-bg hidden items-center justify-center p-4 z-[101]"><div class="animate-pop bg-white w-full max-w-[280px] rounded-[20px] p-2"><div class="bg-[#fdf8ff] border rounded-[16px] p-4 text-center"><img id="profilePhotoBig" src="" class="w-12 h-12 rounded-full mx-auto hidden object-cover"><div id="profileInitialBig" class="w-12 h-12 bg-[#f3f0ff] rounded-full mx-auto flex items-center justify-center text-[18px]">💜</div><h3 class="font-bold mt-2 text-[11px] truncate" id="profileEmail"></h3><button onclick="location.href='home.html'" class="w-full mt-3 bg-[#7c3aed] text-white rounded-full py-2.5 text-[10px] font-bold">Go to Scrapbook</button><div class="flex gap-2 mt-2"><button onclick="openSwitchFromProfile()" class="flex-1 bg-white border rounded-full py-2.5 text-[10px] font-bold">⇄ Switch</button><button onclick="logOut()" class="flex-1 bg-white border rounded-full py-2.5 text-[10px] font-bold">Log out</button></div><button onclick="closeProfile()" class="w-full mt-2 text-[9px] text-[#6b7280]">close →</button></div></div></div>
-<div id="switchModal" class="fixed inset-0 modal-bg hidden items-center justify-center p-4 z-[102]"><div class="animate-pop bg-[#1a1033] w-full max-w-[320px] rounded-[20px] p-4"><div class="flex justify-between items-center"><h3 class="text-white font-bold text-[11px]">Switch account</h3><button onclick="closeSwitchModal()" class="text-white/60">✕</button></div><div id="switchList" class="mt-3 space-y-2 max-h-[280px] overflow-y-auto"></div><div class="flex gap-2 mt-3"><button onclick="closeSwitchModal()" class="flex-1 bg-white/10 text-white py-2.5 rounded-full text-[10px] font-bold">Cancel</button><button onclick="openAuth('login')" class="flex-1 bg-white text-black py-2.5 rounded-full text-[10px] font-bold">+ Add</button></div></div></div>
+<div id="profileModal" class="fixed inset-0 modal-bg hidden items-center justify-center p-4 z-[101]"><div class="animate-pop bg-white w-full max-w-[280px] rounded-[20px] p-2"><div class="bg-[#fdf8ff] border rounded-[16px] p-4 text-center"><img id="profilePhotoBig" src="" class="w-12 h-12 rounded-full mx-auto hidden object-cover"><div id="profileInitialBig" class="w-12 h-12 bg-[#f3f0ff] rounded-full mx-auto flex items-center justify-center text-[18px]">💜</div><h3 class="font-bold mt-2 text-[11px] truncate" id="profileEmail"></h3><button onclick="location.href='home.html'" class="w-full mt-3 bg-[#7c3aed] text-white rounded-full py-2.5 text-[10px] font-bold">Go to Scrapbook</button><div class="flex gap-2 mt-2"><button onclick="openSwitchFromProfile()" class="flex-1 bg-white border border-[#ede9fe] rounded-full py-2.5 text-[10px] font-bold">⇄ Switch</button><button onclick="logOut()" class="flex-1 bg-white border border-[#ede9fe] rounded-full py-2.5 text-[10px] font-bold">Log out</button></div><button onclick="closeProfile()" class="w-full mt-2 text-[9px] text-[#6b7280]">close →</button></div></div></div>
+
+<div id="switchModal" class="fixed inset-0 modal-bg hidden items-center justify-center p-4 z-[102]"><div class="animate-pop bg-[#1a1033] w-full max-w-[320px] rounded-[20px] p-4"><div class="flex justify-between items-center"><h3 class="text-white font-bold text-[11px]">Switch account</h3><button onclick="closeSwitchModal()" class="text-white/60">✕</button></div><div id="switchList" class="mt-3 space-y-2 max-h-[280px] overflow-y-auto"></div><div class="flex gap-2 mt-3"><button onclick="closeSwitchModal()" class="flex-1 bg-white/10 text-white py-2.5 rounded-full text-[10px] font-bold">Cancel</button><button onclick="handleAddAccount()" class="flex-1 bg-white text-black py-2.5 rounded-full text-[10px] font-bold">+ Add</button></div></div></div>
 
 <script>
+const boraQuotes = [
+  {q:"Love yourself, love myself, peace.", by:"Suga"},
+  {q:"You were born to be real, not perfect.", by:"Suga"},
+  {q:"No matter who you are, where you're from, your skin colour, your gender identity, just speak yourself.", by:"RM"},
+  {q:"Even if you're not perfect, you're limited edition.", by:"RM"},
+  {q:"Teamwork makes the dream work.", by:"RM"},
+  {q:"If you want to love others, I think you should love yourself first.", by:"RM"},
+  {q:"Life is more beautiful when you look at it with love.", by:"Jin"},
+  {q:"Your presence can give happiness. I hope you remember that.", by:"Jin"},
+  {q:"We shine brightest when we shine together.", by:"Jin"},
+  {q:"If you can't fly, then run. If you can't run, then walk. If you can't walk, then crawl, but whatever you do, keep moving.", by:"Jungkook"},
+  {q:"Living without passion is like being dead.", by:"Jungkook"},
+  {q:"Effort makes you. You will regret someday if you don't do your best now.", by:"Jungkook"},
+  {q:"Don't be trapped in someone else's dream.", by:"V"},
+  {q:"You are the only one who can make yourself happy.", by:"V"},
+  {q:"When things get hard, stop for a while and look back and see how far you've come.", by:"V"},
+  {q:"Go on your path, even if you live for a day.", by:"Jimin"},
+  {q:"There is beauty in everything, just not everybody sees it.", by:"Jimin"},
+  {q:"I am who I am. That's all there is.", by:"Jimin"},
+  {q:"The moment you think of giving up, think of the reason why you held on so long.", by:"J-Hope"},
+  {q:"Even when you're in darkness, you shine the brightest.", by:"J-Hope"},
+  {q:"Music transcends language.", by:"J-Hope"},
+  {q:"I purple you. I will trust and love you for a long time.", by:"V"},
+  {q:"Borahae means I will love you until the end.", by:"V"},
+  {q:"Let's never lose our light, ARMY.", by:"ARMY"},
+  {q:"Every stream is a love letter we write together.", by:"ARMY"},
+  {q:"Keep the light, even when the night feels long.", by:"ARMY"},
+  {q:"We are bulletproof, when we are together.", by:"BTS"},
+  {q:"The flower that blooms in adversity is the most rare and beautiful.", by:"Jin"},
+  {q:"Don't ever be afraid to dream, ARMY.", by:"Jungkook"},
+  {q:"Your hard work today is your story tomorrow.", by:"Suga"}
+];
+function getUniqueQuote(){
+  let used = JSON.parse(localStorage.getItem('bora_used_quotes')||'[]');
+  let available = boraQuotes.map((_,i)=>i).filter(i=>!used.includes(i));
+  if(available.length===0){ used=[]; available=boraQuotes.map((_,i)=>i); }
+  let pick = available[Math.floor(Math.random()*available.length)];
+  used.push(pick);
+  localStorage.setItem('bora_used_quotes', JSON.stringify(used));
+  return boraQuotes[pick];
+}
+(function(){
+  let data = getUniqueQuote();
+  document.getElementById('splashQuote').innerText = '“'+data.q+'”';
+  document.getElementById('splashAuthor').innerText = '— '+data.by;
+  setTimeout(()=>{
+    let splash = document.getElementById('splashScreen');
+    splash.style.opacity='0';
+    setTimeout(()=>{ splash.style.display='none'; },600);
+  }, 2600);
+})();
+
 const firebaseConfig = { apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw", authDomain: "borahae-fm-f7075.firebaseapp.com", databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com", projectId: "borahae-fm-f7075", storageBucket: "borahae-fm-f7075.firebasestorage.app", messagingSenderId: "319118277965", appId: "1:319118277965:web:eece2a5bf15708aab3cb04" };
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth(); const db = firebase.database();
+
 function openAuth(t){ authModal.classList.remove('hidden'); authModal.classList.add('flex'); switchTab(t||'login'); }
 function closeAuth(){ authModal.classList.add('hidden'); authModal.classList.remove('flex'); }
 function openProfile(){ profileModal.classList.remove('hidden'); profileModal.classList.add('flex'); }
 function closeProfile(){ profileModal.classList.add('hidden'); profileModal.classList.remove('flex'); }
-function openSwitchFromProfile(){ closeProfile(); setTimeout(()=>{ switchModal.classList.remove('hidden'); switchModal.classList.add('flex'); renderSwitchList(); },150); }
+function openSwitchFromProfile(){ closeProfile(); setTimeout(()=>{ switchModal.classList.remove('hidden'); switchModal.classList.add('flex'); renderSwitchList(); },120); }
 function closeSwitchModal(){ switchModal.classList.add('hidden'); switchModal.classList.remove('flex'); }
+function handleAddAccount(){ closeSwitchModal(); setTimeout(()=>openAuth('login'),150); }
 function switchTab(t){ if(t==='login'){ loginForm.classList.remove('hidden'); signupForm.classList.add('hidden'); tabLogin.className='flex-1 py-3 font-bold text-[11px] bg-[#7c3aed] text-white'; tabSignup.className='flex-1 py-3 font-bold text-[11px] bg-[#f3f0ff] text-[#6b7280]'; } else { signupForm.classList.remove('hidden'); loginForm.classList.add('hidden'); tabSignup.className='flex-1 py-3 font-bold text-[11px] bg-[#7c3aed] text-white'; tabLogin.className='flex-1 py-3 font-bold text-[11px] bg-[#f3f0ff] text-[#6b7280]'; } }
-function saveToMulti(u){ let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); let obj={uid:u.uid||u.email,email:u.email,name:u.displayName||u.email.split('@')[0],photo:u.photoURL||''}; let i=list.findIndex(a=>a.email.toLowerCase()===obj.email.toLowerCase()); if(i>-1) list[i]={...list[i],...obj}; else list.push(obj); localStorage.setItem('borahae_accounts',JSON.stringify(list)); localStorage.setItem('borahaeUser',JSON.stringify(obj)); updateLive(); }
-function renderSwitchList(){ let cur=(JSON.parse(localStorage.getItem('borahaeUser')||'{}').email||'').toLowerCase(); let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); switchList.innerHTML=list.map(a=>`<div onclick="switchAccount('${a.email}')" class="flex items-center gap-3 p-2.5 rounded-[14px] ${a.email.toLowerCase()===cur?'bg-white/10':''} hover:bg-white/10 cursor-pointer"><img src="${a.photo||''}" onerror="this.src='https://via.placeholder.com/32'" class="w-8 h-8 rounded-full"><div class="flex-1 overflow-hidden"><p class="text-white text-[11px] font-bold truncate">${a.name}</p><p class="text-white/50 text-[9px] truncate">${a.email}</p></div>${a.email.toLowerCase()===cur?'<span class="text-[#a78bfa]">✓</span>':''}</div>`).join('')||'<p class="text-white/50 text-[11px] text-center">No accounts</p>'; }
-function switchAccount(email){ let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); let acc=list.find(a=>a.email===email); localStorage.setItem('borahaeUser',JSON.stringify(acc)); localStorage.setItem('army_name',acc.name); if(acc.photo) localStorage.setItem('army_pfp',acc.photo); closeSwitchModal(); location.reload(); }
-function updateHeader(user){ if(user){ beforeLogin.classList.add('hidden'); beforeLogin.classList.remove('flex'); afterLogin.classList.remove('hidden'); afterLogin.classList.add('flex'); userEmailShow.innerText=user.email; profileEmail.innerText=user.email; if(user.photo&&user.photo!==''){ userPhotoShow.src=user.photo; profilePhotoBig.src=user.photo; userPhotoShow.classList.remove('hidden'); profilePhotoBig.classList.remove('hidden'); userInitial.classList.add('hidden'); profileInitialBig.classList.add('hidden'); } else { userPhotoShow.classList.add('hidden'); profilePhotoBig.classList.add('hidden'); userInitial.classList.remove('hidden'); profileInitialBig.classList.remove('hidden'); profileInitialBig.classList.add('flex'); userInitial.innerText=user.email.charAt(0).toUpperCase(); profileInitialBig.innerText=user.email.charAt(0).toUpperCase(); } saveToMulti({uid:user.uid,email:user.email,displayName:user.displayName,photoURL:user.photoURL}); } else { beforeLogin.classList.remove('hidden'); beforeLogin.classList.add('flex'); afterLogin.classList.add('hidden'); afterLogin.classList.remove('flex'); } }
-function updateLive(){ db.ref('users').once('value',s=>{ let c=s.numChildren(); document.getElementById('liveArmyCount').innerText= (12480 + c).toLocaleString() + ' ARMY'; }); }
-updateLive();
-async function doEmailLogin(e){ e.preventDefault(); let email=loginEmail.value.trim(), pass=loginPass.value; if(!email||!pass) return; loginBtn.innerText='Logging in...'; loginBtn.disabled=true; try{ let cred=await auth.signInWithEmailAndPassword(email,pass); closeAuth(); }catch(err){ alert(err.message); } finally{ loginBtn.innerText='Log In'; loginBtn.disabled=false; } }
-async function doEmailSignup(e){ e.preventDefault(); let email=signupEmail.value.trim(), pass=signupPass.value, conf=signupConfirm.value; if(pass!==conf) return alert('Passwords not match'); signupBtn.innerText='Creating...'; signupBtn.disabled=true; try{ let cred=await auth.createUserWithEmailAndPassword(email,pass); await db.ref('users/'+cred.user.uid).set({email, name:email.split('@')[0], joinDate:new Date().toLocaleDateString()}); closeAuth(); }catch(err){ alert(err.message); } finally{ signupBtn.innerText='Sign Up'; signupBtn.disabled=false; } }
-async function signInWithGoogle(){ let provider=new firebase.auth.GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'}); try{ let result=await auth.signInWithPopup(provider); await db.ref('users/'+result.user.uid).update({email:result.user.email, name:result.user.displayName, photo:result.user.photoURL, lastLogin:Date.now()}); closeAuth(); }catch(err){ alert(err.message); } }
+
+function saveToMulti(u){
+  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
+  let obj={uid:u.uid||u.email,email:u.email,name:u.displayName||u.email.split('@')[0],photo:u.photoURL||u.photo||''};
+  let i=list.findIndex(a=>a.email.toLowerCase()===obj.email.toLowerCase());
+  if(i>-1) list[i]={...list[i],...obj}; else list.push(obj);
+  localStorage.setItem('borahae_accounts',JSON.stringify(list));
+  localStorage.setItem('borahaeUser',JSON.stringify(obj));
+  localStorage.setItem('borahae_last_active', obj.email);
+}
+function renderSwitchList(){
+  let cur=(JSON.parse(localStorage.getItem('borahaeUser')||'{}').email||'').toLowerCase();
+  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
+  switchList.innerHTML=list.map(a=>`<div onclick="switchAccount('${a.email}')" class="flex items-center gap-3 p-2.5 rounded-[14px] ${a.email.toLowerCase()===cur?'bg-white/15':''} hover:bg-white/10 cursor-pointer"><img src="${a.photo||''}" onerror="this.src='https://via.placeholder.com/32'" class="w-8 h-8 rounded-full object-cover bg-white/20"><div class="flex-1 overflow-hidden"><p class="text-white text-[11px] font-bold truncate">${a.name}</p><p class="text-white/50 text-[9px] truncate">${a.email}</p></div>${a.email.toLowerCase()===cur?'<span class="text-[#a78bfa] text-[12px]">✓</span>':''}</div>`).join('')||'<p class="text-white/50 text-[11px] text-center py-4">No accounts yet</p>';
+}
+function switchAccount(email){
+  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
+  let acc=list.find(a=>a.email.toLowerCase()===email.toLowerCase());
+  if(!acc) return;
+  localStorage.setItem('borahaeUser',JSON.stringify(acc));
+  localStorage.setItem('borahae_last_active', acc.email);
+  localStorage.setItem('army_name',acc.name);
+  if(acc.photo) localStorage.setItem('army_pfp',acc.photo);
+  updateHeaderFromLocal(acc);
+  closeSwitchModal();
+}
+function updateHeaderFromLocal(acc){
+  beforeLogin.classList.add('hidden'); beforeLogin.classList.remove('flex');
+  afterLogin.classList.remove('hidden'); afterLogin.classList.add('flex');
+  userEmailShow.innerText=acc.email;
+  profileEmail.innerText=acc.email;
+  if(acc.photo){ userPhotoShow.src=acc.photo; profilePhotoBig.src=acc.photo; userPhotoShow.classList.remove('hidden'); profilePhotoBig.classList.remove('hidden'); userInitial.classList.add('hidden'); profileInitialBig.classList.add('hidden'); }
+  else { userPhotoShow.classList.add('hidden'); profilePhotoBig.classList.add('hidden'); userInitial.classList.remove('hidden'); profileInitialBig.classList.remove('hidden'); profileInitialBig.classList.add('flex'); userInitial.innerText=acc.email.charAt(0).toUpperCase(); profileInitialBig.innerText=acc.email.charAt(0).toUpperCase(); }
+}
+function updateHeader(user){
+  if(user){
+    saveToMulti(user);
+    updateHeaderFromLocal({email:user.email,name:user.displayName||user.email.split('@')[0],photo:user.photoURL||user.photo||''});
+  } else {
+    let local=JSON.parse(localStorage.getItem('borahaeUser')||'null');
+    if(local){ updateHeaderFromLocal(local); }
+    else { beforeLogin.classList.remove('hidden'); beforeLogin.classList.add('flex'); afterLogin.classList.add('hidden'); afterLogin.classList.remove('flex'); }
+  }
+}
+function updateRealArmyStrip(){
+  db.ref('users').limitToLast(10).once('value',snap=>{
+    let users=[]; snap.forEach(c=>{ users.push(c.val()); });
+    users=users.reverse();
+    let count=snap.numChildren();
+    document.getElementById('liveArmyCount').innerText= count>0? count.toLocaleString()+' ARMY' : '0 ARMY';
+    let container=document.getElementById('realArmyPfps');
+    if(users.length===0){ container.innerHTML='<div class="w-7 h-7 rounded-full bg-[#f3e8ff] border-2 border-white flex items-center justify-center text-[10px] font-bold text-[#7c3aed]">A</div>'; return; }
+    container.innerHTML=users.slice(0,4).map((u,i)=>`<img src="${u.photo||'https://via.placeholder.com/40'}" onerror="this.src='https://via.placeholder.com/40'" class="w-7 h-7 rounded-full border-2 border-white object-cover ${i>0?'-ml-1.5':''}">`).join('');
+  });
+}
+updateRealArmyStrip();
+db.ref('users').on('value',()=>updateRealArmyStrip());
+async function doEmailLogin(e){
+  e.preventDefault();
+  let email=loginEmail.value.trim(), pass=loginPass.value;
+  loginBtn.innerText='Logging...'; loginBtn.disabled=true;
+  try{ let cred=await auth.signInWithEmailAndPassword(email,pass); closeAuth(); }catch(err){ alert(err.message); } finally{ loginBtn.innerText='Log In'; loginBtn.disabled=false; }
+}
+async function doEmailSignup(e){
+  e.preventDefault();
+  let email=signupEmail.value.trim(), pass=signupPass.value, conf=signupConfirm.value;
+  if(pass!==conf) return alert('Passwords not match');
+  signupBtn.innerText='Creating...'; signupBtn.disabled=true;
+  try{ let cred=await auth.createUserWithEmailAndPassword(email,pass); await db.ref('users/'+cred.user.uid).set({email, name:email.split('@')[0], joinDate:new Date().toLocaleDateString()}); closeAuth(); }catch(err){ alert(err.message); } finally{ signupBtn.innerText='Sign Up'; signupBtn.disabled=false; }
+}
+async function signInWithGoogle(){
+  let provider=new firebase.auth.GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'});
+  try{ let result=await auth.signInWithPopup(provider); await db.ref('users/'+result.user.uid).update({email:result.user.email, name:result.user.displayName, photo:result.user.photoURL, lastLogin:Date.now()}); closeAuth(); }catch(err){ alert(err.message); }
+}
 function forgotPass(){ let email=loginEmail.value.trim(); if(!email) return alert('Enter email'); auth.sendPasswordResetEmail(email).then(()=>alert('Reset sent')).catch(e=>alert(e.message)); }
-function handleScrapbook(){ if(auth.currentUser) location.href='home.html'; else openAuth('login'); }
-function logOut(){ auth.signOut().then(()=>{ localStorage.removeItem('borahaeUser'); location.reload(); }); }
-auth.onAuthStateChanged(user=>{ if(user){ updateHeader({uid:user.uid,email:user.email,displayName:user.displayName,photo:user.photoURL,photoURL:user.photoURL}); } else { let local=JSON.parse(localStorage.getItem('borahaeUser')||'null'); if(local) updateHeader({uid:local.uid,email:local.email,displayName:local.name,photo:local.photo,photoURL:local.photo}); else updateHeader(null); } });
+function handleScrapbook(){ let local=JSON.parse(localStorage.getItem('borahaeUser')||'null'); if(auth.currentUser || local) location.href='home.html'; else openAuth('login'); }
+function logOut(){ auth.signOut(); localStorage.removeItem('borahaeUser'); localStorage.removeItem('borahae_last_active'); location.reload(); }
+let lastActive=JSON.parse(localStorage.getItem('borahaeUser')||'null');
+if(lastActive){ updateHeaderFromLocal(lastActive); }
+auth.onAuthStateChanged(user=>{
+  if(user){ updateHeader({uid:user.uid,email:user.email,displayName:user.displayName,photo:user.photoURL,photoURL:user.photoURL}); }
+  else { if(!lastActive) updateHeader(null); }
+});
 </script></body></html>
