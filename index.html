@@ -26,16 +26,11 @@
 </head>
 <body class="hero-bg">
 
-<!-- SPLASH - NO BOX, SIMPLE ITALIC -->
 <div id="splashScreen">
   <div class="w-full max-w-[300px] text-center">
     <p class="font-mono text-[10px] tracking-[4px] text-[#c4b5fd] text-center">BORAHAE.FM • FOR YOU</p>
-
-    <h2 id="splashQuote" class="text-[16px] leading-[1.6] font-semibold text-[#1a1033] mt-10 tracking-tight" style="font-style: italic; font-weight: 600;">
-      Let's never lose our light, ARMY.
-    </h2>
+    <h2 id="splashQuote" class="text-[16px] leading-[1.6] font-semibold text-[#1a1033] mt-10 tracking-tight" style="font-style: italic; font-weight: 600;">Let's never lose our light, ARMY.</h2>
     <p id="splashAuthor" class="text-[12px] text-[#6b7280] mt-6 text-right pr-2" style="font-style: italic; font-weight: 500;">— ARMY</p>
-
     <div class="flex items-center justify-center gap-2 mt-12">
       <div class="w-1 h-1 bg-[#d8b4fe] rounded-full animate-pulse"></div>
       <p class="font-mono text-[9px] tracking-[3px] text-[#c4b5fd]">LOADING YOUR LIGHT</p>
@@ -180,9 +175,12 @@ function getUniqueQuote(){
   }, 4500);
 })();
 
+const OWNER_EMAILS = ["pratimatribhuvan2006@gmail.com"];
+
 const firebaseConfig = { apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw", authDomain: "borahae-fm-f7075.firebaseapp.com", databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com", projectId: "borahae-fm-f7075", storageBucket: "borahae-fm-f7075.firebasestorage.app", messagingSenderId: "319118277965", appId: "1:319118277965:web:eece2a5bf15708aab3cb04" };
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth(); const db = firebase.database();
+
 function openAuth(t){ authModal.classList.remove('hidden'); authModal.classList.add('flex'); switchTab(t||'login'); }
 function closeAuth(){ authModal.classList.add('hidden'); authModal.classList.remove('flex'); }
 function openProfile(){ profileModal.classList.remove('hidden'); profileModal.classList.add('flex'); }
@@ -191,21 +189,126 @@ function openSwitchFromProfile(){ closeProfile(); setTimeout(()=>{ switchModal.c
 function closeSwitchModal(){ switchModal.classList.add('hidden'); switchModal.classList.remove('flex'); }
 function handleAddAccount(){ closeSwitchModal(); setTimeout(()=>openAuth('login'),150); }
 function switchTab(t){ if(t==='login'){ loginForm.classList.remove('hidden'); signupForm.classList.add('hidden'); tabLogin.className='flex-1 py-3 font-bold text-[11px] bg-[#7c3aed] text-white'; tabSignup.className='flex-1 py-3 font-bold text-[11px] bg-[#f3f0ff] text-[#6b7280]'; } else { signupForm.classList.remove('hidden'); loginForm.classList.add('hidden'); tabSignup.className='flex-1 py-3 font-bold text-[11px] bg-[#7c3aed] text-white'; tabLogin.className='flex-1 py-3 font-bold text-[11px] bg-[#f3f0ff] text-[#6b7280]'; } }
-function saveToMulti(u){ let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); let obj={uid:u.uid||u.email,email:u.email,name:u.displayName||u.email.split('@')[0],photo:u.photoURL||u.photo||''}; let i=list.findIndex(a=>a.email.toLowerCase()===obj.email.toLowerCase()); if(i>-1) list[i]={...list[i],...obj}; else list.push(obj); localStorage.setItem('borahae_accounts',JSON.stringify(list)); localStorage.setItem('borahaeUser',JSON.stringify(obj)); localStorage.setItem('borahae_last_active', obj.email); }
-function renderSwitchList(){ let cur=(JSON.parse(localStorage.getItem('borahaeUser')||'{}').email||'').toLowerCase(); let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); switchList.innerHTML=list.map(a=>`<div onclick="switchAccount('${a.email}')" class="flex items-center gap-3 p-2.5 rounded-[14px] ${a.email.toLowerCase()===cur?'bg-white/15':''} hover:bg-white/10 cursor-pointer"><img src="${a.photo||''}" onerror="this.src='https://via.placeholder.com/32'" class="w-8 h-8 rounded-full object-cover bg-white/20"><div class="flex-1 overflow-hidden"><p class="text-white text-[11px] font-bold truncate">${a.name}</p><p class="text-white/50 text-[9px] truncate">${a.email}</p></div>${a.email.toLowerCase()===cur?'<span class="text-[#a78bfa] text-[12px]">✓</span>':''}</div>`).join('')||'<p class="text-white/50 text-[11px] text-center py-4">No accounts yet</p>'; }
-function switchAccount(email){ let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); let acc=list.find(a=>a.email.toLowerCase()===email.toLowerCase()); if(!acc) return; localStorage.setItem('borahaeUser',JSON.stringify(acc)); localStorage.setItem('borahae_last_active', acc.email); localStorage.setItem('army_name',acc.name); if(acc.photo) localStorage.setItem('army_pfp',acc.photo); updateHeaderFromLocal(acc); closeSwitchModal(); }
-function updateHeaderFromLocal(acc){ beforeLogin.classList.add('hidden'); beforeLogin.classList.remove('flex'); afterLogin.classList.remove('hidden'); afterLogin.classList.add('flex'); userEmailShow.innerText=acc.email; profileEmail.innerText=acc.email; if(acc.photo){ userPhotoShow.src=acc.photo; profilePhotoBig.src=acc.photo; userPhotoShow.classList.remove('hidden'); profilePhotoBig.classList.remove('hidden'); userInitial.classList.add('hidden'); profileInitialBig.classList.add('hidden'); } else { userPhotoShow.classList.add('hidden'); profilePhotoBig.classList.add('hidden'); userInitial.classList.remove('hidden'); profileInitialBig.classList.remove('hidden'); profileInitialBig.classList.add('flex'); userInitial.innerText=acc.email.charAt(0).toUpperCase(); profileInitialBig.innerText=acc.email.charAt(0).toUpperCase(); } }
-function updateHeader(user){ if(user){ saveToMulti(user); updateHeaderFromLocal({email:user.email,name:user.displayName||user.email.split('@')[0],photo:user.photoURL||user.photo||''}); } else { let local=JSON.parse(localStorage.getItem('borahaeUser')||'null'); if(local){ updateHeaderFromLocal(local); } else { beforeLogin.classList.remove('hidden'); beforeLogin.classList.add('flex'); afterLogin.classList.add('hidden'); afterLogin.classList.remove('flex'); } } }
-function updateRealArmyStrip(){ db.ref('users').limitToLast(10).once('value',snap=>{ let users=[]; snap.forEach(c=>{ users.push(c.val()); }); users=users.reverse(); let count=snap.numChildren(); document.getElementById('liveArmyCount').innerText= count>0? count.toLocaleString()+' ARMY' : '0 ARMY'; let container=document.getElementById('realArmyPfps'); if(users.length===0){ container.innerHTML='<div class="w-7 h-7 rounded-full bg-[#f3e8ff] border-2 border-white flex items-center justify-center text-[10px] font-bold text-[#7c3aed]">A</div>'; return; } container.innerHTML=users.slice(0,4).map((u,i)=>`<img src="${u.photo||'https://via.placeholder.com/40'}" onerror="this.src='https://via.placeholder.com/40'" class="w-7 h-7 rounded-full border-2 border-white object-cover ${i>0?'-ml-1.5':''}">`).join(''); }); }
+
+function saveToMulti(u){
+  let deleted = JSON.parse(localStorage.getItem('borahae_deleted_acc')||'[]');
+  if(deleted.includes(u.email.toLowerCase())) return;
+  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
+  let obj={uid:u.uid||u.email,email:u.email,name:u.displayName||u.email.split('@')[0],photo:u.photoURL||u.photo||''};
+  let i=list.findIndex(a=>a.email.toLowerCase()===obj.email.toLowerCase());
+  if(i>-1) list[i]={...list[i],...obj}; else list.push(obj);
+  localStorage.setItem('borahae_accounts',JSON.stringify(list));
+  localStorage.setItem('borahaeUser',JSON.stringify(obj));
+  localStorage.setItem('borahae_last_active', obj.email);
+  localStorage.setItem('borahae_is_owner', OWNER_EMAILS.includes(obj.email.toLowerCase())? 'true' : 'false');
+}
+function renderSwitchList(){
+  let cur=(JSON.parse(localStorage.getItem('borahaeUser')||'{}').email||'').toLowerCase();
+  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
+  let deleted = JSON.parse(localStorage.getItem('borahae_deleted_acc')||'[]');
+  list = list.filter(a=>!deleted.includes(a.email.toLowerCase()));
+  localStorage.setItem('borahae_accounts', JSON.stringify(list));
+  switchList.innerHTML=list.map(a=>`<div onclick="switchAccount('${a.email}')" class="flex items-center gap-3 p-2.5 rounded-[14px] ${a.email.toLowerCase()===cur?'bg-white/15':''} hover:bg-white/10 cursor-pointer"><img src="${a.photo||''}" onerror="this.src='https://via.placeholder.com/32'" class="w-8 h-8 rounded-full object-cover bg-white/20"><div class="flex-1 overflow-hidden"><p class="text-white text-[11px] font-bold truncate">${a.name}</p><p class="text-white/50 text-[9px] truncate">${a.email}</p></div>${a.email.toLowerCase()===cur?'<span class="text-[#a78bfa] text-[12px]">✓</span>':''}</div>`).join('')||'<p class="text-white/50 text-[11px] text-center py-4">No accounts yet</p>';
+}
+function switchAccount(email){
+  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
+  let acc=list.find(a=>a.email.toLowerCase()===email.toLowerCase());
+  if(!acc) return;
+  localStorage.setItem('borahaeUser',JSON.stringify(acc));
+  localStorage.setItem('borahae_last_active', acc.email);
+  localStorage.setItem('army_name',acc.name);
+  localStorage.setItem('borahae_is_owner', OWNER_EMAILS.includes(acc.email.toLowerCase())? 'true' : 'false');
+  if(acc.photo) localStorage.setItem('army_pfp',acc.photo);
+  updateHeaderFromLocal(acc);
+  closeSwitchModal();
+  // Firebase auth ko force nahi karenge, local se hi owner check hoga
+}
+function updateHeaderFromLocal(acc){
+  beforeLogin.classList.add('hidden'); beforeLogin.classList.remove('flex');
+  afterLogin.classList.remove('hidden'); afterLogin.classList.add('flex');
+  userEmailShow.innerText=acc.email;
+  profileEmail.innerText=acc.email;
+  if(acc.photo){ userPhotoShow.src=acc.photo; profilePhotoBig.src=acc.photo; userPhotoShow.classList.remove('hidden'); profilePhotoBig.classList.remove('hidden'); userInitial.classList.add('hidden'); profileInitialBig.classList.add('hidden'); }
+  else { userPhotoShow.classList.add('hidden'); profilePhotoBig.classList.add('hidden'); userInitial.classList.remove('hidden'); profileInitialBig.classList.remove('hidden'); profileInitialBig.classList.add('flex'); userInitial.innerText=acc.email.charAt(0).toUpperCase(); profileInitialBig.innerText=acc.email.charAt(0).toUpperCase(); }
+}
+function updateHeader(user){
+  if(user){
+    saveToMulti(user);
+    updateHeaderFromLocal({email:user.email,name:user.displayName||user.email.split('@')[0],photo:user.photoURL||user.photo||''});
+  } else {
+    let local=JSON.parse(localStorage.getItem('borahaeUser')||'null');
+    if(local){ updateHeaderFromLocal(local); }
+    else { beforeLogin.classList.remove('hidden'); beforeLogin.classList.add('flex'); afterLogin.classList.add('hidden'); afterLogin.classList.remove('flex'); }
+  }
+}
+function updateRealArmyStrip(){
+  db.ref('users').limitToLast(10).once('value',snap=>{
+    let users=[]; snap.forEach(c=>{ users.push(c.val()); });
+    users=users.reverse();
+    let count=snap.numChildren();
+    document.getElementById('liveArmyCount').innerText= count>0? count.toLocaleString()+' ARMY' : '0 ARMY';
+    let container=document.getElementById('realArmyPfps');
+    if(users.length===0){ container.innerHTML='<div class="w-7 h-7 rounded-full bg-[#f3e8ff] border-2 border-white flex items-center justify-center text-[10px] font-bold text-[#7c3aed]">A</div>'; return; }
+    container.innerHTML=users.slice(0,4).map((u,i)=>`<img src="${u.photo||'https://via.placeholder.com/40'}" onerror="this.src='https://via.placeholder.com/40'" class="w-7 h-7 rounded-full border-2 border-white object-cover ${i>0?'-ml-1.5':''}">`).join('');
+  });
+}
 updateRealArmyStrip();
 db.ref('users').on('value',()=>updateRealArmyStrip());
-async function doEmailLogin(e){ e.preventDefault(); let email=loginEmail.value.trim(), pass=loginPass.value; loginBtn.innerText='Logging...'; loginBtn.disabled=true; try{ let cred=await auth.signInWithEmailAndPassword(email,pass); closeAuth(); }catch(err){ alert(err.message); } finally{ loginBtn.innerText='Log In'; loginBtn.disabled=false; } }
-async function doEmailSignup(e){ e.preventDefault(); let email=signupEmail.value.trim(), pass=signupPass.value, conf=signupConfirm.value; if(pass!==conf) return alert('Passwords not match'); signupBtn.innerText='Creating...'; signupBtn.disabled=true; try{ let cred=await auth.createUserWithEmailAndPassword(email,pass); await db.ref('users/'+cred.user.uid).set({email, name:email.split('@')[0], joinDate:new Date().toLocaleDateString()}); closeAuth(); }catch(err){ alert(err.message); } finally{ signupBtn.innerText='Sign Up'; signupBtn.disabled=false; } }
-async function signInWithGoogle(){ let provider=new firebase.auth.GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'}); try{ let result=await auth.signInWithPopup(provider); await db.ref('users/'+result.user.uid).update({email:result.user.email, name:result.user.displayName, photo:result.user.photoURL, lastLogin:Date.now()}); closeAuth(); }catch(err){ alert(err.message); } }
+
+async function doEmailLogin(e){
+  e.preventDefault();
+  let email=loginEmail.value.trim().toLowerCase(), pass=loginPass.value;
+  if(!email ||!pass) return;
+  loginBtn.innerText='Logging...'; loginBtn.disabled=true;
+  try{
+    // clear deleted flag if owner tries again
+    let deleted = JSON.parse(localStorage.getItem('borahae_deleted_acc')||'[]');
+    deleted = deleted.filter(d=>d!==email);
+    localStorage.setItem('borahae_deleted_acc', JSON.stringify(deleted));
+    let cred=await auth.signInWithEmailAndPassword(email,pass);
+    saveToMulti({uid:cred.user.uid, email:cred.user.email, displayName:cred.user.displayName, photoURL:cred.user.photoURL});
+    closeAuth();
+    updateHeaderFromLocal({email:cred.user.email, name:cred.user.displayName||cred.user.email.split('@')[0], photo:cred.user.photoURL||''});
+  }catch(err){ alert(err.message); } finally{ loginBtn.innerText='Log In'; loginBtn.disabled=false; }
+}
+async function doEmailSignup(e){
+  e.preventDefault();
+  let email=signupEmail.value.trim().toLowerCase(), pass=signupPass.value, conf=signupConfirm.value;
+  if(pass!==conf) return alert('Passwords not match');
+  signupBtn.innerText='Creating...'; signupBtn.disabled=true;
+  try{
+    let cred=await auth.createUserWithEmailAndPassword(email,pass);
+    await db.ref('users/'+cred.user.uid).set({email, name:email.split('@')[0], joinDate:new Date().toLocaleDateString()});
+    saveToMulti({uid:cred.user.uid, email:cred.user.email, displayName:cred.user.displayName, photoURL:cred.user.photoURL});
+    closeAuth();
+  }catch(err){ alert(err.message); } finally{ signupBtn.innerText='Sign Up'; signupBtn.disabled=false; }
+}
+async function signInWithGoogle(){
+  let provider=new firebase.auth.GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'});
+  try{
+    let result=await auth.signInWithPopup(provider);
+    await db.ref('users/'+result.user.uid).update({email:result.user.email, name:result.user.displayName, photo:result.user.photoURL, lastLogin:Date.now()});
+    saveToMulti({uid:result.user.uid, email:result.user.email, displayName:result.user.displayName, photoURL:result.user.photoURL});
+    closeAuth();
+  }catch(err){ alert(err.message); }
+}
 function forgotPass(){ let email=loginEmail.value.trim(); if(!email) return alert('Enter email'); auth.sendPasswordResetEmail(email).then(()=>alert('Reset sent')).catch(e=>alert(e.message)); }
 function handleScrapbook(){ let local=JSON.parse(localStorage.getItem('borahaeUser')||'null'); if(auth.currentUser || local) location.href='home.html'; else openAuth('login'); }
-function logOut(){ auth.signOut(); localStorage.removeItem('borahaeUser'); localStorage.removeItem('borahae_last_active'); location.reload(); }
+function logOut(){ auth.signOut(); localStorage.removeItem('borahaeUser'); localStorage.removeItem('borahae_last_active'); localStorage.removeItem('borahae_is_owner'); location.reload(); }
+
 let lastActive=JSON.parse(localStorage.getItem('borahaeUser')||'null');
 if(lastActive){ updateHeaderFromLocal(lastActive); }
-auth.onAuthStateChanged(user=>{ if(user){ updateHeader({uid:user.uid,email:user.email,displayName:user.displayName,photo:user.photoURL,photoURL:user.photoURL}); } else { if(!lastActive) updateHeader(null); } });
+
+auth.onAuthStateChanged(user=>{
+  if(user){
+    let deleted = JSON.parse(localStorage.getItem('borahae_deleted_acc')||'[]');
+    if(deleted.includes(user.email.toLowerCase())){
+      // deleted account, don't auto add
+      return;
+    }
+    updateHeader({uid:user.uid,email:user.email,displayName:user.displayName,photo:user.photoURL,photoURL:user.photoURL});
+  } else {
+    if(!lastActive) updateHeader(null);
+  }
+});
 </script></body></html>
