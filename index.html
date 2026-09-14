@@ -11,30 +11,35 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
   html{scroll-behavior:smooth;}
   body{font-family:'Manrope',sans-serif; background:#fdf8ff; color:#1e1033; margin:0; -webkit-font-smoothing:antialiased;}
-.font-display{font-family:'Manrope',sans-serif;}
+.font-display{font-family:'Playfair Display',serif;}
 .font-mono{font-family:'DM Mono',monospace;}
 .hero-bg{background: radial-gradient(120% 80% at 90% 0%, #f5d0fe 0%, #fce7ff 20%, #fdf8ff 60%);}
 @keyframes pop{0%{transform:scale(0.94);opacity:0}100%{transform:scale(1);opacity:1}}
 .animate-pop{animation:pop.22s cubic-bezier(.16,1,.3,1)}
 .modal-bg{backdrop-filter:blur(8px);background:rgba(30,16,51,0.45)}
-#splashScreen{position:fixed; inset:0; z-index:9999; background:#fbf5ff; display:flex; align-items:center; justify-content:center; padding:28px; transition:opacity 0.8s ease;}
+#splashScreen{position:fixed; inset:0; z-index:9999; background:rgba(253,248,255,0.92); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); display:flex; align-items:center; justify-content:center; padding:28px; transition:opacity 0.7s ease;}
 </style>
 </head>
 <body class="hero-bg">
 
+<!-- SPLASH - PREMIUM SIMPLE -->
 <div id="splashScreen">
-  <div class="w-full max-w-[300px] text-center">
-    <p class="font-mono text-[10px] tracking-[4px] text-[#c4b5fd] text-center">BORAHAE.FM • FOR YOU</p>
-    <h2 id="splashQuote" class="text-[16px] leading-[1.6] font-semibold text-[#1a1033] mt-10 tracking-tight" style="font-style: italic; font-weight: 600;">Let's never lose our light, ARMY.</h2>
-    <p id="splashAuthor" class="text-[12px] text-[#6b7280] mt-6 text-right pr-2" style="font-style: italic; font-weight: 500;">— ARMY</p>
-    <div class="flex items-center justify-center gap-2 mt-12">
-      <div class="w-1 h-1 bg-[#d8b4fe] rounded-full animate-pulse"></div>
-      <p class="font-mono text-[9px] tracking-[3px] text-[#c4b5fd]">LOADING YOUR LIGHT</p>
-      <div class="w-1 h-1 bg-[#d8b4fe] rounded-full animate-pulse"></div>
+  <div class="w-full max-w-[320px]">
+    <p class="font-mono text-[9px] tracking-[3px] text-[#a78bfa]">BORAHAE.FM • FOR YOU</p>
+    <div class="mt-6 bg-white border border-[#f3e8ff] rounded-[18px] p-5 shadow-[0_8px_30px_rgba(124,58,237,0.08)]">
+      <h2 id="splashQuote" class="text-[15px] leading-[1.5] font-semibold text-[#1e1033] tracking-tight">
+        Love yourself, love myself, peace.
+      </h2>
+      <p id="splashAuthor" class="text-[11px] text-[#6b7280] mt-4 text-right font-bold">— Suga</p>
+    </div>
+    <div class="flex items-center gap-2 mt-5 justify-center">
+      <div class="w-1 h-1 bg-[#c4b5fd] rounded-full animate-pulse"></div>
+      <p class="font-mono text-[8px] tracking-[2.5px] text-[#a78bfa]">LOADING YOUR LIGHT</p>
+      <div class="w-1 h-1 bg-[#c4b5fd] rounded-full animate-pulse"></div>
     </div>
   </div>
 </div>
@@ -76,7 +81,7 @@
           <div class="absolute top-[45px] right-[35px] w-[90px] h-[90px] border border-white/25 rounded-full"></div>
           <div class="absolute top-[60px] right-[50px] w-[60px] h-[60px] border border-white/15 rounded-full"></div>
           <div class="relative z-10 flex justify-between"><span class="font-mono text-[9px] tracking-[2.5px] text-white/70">MISSION 001 / BANGTANTV</span></div>
-          <div class="relative z-10 mt-10"><h2 class="text-[44px] leading-[0.88] text-white font-bold tracking-tight">The<br>purple<br>hour.</h2></div>
+          <div class="relative z-10 mt-10"><h2 class="font-display text-[44px] leading-[0.88] text-white font-bold tracking-tight">The<br>purple<br>hour.</h2></div>
           <div class="relative z-10"><div class="flex items-center gap-2.5"><div class="w-[36px] h-[36px] bg-[#f472b6] rounded-full flex items-center justify-center shadow-md"><span class="text-black text-[12px] ml-[1px]">▶</span></div><span class="text-white text-[12px] font-semibold">Watch together</span></div><p class="text-[11px] text-white/60 mt-3 leading-[1.3] max-w-[200px]">A little place to leave your mark on the streams that mean something.</p></div>
           <div class="absolute bottom-0 left-0 right-0 bg-[#1a1033]/90 backdrop-blur px-5 py-3 flex justify-between items-center rounded-b-[20px]"><span class="font-mono text-[8px] tracking-[2px] text-white/40">YOUR STREAM JOURNAL</span><span class="text-[11px] text-[#f472b6] font-bold">♥ borahae</span></div>
         </div>
@@ -88,16 +93,16 @@
 
 <section id="how-it-works" class="bg-white border-y border-[#eee6f8]">
   <div class="max-w-[1100px] mx-auto divide-y md:divide-y-0 md:grid md:grid-cols-3 md:divide-x divide-[#eee6f8]">
-    <div class="p-7 py-10"><p class="font-mono text-[11px] text-[#7c3aed]">01</p><h3 class="font-bold text-[18px] mt-3">Find your mission</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">Start with hand-picked BANGTANTV moments, or bring in a favorite YouTube video.</p></div>
-    <div class="p-7 py-10"><p class="font-mono text-[11px] text-[#7c3aed]">02</p><h3 class="font-bold text-[18px] mt-3">Watch with intention</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">The in-app player keeps your watch flow in one place, without losing the feeling.</p></div>
-    <div class="p-7 py-10"><p class="font-mono text-[11px] text-[#7c3aed]">03</p><h3 class="font-bold text-[18px] mt-3">Leave your mark</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">One completed stream, recorded. Your personal progress and our shared leaderboard grow together.</p></div>
+    <div class="p-7 py-10"><p class="font-mono text-[11px] text-[#7c3aed]">01</p><h3 class="font-display text-[20px] font-bold mt-3">Find your mission</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">Start with hand-picked BANGTANTV moments, or bring in a favorite YouTube video.</p></div>
+    <div class="p-7 py-10"><p class="font-mono text-[11px] text-[#7c3aed]">02</p><h3 class="font-display text-[20px] font-bold mt-3">Watch with intention</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">The in-app player keeps your watch flow in one place, without losing the feeling.</p></div>
+    <div class="p-7 py-10"><p class="font-mono text-[11px] text-[#7c3aed]">03</p><h3 class="font-display text-[20px] font-bold mt-3">Leave your mark</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">One completed stream, recorded. Your personal progress and our shared leaderboard grow together.</p></div>
   </div>
 </section>
 
 <section class="bg-[#fdf8ff] py-12 px-5">
   <div class="max-w-[1100px] mx-auto">
     <p class="font-mono text-[10px] tracking-[3px] text-[#7c3aed]">A SOFT PLACE FOR LOUD LOVE</p>
-    <h2 class="text-[36px] md:text-[52px] leading-[0.9] font-bold mt-3 tracking-tight">The comeback<br>energy, kept<br>close.</h2>
+    <h2 class="font-display text-[36px] md:text-[52px] leading-[0.9] font-bold mt-3 tracking-tight">The comeback<br>energy, kept<br>close.</h2>
     <div class="grid md:grid-cols-2 gap-4 mt-8 max-w-[720px]">
       <div class="bg-[#f5f0ff] rounded-[22px] p-6 border border-[#f3e8ff]"><div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-[#7c3aed]">◎</div><h3 class="font-bold text-[15px] mt-10">Your daily rhythm</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">A gentle daily goal makes showing up feel like a ritual, not a chore.</p></div>
       <div class="bg-white rounded-[22px] p-6 border border-[#f3e8ff] shadow-[0_4px_20px_rgba(0,0,0,0.03)]"><div class="w-8 h-8 flex items-center justify-center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><h3 class="font-bold text-[15px] mt-10">Our purple light</h3><p class="text-[13px] text-[#6b7280] mt-2 leading-[1.5]">Celebrate milestones with ARMY around the world, one stream at a time.</p></div>
@@ -132,28 +137,46 @@ const boraQuotes = [
   {q:"Go on your path, even if you live for a day.", by:"Jimin"},
   {q:"Trust yourself.", by:"J-Hope"},
   {q:"Try without succeeding, overcome limits daily.", by:"Jin"},
+  {q:"Love yourself, love myself, peace.", by:"Suga"},
   {q:"You were born to be real, not perfect.", by:"Suga"},
-  {q:"No matter who you are, where you're from, just speak yourself.", by:"RM"},
-  {q:"Even if you're not perfect, you're limited edition.", by:"RM"},
+  {q:"No matter who you are, where you're from, just speak yourself.", by:"Namjoon"},
+  {q:"Even if you're not perfect, you're limited edition.", by:"Namjoon"},
   {q:"Your presence can give happiness.", by:"Jin"},
   {q:"We shine brightest when we shine together.", by:"Jin"},
   {q:"If you can't fly, then run. If you can't run, then walk. Keep moving.", by:"Jungkook"},
   {q:"Effort makes you. You will regret if you don't do your best now.", by:"Jungkook"},
-  {q:"Don't be trapped in someone else's dream.", by:"V"},
+  {q:"Don't be trapped in someone else's dream.", by:"Taehyung"},
   {q:"The moment you think of giving up, think of why you held on so long.", by:"J-Hope"},
   {q:"Even when you're in darkness, you shine the brightest.", by:"J-Hope"},
-  {q:"I purple you. I will trust and love you for a long time.", by:"V"},
-  {q:"Borahae means I will love you till the end.", by:"V"},
+  {q:"I purple you. I will trust and love you for a long time.", by:"Taehyung"},
+  {q:"Borahae means I will love you till the end.", by:"Taehyung"},
   {q:"Let's never lose our light, ARMY.", by:"ARMY"},
   {q:"Every stream is a love letter we write together.", by:"ARMY"},
+  {q:"Keep the light, even when the night feels long.", by:"ARMY"},
   {q:"We are bulletproof, when we are together.", by:"BTS"},
   {q:"Don't ever be afraid to dream, ARMY.", by:"Jungkook"},
   {q:"Your hard work today is your story tomorrow.", by:"Suga"},
   {q:"Music transcends language.", by:"J-Hope"},
+  {q:"Go on your path.", by:"Jimin"},
+  {q:"You are the only one who can make yourself happy.", by:"Taehyung"},
+  {q:"There is beauty in everything.", by:"Jimin"},
+  {q:"I am who I am. That's all there is.", by:"Jimin"},
+  {q:"Life is more beautiful when you look at it with love.", by:"Jin"},
+  {q:"Love yourself first if you want to love others.", by:"Namjoon"},
+  {q:"It does not matter how slowly you go, as long as you do not stop.", by:"ARMY"},
   {q:"Small steps every day lead to big results.", by:"ARMY"},
   {q:"Your love keeps the purple light alive.", by:"ARMY"},
+  {q:"Streaming with heart is louder than numbers.", by:"ARMY"},
+  {q:"Together we keep the light on.", by:"BTS"},
+  {q:"Stay gold, stay you.", by:"BTS"},
+  {q:"Dream, hope, forward, love.", by:"ARMY"},
   {q:"You never walk alone, ARMY walks with you.", by:"BTS"},
-  {q:"You gave me the best of me, so you'll give you the best of you.", by:"Jungkook"}
+  {q:"Love is not something we give or get, it is something we nurture.", by:"Namjoon"},
+  {q:"Even the darkest night will end and the sun will rise.", by:"BTS"},
+  {q:"You gave me the best of me, so you'll give you the best of you.", by:"Jungkook"},
+  {q:"Be the morning that comes after the dark.", by:"J-Hope"},
+  {q:"We were only seven, but we have you all now.", by:"BTS"},
+  {q:"You shine the brightest when you are yourself.", by:"ARMY"}
 ];
 function getUniqueQuote(){
   let used = JSON.parse(localStorage.getItem('bora_used_quotes')||'[]');
@@ -165,12 +188,6 @@ function getUniqueQuote(){
   return boraQuotes[pick];
 }
 (function(){
-  let skip = localStorage.getItem('borahae_skip_splash');
-  if(skip==='true'){
-    document.getElementById('splashScreen').style.display='none';
-    localStorage.removeItem('borahae_skip_splash');
-    return;
-  }
   let data = getUniqueQuote();
   document.getElementById('splashQuote').innerText = data.q;
   document.getElementById('splashAuthor').innerText = '— '+data.by;
@@ -178,18 +195,12 @@ function getUniqueQuote(){
     let splash = document.getElementById('splashScreen');
     splash.style.opacity='0';
     setTimeout(()=>{ splash.style.display='none'; },700);
-  }, 4500);
+  }, 4200);
 })();
-
-const OWNER_EMAILS = ["pratimatribhuvan2006@gmail.com"];
 
 const firebaseConfig = { apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw", authDomain: "borahae-fm-f7075.firebaseapp.com", databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com", projectId: "borahae-fm-f7075", storageBucket: "borahae-fm-f7075.firebasestorage.app", messagingSenderId: "319118277965", appId: "1:319118277965:web:eece2a5bf15708aab3cb04" };
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth(); const db = firebase.database();
-
-// Persistence fix - important for mobile
-auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
-
 function openAuth(t){ authModal.classList.remove('hidden'); authModal.classList.add('flex'); switchTab(t||'login'); }
 function closeAuth(){ authModal.classList.add('hidden'); authModal.classList.remove('flex'); }
 function openProfile(){ profileModal.classList.remove('hidden'); profileModal.classList.add('flex'); }
@@ -198,162 +209,21 @@ function openSwitchFromProfile(){ closeProfile(); setTimeout(()=>{ switchModal.c
 function closeSwitchModal(){ switchModal.classList.add('hidden'); switchModal.classList.remove('flex'); }
 function handleAddAccount(){ closeSwitchModal(); setTimeout(()=>openAuth('login'),150); }
 function switchTab(t){ if(t==='login'){ loginForm.classList.remove('hidden'); signupForm.classList.add('hidden'); tabLogin.className='flex-1 py-3 font-bold text-[11px] bg-[#7c3aed] text-white'; tabSignup.className='flex-1 py-3 font-bold text-[11px] bg-[#f3f0ff] text-[#6b7280]'; } else { signupForm.classList.remove('hidden'); loginForm.classList.add('hidden'); tabSignup.className='flex-1 py-3 font-bold text-[11px] bg-[#7c3aed] text-white'; tabLogin.className='flex-1 py-3 font-bold text-[11px] bg-[#f3f0ff] text-[#6b7280]'; } }
-
-function saveToMulti(u){
-  try{
-    let deleted = JSON.parse(localStorage.getItem('borahae_deleted_acc')||'[]');
-    if(deleted.includes(u.email.toLowerCase())) return;
-    let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
-    let obj={uid:u.uid||u.email,email:u.email,name:u.displayName||u.email.split('@')[0],photo:u.photoURL||u.photo||''};
-    let i=list.findIndex(a=>a.email.toLowerCase()===obj.email.toLowerCase());
-    if(i>-1) list[i]={...list[i],...obj}; else list.push(obj);
-    localStorage.setItem('borahae_accounts',JSON.stringify(list));
-    localStorage.setItem('borahaeUser',JSON.stringify(obj));
-    localStorage.setItem('borahae_last_active', obj.email);
-    localStorage.setItem('borahae_is_owner', OWNER_EMAILS.includes(obj.email.toLowerCase())? 'true' : 'false');
-  }catch(e){ console.log('saveToMulti error', e); }
-}
-function renderSwitchList(){
-  let cur=(JSON.parse(localStorage.getItem('borahaeUser')||'{}').email||'').toLowerCase();
-  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
-  let deleted = JSON.parse(localStorage.getItem('borahae_deleted_acc')||'[]');
-  list = list.filter(a=>!deleted.includes(a.email.toLowerCase()));
-  localStorage.setItem('borahae_accounts', JSON.stringify(list));
-  switchList.innerHTML=list.map(a=>`<div onclick="switchAccount('${a.email}')" class="flex items-center gap-3 p-2.5 rounded-[14px] ${a.email.toLowerCase()===cur?'bg-white/15':''} hover:bg-white/10 cursor-pointer"><img src="${a.photo||''}" onerror="this.src='https://via.placeholder.com/32'" class="w-8 h-8 rounded-full object-cover bg-white/20"><div class="flex-1 overflow-hidden"><p class="text-white text-[11px] font-bold truncate">${a.name}</p><p class="text-white/50 text-[9px] truncate">${a.email}</p></div>${a.email.toLowerCase()===cur?'<span class="text-[#a78bfa] text-[12px]">✓</span>':''}</div>`).join('')||'<p class="text-white/50 text-[11px] text-center py-4">No accounts yet</p>';
-}
-function switchAccount(email){
-  let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
-  let acc=list.find(a=>a.email.toLowerCase()===email.toLowerCase());
-  if(!acc) return;
-  localStorage.setItem('borahaeUser',JSON.stringify(acc));
-  localStorage.setItem('borahae_last_active', acc.email);
-  localStorage.setItem('army_name',acc.name);
-  localStorage.setItem('borahae_is_owner', OWNER_EMAILS.includes(acc.email.toLowerCase())? 'true' : 'false');
-  if(acc.photo) localStorage.setItem('army_pfp',acc.photo);
-  updateHeaderFromLocal(acc);
-  closeSwitchModal();
-}
-function updateHeaderFromLocal(acc){
-  beforeLogin.classList.add('hidden'); beforeLogin.classList.remove('flex');
-  afterLogin.classList.remove('hidden'); afterLogin.classList.add('flex');
-  userEmailShow.innerText=acc.email;
-  profileEmail.innerText=acc.email;
-  if(acc.photo){ userPhotoShow.src=acc.photo; profilePhotoBig.src=acc.photo; userPhotoShow.classList.remove('hidden'); profilePhotoBig.classList.remove('hidden'); userInitial.classList.add('hidden'); profileInitialBig.classList.add('hidden'); }
-  else { userPhotoShow.classList.add('hidden'); profilePhotoBig.classList.add('hidden'); userInitial.classList.remove('hidden'); profileInitialBig.classList.remove('hidden'); profileInitialBig.classList.add('flex'); userInitial.innerText=acc.email.charAt(0).toUpperCase(); profileInitialBig.innerText=acc.email.charAt(0).toUpperCase(); }
-}
-function updateHeader(user){
-  if(user){
-    saveToMulti(user);
-    updateHeaderFromLocal({email:user.email,name:user.displayName||user.email.split('@')[0],photo:user.photoURL||user.photo||''});
-  } else {
-    let local=JSON.parse(localStorage.getItem('borahaeUser')||'null');
-    if(local){ updateHeaderFromLocal(local); }
-    else { beforeLogin.classList.remove('hidden'); beforeLogin.classList.add('flex'); afterLogin.classList.add('hidden'); afterLogin.classList.remove('flex'); }
-  }
-}
-function updateRealArmyStrip(){
-  db.ref('users').limitToLast(10).once('value',snap=>{
-    let users=[]; snap.forEach(c=>{ users.push(c.val()); });
-    users=users.reverse();
-    let count=snap.numChildren();
-    document.getElementById('liveArmyCount').innerText= count>0? count.toLocaleString()+' ARMY' : '0 ARMY';
-    let container=document.getElementById('realArmyPfps');
-    if(users.length===0){ container.innerHTML='<div class="w-7 h-7 rounded-full bg-[#f3e8ff] border-2 border-white flex items-center justify-center text-[10px] font-bold text-[#7c3aed]">A</div>'; return; }
-    container.innerHTML=users.slice(0,4).map((u,i)=>`<img src="${u.photo||'https://via.placeholder.com/40'}" onerror="this.src='https://via.placeholder.com/40'" class="w-7 h-7 rounded-full border-2 border-white object-cover ${i>0?'-ml-1.5':''}">`).join('');
-  });
-}
+function saveToMulti(u){ let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); let obj={uid:u.uid||u.email,email:u.email,name:u.displayName||u.email.split('@')[0],photo:u.photoURL||u.photo||''}; let i=list.findIndex(a=>a.email.toLowerCase()===obj.email.toLowerCase()); if(i>-1) list[i]={...list[i],...obj}; else list.push(obj); localStorage.setItem('borahae_accounts',JSON.stringify(list)); localStorage.setItem('borahaeUser',JSON.stringify(obj)); localStorage.setItem('borahae_last_active', obj.email); }
+function renderSwitchList(){ let cur=(JSON.parse(localStorage.getItem('borahaeUser')||'{}').email||'').toLowerCase(); let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); switchList.innerHTML=list.map(a=>`<div onclick="switchAccount('${a.email}')" class="flex items-center gap-3 p-2.5 rounded-[14px] ${a.email.toLowerCase()===cur?'bg-white/15':''} hover:bg-white/10 cursor-pointer"><img src="${a.photo||''}" onerror="this.src='https://via.placeholder.com/32'" class="w-8 h-8 rounded-full object-cover bg-white/20"><div class="flex-1 overflow-hidden"><p class="text-white text-[11px] font-bold truncate">${a.name}</p><p class="text-white/50 text-[9px] truncate">${a.email}</p></div>${a.email.toLowerCase()===cur?'<span class="text-[#a78bfa] text-[12px]">✓</span>':''}</div>`).join('')||'<p class="text-white/50 text-[11px] text-center py-4">No accounts yet</p>'; }
+function switchAccount(email){ let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]'); let acc=list.find(a=>a.email.toLowerCase()===email.toLowerCase()); if(!acc) return; localStorage.setItem('borahaeUser',JSON.stringify(acc)); localStorage.setItem('borahae_last_active', acc.email); localStorage.setItem('army_name',acc.name); if(acc.photo) localStorage.setItem('army_pfp',acc.photo); updateHeaderFromLocal(acc); closeSwitchModal(); }
+function updateHeaderFromLocal(acc){ beforeLogin.classList.add('hidden'); beforeLogin.classList.remove('flex'); afterLogin.classList.remove('hidden'); afterLogin.classList.add('flex'); userEmailShow.innerText=acc.email; profileEmail.innerText=acc.email; if(acc.photo){ userPhotoShow.src=acc.photo; profilePhotoBig.src=acc.photo; userPhotoShow.classList.remove('hidden'); profilePhotoBig.classList.remove('hidden'); userInitial.classList.add('hidden'); profileInitialBig.classList.add('hidden'); } else { userPhotoShow.classList.add('hidden'); profilePhotoBig.classList.add('hidden'); userInitial.classList.remove('hidden'); profileInitialBig.classList.remove('hidden'); profileInitialBig.classList.add('flex'); userInitial.innerText=acc.email.charAt(0).toUpperCase(); profileInitialBig.innerText=acc.email.charAt(0).toUpperCase(); } }
+function updateHeader(user){ if(user){ saveToMulti(user); updateHeaderFromLocal({email:user.email,name:user.displayName||user.email.split('@')[0],photo:user.photoURL||user.photo||''}); } else { let local=JSON.parse(localStorage.getItem('borahaeUser')||'null'); if(local){ updateHeaderFromLocal(local); } else { beforeLogin.classList.remove('hidden'); beforeLogin.classList.add('flex'); afterLogin.classList.add('hidden'); afterLogin.classList.remove('flex'); } } }
+function updateRealArmyStrip(){ db.ref('users').limitToLast(10).once('value',snap=>{ let users=[]; snap.forEach(c=>{ users.push(c.val()); }); users=users.reverse(); let count=snap.numChildren(); document.getElementById('liveArmyCount').innerText= count>0? count.toLocaleString()+' ARMY' : '0 ARMY'; let container=document.getElementById('realArmyPfps'); if(users.length===0){ container.innerHTML='<div class="w-7 h-7 rounded-full bg-[#f3e8ff] border-2 border-white flex items-center justify-center text-[10px] font-bold text-[#7c3aed]">A</div>'; return; } container.innerHTML=users.slice(0,4).map((u,i)=>`<img src="${u.photo||'https://via.placeholder.com/40'}" onerror="this.src='https://via.placeholder.com/40'" class="w-7 h-7 rounded-full border-2 border-white object-cover ${i>0?'-ml-1.5':''}">`).join(''); }); }
 updateRealArmyStrip();
 db.ref('users').on('value',()=>updateRealArmyStrip());
-
-async function doEmailLogin(e){
-  e.preventDefault();
-  let email=loginEmail.value.trim().toLowerCase(), pass=loginPass.value;
-  if(!email ||!pass) return alert('Email & password required');
-  loginBtn.innerText='Logging...'; loginBtn.disabled=true;
-  try{
-    let deleted = JSON.parse(localStorage.getItem('borahae_deleted_acc')||'[]');
-    deleted = deleted.filter(d=>d!==email);
-    localStorage.setItem('borahae_deleted_acc', JSON.stringify(deleted));
-    let cred=await auth.signInWithEmailAndPassword(email,pass);
-    saveToMulti({uid:cred.user.uid, email:cred.user.email, displayName:cred.user.displayName||cred.user.email.split('@')[0], photoURL:cred.user.photoURL||''});
-    closeAuth();
-    // redirect like other apps
-    setTimeout(()=>{ window.location.href='home.html'; }, 300);
-  }catch(err){
-    console.error(err);
-    alert(err.message);
-  } finally{ loginBtn.innerText='Log In'; loginBtn.disabled=false; }
-}
-
-async function doEmailSignup(e){
-  e.preventDefault();
-  let email=signupEmail.value.trim().toLowerCase(), pass=signupPass.value, conf=signupConfirm.value;
-  if(!email ||!pass) return alert('Email & password required');
-  if(pass.length<6) return alert('Password must be 6+ characters');
-  if(pass!==conf) return alert('Passwords do not match');
-  signupBtn.innerText='Creating...'; signupBtn.disabled=true;
-  try{
-    let cred=await auth.createUserWithEmailAndPassword(email,pass);
-    // DB write - if fails, don't block signup
-    try{
-      await db.ref('users/'+cred.user.uid).set({email:email, name:email.split('@')[0], joinDate:new Date().toLocaleDateString(), createdAt: Date.now()});
-    }catch(dbErr){ console.log('DB write failed but account created', dbErr); }
-    saveToMulti({uid:cred.user.uid, email:cred.user.email, displayName:email.split('@')[0], photoURL:''});
-    closeAuth();
-    alert('Account created! 💜');
-    setTimeout(()=>{ window.location.href='home.html'; }, 400);
-  }catch(err){
-    console.error(err);
-    alert(err.code + ': ' + err.message);
-  } finally{ signupBtn.innerText='Sign Up'; signupBtn.disabled=false; }
-}
-
-async function signInWithGoogle(){
-  let provider=new firebase.auth.GoogleAuthProvider();
-  provider.setCustomParameters({prompt:'select_account'});
-  try{
-    let result=await auth.signInWithPopup(provider);
-    try{
-      await db.ref('users/'+result.user.uid).update({email:result.user.email, name:result.user.displayName, photo:result.user.photoURL, lastLogin:Date.now()});
-    }catch(e){ console.log('db update fail', e); }
-    saveToMulti({uid:result.user.uid, email:result.user.email, displayName:result.user.displayName, photoURL:result.user.photoURL});
-    closeAuth();
-    setTimeout(()=>{ window.location.href='home.html'; }, 300);
-  }catch(err){
-    console.error(err);
-    alert('Google sign-in failed: ' + err.message);
-  }
-}
-
-function forgotPass(){ let email=loginEmail.value.trim(); if(!email) return alert('Enter email first'); auth.sendPasswordResetEmail(email).then(()=>alert('Reset link sent to '+email)).catch(e=>alert(e.message)); }
+async function doEmailLogin(e){ e.preventDefault(); let email=loginEmail.value.trim(), pass=loginPass.value; loginBtn.innerText='Logging...'; loginBtn.disabled=true; try{ let cred=await auth.signInWithEmailAndPassword(email,pass); closeAuth(); }catch(err){ alert(err.message); } finally{ loginBtn.innerText='Log In'; loginBtn.disabled=false; } }
+async function doEmailSignup(e){ e.preventDefault(); let email=signupEmail.value.trim(), pass=signupPass.value, conf=signupConfirm.value; if(pass!==conf) return alert('Passwords not match'); signupBtn.innerText='Creating...'; signupBtn.disabled=true; try{ let cred=await auth.createUserWithEmailAndPassword(email,pass); await db.ref('users/'+cred.user.uid).set({email, name:email.split('@')[0], joinDate:new Date().toLocaleDateString()}); closeAuth(); }catch(err){ alert(err.message); } finally{ signupBtn.innerText='Sign Up'; signupBtn.disabled=false; } }
+async function signInWithGoogle(){ let provider=new firebase.auth.GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'}); try{ let result=await auth.signInWithPopup(provider); await db.ref('users/'+result.user.uid).update({email:result.user.email, name:result.user.displayName, photo:result.user.photoURL, lastLogin:Date.now()}); closeAuth(); }catch(err){ alert(err.message); } }
+function forgotPass(){ let email=loginEmail.value.trim(); if(!email) return alert('Enter email'); auth.sendPasswordResetEmail(email).then(()=>alert('Reset sent')).catch(e=>alert(e.message)); }
 function handleScrapbook(){ let local=JSON.parse(localStorage.getItem('borahaeUser')||'null'); if(auth.currentUser || local) location.href='home.html'; else openAuth('login'); }
-
-function logOut(){
-  localStorage.setItem('borahae_skip_splash','true');
-  auth.signOut().then(()=>{
-    localStorage.removeItem('borahaeUser');
-    localStorage.removeItem('borahae_last_active');
-    localStorage.removeItem('borahae_is_owner');
-    // don't reload with splash
-    window.location.href = 'index.html';
-  }).catch(()=>{
-    localStorage.removeItem('borahaeUser');
-    localStorage.removeItem('borahae_last_active');
-    localStorage.removeItem('borahae_is_owner');
-    window.location.href = 'index.html';
-  });
-}
-
+function logOut(){ auth.signOut(); localStorage.removeItem('borahaeUser'); localStorage.removeItem('borahae_last_active'); location.reload(); }
 let lastActive=JSON.parse(localStorage.getItem('borahaeUser')||'null');
 if(lastActive){ updateHeaderFromLocal(lastActive); }
-
-auth.onAuthStateChanged(user=>{
-  if(user){
-    let deleted = JSON.parse(localStorage.getItem('borahae_deleted_acc')||'[]');
-    if(deleted.includes(user.email.toLowerCase())) return;
-    updateHeader({uid:user.uid,email:user.email,displayName:user.displayName||user.email.split('@')[0],photo:user.photoURL,photoURL:user.photoURL});
-  } else {
-    if(!lastActive) updateHeader(null);
-  }
-});
+auth.onAuthStateChanged(user=>{ if(user){ updateHeader({uid:user.uid,email:user.email,displayName:user.displayName,photo:user.photoURL,photoURL:user.photoURL}); } else { if(!lastActive) updateHeader(null); } });
 </script></body></html>
