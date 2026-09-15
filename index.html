@@ -201,13 +201,24 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth(); const db = firebase.database();
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
 
-// CHECK FOR GOOGLE LOGIN RETURN FROM CHROME TAB
+// FIXED - CHECK FOR GOOGLE LOGIN RETURN (LOCAL + URL PARAMS FOR APK)
 (function checkChromeLoginReturn(){
   let params = new URLSearchParams(window.location.search);
   if(params.get('google_login')==='1'){
     try{
       let data = JSON.parse(localStorage.getItem('borahae_chrome_google')||'null');
-      if(data){
+      if(!data){
+        let email = params.get('email');
+        if(email){
+          data = {
+            uid: params.get('uid') || email,
+            email: email,
+            name: params.get('name') || email.split('@')[0],
+            photo: params.get('photo') || ''
+          };
+        }
+      }
+      if(data && data.email){
         saveToMulti({uid:data.uid||data.email, email:data.email, displayName:data.name, photoURL:data.photo});
         updateHeaderFromLocal({email:data.email, name:data.name, photo:data.photo});
         setTimeout(()=>{ window.location.href='home.html'; }, 500);
@@ -292,7 +303,6 @@ function updateRealArmyStrip(){
 updateRealArmyStrip();
 db.ref('users').on('value',()=>updateRealArmyStrip());
 
-// ====== FIXED LOGIN - SAVE PASSWORD POPUP KE BAAD BHI KAAM KAREGA ======
 async function doEmailLogin(e){
   if(e){ e.preventDefault(); e.stopPropagation(); }
   let email=loginEmail.value.trim().toLowerCase(), pass=loginPass.value;
@@ -303,7 +313,6 @@ async function doEmailLogin(e){
     deleted = deleted.filter(d=>d!==email);
     localStorage.setItem('borahae_deleted_acc', JSON.stringify(deleted));
     let cred=await auth.signInWithEmailAndPassword(email,pass);
-    // OWNER FIX - ONLY YOUR EMAIL GETS OWNER
     saveToMulti({uid:cred.user.uid, email:cred.user.email, displayName:cred.user.displayName||cred.user.email.split('@')[0], photoURL:cred.user.photoURL||''});
     closeAuth();
     niotronSet("LOGIN_SUCCESS::"+cred.user.email);
@@ -331,14 +340,13 @@ async function doEmailSignup(e){
     let cred=await auth.createUserWithEmailAndPassword(email,pass);
     try{
       await db.ref('users/'+cred.user.uid).set({email:email, name:email.split('@')[0], joinDate:new Date().toLocaleDateString(), createdAt: Date.now()});
-    }catch(dbErr){ console.log('DB write failed but account created', dbErr); }
+    }catch(dbErr){}
     saveToMulti({uid:cred.user.uid, email:cred.user.email, displayName:email.split('@')[0], photoURL:''});
     closeAuth();
     niotronSet("SIGNUP_SUCCESS::"+email);
     alert('Account created! 💜');
     setTimeout(()=>{ window.location.href='home.html'; }, 400);
   }catch(err){
-    console.error(err);
     if(err.code==='auth/email-already-in-use'){
       alert('Ye email pehle se hai. Login karo ya Google se login karo');
     } else {
@@ -359,12 +367,11 @@ async function signInWithGoogle(){
     let result=await auth.signInWithPopup(provider);
     try{
       await db.ref('users/'+result.user.uid).update({email:result.user.email, name:result.user.displayName, photo:result.user.photoURL, lastLogin:Date.now()});
-    }catch(e){ console.log('db update fail', e); }
+    }catch(e){}
     saveToMulti({uid:result.user.uid, email:result.user.email, displayName:result.user.displayName, photoURL:result.user.photoURL});
     closeAuth();
     setTimeout(()=>{ window.location.href='home.html'; }, 300);
   }catch(err){
-    console.error(err);
     if(err.code==='auth/popup-blocked'){
       auth.signInWithRedirect(provider);
     } else {
