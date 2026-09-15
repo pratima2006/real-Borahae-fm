@@ -15,26 +15,26 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;color:#1a1033;overflow-
 .modal-bg{backdrop-filter:blur(6px);background:rgba(0,0,0,0.25)}
 </style></head><body class="paper-grid pb-24">
 
-<header class="sticky top-0 z-30 bg-[#fdf8ff]/90 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
+<header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
 <button onclick="openSidebar()" class="w-9 h-9 bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center text-[20px]">☰</button>
 <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
 </header>
 
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
-<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 flex flex-col p-5">
+<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
 <div class="flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div><button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button></div>
 <p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
 <nav class="space-y-[2px]">
 <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
-<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice</a>
+<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice <span id="newNotice" class="ml-auto hidden text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span></a>
 <a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">✦ Missions</a>
-<a href="plaza.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">☾ Borahae Plaza</a>
 <a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">▶ Videos</a>
 <a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◫ My History</a>
+<a href="plaza.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">☾ Borahae Plaza</a>
 </nav>
 <div class="mt-auto">
-<div class="border-t border-white/10 pt-4"><a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a></div>
-<div id="sidebarUserBox" onclick="window.location.href='profile.html'" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15"><div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden"/><span id="sidebarAvatarLetter">A</span></div><div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY</p><p id="sidebarSub" class="text-white/50 text-[10px] truncate">View profile</p></div></div>
+<div class="border-t border-white/10 pt-4 space-y-[2px]"><a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a></div>
+<div id="sidebarUserBox" onclick="goProfile()" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15 transition"><div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden flex-shrink-0"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden"/><span id="sidebarAvatarLetter">A</span></div><div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY</p><p class="text-white/50 text-[10px] truncate">View profile</p></div></div>
 </div>
 </aside>
 
@@ -56,28 +56,22 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;color:#1a1033;overflow-
   </div>
 </main>
 
-<!-- ADD MODAL - PIC JAISA -->
 <div id="addModal" class="fixed inset-0 z-[70] hidden modal-bg flex items-center justify-center p-4">
   <div class="animate-pop bg-white rounded-[22px] p-5 w-full max-w-[360px] shadow-xl">
     <div class="flex justify-between items-center"><h3 class="font-bold text-[14px]">Add Mission</h3><button onclick="closeAddModal()" class="w-7 h-7 bg-gray-100 rounded-full flex items-center justify-center text-[12px]">✕</button></div>
-
     <label class="text-[10px] font-bold text-gray-600 mt-4 block">Title</label>
     <input id="missionTitle" placeholder="Title e.g. Dynamite" class="w-full mt-1 border border-[#ede9fe] rounded-[12px] px-3 py-2.5 text-[12px] outline-none focus:border-[#7c3aed] focus:ring-1 focus:ring-[#ede9fe]">
-
     <label class="text-[10px] font-bold text-gray-600 mt-3 block">YouTube Link</label>
     <div class="relative mt-1">
       <input id="missionLink" oninput="checkYTLink()" placeholder="https://youtu.be/... or ID" class="w-full border border-[#ede9fe] rounded-[12px] px-3 py-2.5 pr-8 text-[12px] outline-none focus:border-[#7c3aed]">
       <span id="ytTick" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 bg-[#22c55e] text-white rounded-full flex items-center justify-center text-[11px]">✓</span>
     </div>
-
     <div id="thumbPreview" class="hidden mt-3 rounded-[12px] overflow-hidden border border-[#f3e8ff] relative">
       <img id="thumbImg" src="" class="w-full h-[120px] object-cover">
       <div class="absolute bottom-0 left-0 right-0 bg-black/50 backdrop-blur px-2 py-1"><p id="thumbId" class="text-[9px] font-mono text-white/80 truncate"></p></div>
     </div>
-
     <label class="text-[10px] font-bold text-gray-600 mt-3 block">How many times to stream?</label>
     <input id="missionGoal" type="number" min="1" max="50" value="5" class="w-[90px] mt-1 border border-[#ede9fe] rounded-[10px] px-3 py-2 text-[12px] outline-none focus:border-[#7c3aed]">
-
     <button onclick="saveMission()" class="w-full mt-5 bg-[#7c3aed] text-white py-3 rounded-full text-[12px] font-bold">+ Add Mission</button>
     <p id="ownerOnlyNote" class="text-[9px] text-gray-400 mt-2 text-center">Only owner can add • pratimatribhuvan2006@gmail.com</p>
   </div>
@@ -86,9 +80,7 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;color:#1a1033;overflow-
 <script>
 const firebaseConfig = { apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw", authDomain: "borahae-fm-f7075.firebaseapp.com", databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com", projectId: "borahae-fm-f7075" };
 firebase.initializeApp(firebaseConfig); const db=firebase.database(); const auth=firebase.auth();
-
 const OWNER_EMAILS = ["pratimatribhuvan2006@gmail.com"];
-
 let videos=[], counts={}, isOwner=false, currentUserEmail="", premiumExtraCount=0, lastValidYTId="";
 
 function getYouTubeID(urlOrId){
@@ -98,7 +90,6 @@ function getYouTubeID(urlOrId){
   if(urlOrId.match(/^[a-zA-Z0-9_-]{11}$/)) return urlOrId;
   return "";
 }
-
 function checkYTLink(){
   let link = document.getElementById('missionLink').value.trim();
   let id = getYouTubeID(link);
@@ -118,7 +109,6 @@ function checkYTLink(){
     lastValidYTId = "";
   }
 }
-
 function recalcCountsFromHistory(){
   let detailed=JSON.parse(localStorage.getItem('borahae_detailed_logs')||'{}');
   let todayStr = new Date().toDateString();
@@ -134,7 +124,6 @@ function recalcCountsFromHistory(){
   if(extra.date!== todayStr) { extra={date:todayStr, count:0}; localStorage.setItem('borahae_premium_extra_today', JSON.stringify(extra)); }
   premiumExtraCount = extra.count||0;
 }
-
 function render(){
  recalcCountsFromHistory();
  const list=document.getElementById('missionList');
@@ -164,7 +153,6 @@ function render(){
    else premiumBox.classList.add('hidden');
  } else premiumBox.classList.add('hidden');
 }
-
 db.ref('missions').on('value', (snap)=>{
   let data=snap.val();
   videos=[];
@@ -176,9 +164,9 @@ db.ref('missions').on('value', (snap)=>{
   }
   render();
 });
-
 function openSidebar(){ document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebarOverlay').classList.add('hidden');}
+function goProfile(){ const u=firebase.auth().currentUser; const uid=u? u.uid : (JSON.parse(localStorage.getItem('borahaeUser')||'{}').uid || 'me'); location.href='profile.html?uid='+uid; }
 function openAddModal(isPremiumAdd=false){
   if(!isOwner &&!isPremiumAdd){ alert('Only owner can add missions'); return; }
   if(isPremiumAdd && premiumExtraCount>=2) { alert('Daily limit 2 reached'); return; }
@@ -215,7 +203,6 @@ function deleteMission(key, e){
   if(!isOwner){ alert('Only owner can delete'); return; }
   if(confirm('Delete this mission?')) db.ref('missions/'+key).remove();
 }
-
 try{
   const savedUser = JSON.parse(localStorage.getItem('borahaeUser') || '{}');
   if(savedUser.name){
@@ -245,5 +232,25 @@ auth.onAuthStateChanged(user=>{
   }
   render();
 });
+
+// NEW TAG 12 HOURS LOGIC
+const TWELVE_HOURS = 12*60*60*1000;
+let latestTimes={notice:0, donate:0, voting:0};
+function updateNewTag(){
+  const now=Date.now(); let newest=null, newestTime=0;
+  for(let k in latestTimes){ if(latestTimes[k] && (now-latestTimes[k] < TWELVE_HOURS)){ if(latestTimes[k] > newestTime){ newestTime=latestTimes[k]; newest=k; } } }
+  const el=document.getElementById('newNotice'); if(!el) return;
+  if(!newest){ el.classList.add('hidden'); return; }
+  el.classList.remove('hidden');
+  if(newest==='notice') el.className='ml-auto text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#f472b6]';
+  else if(newest==='donate') el.className='ml-auto text-black text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#facc15]';
+  else el.className='ml-auto text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#22c55e]';
+  el.innerText='NEW';
+}
+db.ref('notices').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; latestTimes.notice=last.createdAt||0; updateNewTag(); });
+db.ref('borahaeDonates').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; latestTimes.donate=last.createdAt||0; updateNewTag(); });
+db.ref('donateLinks').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; if(last.createdAt > latestTimes.donate) latestTimes.donate=last.createdAt; updateNewTag(); });
+db.ref('votings').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; latestTimes.voting=last.createdAt||0; updateNewTag(); });
+
 setInterval(render, 5000);
 </script></body></html>
