@@ -1,0 +1,44 @@
+<div class="notif-fragment">
+<h2 class="font-display text-[20px] font-bold">Notifications</h2>
+<p class="text-[10px] text-gray-500 mt-1">Replies and mentions from plaza</p>
+<div class="flex gap-2 mt-3">
+<button onclick="filterNotif('all')" id="tabAll" class="px-3.5 py-1.5 rounded-full text-[10px] font-bold bg-[#1a1033] text-white">All</button>
+<button onclick="filterNotif('reply')" id="tabReply" class="px-3.5 py-1.5 rounded-full text-[10px] font-bold bg-white border border-[#f3e8ff] text-gray-500">Reply</button>
+<button onclick="filterNotif('mention')" id="tabMention" class="px-3.5 py-1.5 rounded-full text-[10px] font-bold bg-white border border-[#f3e8ff] text-gray-500">Mention</button>
+</div>
+<div id="notifList" class="mt-4 space-y-2"></div>
+<div id="notifEmpty" class="text-center py-12 bg-white border border-dashed border-[#f3e8ff] rounded-[16px] mt-3"><p class="text-[11px] text-gray-400">No notifications yet 💜</p></div>
+</div>
+<script>
+(function(){
+let currentFilter='all';
+window.filterNotif=(t)=>{
+ currentFilter=t;
+ ['all','reply','mention'].forEach(x=>{
+  let el=document.getElementById('tab'+x.charAt(0).toUpperCase()+x.slice(1));
+  if(!el)return; el.className=x===t?'px-3.5 py-1.5 rounded-full text-[10px] font-bold bg-[#1a1033] text-white':'px-3.5 py-1.5 rounded-full text-[10px] font-bold bg-white border border-[#f3e8ff] text-gray-500';
+ });
+ let uid=firebase.auth().currentUser?.uid||JSON.parse(localStorage.getItem('borahaeUser')||'{}').uid||'local';
+ let notifs=JSON.parse(localStorage.getItem('borahae_notifications_'+uid)||'[]'); renderNotifList(notifs);
+};
+function renderNotifList(all){
+ let filtered=all.filter(n=>currentFilter==='all'?true:n.type===currentFilter);
+ let listEl=document.getElementById('notifList'); let emptyEl=document.getElementById('notifEmpty');
+ if(!listEl)return;
+ if(filtered.length===0){listEl.innerHTML='';emptyEl.classList.remove('hidden');return;} emptyEl.classList.add('hidden');
+ listEl.innerHTML=filtered.map(n=>{
+  let icon=n.type==='reply'?'↩️':n.type==='mention'?'@':'💜';
+  let color=n.type==='reply'?'bg-[#ede9fe]':n.type==='mention'?'bg-[#fef3c7]':'bg-[#f5f3ff]';
+  return `<div onclick="openNotif('${n.msgId}','${n.id}')" class="bg-white border border-[#f3e8ff] rounded-[14px] p-3 flex gap-2.5 items-start ${!n.read?'border-[#7c3aed]/40':''}"><div class="w-8 h-8 rounded-[10px] ${color} flex items-center justify-center text-[12px]">${icon}</div><div class="flex-1"><p class="font-bold text-[10px]"><span class="text-[#7c3aed]">${n.fromName||'Someone'}</span> ${n.type==='reply'?'replied':'mentioned'} • ${new Date(n.ts).toLocaleTimeString()}</p><p class="text-[10px] text-gray-600 mt-1">${n.text||''}</p></div></div>`;
+ }).join('');
+}
+window.openNotif=(msgId,notifId)=>{
+ let uid=firebase.auth().currentUser?.uid||JSON.parse(localStorage.getItem('borahaeUser')||'{}').uid||'local';
+ let notifs=JSON.parse(localStorage.getItem('borahae_notifications_'+uid)||'[]').map(n=>n.id===notifId?{...n,read:true}:n);
+ localStorage.setItem('borahae_notifications_'+uid,JSON.stringify(notifs));
+ localStorage.setItem('borahae_highlight_msg',msgId); window.location.href='../plaza.html?highlight='+msgId;
+};
+let uid=firebase.auth().currentUser?.uid||JSON.parse(localStorage.getItem('borahaeUser')||'{}').uid||'local';
+let notifs=JSON.parse(localStorage.getItem('borahae_notifications_'+uid)||'[]'); renderNotifList(notifs);
+})();
+</script>
