@@ -1,0 +1,20 @@
+<div class="manage-fragment">
+<h2 class="font-display text-[20px] font-bold">Manage accounts</h2>
+<p class="text-[10px] text-gray-500 mt-1">Switch between your ARMY accounts</p>
+<div id="manageAccountsList" class="mt-4 space-y-2"></div>
+<div class="mt-4 flex gap-2">
+<button onclick="openPage('main')" class="flex-1 bg-white border border-[#f3e8ff] py-2.5 rounded-full text-[10px] font-bold">Cancel</button>
+<button onclick="window.location.href='../index.html'" class="flex-1 bg-[#1a1033] text-white py-2.5 rounded-full text-[10px] font-bold">+ Add account</button>
+</div>
+</div>
+<script>
+(function(){
+function renderManageAccounts(){
+ let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');
+ document.getElementById('manageAccountsList').innerHTML=list.map(a=>`<div class="flex items-center gap-3 bg-white border border-[#f3e8ff] rounded-[14px] p-2.5"><div onclick="switchToAcc('${a.email}')" class="flex items-center gap-3 flex-1 cursor-pointer"><img src="${a.photo||''}" class="w-9 h-9 rounded-full bg-[#ede9fe] object-cover"><div><p class="font-bold text-[11px] text-black">${a.name}</p><p class="text-[9px] text-gray-500">${a.email}</p></div></div><button onclick="askAccDel1('${a.email}')" class="w-7 h-7 bg-[#fff1f2] border rounded-full text-[#e11d48] text-[12px]">✕</button></div>`).join('')||'<p class="text-[11px] text-gray-400 text-center py-6">No accounts yet</p>';
+}
+window.switchToAcc=(email)=>{let list=JSON.parse(localStorage.getItem('borahae_accounts')||'[]');let acc=list.find(a=>a.email===email);localStorage.setItem('borahaeUser',JSON.stringify(acc));localStorage.setItem('army_name',acc.name);if(acc.photo)localStorage.setItem('army_pfp',acc.photo);location.reload();};
+window.askAccDel1=(e)=>{window.accToDelete=e;document.getElementById('accDel1')?.classList.remove('hidden');document.getElementById('accDel1')?.classList.add('flex');};
+renderManageAccounts();
+})();
+</script>
