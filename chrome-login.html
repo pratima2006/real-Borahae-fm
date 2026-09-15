@@ -1,51 +1,154 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Login</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Google Login • borahae.fm</title>
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-</head><body style="font-family:sans-serif;text-align:center;padding:40px;background:#fdf8ff">
-<h3 style="color:#7c3aed">Logging in with Google... 💜</h3>
-<p id="msg" style="font-size:11px;color:#6b7280">Please wait...</p>
+
+<style>
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    box-sizing:border-box;
+    background:#fdf8ff;
+    font-family:Arial,sans-serif;
+    color:#1e1033;
+    text-align:center;
+  }
+  .box{
+    width:min(340px,100%);
+    background:#fff;
+    border:1px solid #eee6f8;
+    border-radius:22px;
+    padding:28px 22px;
+    box-shadow:0 15px 45px rgba(30,16,51,.10);
+  }
+  .logo{
+    width:46px;
+    height:46px;
+    margin:0 auto 14px;
+    border-radius:14px;
+    background:#7c3aed;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    font-weight:700;
+  }
+  h3{margin:0;font-size:17px}
+  p{font-size:12px;color:#6b7280;line-height:1.5}
+  .small{font-size:10px;color:#9ca3af}
+</style>
+</head>
+
+<body>
+  <div class="box">
+    <div class="logo">b</div>
+    <h3 id="title">Continue with Google</h3>
+    <p id="msg">Google sign-in is opening. Please wait…</p>
+    <p class="small">borahae.fm</p>
+  </div>
+
 <script>
-const OWNER_EMAILS = ["pratimatribhuvan2006@gmail.com"];
-const firebaseConfig = { apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw", authDomain: "borahae-fm-f7075.firebaseapp.com", databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com", projectId: "borahae-fm-f7075" };
+const firebaseConfig = {
+  apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",
+  authDomain: "borahae-fm-f7075.firebaseapp.com",
+  databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com",
+  projectId: "borahae-fm-f7075",
+  storageBucket: "borahae-fm-f7075.firebasestorage.app",
+  messagingSenderId: "319118277965",
+  appId: "1:319118277965:web:eece2a5bf15708aab3cb04"
+};
+
 firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
 const db = firebase.database();
+
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
-let provider = new firebase.auth.GoogleAuthProvider();
+
+const provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({prompt:'select_account'});
 
-function sendToApp(email){
-  try{
-    if(window.AppInventor){
-      window.AppInventor.setWebViewString("GOOGLE_SUCCESS::"+email);
-      document.getElementById('msg').innerText = "Success! Returning to app... 💜";
-      return true;
-    }
-  }catch(e){}
-  return false;
+// This must be the public HTTPS URL that you configure in your
+// Niotron Deep Link extension.
+// Example:
+// https://borahae-fm-app.vercel.app/index.html
+const CALLBACK_BASE =
+  "https://borahae-fm-app.vercel.app/index.html";
+
+function setMessage(text){
+  document.getElementById("msg").innerText = text;
 }
 
-auth.signInWithPopup(provider).then(async (result)=>{
-  await db.ref('users/'+result.user.uid).update({email:result.user.email, name:result.user.displayName, photo:result.user.photoURL, lastLogin:Date.now()}).catch(()=>{});
-  let data = {email:result.user.email, name:result.user.displayName, photo:result.user.photoURL, uid:result.user.uid};
-  try{
-    localStorage.setItem('borahae_chrome_google', JSON.stringify(data));
-    localStorage.setItem('borahaeUser', JSON.stringify({uid:data.uid,email:data.email,name:data.name,photo:data.photo}));
-    localStorage.setItem('borahae_last_active',data.email);
-    localStorage.setItem('army_name',data.name);
-    if(data.photo) localStorage.setItem('army_pfp',data.photo);
-    localStorage.setItem('borahae_is_owner', OWNER_EMAILS.includes(data.email.toLowerCase())?'true':'false');
-  }catch(e){}
+function fail(err){
+  console.error(err);
+  document.getElementById("title").innerText = "Google sign-in failed";
+  setMessage(err && err.message ? err.message : String(err));
+}
 
-  // APK ke liye - Niotron ko bhejega
-  let sent = sendToApp(data.email);
-  // Web ke liye fallback - agar AppInventor nahi hai toh khud redirect
-  if(!sent){
-    let url = "index.html?google_login=1&email="+encodeURIComponent(data.email)+"&name="+encodeURIComponent(data.name)+"&photo="+encodeURIComponent(data.photo||"")+"&uid="+encodeURIComponent(data.uid);
-    setTimeout(()=>{ window.location.href = url; }, 700);
+async function login(){
+  try{
+    setMessage("Choose your Google account…");
+
+    const result = await auth.signInWithPopup(provider);
+    const user = result.user;
+
+    // IMPORTANT:
+    // This is the Google OAuth access token from the credential.
+    // The APK's index.html uses it with GoogleAuthProvider.credential()
+    // to establish Firebase Auth inside the WebView.
+    const credential = result.credential;
+    const accessToken = credential && credential.accessToken;
+
+    if(!accessToken){
+      throw new Error("Google access token was not returned.");
+    }
+
+    try{
+      await db.ref("users/"+user.uid).update({
+        email: user.email || "",
+        name: user.displayName || "",
+        photo: user.photoURL || "",
+        lastLogin: Date.now()
+      });
+    }catch(e){
+      // Authentication can still continue if the database write is blocked.
+      console.warn("Database update failed:", e);
+    }
+
+    setMessage("Success! Returning to borahae.fm…");
+
+    const callback =
+      CALLBACK_BASE +
+      "?google_callback=1" +
+      "&access_token=" + encodeURIComponent(accessToken) +
+      "&email=" + encodeURIComponent(user.email || "");
+
+    // Give Chrome a moment to paint the success message, then return.
+    setTimeout(()=>{
+      window.location.replace(callback);
+    }, 250);
+
+  }catch(err){
+    if(err && err.code === "auth/popup-closed-by-user"){
+      setMessage("Google window was closed. You can go back and try again.");
+      return;
+    }
+    fail(err);
   }
-}).catch(e=>{
-  document.body.innerHTML = "<p style='color:#e11d48'>Error: "+e.message+"</p><a href='index.html' style='background:#7c3aed;color:white;padding:10px 18px;border-radius:999px;text-decoration:none;display:inline-block;margin-top:12px'>Go back</a>";
-});
-</script></body></html>
+}
+
+login();
+</script>
+</body>
+</html>
