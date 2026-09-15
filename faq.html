@@ -1,99 +1,33 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FAQ - borahae.fm</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-<style>
-  html{scroll-behavior:smooth;}
-  body{font-family:'Manrope',sans-serif; background:#fdf8ff; color:#1a1033; transition:0.3s}
-.font-display{font-family:'Playfair Display',serif;}
-.font-mono{font-family:'DM Mono',monospace;}
-.paper-grid{background-image:linear-gradient(#e9d5ff1f 1px, transparent 1px),linear-gradient(90deg, #e9d5ff1f 1px, transparent 1px); background-size:22px 22px;}
-.sidebar-bg{background:#28164f;}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #f3e8ff;display:none;justify-content:space-around;padding:8px 0 18px 0;z-index:30;max-width:600px;margin:0 auto;}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;opacity:0.5}
-.nav-item.active{opacity:1}
-body.dark{background:#0f0a1e!important;color:white!important}
-body.dark header{background:#0f0a1e!important;border-color:#1f1340!important}
-body.dark main p.text-[#6b7280]{color:#9ca3af!important}
-</style></head><body class="paper-grid">
+<div class="faq-fragment">
+<p class="font-mono text-[9px] tracking-[3px] text-[#7c3aed] font-bold">LITTLE QUESTIONS</p>
+<h2 class="font-display text-[20px] font-bold mt-1 leading-[0.95]">FAQ, with care.</h2>
 
-<header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
-  <button onclick="openSidebar()" class="w-9 h-9 bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center text-[20px]">☰</button>
-  <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
-  <span class="font-bold text-[15px]">FAQ</span>
-</header>
-
-<!-- EXACT HOME WALA SIDEBAR -->
-<div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
-<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
-  <div class="flex items-center justify-between">
-    <div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div>
-    <button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button>
-  </div>
-  <p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
-  <nav class="space-y-[2px]">
-    <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
-    <a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice <span class="ml-auto bg-[#f472b6] text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span></a>
-    <a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✦ Missions</a>
-    <a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">▶ Videos</a>
-    <a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◫ My History</a>
-    <a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">? FAQ <span class="ml-auto w-2 h-2 bg-[#f472b6] rounded-full"></span></a>
-  </nav>
-  <div class="mt-auto">
-    <div class="border-t border-white/10 pt-4 space-y-[2px]">
-      <a href="whatsnew.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✧ What's New</a>
-      <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a>
-    </div>
-    <div id="sidebarUserBox" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3">
-      <div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div>
-      <div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY demo</p><p id="sidebarEmail" class="text-white/50 text-[10px] truncate">keeping the purple light on</p></div>
-    </div>
-  </div>
-</aside>
-
-<main class="w-full max-w-[480px] md:max-w-[600px] mx-auto px-5 pt-6 pb-28 min-h-screen">
-  <p class="font-mono text-[10px] tracking-[3px] text-[#7c3aed] font-bold">LITTLE QUESTIONS</p>
-  <h1 class="font-display text-[34px] leading-[0.95] font-bold mt-1 text-[#1a1033]">FAQ, with care.</h1>
-
-  <div class="mt-6 bg-white border border-[#e9e0f5] rounded-[24px] p-2 shadow-sm">
-    <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[13px]">What counts as a stream?</span><span class="text-[#7c3aed] text-[12px]">⌄</span></button><div class="hidden px-4 pb-4 text-[11px] text-[#6b7280] leading-[1.5]">A stream is counted when you watch >60 seconds without major seeking in our in-app YouTube player. Short = filtered.</div></div>
-    <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[13px]">Can I add any YouTube video?</span><span class="text-[#7c3aed] text-[12px]">⌄</span></button><div class="hidden px-4 pb-4 text-[11px] text-[#6b7280]">Yes, public YouTube links work. Private/unlisted won't validate.</div></div>
-    <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[13px]">Does this increase YouTube's official view?</span><span class="text-[#7c3aed] text-[12px]">⌄</span></button><div class="hidden px-4 pb-4 text-[11px] text-[#6b7280]">We use real YouTube player, so it follows YouTube rules. Official count is decided by YouTube. We show your personal journal.</div></div>
-    <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[13px]">What's Correct vs Filtered?</span><span class="text-[#7c3aed] text-[12px]">⌄</span></button><div class="hidden px-4 pb-4 text-[11px] text-[#6b7280]">Correct = full watch >60s. Filtered = short/skip/background. Helps you stream properly.</div></div>
-    <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[13px]">Why history gone after new APK?</span><span class="text-[#7c3aed] text-[12px]">⌄</span></button><div class="hidden px-4 pb-4 text-[11px] text-[#6b7280]">Fixed in v2.1 - now saved to cloud with Gmail. Same email login = history back even after new APK.</div></div>
-    <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[13px]">What is Premium? Why lock Memoir?</span><span class="text-[#7c3aed] text-[12px]">⌄</span></button><div class="hidden px-4 pb-4 text-[11px] text-[#6b7280]">Premium unlocks full Correct/Filtered logs. Free till May 1, 2027. After $2.99/mo ₹249. Owner free forever.</div></div>
-    <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[13px]">Can I cancel Premium?</span><span class="text-[#7c3aed] text-[12px]">⌄</span></button><div class="hidden px-4 pb-4 text-[11px] text-[#6b7280]">Yes anytime from Play Store > Subscriptions. Data stays safe.</div></div>
-    <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[13px]">Is my Google / YouTube data safe?</span><span class="text-[#7c3aed] text-[12px]">⌄</span></button><div class="hidden px-4 pb-4 text-[11px] text-[#6b7280]">Only youtube.readonly scope. We never post/delete/share. Token stays on phone. Disconnect in Settings anytime.</div></div>
-    <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[13px]">Sidebar vs Navigation Bar?</span><span class="text-[#7c3aed] text-[12px]">⌄</span></button><div class="hidden px-4 pb-4 text-[11px] text-[#6b7280]">Settings > Sidebar Settings me choose kar sakti hai. Bottom nav = Instagram style, bigger icon small label.</div></div>
-    <div><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[13px]">How to report a bug?</span><span class="text-[#7c3aed] text-[12px]">⌄</span></button><div class="hidden px-4 pb-4 text-[11px] text-[#6b7280]">DM @borahae.fm on Insta or mail from Settings with screenshot + email.</div></div>
-  </div>
-</main>
-
-<div id="bottomNav" class="bottom-nav">
-  <a href="home.html" class="nav-item"><span style="font-size:22px">⌂</span><span style="font-size:10px;font-weight:700">Home</span></a>
-  <a href="missions.html" class="nav-item"><span style="font-size:22px">✦</span><span style="font-size:10px;font-weight:700">Missions</span></a>
-  <a href="music.html" class="nav-item"><span style="font-size:22px">▶</span><span style="font-size:10px;font-weight:700">Videos</span></a>
-  <a href="history.html" class="nav-item"><span style="font-size:22px">◫</span><span style="font-size:10px;font-weight:700">History</span></a>
-  <a href="faq.html" class="nav-item active"><span style="font-size:26px;color:#7c3aed">?</span><span style="font-size:10px;font-weight:700">FAQ</span></a>
+<div class="mt-4 bg-white border border-[#e9e0f5] rounded-[24px] p-2 shadow-sm">
+  <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[12px]">What counts as a stream?</span><span class="text-[#7c3aed] text-[12px] transition">⌄</span></button><div class="hidden px-4 pb-4 text-[10px] text-[#6b7280] leading-[1.5]">A stream is counted when you watch >60 seconds without major seeking in our in-app YouTube player. Short = filtered.</div></div>
+  <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[12px]">Can I add any YouTube video?</span><span class="text-[#7c3aed] text-[12px] transition">⌄</span></button><div class="hidden px-4 pb-4 text-[10px] text-[#6b7280]">Yes, public YouTube links work. Private/unlisted won't validate.</div></div>
+  <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[12px]">Does this increase YouTube's official view?</span><span class="text-[#7c3aed] text-[12px] transition">⌄</span></button><div class="hidden px-4 pb-4 text-[10px] text-[#6b7280]">We use real YouTube player, so it follows YouTube rules. Official count is decided by YouTube. We show your personal journal.</div></div>
+  <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[12px]">What's Correct vs Filtered?</span><span class="text-[#7c3aed] text-[12px] transition">⌄</span></button><div class="hidden px-4 pb-4 text-[10px] text-[#6b7280]">Correct = full watch >60s. Filtered = short/skip/background. Helps you stream properly.</div></div>
+  <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[12px]">Why history gone after new APK?</span><span class="text-[#7c3aed] text-[12px] transition">⌄</span></button><div class="hidden px-4 pb-4 text-[10px] text-[#6b7280]">Fixed in v2.1 - now saved to cloud with Gmail. Same email login = history back even after new APK.</div></div>
+  <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[12px]">What is Premium? Why lock Memoir?</span><span class="text-[#7c3aed] text-[12px] transition">⌄</span></button><div class="hidden px-4 pb-4 text-[10px] text-[#6b7280]">Premium unlocks full Correct/Filtered logs. Free till May 1, 2027. After $2.99/mo ₹249. Owner free forever.</div></div>
+  <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[12px]">Can I cancel Premium?</span><span class="text-[#7c3aed] text-[12px] transition">⌄</span></button><div class="hidden px-4 pb-4 text-[10px] text-[#6b7280]">Yes anytime from Play Store > Subscriptions. Data stays safe.</div></div>
+  <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[12px]">Is my Google / YouTube data safe?</span><span class="text-[#7c3aed] text-[12px] transition">⌄</span></button><div class="hidden px-4 pb-4 text-[10px] text-[#6b7280]">Only youtube.readonly scope. We never post/delete/share. Token stays on phone. Disconnect in Settings anytime.</div></div>
+  <div class="border-b border-[#eee6f8]"><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[12px]">Sidebar vs Navigation Bar?</span><span class="text-[#7c3aed] text-[12px] transition">⌄</span></button><div class="hidden px-4 pb-4 text-[10px] text-[#6b7280]">Settings > Sidebar Settings me choose kar sakti hai. Bottom nav = Instagram style, bigger icon small label.</div></div>
+  <div><button onclick="toggleFaq(this)" class="w-full text-left px-4 py-4 flex justify-between items-center gap-3"><span class="font-semibold text-[12px]">How to report a bug?</span><span class="text-[#7c3aed] text-[12px] transition">⌄</span></button><div class="hidden px-4 pb-4 text-[10px] text-[#6b7280]">DM @borahae.fm on Insta or mail from Settings with screenshot + email.</div></div>
+</div>
 </div>
 
 <script>
-const firebaseConfig={apiKey:"AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",authDomain:"borahae-fm-f7075.firebaseapp.com",projectId:"borahae-fm-f7075"};
-if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-firebase.auth().onAuthStateChanged(user=>{
-  if(user){
-    document.getElementById('sidebarName').innerText=user.displayName||localStorage.getItem('army_name')||'ARMY';
-    document.getElementById('sidebarEmail').innerText=user.email;
-    if(user.photoURL){ document.getElementById('sidebarAvatarImg').src=user.photoURL; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }
+(function(){
+window.toggleFaq = function(btn){
+  let content=btn.nextElementSibling;
+  let icon=btn.querySelector('span:last-child');
+  if(content.classList.contains('hidden')){
+    content.classList.remove('hidden');
+    icon.style.transform='rotate(180deg)';
   } else {
-    try{ const u=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); if(u.name){ document.getElementById('sidebarName').innerText=u.name; document.getElementById('sidebarAvatarLetter').innerText=u.name.charAt(0).toUpperCase(); if(u.photo){ document.getElementById('sidebarAvatarImg').src=u.photo; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); } } }catch(e){}
+    content.classList.add('hidden');
+    icon.style.transform='rotate(0deg)';
   }
-  let mode=localStorage.getItem('borahae_navMode')||'sidebar'; if(mode==='navigation'){ document.getElementById('sidebar').style.display='none'; document.getElementById('bottomNav').style.display='flex'; } else { document.getElementById('bottomNav').style.display='none'; document.getElementById('sidebar').style.display='flex'; }
-  if(localStorage.getItem('borahae_dark')==='true') document.body.classList.add('dark');
-});
-function openSidebar(){ if(localStorage.getItem('borahae_navMode')==='navigation') return; document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebarOverlay').classList.remove('hidden');}
-function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebarOverlay').classList.add('hidden');}
-function toggleFaq(btn){ let content=btn.nextElementSibling; let icon=btn.querySelector('span:last-child'); if(content.classList.contains('hidden')){ content.classList.remove('hidden'); icon.style.transform='rotate(180deg)'; } else { content.classList.add('hidden'); icon.style.transform='rotate(0deg)'; } }
+}
+})();
 </script>
-</body></html>
