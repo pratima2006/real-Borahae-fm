@@ -21,29 +21,29 @@ body{font-family:'Manrope',sans-serif;background:#faf6ff;overscroll-behavior-y:c
 
 <div id="pullIndicator" class="fixed top-0 left-0 right-0 z-[60] flex justify-center pt-2 pointer-events-none"><div class="bg-white border shadow px-3 py-1.5 rounded-full text-[10px] font-bold flex gap-1.5 items-center"><span>↻</span> Refreshing...</div></div>
 
-<header class="sticky top-0 z-20 bg-[#faf6ff]/90 backdrop-blur-md border-b border-purple-100 px-4 py-3 flex items-center gap-3">
+<header class="sticky top-0 z-30 bg-[#faf6ff]/80 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
 <button onclick="openSidebar()" class="text-xl w-9 h-9 flex items-center justify-center bg-white border border-[#ede9fe] rounded-[10px]">☰</button>
 <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
 <span class="font-bold text-[15px]">History</span>
 </header>
 
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
-<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 flex flex-col p-5">
+<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
 <div class="flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div><button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button></div>
 <p class="mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
 <nav class="space-y-[2px]">
 <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
-<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Board</a>
+<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice <span id="newNotice" class="ml-auto hidden text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span></a>
 <a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✦ Missions</a>
 <a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">▶ Videos</a>
-<a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">◫ My History <span class="ml-auto w-2 h-2 bg-[#f472b6] rounded-full"></span></a>
-<a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">? FAQ</a>
+<a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">◫ My History</a>
+<a href="plaza.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">☾ Borahae Plaza</a>
 </nav>
 <div class="mt-auto">
-<div class="border-t border-white/10 pt-4 space-y-[2px]"><a href="whatsnew.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✧ What's New</a><a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a></div>
-<div id="sidebarUserBox" onclick="location.href='settings.html'" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15 transition">
+<div class="border-t border-white/10 pt-4 space-y-[2px]"><a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a></div>
+<div id="sidebarUserBox" onclick="goProfile()" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15 transition">
 <div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden flex-shrink-0"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div>
-<div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY</p><p id="sidebarSub" class="text-white/50 text-[10px] truncate">View profile</p></div>
+<div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY</p><p class="text-white/50 text-[10px] truncate">View profile</p></div>
 </div>
 </div>
 </aside>
@@ -108,17 +108,16 @@ const db = firebase.firestore();
 <script>
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
+function goProfile(){ const u = JSON.parse(localStorage.getItem('borahaeUser')||'{}'); const uid = firebase.auth()?.currentUser?.uid || u.uid || 'me'; location.href='profile.html?uid='+uid; }
 let streams = JSON.parse(localStorage.getItem('borahae_history') || '[]');
 let detailedLogs = JSON.parse(localStorage.getItem('borahae_detailed_logs') || '{}');
 let currentTab = 'video'; let deleteTargetId=null;
-
 const OWNER_EMAILS = ['pratimatribhuvan2006@gmail.com','tribhuvanpratima38@gmail.com'].map(e=>e.toLowerCase());
 function getCurrentUser(){ try{ return JSON.parse(localStorage.getItem('borahaeUser')||localStorage.getItem('borahae_user')||'{}'); }catch(e){ return {}; } }
 function isOwnerUser(){ const u=getCurrentUser(); return u.email && OWNER_EMAILS.includes(u.email.toLowerCase()); }
 function isFreeDayActive(){ const now=new Date(); const first=new Date(now.getFullYear(), now.getMonth(), 1); let s=new Date(first); while(s.getDay()!==0) s.setDate(s.getDate()+1); const start=new Date(s); start.setHours(12,0,0,0); const end=new Date(start); end.setDate(end.getDate()+1); return (now>=start && now<=end)? end : null; }
 const FREE_UNTIL = new Date('2027-05-01T00:00:00');
 function hasPremiumAccess(){ if(isOwnerUser()) return true; if(localStorage.getItem('isPremium')==='true') return true; if(new Date() < FREE_UNTIL) return true; if(isFreeDayActive()) return true; return false; }
-
 function loadSidebarPFP(){
   try{
     let u=getCurrentUser(); let name = u.name || localStorage.getItem('army_name') || 'ARMY';
@@ -228,7 +227,6 @@ function buyPremium(){ if(confirm('Test unlock?')){ localStorage.setItem('isPrem
 async function saveToCloud(){ const user = firebase.auth().currentUser; if(!user) return; try{ await db.collection('users').doc(user.uid).set({ history: streams, detailedLogs: detailedLogs, deleted: JSON.parse(localStorage.getItem('borahae_deleted')||'[]'), email: user.email, updatedAt: new Date() }, {merge:true}); }catch(e){} }
 async function loadFromCloud(){ const user = firebase.auth().currentUser; if(!user) return; try{ const doc = await db.collection('users').doc(user.uid).get(); if(doc.exists && doc.data().history){ streams = doc.data().history; detailedLogs = doc.data().detailedLogs || {}; localStorage.setItem('borahae_history', JSON.stringify(streams)); localStorage.setItem('borahae_detailed_logs', JSON.stringify(detailedLogs)); render(); } }catch(e){} }
 firebase.auth().onAuthStateChanged(user=>{ if(user){ loadSidebarPFP(); loadFromCloud(); } });
-
 let startY=0; let pulling=false;
 window.addEventListener('touchstart', e=>{ if(window.scrollY===0){ startY=e.touches[0].clientY; pulling=true; } });
 window.addEventListener('touchmove', e=>{ if(!pulling) return; let diff=e.touches[0].clientY-startY; if(diff>80) document.getElementById('pullIndicator').style.transform='translateY(0)'; });
@@ -237,7 +235,6 @@ window.addEventListener('touchend', e=>{
   if(diff>80){ document.getElementById('pullIndicator').style.transform='translateY(0)'; setTimeout(()=>{ checkActiveAndRender(); document.getElementById('pullIndicator').style.transform='translateY(-100%)'; },600); }
   else { document.getElementById('pullIndicator').style.transform='translateY(-100%)'; }
 });
-
 function checkActiveAndRender(){
   streams = JSON.parse(localStorage.getItem('borahae_history') || '[]');
   detailedLogs = JSON.parse(localStorage.getItem('borahae_detailed_logs') || '{}');
@@ -246,7 +243,6 @@ function checkActiveAndRender(){
     try{
       let active=JSON.parse(activeStr); let now=Date.now(); let watched=Math.floor((now-active.start)/1000); let total=active.duration||180;
       localStorage.removeItem('borahae_active_stream');
-      // FIXED: 30 sec ya 40% jo pehle ho - teri 1:30 wali pakka save hogi
       let needed = Math.min(30, Math.floor(total*0.4));
       if(watched>=needed){
         let dateStr=new Date().toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});
@@ -261,7 +257,6 @@ function checkActiveAndRender(){
         detailedLogs[active.id].unshift({date:dateStr,fullDate:fullISO,time:timeStr,duration:`${watched}s`,type:streamType,seconds:watched,required:total});
         localStorage.setItem('borahae_history',JSON.stringify(streams));
         localStorage.setItem('borahae_detailed_logs',JSON.stringify(detailedLogs));
-        // loop block reset taaki agla stream bhi save ho
         localStorage.removeItem('borahae_last_watch');
         saveToCloud();
       }
@@ -273,5 +268,32 @@ window.addEventListener('pageshow', checkActiveAndRender);
 window.addEventListener('focus', checkActiveAndRender);
 document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkActiveAndRender(); });
 window.addEventListener('load', checkActiveAndRender);
-render();
-</script></body></html>
+
+// NEW TAG 12H LOGIC
+const TWELVE_HOURS = 12*60*60*1000;
+let latestTimes={notice:0, donate:0, voting:0};
+function updateNewTag(){
+  const now=Date.now(); let newest=null, newestTime=0;
+  for(let k in latestTimes){ if(latestTimes[k] && (now-latestTimes[k] < TWELVE_HOURS)){ if(latestTimes[k] > newestTime){ newestTime=latestTimes[k]; newest=k; } } }
+  const el=document.getElementById('newNotice'); if(!el) return;
+  if(!newest){ el.classList.add('hidden'); return; }
+  el.classList.remove('hidden');
+  if(newest==='notice') el.className='ml-auto text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#f472b6]';
+  else if(newest==='donate') el.className='ml-auto text-black text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#facc15]';
+  else el.className='ml-auto text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#22c55e]';
+  el.innerText='NEW';
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script>
+const rtdbConfig={apiKey:"AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",authDomain:"borahae-fm-f7075.firebaseapp.com",databaseURL:"https://borahae-fm-f7075-default-rtdb.firebaseio.com",projectId:"borahae-fm-f7075"};
+if(firebase.apps.length<2) firebase.initializeApp(rtdbConfig, "rtdb");
+const rtdb = firebase.app("rtdb").database();
+rtdb.ref('notices').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; latestTimes.notice=last.createdAt||0; updateNewTag(); });
+rtdb.ref('borahaeDonates').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; latestTimes.donate=last.createdAt||0; updateNewTag(); });
+rtdb.ref('donateLinks').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; if(last.createdAt > latestTimes.donate) latestTimes.donate=last.createdAt; updateNewTag(); });
+rtdb.ref('votings').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; latestTimes.voting=last.createdAt||0; updateNewTag(); });
+</script>
+</body></html>
