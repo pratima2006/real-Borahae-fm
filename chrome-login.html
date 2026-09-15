@@ -4,7 +4,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 </head><body style="font-family:sans-serif;text-align:center;padding:40px;background:#fdf8ff">
 <h3 style="color:#7c3aed">Logging in with Google... 💜</h3>
-<p style="font-size:11px;color:#6b7280">Please wait...</p>
+<p id="msg" style="font-size:11px;color:#6b7280">Please wait...</p>
 <script>
 const OWNER_EMAILS = ["pratimatribhuvan2006@gmail.com"];
 const firebaseConfig = { apiKey: "AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw", authDomain: "borahae-fm-f7075.firebaseapp.com", databaseURL: "https://borahae-fm-f7075-default-rtdb.firebaseio.com", projectId: "borahae-fm-f7075" };
@@ -14,6 +14,18 @@ const db = firebase.database();
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
 let provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({prompt:'select_account'});
+
+function sendToApp(email){
+  try{
+    if(window.AppInventor){
+      window.AppInventor.setWebViewString("GOOGLE_SUCCESS::"+email);
+      document.getElementById('msg').innerText = "Success! Returning to app... 💜";
+      return true;
+    }
+  }catch(e){}
+  return false;
+}
+
 auth.signInWithPopup(provider).then(async (result)=>{
   await db.ref('users/'+result.user.uid).update({email:result.user.email, name:result.user.displayName, photo:result.user.photoURL, lastLogin:Date.now()}).catch(()=>{});
   let data = {email:result.user.email, name:result.user.displayName, photo:result.user.photoURL, uid:result.user.uid};
@@ -21,10 +33,19 @@ auth.signInWithPopup(provider).then(async (result)=>{
     localStorage.setItem('borahae_chrome_google', JSON.stringify(data));
     localStorage.setItem('borahaeUser', JSON.stringify({uid:data.uid,email:data.email,name:data.name,photo:data.photo}));
     localStorage.setItem('borahae_last_active',data.email);
+    localStorage.setItem('army_name',data.name);
+    if(data.photo) localStorage.setItem('army_pfp',data.photo);
     localStorage.setItem('borahae_is_owner', OWNER_EMAILS.includes(data.email.toLowerCase())?'true':'false');
-    if(window.AppInventor){ window.AppInventor.setWebViewString("GOOGLE_SUCCESS::"+data.email); }
   }catch(e){}
-  let url = "index.html?google_login=1&email="+encodeURIComponent(data.email)+"&name="+encodeURIComponent(data.name)+"&photo="+encodeURIComponent(data.photo||"")+"&uid="+encodeURIComponent(data.uid);
-  setTimeout(()=>{ window.location.href = url; }, 700);
-}).catch(e=>{ document.body.innerHTML = "<p>Error: "+e.message+"</p><a href='index.html'>Go back</a>"; });
+
+  // APK ke liye - Niotron ko bhejega
+  let sent = sendToApp(data.email);
+  // Web ke liye fallback - agar AppInventor nahi hai toh khud redirect
+  if(!sent){
+    let url = "index.html?google_login=1&email="+encodeURIComponent(data.email)+"&name="+encodeURIComponent(data.name)+"&photo="+encodeURIComponent(data.photo||"")+"&uid="+encodeURIComponent(data.uid);
+    setTimeout(()=>{ window.location.href = url; }, 700);
+  }
+}).catch(e=>{
+  document.body.innerHTML = "<p style='color:#e11d48'>Error: "+e.message+"</p><a href='index.html' style='background:#7c3aed;color:white;padding:10px 18px;border-radius:999px;text-decoration:none;display:inline-block;margin-top:12px'>Go back</a>";
+});
 </script></body></html>
