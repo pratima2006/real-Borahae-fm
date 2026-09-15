@@ -19,13 +19,13 @@
 </head>
 <body class="paper-grid">
 
-<!-- HEADER -->
+<!-- HEADER - Same -->
 <header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
   <button onclick="openSidebar()" class="w-9 h-9 bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center text-[20px]">☰</button>
   <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
 </header>
 
-<!-- SIDEBAR - Updated with Plaza + Colored NEW -->
+<!-- SIDEBAR - Cleaned, FAQ/WhatsNew Removed -->
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
 <aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
   <div class="flex items-center justify-between">
@@ -40,21 +40,19 @@
     <a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">▶ Videos</a>
     <a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◫ My History</a>
     <a href="plaza.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">☾ Borahae Plaza</a>
-    <a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">? FAQ</a>
   </nav>
   <div class="mt-auto">
     <div class="border-t border-white/10 pt-4 space-y-[2px]">
-      <a href="whatsnew.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✧ What's New</a>
       <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a>
     </div>
     <div id="sidebarUserBox" onclick="goProfile()" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15 transition">
       <div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden flex-shrink-0"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div>
-      <div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY demo</p><p class="text-white/50 text-[10px] truncate">View profile</p></div>
+      <div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY</p><p class="text-white/50 text-[10px] truncate">View profile</p></div>
     </div>
   </div>
 </aside>
 
-<!-- HOME CONTENT - Same as before - Kuch delete nahi kiya -->
+<!-- HOME CONTENT - Same -->
 <main class="max-w-[480px] md:max-w-[600px] mx-auto px-5 pt-6 pb-20">
   <div>
     <p class="font-mono text-[11px] tracking-[2.5px] text-[#7c3aed]">YOUR SCRAPBOOK <span class="text-black/30 mx-2">·</span> AUG 29, 2026</p>
@@ -88,23 +86,114 @@
 <script>
 const firebaseConfig={apiKey:"AIzaSyAdEOrnBLg4N7TEDE1WRU6FBjerS6r7Xnw",authDomain:"borahae-fm-f7075.firebaseapp.com",databaseURL:"https://borahae-fm-f7075-default-rtdb.firebaseio.com",projectId:"borahae-fm-f7075"};
 if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth();
 const db=firebase.database();
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebarOverlay').classList.remove('hidden');}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebarOverlay').classList.add('hidden');}
-function goProfile(){ const u=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); const uid=firebase.auth().currentUser?.uid||u.uid||'me'; location.href='profile.html?uid='+uid; }
-// Dynamic User Logic + Profile box
-try{
-  const savedUser = JSON.parse(localStorage.getItem('borahaeUser') || '{}');
-  const name = savedUser.name || localStorage.getItem('army_name') || 'ARMY demo';
-  if(name){ document.getElementById('sidebarName').innerText=name; document.getElementById('sidebarAvatarLetter').innerText=name.charAt(0).toUpperCase(); }
-  const photo = savedUser.photo || localStorage.getItem('army_pfp');
-  if(photo){ document.getElementById('sidebarAvatarImg').src=photo; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }
-}catch(e){}
-// NEW LOGIC - Pink = Notice, Yellow = Donate, Green = Voting
-db.ref('notices').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; let seen=parseInt(localStorage.getItem('lastNoticeSeen')||'0'); if(last.createdAt>seen){ let el=document.getElementById('newNotice'); el.classList.remove('hidden'); el.className='ml-auto text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#f472b6]'; el.innerText='NEW'; }});
-db.ref('borahaeDonates').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; let seen=parseInt(localStorage.getItem('lastDonateSeen')||'0'); if(last.createdAt>seen){ let el=document.getElementById('newNotice'); el.classList.remove('hidden'); el.className='ml-auto text-black text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#facc15]'; el.innerText='NEW'; }});
-db.ref('donateLinks').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; let seen=parseInt(localStorage.getItem('lastDonateSeen')||'0'); if(last.createdAt>seen){ let el=document.getElementById('newNotice'); el.classList.remove('hidden'); el.className='ml-auto text-black text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#facc15]'; el.innerText='NEW'; }});
-db.ref('votings').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; let seen=parseInt(localStorage.getItem('lastVotingSeen')||'0'); if(last.createdAt>seen){ let el=document.getElementById('newNotice'); el.classList.remove('hidden'); el.className='ml-auto text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#22c55e]'; el.innerText='NEW'; }});
+function goProfile(){
+  const u = firebase.auth().currentUser;
+  const uid = u? u.uid : (JSON.parse(localStorage.getItem('borahaeUser')||'{}').uid || 'me');
+  location.href='profile.html?uid='+uid;
+}
+
+// PROFILE BOX - Current Login User PFP + Name
+auth.onAuthStateChanged(user=>{
+  if(user){
+    const name = user.displayName || user.email?.split('@')[0] || 'ARMY';
+    document.getElementById('sidebarName').innerText = name;
+    document.getElementById('sidebarAvatarLetter').innerText = name.charAt(0).toUpperCase();
+    if(user.photoURL){
+      document.getElementById('sidebarAvatarImg').src = user.photoURL;
+      document.getElementById('sidebarAvatarImg').classList.remove('hidden');
+      document.getElementById('sidebarAvatarLetter').classList.add('hidden');
+    }
+    // also save for other pages
+    localStorage.setItem('borahaeUser', JSON.stringify({uid:user.uid, name:name, photo:user.photoURL||''}));
+  } else {
+    // fallback to localStorage
+    try{
+      const savedUser = JSON.parse(localStorage.getItem('borahaeUser') || '{}');
+      const name = savedUser.name || localStorage.getItem('army_name') || 'ARMY';
+      if(name){
+        document.getElementById('sidebarName').innerText=name;
+        document.getElementById('sidebarAvatarLetter').innerText=name.charAt(0).toUpperCase();
+      }
+      const photo = savedUser.photo || localStorage.getItem('army_pfp');
+      if(photo){
+        document.getElementById('sidebarAvatarImg').src=photo;
+        document.getElementById('sidebarAvatarImg').classList.remove('hidden');
+        document.getElementById('sidebarAvatarLetter').classList.add('hidden');
+      }
+    }catch(e){}
+  }
+});
+
+// NEW TAG - 12 Hours Only Logic
+const TWELVE_HOURS = 12 * 60 * 60 * 1000;
+let latestNotices = { notice:0, donate:0, voting:0 };
+let latestTimes = { notice:0, donate:0, voting:0 };
+
+function updateNewTag(){
+  const now = Date.now();
+  let newestType = null;
+  let newestTime = 0;
+
+  // Find most recent within 12h
+  for(let key in latestTimes){
+    if(latestTimes[key] && (now - latestTimes[key] < TWELVE_HOURS)){
+      if(latestTimes[key] > newestTime){
+        newestTime = latestTimes[key];
+        newestType = key;
+      }
+    }
+  }
+
+  const el = document.getElementById('newNotice');
+  if(!el) return;
+
+  if(!newestType){
+    el.classList.add('hidden');
+    return;
+  }
+
+  el.classList.remove('hidden');
+  if(newestType === 'notice'){
+    el.className='ml-auto text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#f472b6]';
+  } else if(newestType === 'donate'){
+    el.className='ml-auto text-black text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#facc15]';
+  } else if(newestType === 'voting'){
+    el.className='ml-auto text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#22c55e]';
+  }
+  el.innerText='NEW';
+
+  // Auto-hide after 12h check every minute
+  setTimeout(updateNewTag, 60*1000);
+}
+
+db.ref('notices').limitToLast(1).on('value',s=>{
+  if(!s.val()) return;
+  let last=Object.values(s.val())[0];
+  latestTimes.notice = last.createdAt || 0;
+  updateNewTag();
+});
+db.ref('borahaeDonates').limitToLast(1).on('value',s=>{
+  if(!s.val()) return;
+  let last=Object.values(s.val())[0];
+  latestTimes.donate = last.createdAt || 0;
+  updateNewTag();
+});
+db.ref('donateLinks').limitToLast(1).on('value',s=>{
+  if(!s.val()) return;
+  let last=Object.values(s.val())[0];
+  if(last.createdAt > latestTimes.donate) latestTimes.donate = last.createdAt;
+  updateNewTag();
+});
+db.ref('votings').limitToLast(1).on('value',s=>{
+  if(!s.val()) return;
+  let last=Object.values(s.val())[0];
+  latestTimes.voting = last.createdAt || 0;
+  updateNewTag();
+});
 </script>
 </body>
 </html>
