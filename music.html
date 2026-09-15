@@ -16,13 +16,13 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 #actionSheet.sheet{transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.32,0.72,0,1)}
 #actionSheet.show.sheet{transform:translateY(0)}
 </style></head><body class="paper-grid pb-24">
-<header class="sticky top-0 z-30 bg-[#fdf8ff]/90 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
+<header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
 <button onclick="openSidebar()" class="w-9 h-9 bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center text-[20px] cursor-pointer">☰</button>
 <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
 </header>
 
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
-<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 flex flex-col p-5">
+<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
 <div class="flex items-center justify-between">
 <div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div>
 <button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button>
@@ -30,17 +30,17 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff;overflow-x:hidden;}
 <p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
 <nav class="space-y-[2px]">
 <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
-<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Board</a>
+<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◐ Notice <span id="newNotice" class="ml-auto hidden text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span></a>
 <a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✦ Missions</a>
-<a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">▶ Videos <span class="ml-auto w-2 h-2 bg-[#f472b6] rounded-full"></span></a>
+<a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">▶ Videos</a>
 <a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◫ My History</a>
-<a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">? FAQ</a>
+<a href="plaza.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">☾ Borahae Plaza</a>
 </nav>
 <div class="mt-auto">
-<div class="border-t border-white/10 pt-4 space-y-[2px]"><a href="whatsnew.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✧ What's New</a><a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a></div>
-<div id="sidebarUserBox" onclick="location.href='settings.html'" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15 transition">
+<div class="border-t border-white/10 pt-4 space-y-[2px]"><a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a></div>
+<div id="sidebarUserBox" onclick="goProfile()" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15 transition">
 <div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden flex-shrink-0"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div>
-<div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY</p><p id="sidebarSub" class="text-white/50 text-[10px] truncate">View profile</p></div>
+<div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY</p><p class="text-white/50 text-[10px] truncate">View profile</p></div>
 </div>
 </div>
 </aside>
@@ -146,7 +146,6 @@ firebase.initializeApp(firebaseConfig);const db=firebase.database(); const auth=
 function getYouTubeID(u){if(!u)return"";u=u.trim();if(u.length===11&&!u.includes("/")&&!u.includes("?"))return u;let r=/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;let m=u.match(r);return(m&&m[2].length===11)?m[2]:"";}
 function detectType(url){ if(url.toLowerCase().includes('shorts/')) return 'short'; return 'video'; }
 function formatDuration(sec){ if(!sec||isNaN(sec)||sec<=0) return "0:00"; let m=Math.floor(sec/60); let s=sec%60; return m+":"+String(s).padStart(2,'0'); }
-
 let videos=JSON.parse(localStorage.getItem('bts_videos')||'[]');
 let pinned=JSON.parse(localStorage.getItem('bts_pinned')||'[]');
 let missionGoals=JSON.parse(localStorage.getItem('borahae_mission_goals')||'{}');
@@ -154,20 +153,17 @@ let durations=JSON.parse(localStorage.getItem('bts_durations')||'{"gdZLi9oWNZg":
 if(videos.length===0){videos=[{title:"BTS 'Dynamite' Official MV",id:"gdZLi9oWNZg",channel:"HYBE LABELS",addedAt:Date.now(),type:'video',duration:219},{title:"BTS 'Butter' Official MV",id:"WMweEpGlu_U",channel:"HYBE LABELS",addedAt:Date.now(),type:'video',duration:167}];localStorage.setItem('bts_videos',JSON.stringify(videos));}
 let pending=null;let actionData=null;let deleteId=null;let isNewFilterActive=false;let isPinnedFilterActive=false;let currentFilter='all';let currentType='all';
 function normalize(a){let n=(a||"").trim();if(n.toLowerCase().includes("hybe"))return"HYBE LABELS";if(n.toLowerCase().includes("bangtan"))return"BANGTANTV";return n.trim();}
-
+function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
+function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
+function goProfile(){ const u=firebase.auth().currentUser; const uid=u? u.uid : (JSON.parse(localStorage.getItem('borahaeUser')||'{}').uid || 'me'); location.href='profile.html?uid='+uid; }
 auth.onAuthStateChanged(user=>{
-  if(user||localStorage.getItem('borahae_user')){
-    try{
-      let u = user? {name:user.displayName, photo:user.photoURL} : JSON.parse(localStorage.getItem('borahae_user')||'{}');
-      let name = u.name || localStorage.getItem('army_name') || 'ARMY';
-      document.getElementById('sidebarName').innerText=name;
-      let pic = (user&&user.photoURL) || u.photo || localStorage.getItem('army_pfp') || '';
-      if(pic){ document.getElementById('sidebarAvatarImg').src=pic; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }
-      else { document.getElementById('sidebarAvatarLetter').innerText=name.charAt(0).toUpperCase(); }
-    }catch(e){}
+  if(user){
+    document.getElementById('sidebarName').innerText=user.displayName||localStorage.getItem('army_name')||'ARMY';
+    if(user.photoURL){ document.getElementById('sidebarAvatarImg').src=user.photoURL; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }
+  } else {
+    try{ let u=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); if(u.name){ document.getElementById('sidebarName').innerText=u.name; document.getElementById('sidebarAvatarLetter').innerText=u.name.charAt(0).toUpperCase(); if(u.photo){ document.getElementById('sidebarAvatarImg').src=u.photo; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); } } }catch(e){}
   }
 });
-
 let fbDebounce=null;
 db.ref('videos').on('value',snap=>{
   clearTimeout(fbDebounce);
@@ -188,7 +184,6 @@ db.ref('videos').on('value',snap=>{
     if(changed){localStorage.setItem('bts_videos',JSON.stringify(videos));localStorage.setItem('bts_durations',JSON.stringify(durations));applyFilters();}
   },500);
 });
-
 async function fetchRealDurationFast(id){
   if(durations[id] && durations[id]>0) return durations[id];
   try{
@@ -204,10 +199,8 @@ async function fetchRealDurationFast(id){
   }catch(e){}
   return durations[id]||0;
 }
-
 let checkTimer=null; let lastCheckedId="";
 function debouncedCheck(){ clearTimeout(checkTimer); checkTimer=setTimeout(()=>checkLink(),380); }
-
 async function checkLink(){
   const link=document.getElementById('ytLink').value.trim();
   const preview=document.getElementById('previewBox');
@@ -374,8 +367,26 @@ window.addEventListener('pageshow',function(){
   if(watched<needed){ saveFiltered(active.id,active.title,total,watched); }
   else{ saveCorrect(active.id,active.title,total,watched); }
 });
-function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebarOverlay').classList.remove('hidden');}
-function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebarOverlay').classList.add('hidden');}
 document.addEventListener('click',function(e){ if(!e.target.closest('#filterBtn') &&!e.target.closest('#filterDropdown')) document.getElementById('filterDropdown').classList.add('hidden'); if(!e.target.closest('#typeBtn') &&!e.target.closest('#typeDropdown')) document.getElementById('typeDropdown').classList.add('hidden'); });
+
+// NEW TAG 12H LOGIC
+const TWELVE_HOURS = 12*60*60*1000;
+let latestTimes={notice:0, donate:0, voting:0};
+function updateNewTag(){
+  const now=Date.now(); let newest=null, newestTime=0;
+  for(let k in latestTimes){ if(latestTimes[k] && (now-latestTimes[k] < TWELVE_HOURS)){ if(latestTimes[k] > newestTime){ newestTime=latestTimes[k]; newest=k; } } }
+  const el=document.getElementById('newNotice'); if(!el) return;
+  if(!newest){ el.classList.add('hidden'); return; }
+  el.classList.remove('hidden');
+  if(newest==='notice') el.className='ml-auto text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#f472b6]';
+  else if(newest==='donate') el.className='ml-auto text-black text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#facc15]';
+  else el.className='ml-auto text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#22c55e]';
+  el.innerText='NEW';
+}
+db.ref('notices').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; latestTimes.notice=last.createdAt||0; updateNewTag(); });
+db.ref('borahaeDonates').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; latestTimes.donate=last.createdAt||0; updateNewTag(); });
+db.ref('donateLinks').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; if(last.createdAt > latestTimes.donate) latestTimes.donate=last.createdAt; updateNewTag(); });
+db.ref('votings').limitToLast(1).on('value',s=>{ if(!s.val()) return; let last=Object.values(s.val())[0]; latestTimes.voting=last.createdAt||0; updateNewTag(); });
+
 applyFilters();
 </script></body></html>
