@@ -15,28 +15,33 @@ body{font-family:'Manrope',sans-serif;background:#fdf8ff}
 .animate-pop{animation:pop 0.22s cubic-bezier(.16,1,.3,1)}
 .modal-bg{backdrop-filter:blur(6px);background:rgba(0,0,0,0.25)}
 </style></head><body class="paper-grid pb-10">
-<header class="sticky top-0 z-30 bg-[#fdf8ff]/90 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
+
+<!-- HEADER - Same as new home.html -->
+<header class="sticky top-0 z-30 bg-[#fdf8ff]/80 backdrop-blur-md border-b border-[#f3e8ff] px-4 py-3 flex items-center gap-3">
 <button onclick="openSidebar()" class="w-9 h-9 bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center text-[20px] cursor-pointer">☰</button>
 <div class="w-[38px] h-[38px] bg-[#7c3aed] rounded-[14px] flex items-center justify-center text-white font-display text-[24px] font-bold">b</div>
 </header>
+
+<!-- SIDEBAR - Same as new home.html, Notice Active, FAQ/WhatsNew Removed -->
 <div id="sidebarOverlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 hidden z-40"></div>
-<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 flex flex-col p-5">
+<aside id="sidebar" class="fixed top-0 left-0 w-[280px] h-full sidebar-bg z-50 -translate-x-full transition-all duration-300 ease-out flex flex-col p-5">
 <div class="flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-[34px] h-[34px] bg-[#7c3aed] rounded-[12px] flex items-center justify-center text-white font-display text-[20px]">b</div><span class="text-white font-bold text-[16px]">borahae<span class="text-[#a78bfa]">.fm</span></span></div><button onclick="closeSidebar()" class="text-white/70 text-[20px]">✕</button></div>
 <p class="font-mono text-[9px] tracking-[2.5px] text-white/40 mt-7 mb-2">YOUR SCRAPBOOK</p>
 <nav class="space-y-[2px]">
 <a href="home.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⌂ Home</a>
-<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">◐ Notice <span class="ml-auto bg-[#f472b6] text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span></a>
-<a href="plaza.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">☾ Borahae Plaza <span class="ml-auto w-2 h-2 bg-[#a78bfa] rounded-full"></span></a>
+<a href="notice.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full bg-white/10 text-white font-semibold text-[13px]">◐ Notice <span id="newNotice" class="ml-auto hidden text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span></a>
 <a href="missions.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">✦ Missions</a>
 <a href="music.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">▶ Videos</a>
 <a href="history.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">◫ My History</a>
-<a href="faq.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">? FAQ</a>
+<a href="plaza.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">☾ Borahae Plaza</a>
 </nav>
 <div class="mt-auto">
-<div class="border-t border-white/10 pt-4"><a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a></div>
-<div id="sidebarUserBox" onclick="window.location.href='settings.html'" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15 transition">
+<div class="border-t border-white/10 pt-4 space-y-[2px]">
+<a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-full text-white/60 hover:bg-white/5 text-[13px]">⚙ Settings</a>
+</div>
+<div id="sidebarUserBox" onclick="goProfile()" class="mt-4 bg-white/10 rounded-[14px] p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15 transition">
 <div id="sidebarAvatar" class="w-9 h-9 bg-[#f472b6] rounded-full flex items-center justify-center font-bold text-[#28164f] text-[13px] overflow-hidden flex-shrink-0"><img id="sidebarAvatarImg" class="w-full h-full object-cover hidden" /><span id="sidebarAvatarLetter">A</span></div>
-<div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY</p><p id="sidebarSub" class="text-white/50 text-[10px] truncate">View profile</p></div>
+<div class="overflow-hidden"><p id="sidebarName" class="text-white text-[12px] font-bold truncate">ARMY</p><p class="text-white/50 text-[10px] truncate">View profile</p></div>
 </div>
 </div>
 </aside>
@@ -83,6 +88,13 @@ function openExternal(url){
     window.open(url,'_blank');
   }
 }
+function openSidebar(){sidebar.classList.remove('-translate-x-full');sidebarOverlay.classList.remove('hidden');}
+function closeSidebar(){sidebar.classList.add('-translate-x-full');sidebarOverlay.classList.add('hidden');}
+function goProfile(){
+  const u = firebase.auth().currentUser;
+  const uid = u? u.uid : (JSON.parse(localStorage.getItem('borahaeUser')||'{}').uid || 'me');
+  location.href='profile.html?uid='+uid;
+}
 
 auth.onAuthStateChanged(u=>{
   if(u){
@@ -91,7 +103,7 @@ auth.onAuthStateChanged(u=>{
     document.getElementById('sidebarName').innerText=name;
     if(pic){ sidebarAvatarImg.src=pic; sidebarAvatarImg.classList.remove('hidden'); sidebarAvatarLetter.classList.add('hidden'); }
     else sidebarAvatarLetter.innerText=name.charAt(0).toUpperCase();
-    try{ localStorage.setItem('borahaeUser', JSON.stringify({name:name,photo:pic,email:u.email,uid:u.uid})); }catch(e){}
+    try{ localStorage.setItem('borahaeUser', JSON.stringify({name:name,photo:pic,email:u.email,uid:u.uid})); localStorage.setItem('borahaeUser', JSON.stringify({name:name,photo:pic,email:u.email,uid:u.uid})); }catch(e){}
     if(OWNERS.includes(u.email.toLowerCase())){ isOwner=true; showOwner(); }
   } else {
     try{ let lu=JSON.parse(localStorage.getItem('borahaeUser')||'{}'); if(lu.name){ sidebarName.innerText=lu.name; if(lu.photo){ sidebarAvatarImg.src=lu.photo; sidebarAvatarImg.classList.remove('hidden'); sidebarAvatarLetter.classList.add('hidden'); } } }catch(e){}
@@ -99,8 +111,6 @@ auth.onAuthStateChanged(u=>{
   loadAll();
 });
 function showOwner(){ if(main==='notice') ownerNoticeBox.classList.remove('hidden'); if(main==='donate'&&sub==='borahae') ownerBorahaeBox.classList.remove('hidden'); if(main==='donate'&&sub==='donate') ownerDonateLinkBox.classList.remove('hidden'); if(main==='votings') ownerVotingBox.classList.remove('hidden'); }
-function openSidebar(){sidebar.classList.remove('-translate-x-full');sidebarOverlay.classList.remove('hidden');}
-function closeSidebar(){sidebar.classList.add('-translate-x-full');sidebarOverlay.classList.add('hidden');}
 function switchMain(t){ main=t; tabNotice.className="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold"; tabDonate.className="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold"; tabVotings.className="bg-white border px-4 py-1.5 rounded-full text-[11px] font-bold"; noticeContent.classList.add('hidden'); borahaeContent.classList.add('hidden'); donateLinksContent.classList.add('hidden'); votingsContent.classList.add('hidden'); donateSub.classList.add('hidden'); ownerNoticeBox.classList.add('hidden'); ownerBorahaeBox.classList.add('hidden'); ownerDonateLinkBox.classList.add('hidden'); ownerVotingBox.classList.add('hidden'); if(t==='notice'){tabNotice.className="bg-[#1a1033] text-white px-4 py-1.5 rounded-full text-[11px] font-bold"; noticeContent.classList.remove('hidden'); if(isOwner) ownerNoticeBox.classList.remove('hidden');} if(t==='donate'){tabDonate.className="bg-[#1a1033] text-white px-4 py-1.5 rounded-full text-[11px] font-bold"; donateSub.classList.remove('hidden'); switchSub(sub);} if(t==='votings'){tabVotings.className="bg-[#1a1033] text-white px-4 py-1.5 rounded-full text-[11px] font-bold"; votingsContent.classList.remove('hidden'); if(isOwner) ownerVotingBox.classList.remove('hidden');} }
 function switchSub(s){ sub=s; subBorahae.className="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold"; subDonate.className="bg-white border px-3 py-1.5 rounded-full text-[10px] font-bold"; borahaeContent.classList.add('hidden'); donateLinksContent.classList.add('hidden'); ownerBorahaeBox.classList.add('hidden'); ownerDonateLinkBox.classList.add('hidden'); if(s==='borahae'){subBorahae.className="bg-[#ede9fe] border border-[#c4b5fd] px-3 py-1.5 rounded-full text-[10px] font-bold"; borahaeContent.classList.remove('hidden'); if(isOwner) ownerBorahaeBox.classList.remove('hidden');} else {subDonate.className="bg-[#ede9fe] border border-[#c4b5fd] px-3 py-1.5 rounded-full text-[10px] font-bold"; donateLinksContent.classList.remove('hidden'); if(isOwner) ownerDonateLinkBox.classList.remove('hidden');} }
 function fileToBase64(f){return new Promise(r=>{let rd=new FileReader(); rd.onload=e=>r(e.target.result); rd.readAsDataURL(f);});}
@@ -112,27 +122,58 @@ function askDelete(path){ pendingDelete.path=path; deleteModal.classList.remove(
 function closeDelete(){ deleteModal.classList.add('hidden'); }
 confirmDeleteBtn.onclick=()=>{ if(pendingDelete.path) db.ref(pendingDelete.path).remove(); closeDelete(); };
 deleteModal.addEventListener('click',e=>{ if(e.target.id==='deleteModal') closeDelete(); });
-
 function escapeHtml(s){ return s? s.replace(/"/g,'&quot;') : ''; }
+
+// 12 HOURS NEW TAG LOGIC
+const TWELVE_HOURS = 12*60*60*1000;
+let latestTimes={notice:0, donate:0, voting:0};
+function updateNewTag(){
+  const now=Date.now(); let newest=null, newestTime=0;
+  for(let k in latestTimes){
+    if(latestTimes[k] && (now-latestTimes[k] < TWELVE_HOURS)){
+      if(latestTimes[k] > newestTime){ newestTime=latestTimes[k]; newest=k; }
+    }
+  }
+  const el=document.getElementById('newNotice');
+  if(!newest){ el.classList.add('hidden'); return; }
+  el.classList.remove('hidden');
+  if(newest==='notice') el.className='ml-auto text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#f472b6]';
+  else if(newest==='donate') el.className='ml-auto text-black text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#facc15]';
+  else if(newest==='voting') el.className='ml-auto text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-[#22c55e]';
+  el.innerText='NEW';
+  setTimeout(updateNewTag, 60000);
+}
 
 function loadAll(){
   db.ref('notices').on('value',s=>{
     let data=s.val(); let arr=data?Object.entries(data).map(([k,v])=>({...v,_key:k})).sort((a,b)=>b.createdAt-a.createdAt):[];
+    if(arr.length) latestTimes.notice = arr[0].createdAt || 0;
+    updateNewTag();
     noticeContent.innerHTML= arr.length? arr.map(n=>`<div class="relative border border-[#fde68a] bg-[#fefce8] rounded-[18px] p-3.5 shadow-sm">${isOwner?`<button onclick="askDelete('notices/${n._key}')" class="absolute top-2 right-2 w-6 h-6 bg-white border rounded-full flex items-center justify-center text-[10px]">✕</button>`:''}<div class="flex justify-between pr-6"><span class="text-[8px] bg-[#facc15] text-[#713f12] px-2.5 py-1 rounded-full font-bold">NOTICE • ${n.date||''}</span><span class="text-[9px] text-gray-400">Added ${n.date||''}</span></div><h3 class="font-extrabold text-[13px] mt-2.5 text-[#1a1033]">${n.title}</h3><p class="text-[11px] font-semibold text-[#1a1033] mt-1.5 leading-[1.6] desc-pre">${n.desc||''}</p>${n.img?`<img src="${n.img}" class="w-full mt-3 rounded-[12px] border">`:''}</div>`).join('') : `<div class="border-dashed border-2 rounded-[20px] p-6 text-center text-gray-400 text-[12px]">No notices</div>`;
   });
   db.ref('borahaeDonates').on('value',s=>{
     let data=s.val(); let arr=data?Object.entries(data).map(([k,v])=>({...v,_key:k})).sort((a,b)=>b.createdAt-a.createdAt):[];
+    if(arr.length && arr[0].createdAt > latestTimes.donate) latestTimes.donate = arr[0].createdAt;
+    updateNewTag();
     borahaeContent.innerHTML= arr.length? arr.map(b=>`<div class="relative border border-[#86efac] bg-[#f0fdf4] rounded-[18px] p-3.5">${isOwner?`<button onclick="askDelete('borahaeDonates/${b._key}')" class="absolute top-2 right-2 w-6 h-6 bg-white border rounded-full text-[10px]">✕</button>`:''}<div class="flex justify-between pr-6"><span class="text-[8px] bg-[#16a34a] text-white px-2.5 py-1 rounded-full font-bold">BORAE FM DONATE</span><span class="text-[9px] text-gray-500">${b.date||''}</span></div><h3 class="font-bold text-[12px] mt-2">${b.title}</h3><p class="text-[11px] font-bold text-[#16a34a]">${b.amount||''}</p>${b.img?`<img src="${b.img}" class="w-full mt-2 rounded-[12px] border">`:''}</div>`).join('') : `<div class="border-dashed border-2 rounded-[20px] p-6 text-center text-gray-400 text-[12px]">No proofs</div>`;
   });
   db.ref('donateLinks').on('value',s=>{
     let data=s.val(); let arr=data?Object.entries(data).map(([k,v])=>({...v,_key:k})).sort((a,b)=>b.createdAt-a.createdAt):[];
+    if(arr.length && arr[0].createdAt > latestTimes.donate) latestTimes.donate = arr[0].createdAt;
+    updateNewTag();
     donateLinksContent.innerHTML= arr.length? arr.map(l=>{
       let safeLink=escapeHtml(l.link);
       return `<div class="relative bg-white border rounded-[18px] p-3.5">${isOwner?`<button onclick="askDelete('donateLinks/${l._key}')" class="absolute top-2 right-2 w-6 h-6 bg-[#faf5ff] border rounded-full text-[10px]">✕</button>`:''}<h3 class="font-bold text-[12px] pr-6">${l.title}</h3><p class="text-[11px] text-[#6b7280] mt-1 desc-pre">${l.desc||''}</p><div class="flex justify-between items-end mt-3"><button data-url="${safeLink}" onclick="openExternal(this.dataset.url)" class="bg-[#7c3aed] text-white px-5 py-2 rounded-full text-[10px] font-bold">Donate ↗</button><span class="text-[9px] text-gray-400">Added ${l.date||''}</span></div></div>`;
     }).join('') : `<div class="border-dashed border-2 rounded-[20px] p-6 text-center text-gray-400 text-[12px]">No links</div>`;
   });
   db.ref('votings').on('value',s=>{
-    let data=s.val(); if(!data){ votingsContent.innerHTML=`<div class="border-dashed border-2 rounded-[20px] p-6 text-center text-gray-400 text-[12px]">No votings</div>`; return; }
+    let data=s.val();
+    if(data){
+      let vals=Object.values(data);
+      if(vals.length) latestTimes.voting = Math.max(...vals.map(v=>v.createdAt||0));
+      updateNewTag();
+    }
+    if(!data){ votingsContent.innerHTML=`<div class="border-dashed border-2 rounded-[20px] p-6 text-center text-gray-400 text-[12px]">No votings</div>`; return; }
     let now=Date.now(); Object.entries(data).forEach(([k,v])=>{ let et=v.endTimestamp||new Date(v.endDate).getTime()+86399999; if(now>et+86400000) db.ref('votings/'+k).remove(); });
     let arr=Object.entries(data).map(([k,v])=>({...v,_key:k})).filter(v=>{ let et=v.endTimestamp||new Date(v.endDate).getTime()+86399999; return now<=et+86400000; }).sort((a,b)=>b.createdAt-a.createdAt);
     votingsContent.innerHTML= arr.map(v=>{
