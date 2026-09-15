@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -112,10 +112,28 @@
 <div id="profileModal" class="fixed inset-0 modal-bg hidden items-center justify-center p-4 z-[101]"><div class="animate-pop bg-white w-full max-w-[280px] rounded-[20px] p-2"><div class="bg-[#fdf8ff] border rounded-[16px] p-4 text-center"><img id="profilePhotoBig" src="" class="w-12 h-12 rounded-full mx-auto hidden object-cover"><div id="profileInitialBig" class="w-12 h-12 bg-[#f3f0ff] rounded-full mx-auto flex items-center justify-center text-[18px]">💜</div><h3 class="font-bold mt-2 text-[11px] truncate" id="profileEmail"></h3><button onclick="location.href='home.html'" class="w-full mt-3 bg-[#7c3aed] text-white rounded-full py-2.5 text-[10px] font-bold">Go to Scrapbook</button><div class="flex gap-2 mt-2"><button onclick="openSwitchFromProfile()" class="flex-1 bg-white border border-[#ede9fe] rounded-full py-2.5 text-[10px] font-bold">⇄ Switch</button><button onclick="logOut()" class="flex-1 bg-white border border-[#ede9fe] rounded-full py-2.5 text-[10px] font-bold">Log out</button></div><button onclick="closeProfile()" class="w-full mt-2 text-[9px] text-[#6b7280]">close →</button></div></div></div>
 <div id="switchModal" class="fixed inset-0 modal-bg hidden items-center justify-center p-4 z-[102]"><div class="animate-pop bg-[#1a1033] w-full max-w-[320px] rounded-[20px] p-4"><div class="flex justify-between items-center"><h3 class="text-white font-bold text-[11px]">Switch account</h3><button onclick="closeSwitchModal()" class="text-white/60">✕</button></div><div id="switchList" class="mt-3 space-y-2 max-h-[280px] overflow-y-auto"></div><div class="flex gap-2 mt-3"><button onclick="closeSwitchModal()" class="flex-1 bg-white/10 text-white py-2.5 rounded-full text-[10px] font-bold">Cancel</button><button onclick="handleAddAccount()" class="flex-1 bg-white text-black py-2.5 rounded-full text-[10px] font-bold">+ Add</button></div></div></div>
 <script>
-const isNiotron =!!window.AppInventor;
-function niotronSet(str){ try{ if(window.AppInventor) window.AppInventor.setWebViewString(str); }catch(e){} }
-function niotronExternal(url){ if(isNiotron){ niotronSet("EXTERNAL::"+url); } else{ window.open(url, "_blank"); } }
-function niotronStreamed(){ if(isNiotron) niotronSet("Streamed"); }
+const NIOTRON_BRIDGE = window.Niotron || window.AppInventor || null;
+const isNiotron = !!NIOTRON_BRIDGE;
+
+function niotronSet(str){
+  try{
+    if(NIOTRON_BRIDGE && typeof NIOTRON_BRIDGE.setWebViewString === 'function'){
+      NIOTRON_BRIDGE.setWebViewString(String(str));
+    }
+  }catch(e){}
+}
+
+function niotronExternal(url){
+  if(isNiotron){
+    niotronSet("EXTERNAL::"+url);
+  }else{
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+}
+
+function niotronStreamed(){
+  // Do not send noisy Streamed events on every Firebase auth-state change.
+}
 const boraQuotes = [{q:"If you can't fly, then run. Today we run.", by:"BTS"},{q:"Love myself, love yourself.", by:"Namjoon"},{q:"Teamwork makes the dream work.", by:"ARMY"},{q:"The dawn right before the sun rises is the darkest.", by:"Namjoon"},{q:"Take your hands off what you can't control and get your hands on what you can change.", by:"Suga"},{q:"Living without passion is like being dead.", by:"Jungkook"},{q:"Don't let your dreams just be dreams.", by:"Taehyung"},{q:"Go on your path, even if you live for a day.", by:"Jimin"},{q:"Trust yourself.", by:"J-Hope"},{q:"Try without succeeding, overcome limits daily.", by:"Jin"},{q:"You were born to be real, not perfect.", by:"Suga"},{q:"No matter who you are, where you're from, just speak yourself.", by:"RM"},{q:"Even if you're not perfect, you're limited edition.", by:"RM"},{q:"Your presence can give happiness.", by:"Jin"},{q:"We shine brightest when we shine together.", by:"Jin"},{q:"If you can't fly, then run. If you can't run, then walk. Keep moving.", by:"Jungkook"},{q:"Effort makes you. You will regret if you don't do your best now.", by:"Jungkook"},{q:"Don't be trapped in someone else's dream.", by:"V"},{q:"The moment you think of giving up, think of why you held on so long.", by:"J-Hope"},{q:"Even when you're in darkness, you shine the brightest.", by:"J-Hope"},{q:"I purple you. I will trust and love you for a long time.", by:"V"},{q:"Borahae means I will love you till the end.", by:"V"},{q:"Let's never lose our light, ARMY.", by:"ARMY"},{q:"Every stream is a love letter we write together.", by:"ARMY"},{q:"We are bulletproof, when we are together.", by:"BTS"},{q:"Don't ever be afraid to dream, ARMY.", by:"Jungkook"},{q:"Your hard work today is your story tomorrow.", by:"Suga"},{q:"Music transcends language.", by:"J-Hope"},{q:"Small steps every day lead to big results.", by:"ARMY"},{q:"Your love keeps the purple light alive.", by:"ARMY"},{q:"You never walk alone, ARMY walks with you.", by:"BTS"},{q:"You gave me the best of me, so you'll give you the best of you.", by:"Jungkook"}];
 function getUniqueQuote(){ let used = JSON.parse(localStorage.getItem('bora_used_quotes')||'[]'); let available = boraQuotes.map((_,i)=>i).filter(i=>!used.includes(i)); if(available.length===0){ used=[]; available=boraQuotes.map((_,i)=>i); } let pick = available[Math.floor(Math.random()*available.length)]; used.push(pick); localStorage.setItem('bora_used_quotes', JSON.stringify(used)); return boraQuotes[pick]; }
 (function(){ let skip = localStorage.getItem('borahae_skip_splash'); if(skip==='true'){ document.getElementById('splashScreen').style.display='none'; localStorage.removeItem('borahae_skip_splash'); return; } let data = getUniqueQuote(); document.getElementById('splashQuote').innerText = data.q; document.getElementById('splashAuthor').innerText = '— '+data.by; setTimeout(()=>{ let splash = document.getElementById('splashScreen'); splash.style.opacity='0'; setTimeout(()=>{ splash.style.display='none'; },700); }, 4500); })();
@@ -125,26 +143,61 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth(); const db = firebase.database();
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
 
-// FIXED - CHECK FOR GOOGLE LOGIN RETURN (WEB + APK)
-(function checkChromeLoginReturn(){
-  let params = new URLSearchParams(window.location.search);
-  if(params.get('google_login')==='1'){
-    try{
-      let data = JSON.parse(localStorage.getItem('borahae_chrome_google')||'null');
-      if(!data){
-        let email = params.get('email');
-        if(email){
-          data = { uid: params.get('uid') || email, email: email, name: params.get('name') || email.split('@')[0], photo: params.get('photo') || '' };
-        }
-      }
-      if(data && data.email){
-        saveToMulti({uid:data.uid||data.email, email:data.email, displayName:data.name, photoURL:data.photo});
-        updateHeaderFromLocal({email:data.email, name:data.name, photo:data.photo});
-        setTimeout(()=>{ window.location.href='home.html'; }, 500);
-      }
-    }catch(e){}
+// Google callback.
+// In the APK, DeepLink sends this URL back to Screen1.
+// In a normal browser, the same URL is simply opened as a web page.
+async function checkGoogleCallback(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('google_callback') !== '1') return;
+
+  const accessToken = params.get('access_token') || '';
+  const emailHint = params.get('email') || '';
+
+  // Remove the token from the visible URL as soon as we have read it.
+  try{
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }catch(e){}
+
+  if(!accessToken){
+    alert('Google login callback received, but no Google access token was found.');
+    return;
   }
-})();
+
+  try{
+    const credential = firebase.auth.GoogleAuthProvider.credential(null, accessToken);
+    const result = await auth.signInWithCredential(credential);
+    const user = result.user;
+
+    try{
+      await db.ref('users/'+user.uid).update({
+        email: user.email || emailHint,
+        name: user.displayName || '',
+        photo: user.photoURL || '',
+        lastLogin: Date.now()
+      });
+    }catch(e){}
+
+    saveToMulti({
+      uid: user.uid,
+      email: user.email || emailHint,
+      displayName: user.displayName || (user.email ? user.email.split('@')[0] : 'ARMY'),
+      photoURL: user.photoURL || ''
+    });
+
+    updateHeader(user);
+    closeAuth();
+    niotronSet("GOOGLE_SUCCESS::"+(user.email || emailHint));
+
+    setTimeout(()=>{
+      window.location.href = 'home.html';
+    }, 250);
+  }catch(err){
+    console.error('Google callback error:', err);
+    alert('Google sign-in failed: ' + (err.message || err));
+  }
+}
+
+checkGoogleCallback();
 
 function openAuth(t){ authModal.classList.remove('hidden'); authModal.classList.add('flex'); switchTab(t||'login'); }
 function closeAuth(){ authModal.classList.add('hidden'); authModal.classList.remove('flex'); }
@@ -166,7 +219,6 @@ function saveToMulti(u){
     localStorage.setItem('borahaeUser',JSON.stringify(obj));
     localStorage.setItem('borahae_last_active', obj.email);
     localStorage.setItem('borahae_is_owner', OWNER_EMAILS.includes(obj.email.toLowerCase())? 'true' : 'false');
-    niotronStreamed();
   }catch(e){}
 }
 function renderSwitchList(){
@@ -260,21 +312,49 @@ async function doEmailSignup(e){
   } finally{ signupBtn.innerText='Sign Up'; signupBtn.disabled=false; }
 }
 async function signInWithGoogle(){
-  let provider=new firebase.auth.GoogleAuthProvider();
-  provider.setCustomParameters({prompt:'select_account'});
+  // In Niotron the WebView must ask the native blocks to open
+  // chrome-login.html externally. Do NOT run Firebase Google popup
+  // inside the Android WebView.
   if(isNiotron){
     niotronSet("GOOGLE_LOGIN_REQUEST");
     return;
   }
+
+  // Normal browser version.
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({prompt:'select_account'});
+
   try{
-    let result=await auth.signInWithPopup(provider);
-    try{ await db.ref('users/'+result.user.uid).update({email:result.user.email, name:result.user.displayName, photo:result.user.photoURL, lastLogin:Date.now()}); }catch(e){}
-    saveToMulti({uid:result.user.uid, email:result.user.email, displayName:result.user.displayName, photoURL:result.user.photoURL});
+    const result = await auth.signInWithPopup(provider);
+
+    try{
+      await db.ref('users/'+result.user.uid).update({
+        email: result.user.email,
+        name: result.user.displayName || '',
+        photo: result.user.photoURL || '',
+        lastLogin: Date.now()
+      });
+    }catch(e){}
+
+    saveToMulti({
+      uid: result.user.uid,
+      email: result.user.email,
+      displayName: result.user.displayName,
+      photoURL: result.user.photoURL
+    });
+
     closeAuth();
-    setTimeout(()=>{ window.location.href='home.html'; }, 300);
+    setTimeout(()=>{ window.location.href='home.html'; }, 250);
   }catch(err){
-    if(err.code==='auth/popup-blocked'){ auth.signInWithRedirect(provider); }
-    else { alert('Google sign-in failed: ' + err.message); }
+    console.error(err);
+
+    if(err.code === 'auth/popup-blocked'){
+      alert('Google popup was blocked. Please allow popups for this site and try again.');
+    }else if(err.code === 'auth/popup-closed-by-user'){
+      // User closed the Google window; no error needed.
+    }else{
+      alert('Google sign-in failed: ' + (err.message || err));
+    }
   }
 }
 function forgotPass(){ let email=loginEmail.value.trim(); if(!email) return alert('Enter email first'); auth.sendPasswordResetEmail(email).then(()=>alert('Reset link sent to '+email)).catch(e=>alert(e.message)); }
@@ -299,19 +379,22 @@ function logOut(){
 }
 let lastActive=JSON.parse(localStorage.getItem('borahaeUser')||'null');
 if(lastActive){ updateHeaderFromLocal(lastActive); }
+
 auth.onAuthStateChanged(user=>{
   if(user){
     let deleted = JSON.parse(localStorage.getItem('borahae_deleted_acc')||'[]');
-    if(deleted.includes(user.email.toLowerCase())) return;
-    updateHeader({uid:user.uid,email:user.email,displayName:user.displayName||user.email.split('@')[0],photo:user.photoURL,photoURL:user.photoURL});
-  } else {
-    if(!lastActive) updateHeader(null);
+    if(user.email && deleted.includes(user.email.toLowerCase())) return;
+
+    updateHeader({
+      uid:user.uid,
+      email:user.email,
+      displayName:user.displayName|| (user.email ? user.email.split('@')[0] : 'ARMY'),
+      photo:user.photoURL||'',
+      photoURL:user.photoURL||''
+    });
+  }else{
+    const local=JSON.parse(localStorage.getItem('borahaeUser')||'null');
+    if(!local) updateHeader(null);
   }
 });
-auth.getRedirectResult().then((result)=>{
-  if(result && result.user){
-    saveToMulti({uid:result.user.uid, email:result.user.email, displayName:result.user.displayName, photoURL:result.user.photoURL});
-    window.location.href='home.html';
-  }
-}).catch(()=>{});
 </script></body></html>
