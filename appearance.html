@@ -1,0 +1,67 @@
+<div class="appearance-fragment">
+<h2 class="font-display text-[20px] font-bold">Appearance</h2>
+<p class="text-[10px] text-gray-500 mt-1">Make it yours, ARMY</p>
+
+<div class="mt-4 bg-white border border-[#f3e8ff] rounded-[18px] overflow-hidden">
+<div class="relative h-[110px] bg-[#ede9fe] overflow-hidden">
+<img id="bannerPreview" src="" class="w-full h-full object-cover hidden">
+<div id="bannerPlaceholder" class="w-full h-full flex items-center justify-center text-[10px] text-[#7c3aed]">No banner yet</div>
+<button onclick="triggerBanner()" class="absolute bottom-2 right-2 w-7 h-7 bg-black/60 backdrop-blur text-white rounded-full flex items-center justify-center text-[12px]">✎</button>
+</div>
+<div class="p-4 relative">
+<div class="absolute -top-8 left-4">
+<div class="relative">
+<img id="pfpPreview" src="" class="w-[64px] h-[64px] rounded-full border-[3px] border-white object-cover bg-[#f5f3ff] hidden">
+<div id="pfpPlaceholder" class="w-[64px] h-[64px] rounded-full border-[3px] border-white bg-[#f5f3ff] flex items-center justify-center text-[20px]">💜</div>
+<button onclick="triggerPfp()" class="absolute bottom-0 right-0 w-6 h-6 bg-[#1a1033] text-white rounded-full flex items-center justify-center text-[10px] border-2 border-white">✎</button>
+</div>
+</div>
+<div class="mt-8">
+<label class="text-[9px] font-bold text-gray-500 tracking-widest">DISPLAY NAME</label>
+<input id="displayNameInput" class="w-full mt-1 border border-[#f3e8ff] rounded-[10px] px-3 py-2 text-[11px] outline-none focus:border-[#7c3aed]" placeholder="ARMY name">
+<button onclick="saveAppearance()" class="w-full mt-3 bg-[#7c3aed] text-white rounded-full py-2.5 text-[11px] font-bold">Save changes</button>
+</div>
+</div>
+</div>
+<input type="file" id="bannerFile" accept="image/*" class="hidden"><input type="file" id="pfpFile" accept="image/*" class="hidden">
+</div>
+<script>
+(function(){
+let cropCanvas=document.createElement('canvas'); let cropType=null;
+window.loadAppearance=()=>{
+ let saved=JSON.parse(localStorage.getItem('borahaeUser')||'{}');
+ let name=saved.name||localStorage.getItem('army_name')||'ARMY'; let photo=saved.photo||localStorage.getItem('army_pfp')||'';
+ let banner=localStorage.getItem('borahae_banner')||'';
+ if(document.getElementById('displayNameInput')) document.getElementById('displayNameInput').value=name;
+ if(photo){let p=document.getElementById('pfpPreview');if(p){p.src=photo;p.classList.remove('hidden');document.getElementById('pfpPlaceholder')?.classList.add('hidden');}}
+ if(banner){let b=document.getElementById('bannerPreview');if(b){b.src=banner;b.classList.remove('hidden');document.getElementById('bannerPlaceholder')?.classList.add('hidden');}}
+};
+window.triggerBanner=()=>document.getElementById('bannerFile')?.click();
+window.triggerPfp=()=>document.getElementById('pfpFile')?.click();
+document.getElementById('bannerFile')?.addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>openCrop(r.result,'banner');r.readAsDataURL(f);});
+document.getElementById('pfpFile')?.addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>openCrop(r.result,'pfp');r.readAsDataURL(f);});
+window.openCrop=(src,type)=>{
+ cropType=type; document.getElementById('cropTitle').innerText=type==='banner'?'Crop banner':'Crop PFP';
+ document.getElementById('cropImg').src=src; let box=document.getElementById('cropBox');
+ box.style.borderRadius=type==='banner'?'8px':'50%'; box.style.width=type==='banner'?'240px':'160px'; box.style.height=type==='banner'?'100px':'160px';
+ document.getElementById('cropModal')?.classList.remove('hidden'); document.getElementById('cropModal')?.classList.add('flex');
+};
+window.closeCrop=()=>{document.getElementById('cropModal')?.classList.add('hidden'); document.getElementById('cropModal')?.classList.remove('flex');};
+window.saveCrop=()=>{
+ let img=document.getElementById('cropImg'); let size=cropType==='banner'?{w:600,h:250}:{w:300,h:300};
+ cropCanvas.width=size.w; cropCanvas.height=size.h; let ctx=cropCanvas.getContext('2d');
+ let sx=(img.naturalWidth-img.naturalWidth*0.8)/2; let sy=(img.naturalHeight-img.naturalHeight*0.6)/2;
+ let sW=img.naturalWidth*0.8; let sH=cropType==='banner'?img.naturalHeight*0.5:img.naturalHeight*0.8;
+ ctx.drawImage(img,sx,sy,sW,sH,0,0,size.w,size.h); let dataUrl=cropCanvas.toDataURL('image/jpeg',0.8);
+ if(cropType==='banner'){document.getElementById('bannerPreview').src=dataUrl;document.getElementById('bannerPreview').classList.remove('hidden');document.getElementById('bannerPlaceholder').classList.add('hidden');localStorage.setItem('borahae_banner',dataUrl);if(firebase.auth().currentUser)firebase.database().ref('users/'+firebase.auth().currentUser.uid).update({banner:dataUrl});}
+ else{document.getElementById('pfpPreview').src=dataUrl;document.getElementById('pfpPreview').classList.remove('hidden');document.getElementById('pfpPlaceholder').classList.add('hidden');localStorage.setItem('army_pfp',dataUrl);let u=JSON.parse(localStorage.getItem('borahaeUser')||'{}');u.photo=dataUrl;localStorage.setItem('borahaeUser',JSON.stringify(u));if(firebase.auth().currentUser)firebase.database().ref('users/'+firebase.auth().currentUser.uid).update({photo:dataUrl});}
+ closeCrop();
+};
+window.saveAppearance=()=>{
+ let name=document.getElementById('displayNameInput').value.trim();if(!name)return alert('Enter name');
+ localStorage.setItem('army_name',name);let u=JSON.parse(localStorage.getItem('borahaeUser')||'{}');u.name=name;localStorage.setItem('borahaeUser',JSON.stringify(u));
+ if(firebase.auth().currentUser)firebase.database().ref('users/'+firebase.auth().currentUser.uid).update({name:name}); alert('Saved! 💜');
+};
+loadAppearance();
+})();
+</script>
