@@ -1,67 +1,253 @@
 <div class="appearance-fragment">
-<h2 class="font-display text-[20px] font-bold">Appearance</h2>
-<p class="text-[10px] text-gray-500 mt-1">Make it yours, ARMY</p>
+<p class="font-mono text-[9px] tracking-[3px] text-[#7c3aed] font-bold">APPEARANCE</p>
+<h2 class="font-display text-[22px] font-bold mt-1">Make it yours, ARMY</h2>
 
-<div class="mt-4 bg-white border border-[#f3e8ff] rounded-[18px] overflow-hidden">
-<div class="relative h-[110px] bg-[#ede9fe] overflow-hidden">
-<img id="bannerPreview" src="" class="w-full h-full object-cover hidden">
-<div id="bannerPlaceholder" class="w-full h-full flex items-center justify-center text-[10px] text-[#7c3aed]">No banner yet</div>
-<button onclick="triggerBanner()" class="absolute bottom-2 right-2 w-7 h-7 bg-black/60 backdrop-blur text-white rounded-full flex items-center justify-center text-[12px]">✎</button>
-</div>
-<div class="p-4 relative">
-<div class="absolute -top-8 left-4">
+<!-- BIG PREMIUM BOX -->
+<div class="mt-4 bg-white border border-[#f3e8ff] rounded-[20px] p-4 shadow-[0_8px_30px_rgba(124,58,237,0.06)]">
+
+<!-- ========== PFP SECTION ========== -->
+<div>
+<p class="font-mono text-[9px] tracking-[2.5px] text-[#1a1033] font-bold">YOUR FACE • PFP</p>
+<div class="mt-3 flex items-center gap-3">
 <div class="relative">
-<img id="pfpPreview" src="" class="w-[64px] h-[64px] rounded-full border-[3px] border-white object-cover bg-[#f5f3ff] hidden">
-<div id="pfpPlaceholder" class="w-[64px] h-[64px] rounded-full border-[3px] border-white bg-[#f5f3ff] flex items-center justify-center text-[20px]">💜</div>
-<button onclick="triggerPfp()" class="absolute bottom-0 right-0 w-6 h-6 bg-[#1a1033] text-white rounded-full flex items-center justify-center text-[10px] border-2 border-white">✎</button>
+<img id="pfpPreview" class="w-[72px] h-[72px] rounded-full object-cover border-[3px] border-white shadow-sm bg-[#f5f3ff] hidden">
+<div id="pfpPlaceholder" class="w-[72px] h-[72px] rounded-full bg-[#ede9fe] border-[3px] border-white flex items-center justify-center text-[28px] text-[#7c3aed]">👤</div>
+</div>
+<div class="flex-1">
+<p class="text-[11px] font-bold leading-tight" id="pfpNameLabel">ARMY</p>
+<p class="text-[9px] text-[#9ca3af] mt-0.5">Square crop • 300x300 • JPG</p>
 </div>
 </div>
-<div class="mt-8">
-<label class="text-[9px] font-bold text-gray-500 tracking-widest">DISPLAY NAME</label>
-<input id="displayNameInput" class="w-full mt-1 border border-[#f3e8ff] rounded-[10px] px-3 py-2 text-[11px] outline-none focus:border-[#7c3aed]" placeholder="ARMY name">
-<button onclick="saveAppearance()" class="w-full mt-3 bg-[#7c3aed] text-white rounded-full py-2.5 text-[11px] font-bold">Save changes</button>
+<!-- 4 BOXES ROW -->
+<div class="grid grid-cols-4 gap-2 mt-3">
+<button onclick="openEditPopup('pfp')" class="h-[36px] bg-[#7c3aed] rounded-[10px] flex items-center justify-center text-white text-[14px] font-bold active:scale-95 transition">✎</button>
+<button onclick="deletePfp()" class="h-[36px] bg-white border border-[#fecdd3] rounded-[10px] flex items-center justify-center text-[#e11d48] text-[14px] active:scale-95 transition">🗑</button>
+<button onclick="savePfp()" class="h-[36px] bg-[#7c3aed] rounded-[10px] flex items-center justify-center text-white text-[10px] font-bold active:scale-95 transition">Save</button>
+<button onclick="triggerPfp()" class="h-[36px] bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center text-[10px] font-bold text-[#1a1033] active:scale-95 transition">Change</button>
+</div>
+</div>
+
+<div class="h-[1px] bg-[#f3e8ff] my-5"></div>
+
+<!-- ========== DISPLAY NAME ========== -->
+<div>
+<p class="font-mono text-[9px] tracking-[2.5px] text-[#1a1033] font-bold">DISPLAY NAME</p>
+<input id="displayNameInput" placeholder="Your ARMY name" class="w-full mt-2 bg-[#fdf8ff] border border-[#f3e8ff] rounded-[12px] px-3 py-2.5 text-[11px] font-semibold outline-none focus:border-[#7c3aed] transition">
+<button onclick="saveName()" class="w-full mt-2 bg-[#1a1033] text-white rounded-full py-2.5 text-[11px] font-bold active:scale-[0.98]">Save name</button>
+</div>
+
+<div class="h-[1px] bg-[#f3e8ff] my-5"></div>
+
+<!-- ========== BANNER SECTION ========== -->
+<div>
+<p class="font-mono text-[9px] tracking-[2.5px] text-[#1a1033] font-bold">BANNER • SCRAPBOOK TOP</p>
+<div class="mt-3 relative h-[110px] bg-[#f5f3ff] rounded-[14px] overflow-hidden border border-[#f3e8ff]">
+<img id="bannerPreview" class="w-full h-full object-cover hidden">
+<div id="bannerPlaceholder" class="w-full h-full flex items-center justify-center text-[10px] text-[#7c3aed] font-bold">No banner yet • 600x250</div>
+</div>
+<div class="grid grid-cols-4 gap-2 mt-3">
+<button onclick="openEditPopup('banner')" class="h-[36px] bg-[#7c3aed] rounded-[10px] flex items-center justify-center text-white text-[14px] active:scale-95 transition">✎</button>
+<button onclick="deleteBanner()" class="h-[36px] bg-white border border-[#fecdd3] rounded-[10px] flex items-center justify-center text-[#e11d48] text-[14px] active:scale-95 transition">🗑</button>
+<button onclick="saveBanner()" class="h-[36px] bg-[#7c3aed] rounded-[10px] flex items-center justify-center text-white text-[10px] font-bold active:scale-95 transition">Save</button>
+<button onclick="triggerBanner()" class="h-[36px] bg-white border border-[#ede9fe] rounded-[10px] flex items-center justify-center text-[10px] font-bold active:scale-95 transition">Change</button>
+</div>
+</div>
+
+<div class="h-[1px] bg-[#f3e8ff] my-5"></div>
+
+<!-- ========== BIO SECTION ========== -->
+<div>
+<p class="font-mono text-[9px] tracking-[2.5px] text-[#1a1033] font-bold">BIO • ABOUT YOU</p>
+<textarea id="bioInput" placeholder="Write something purple... e.g. OT7 forever 💜" class="w-full mt-2 bg-[#fdf8ff] border border-[#f3e8ff] rounded-[12px] px-3 py-2.5 text-[11px] outline-none focus:border-[#7c3aed] min-h-[70px] resize-none"></textarea>
+<div class="flex gap-2 mt-2">
+<button onclick="saveBio()" class="flex-1 bg-[#7c3aed] text-white rounded-full py-2.5 text-[11px] font-bold active:scale-[0.98]">Save bio</button>
+<button onclick="deleteBio()" class="w-[90px] bg-white border border-[#f3e8ff] rounded-full py-2.5 text-[11px] font-bold text-[#6b7280]">Clear</button>
+</div>
+<p class="text-[9px] text-[#9ca3af] mt-1.5">Empty + Save = bio delete ho jayega profile se bhi</p>
+</div>
+
+</div>
+</div>
+
+<!-- HIDDEN FILE INPUTS -->
+<input type="file" id="pfpFile" accept="image/*" class="hidden">
+<input type="file" id="bannerFile" accept="image/*" class="hidden">
+
+<!-- CROP POPUP PREMIUM -->
+<div id="cropModal" class="fixed inset-0 bg-black/50 backdrop-blur-[6px] hidden items-center justify-center z-[80] p-4" onclick="if(event.target===this)closeCrop()">
+<div class="bg-white rounded-[20px] w-full max-w-[340px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.2)] animate-[pop_0.25s_ease]">
+<div class="p-4 border-b border-[#f3e8ff] flex justify-between items-center">
+<p id="cropTitle" class="font-bold text-[12px]">Crop PFP</p>
+<button onclick="closeCrop()" class="w-7 h-7 bg-[#f3f4f6] rounded-full text-[12px]">✕</button>
+</div>
+<div class="p-4 bg-[#fdf8ff] flex flex-col items-center">
+<div id="cropBox" class="relative overflow-hidden bg-[#ede9fe] border-2 border-[#7c3aed] shadow-inner" style="width:200px;height:200px;border-radius:50%">
+<img id="cropImg" class="w-full h-full object-cover">
+</div>
+<p class="text-[10px] text-[#9ca3af] mt-3 text-center">Center crop • Pinch to adjust nahi, auto perfect crop</p>
+</div>
+<div class="p-3 grid grid-cols-2 gap-2 bg-white">
+<button onclick="closeCrop()" class="bg-[#f3f4f6] py-3 rounded-full font-bold text-[11px]">Cancel</button>
+<button onclick="confirmCrop()" class="bg-[#7c3aed] text-white py-3 rounded-full font-bold text-[11px]">Crop & Save 💜</button>
 </div>
 </div>
 </div>
-<input type="file" id="bannerFile" accept="image/*" class="hidden"><input type="file" id="pfpFile" accept="image/*" class="hidden">
-</div>
+
+<style>@keyframes pop{from{transform:translateY(10px) scale(0.98);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}</style>
+
 <script>
 (function(){
-let cropCanvas=document.createElement('canvas'); let cropType=null;
+let tempPfp=null, tempBanner=null, cropType=null, rawSrc=null;
+const canvas=document.createElement('canvas');
+
+function getUser(){ try{return JSON.parse(localStorage.getItem('borahaeUser')||'{}')}catch(e){return {}} }
+
 window.loadAppearance=()=>{
- let saved=JSON.parse(localStorage.getItem('borahaeUser')||'{}');
- let name=saved.name||localStorage.getItem('army_name')||'ARMY'; let photo=saved.photo||localStorage.getItem('army_pfp')||'';
- let banner=localStorage.getItem('borahae_banner')||'';
- if(document.getElementById('displayNameInput')) document.getElementById('displayNameInput').value=name;
- if(photo){let p=document.getElementById('pfpPreview');if(p){p.src=photo;p.classList.remove('hidden');document.getElementById('pfpPlaceholder')?.classList.add('hidden');}}
- if(banner){let b=document.getElementById('bannerPreview');if(b){b.src=banner;b.classList.remove('hidden');document.getElementById('bannerPlaceholder')?.classList.add('hidden');}}
+  let u=getUser();
+  let name=u.name||localStorage.getItem('army_name')||'ARMY';
+  let photo=u.photo||localStorage.getItem('army_pfp')||'';
+  let banner=localStorage.getItem('borahae_banner')||u.banner||'';
+  let bio=localStorage.getItem('borahae_bio')||u.bio||'';
+  document.getElementById('displayNameInput').value=name;
+  document.getElementById('pfpNameLabel').innerText=name;
+  document.getElementById('bioInput').value=bio;
+  if(photo){
+    let p=document.getElementById('pfpPreview'); p.src=photo; p.classList.remove('hidden');
+    document.getElementById('pfpPlaceholder').classList.add('hidden'); tempPfp=photo;
+  }
+  if(banner){
+    let b=document.getElementById('bannerPreview'); b.src=banner; b.classList.remove('hidden');
+    document.getElementById('bannerPlaceholder').classList.add('hidden'); tempBanner=banner;
+  }
 };
-window.triggerBanner=()=>document.getElementById('bannerFile')?.click();
-window.triggerPfp=()=>document.getElementById('pfpFile')?.click();
-document.getElementById('bannerFile')?.addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>openCrop(r.result,'banner');r.readAsDataURL(f);});
-document.getElementById('pfpFile')?.addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>openCrop(r.result,'pfp');r.readAsDataURL(f);});
-window.openCrop=(src,type)=>{
- cropType=type; document.getElementById('cropTitle').innerText=type==='banner'?'Crop banner':'Crop PFP';
- document.getElementById('cropImg').src=src; let box=document.getElementById('cropBox');
- box.style.borderRadius=type==='banner'?'8px':'50%'; box.style.width=type==='banner'?'240px':'160px'; box.style.height=type==='banner'?'100px':'160px';
- document.getElementById('cropModal')?.classList.remove('hidden'); document.getElementById('cropModal')?.classList.add('flex');
+
+window.triggerPfp=()=>document.getElementById('pfpFile').click();
+window.triggerBanner=()=>document.getElementById('bannerFile').click();
+
+document.getElementById('pfpFile').addEventListener('change',e=>{
+  let f=e.target.files[0]; if(!f) return;
+  let r=new FileReader(); r.onload=()=>openEditPopup('pfp', r.result); r.readAsDataURL(f); e.target.value='';
+});
+document.getElementById('bannerFile').addEventListener('change',e=>{
+  let f=e.target.files[0]; if(!f) return;
+  let r=new FileReader(); r.onload=()=>openEditPopup('banner', r.result); r.readAsDataURL(f); e.target.value='';
+});
+
+window.openEditPopup=(type, src=null)=>{
+  cropType=type;
+  if(!src){
+    // pencil click = existing image
+    if(type==='pfp') src=tempPfp || document.getElementById('pfpPreview').src || '';
+    else src=tempBanner || document.getElementById('bannerPreview').src || '';
+    if(!src) return type==='pfp'? triggerPfp() : triggerBanner();
+  }
+  rawSrc=src;
+  document.getElementById('cropTitle').innerText= type==='banner'? 'Crop Banner • 600x250' : 'Crop PFP • 300x300';
+  document.getElementById('cropImg').src=src;
+  let box=document.getElementById('cropBox');
+  if(type==='banner'){ box.style.width='260px'; box.style.height='110px'; box.style.borderRadius='12px'; }
+  else { box.style.width='200px'; box.style.height='200px'; box.style.borderRadius='50%'; }
+  let m=document.getElementById('cropModal'); m.classList.remove('hidden'); m.classList.add('flex');
 };
-window.closeCrop=()=>{document.getElementById('cropModal')?.classList.add('hidden'); document.getElementById('cropModal')?.classList.remove('flex');};
-window.saveCrop=()=>{
- let img=document.getElementById('cropImg'); let size=cropType==='banner'?{w:600,h:250}:{w:300,h:300};
- cropCanvas.width=size.w; cropCanvas.height=size.h; let ctx=cropCanvas.getContext('2d');
- let sx=(img.naturalWidth-img.naturalWidth*0.8)/2; let sy=(img.naturalHeight-img.naturalHeight*0.6)/2;
- let sW=img.naturalWidth*0.8; let sH=cropType==='banner'?img.naturalHeight*0.5:img.naturalHeight*0.8;
- ctx.drawImage(img,sx,sy,sW,sH,0,0,size.w,size.h); let dataUrl=cropCanvas.toDataURL('image/jpeg',0.8);
- if(cropType==='banner'){document.getElementById('bannerPreview').src=dataUrl;document.getElementById('bannerPreview').classList.remove('hidden');document.getElementById('bannerPlaceholder').classList.add('hidden');localStorage.setItem('borahae_banner',dataUrl);if(firebase.auth().currentUser)firebase.database().ref('users/'+firebase.auth().currentUser.uid).update({banner:dataUrl});}
- else{document.getElementById('pfpPreview').src=dataUrl;document.getElementById('pfpPreview').classList.remove('hidden');document.getElementById('pfpPlaceholder').classList.add('hidden');localStorage.setItem('army_pfp',dataUrl);let u=JSON.parse(localStorage.getItem('borahaeUser')||'{}');u.photo=dataUrl;localStorage.setItem('borahaeUser',JSON.stringify(u));if(firebase.auth().currentUser)firebase.database().ref('users/'+firebase.auth().currentUser.uid).update({photo:dataUrl});}
- closeCrop();
+
+window.closeCrop=()=>{ let m=document.getElementById('cropModal'); m.classList.add('hidden'); m.classList.remove('flex'); };
+
+window.confirmCrop=()=>{
+  let img=document.getElementById('cropImg');
+  let size = cropType==='banner'? {w:600,h:250} : {w:300,h:300};
+  canvas.width=size.w; canvas.height=size.h;
+  let ctx=canvas.getContext('2d');
+  // smart center crop
+  let iw=img.naturalWidth, ih=img.naturalHeight;
+  let scale=Math.max(size.w/iw, size.h/ih); // not used, we draw cover
+  let sW=iw*0.85, sH= cropType==='banner'? ih*0.55 : iw*0.85;
+  let sx=(iw-sW)/2, sy=(ih-sH)/2;
+  ctx.drawImage(img, sx, sy, sW, sH, 0,0,size.w,size.h);
+  let data=canvas.toDataURL('image/jpeg',0.85);
+  if(cropType==='banner'){
+    tempBanner=data;
+    document.getElementById('bannerPreview').src=data; document.getElementById('bannerPreview').classList.remove('hidden');
+    document.getElementById('bannerPlaceholder').classList.add('hidden');
+  } else {
+    tempPfp=data;
+    document.getElementById('pfpPreview').src=data; document.getElementById('pfpPreview').classList.remove('hidden');
+    document.getElementById('pfpPlaceholder').classList.add('hidden');
+  }
+  closeCrop();
 };
-window.saveAppearance=()=>{
- let name=document.getElementById('displayNameInput').value.trim();if(!name)return alert('Enter name');
- localStorage.setItem('army_name',name);let u=JSON.parse(localStorage.getItem('borahaeUser')||'{}');u.name=name;localStorage.setItem('borahaeUser',JSON.stringify(u));
- if(firebase.auth().currentUser)firebase.database().ref('users/'+firebase.auth().currentUser.uid).update({name:name}); alert('Saved! 💜');
+
+window.savePfp=()=>{
+  if(!tempPfp) return alert('Pehle Change se photo select kar');
+  localStorage.setItem('army_pfp', tempPfp);
+  let u=getUser(); u.photo=tempPfp; localStorage.setItem('borahaeUser', JSON.stringify(u));
+  if(window.db && firebase.auth().currentUser) db.ref('users/'+firebase.auth().currentUser.uid).update({photo:tempPfp});
+  if(window.auth && auth.currentUser) { /* firestore sync if needed */ }
+  alert('PFP saved permanently 💜');
+  // sidebar update
+  try{ document.getElementById('sidebarAvatarImg').src=tempPfp; document.getElementById('sidebarAvatarImg').classList.remove('hidden'); document.getElementById('sidebarAvatarLetter').classList.add('hidden'); }catch(e){}
 };
+
+window.deletePfp=()=>{
+  if(!confirm('PFP hamesha ke liye delete kar du? Default 👤 dikhega sabko')) return;
+  tempPfp=null;
+  localStorage.removeItem('army_pfp');
+  let u=getUser(); delete u.photo; localStorage.setItem('borahaeUser', JSON.stringify(u));
+  document.getElementById('pfpPreview').classList.add('hidden'); document.getElementById('pfpPreview').src='';
+  document.getElementById('pfpPlaceholder').classList.remove('hidden');
+  if(window.db && firebase.auth().currentUser) db.ref('users/'+firebase.auth().currentUser.uid).update({photo:null});
+  alert('Deleted • ab default icon dikhega');
+};
+
+window.saveBanner=()=>{
+  if(!tempBanner) return alert('Pehle banner select kar');
+  localStorage.setItem('borahae_banner', tempBanner);
+  let u=getUser(); u.banner=tempBanner; localStorage.setItem('borahaeUser', JSON.stringify(u));
+  if(window.db && firebase.auth().currentUser) db.ref('users/'+firebase.auth().currentUser.uid).update({banner:tempBanner});
+  alert('Banner saved 💜');
+};
+
+window.deleteBanner=()=>{
+  if(!confirm('Banner delete kar du?')) return;
+  tempBanner=null;
+  localStorage.removeItem('borahae_banner');
+  let u=getUser(); delete u.banner; localStorage.setItem('borahaeUser', JSON.stringify(u));
+  document.getElementById('bannerPreview').classList.add('hidden'); document.getElementById('bannerPreview').src='';
+  document.getElementById('bannerPlaceholder').classList.remove('hidden');
+  if(window.db && firebase.auth().currentUser) db.ref('users/'+firebase.auth().currentUser.uid).update({banner:null});
+};
+
+window.saveName=()=>{
+  let n=document.getElementById('displayNameInput').value.trim();
+  if(!n) return alert('Name likh');
+  localStorage.setItem('army_name', n);
+  let u=getUser(); u.name=n; localStorage.setItem('borahaeUser', JSON.stringify(u));
+  document.getElementById('pfpNameLabel').innerText=n;
+  try{ document.getElementById('sidebarName').innerText=n; }catch(e){}
+  if(window.db && firebase.auth().currentUser) db.ref('users/'+firebase.auth().currentUser.uid).update({name:n});
+  alert('Name saved • profile pe bhi update ho gaya');
+};
+
+window.saveBio=()=>{
+  let b=document.getElementById('bioInput').value.trim();
+  if(!b){
+    // empty + save = delete logic
+    localStorage.removeItem('borahae_bio');
+    let u=getUser(); delete u.bio; localStorage.setItem('borahaeUser', JSON.stringify(u));
+    if(window.db && firebase.auth().currentUser) db.ref('users/'+firebase.auth().currentUser.uid).update({bio:null});
+    alert('Bio deleted • profile se bhi hat gaya');
+    return;
+  }
+  localStorage.setItem('borahae_bio', b);
+  let u=getUser(); u.bio=b; localStorage.setItem('borahaeUser', JSON.stringify(u));
+  if(window.db && firebase.auth().currentUser) db.ref('users/'+firebase.auth().currentUser.uid).update({bio:b});
+  alert('Bio saved 💜');
+};
+
+window.deleteBio=()=>{
+  document.getElementById('bioInput').value='';
+  saveBio();
+};
+
 loadAppearance();
 })();
 </script>
