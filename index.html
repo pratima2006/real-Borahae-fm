@@ -131,6 +131,24 @@ function niotronExternal(url){
   }
 }
 
+// Niotron DeepLink can call this function through EvaluateJavaScript.
+// Pass the complete callback URL received from DeepLink.OnResume.
+function receiveGoogleCallback(url){
+  try{
+    if(!url) return;
+    const u = String(url);
+
+    if(u.indexOf('google_callback=1') === -1){
+      niotronSet("DEEP_LINK_RECEIVED::"+u);
+      return;
+    }
+
+    window.location.href = u;
+  }catch(e){
+    niotronSet("GOOGLE_ERROR::CALLBACK_URL");
+  }
+}
+
 function niotronStreamed(){
   // Do not send noisy Streamed events on every Firebase auth-state change.
 }
@@ -143,9 +161,11 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth(); const db = firebase.database();
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
 
-// Google callback.
-// In the APK, DeepLink sends this URL back to Screen1.
-// In a normal browser, the same URL is simply opened as a web page.
+// Google callback support.
+// In the APK, Niotron's DeepLink component should pass the callback URL
+// back into this WebView. The URL contains a short-lived Google access
+// token which is immediately exchanged with Firebase and removed from
+// the visible URL.
 async function checkGoogleCallback(){
   const params = new URLSearchParams(window.location.search);
   if(params.get('google_callback') !== '1') return;
@@ -153,12 +173,12 @@ async function checkGoogleCallback(){
   const accessToken = params.get('access_token') || '';
   const emailHint = params.get('email') || '';
 
-  // Remove the token from the visible URL as soon as we have read it.
   try{
     window.history.replaceState({}, document.title, window.location.pathname);
   }catch(e){}
 
   if(!accessToken){
+    niotronSet("GOOGLE_ERROR::NO_ACCESS_TOKEN");
     alert('Google login callback received, but no Google access token was found.');
     return;
   }
@@ -193,6 +213,7 @@ async function checkGoogleCallback(){
     }, 250);
   }catch(err){
     console.error('Google callback error:', err);
+    niotronSet("GOOGLE_ERROR::"+(err.code || 'unknown'));
     alert('Google sign-in failed: ' + (err.message || err));
   }
 }
@@ -312,51 +333,68 @@ async function doEmailSignup(e){
   } finally{ signupBtn.innerText='Sign Up'; signupBtn.disabled=false; }
 }
 async function signInWithGoogle(){
-  // In Niotron the WebView must ask the native blocks to open
-  // chrome-login.html externally. Do NOT run Firebase Google popup
-  // inside the Android WebView.
+  /*
+   * ANDROID / NIOTRON:
+   * Google Sign-In is NOT run inside the Android WebView.
+   * Google web sign-in is not supported in Android WebViews, so Niotron
+   * opens chrome-login.html externally. After Google authentication,
+   * chrome-login.html must return through the configured Android DeepLink.
+   */
   if(isNiotron){
     niotronSet("GOOGLE_LOGIN_REQUEST");
     return;
   }
 
-  // Normal browser version.
+  /*
+   * NORMAL BROWSER:
+   * Use Firebase popup when this page is running as a normal website.
+   */
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({prompt:'select_account'});
 
   try{
     const result = await auth.signInWithPopup(provider);
+    const user = result.user;
 
     try{
-      await db.ref('users/'+result.user.uid).update({
-        email: result.user.email,
-        name: result.user.displayName || '',
-        photo: result.user.photoURL || '',
+      await db.ref('users/'+user.uid).update({
+        email: user.email || '',
+        name: user.displayName || '',
+        photo: user.photoURL || '',
         lastLogin: Date.now()
       });
     }catch(e){}
 
     saveToMulti({
-      uid: result.user.uid,
-      email: result.user.email,
-      displayName: result.user.displayName,
-      photoURL: result.user.photoURL
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName || (user.email ? user.email.split('@')[0] : 'ARMY'),
+      photoURL: user.photoURL || ''
     });
 
+    updateHeader(user);
     closeAuth();
-    setTimeout(()=>{ window.location.href='home.html'; }, 250);
+    niotronSet("GOOGLE_SUCCESS::"+(user.email || ''));
+
+    setTimeout(()=>{
+      window.location.href='home.html';
+    }, 250);
+
   }catch(err){
-    console.error(err);
+    console.error('Google sign-in error:', err);
 
     if(err.code === 'auth/popup-blocked'){
-      alert('Google popup was blocked. Please allow popups for this site and try again.');
+      alert('Google popup was blocked. Please allow popups for this website and try again.');
     }else if(err.code === 'auth/popup-closed-by-user'){
-      // User closed the Google window; no error needed.
+      // User closed the Google window.
+    }else if(err.code === 'auth/account-exists-with-different-credential'){
+      alert('This email already exists with another sign-in method. Log in with that method first.');
     }else{
       alert('Google sign-in failed: ' + (err.message || err));
     }
   }
 }
+
 function forgotPass(){ let email=loginEmail.value.trim(); if(!email) return alert('Enter email first'); auth.sendPasswordResetEmail(email).then(()=>alert('Reset link sent to '+email)).catch(e=>alert(e.message)); }
 function handleScrapbook(){
   let local=JSON.parse(localStorage.getItem('borahaeUser')||'null');
