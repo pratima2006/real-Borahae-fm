@@ -380,7 +380,22 @@ function openYouTubeInsideApp(id,title,duration){
 }
 function playFromAction(){closeActionSheet(); if(actionData) openYouTubeInsideApp(actionData.id, actionData.title, actionData.duration);}
 function pinFromAction(){if(!actionData)return;if(pinned.includes(actionData.id))pinned=pinned.filter(p=>p!==actionData.id);else{if(pinned.length>=3){alert('Only top 3 pinned!');return;}pinned.unshift(actionData.id);}localStorage.setItem('bts_pinned',JSON.stringify(pinned));closeActionSheet();applyFilters();}
-function addToMissionsFromAction(){if(!actionData)return;let daily=getDaily();if(daily.ids.includes(actionData.id)){alert('Already in Missions!');return;}if(daily.ids.length>=2){document.getElementById('limitInfo').innerText=`Today: ${daily.ids.length}/2`;document.getElementById('limitPopup').classList.remove('hidden');document.getElementById('limitPopup').classList.add('flex');return;}daily.ids.push(actionData.id);daily.date=new Date().toDateString();localStorage.setItem('borahae_mission_daily',JSON.stringify(daily));if(!missionGoals[actionData.id])missionGoals[actionData.id]=10;localStorage.setItem('borahae_mission_goals',JSON.stringify(missionGoals));closeActionSheet();applyFilters();}
-function removeFromMissions(id){let d=getDaily();d.ids=d.ids.filter(i=>i!==id);localStorage.setItem('borahae_mission_daily',JSON.stringify(d));applyFilters();}
-function editGoal(id){let cur=missionGoals[id]||10;let v=prompt(`Goal? Current ${cur}x`,cur);if(!v)return;let n=parseInt(v);if(isNaN(n))return;missionGoals[id]=n;localStorage.setItem('borahae_mission_goals',JSON.stringify(missionGoals));applyFilters();}
+function addToMissionsFromAction(){
+  if(!actionData)return;
+  let daily=getDaily();
+  if(daily.ids.includes(actionData.id)){alert('Already in Missions!');closeActionSheet();return;}
+  if(daily.ids.length>=2){
+    document.getElementById('limitInfo').innerText=`Today: ${daily.ids.length}/2`;
+    document.getElementById('limitPopup').classList.remove('hidden');
+    document.getElementById('limitPopup').classList.add('flex');
+    closeActionSheet();
+    return;
+  }
+  daily.ids.push(actionData.id);
+  localStorage.setItem('borahae_mission_daily', JSON.stringify(daily));
+  alert('Added to Missions successfully! 💜');
+  closeActionSheet();
+  applyFilters();
+}
+applyFilters();
 </script></body></html>
